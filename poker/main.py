@@ -4538,174 +4538,164 @@ class Evolution:
             PlayManager.delete_bad_plays()
 
 
-class StatElement:
-
-    def __init__(self, cards: str):
-
-        self.cards: str = cards
-
-        self.win_good: int = 0
-        self.win_bad: int = 0
-        self.win_same: int = 0
-
-        self.lose_good: int = 0
-        self.lose_bad: int = 0
-        self.lose_same: int = 0
-
-        self.draw_good: int = 0
-        self.draw_bad: int = 0
-        self.draw_same: int = 0
-
-        self.total: int = 0
-
-        self.wins_with: Dict[Poker.StrengthType, Dict[str, int]] = {strength: {versus: 0
-                                                                               for versus in CardsPair.All}
-                                                                    for strength in Poker.Strength.All}
-
-        self.lose_with: Dict[Poker.StrengthType, Dict[str, int]] = {strength: {versus: 0
-                                                                               for versus in CardsPair.All}
-                                                                    for strength in Poker.Strength.All}
-
-        self.draw_with: Dict[Poker.StrengthType, Dict[str, int]] = {strength: {versus: 0
-                                                                               for versus in CardsPair.All}
-                                                                    for strength in Poker.Strength.All}
-
-        self.wins_whom: Dict[str, Dict[Poker.StrengthType, int]] = {versus: {strength: 0
-                                                                             for strength in Poker.Strength.All}
-                                                                    for versus in CardsPair.All}
-
-        self.lose_whom: Dict[str, Dict[Poker.StrengthType, int]] = {versus: {strength: 0
-                                                                             for strength in Poker.Strength.All}
-                                                                    for versus in CardsPair.All}
-
-        self.draw_whom: Dict[str, Dict[Poker.StrengthType, int]] = {versus: {strength: 0
-                                                                             for strength in Poker.Strength.All}
-                                                                    for versus in CardsPair.All}
-
-    def wins(self) -> int:
-        return self.win_good + self.win_bad + self.win_same
-
-    def loses(self) -> int:
-        return self.lose_good + self.lose_bad + self.lose_same
-
-    def draws(self) -> int:
-        return self.draw_good + self.draw_bad + self.draw_same
-
-    def wins_perc(self) -> float:
-        return self.wins() / self.total
-
-    def loses_perc(self) -> float:
-        return self.loses() / self.total
-
-    def draw_perc(self) -> float:
-        return self.draws() / self.total
-
-    def total_games_whom(self, opp: str) -> int:
-        return sum(self.wins_whom[opp].values()) + sum(self.draw_whom[opp].values()) + sum(self.lose_whom[opp].values())
-
-    def total_wins_whom(self, opp: str) -> int:
-        return sum(self.wins_whom[opp].values())
-
-    def total_lose_whom(self, opp: str) -> int:
-        return sum(self.lose_whom[opp].values())
-
-    def total_draw_whom(self, opp: str) -> int:
-        return sum(self.draw_whom[opp].values())
-
-    def total_wins_perc_whom(self, opp: str) -> float:
-        return self.total_wins_whom(opp) / self.total_games_whom(opp)
-
-    def total_lose_perc_whom(self, opp: str) -> float:
-        return self.total_lose_whom(opp) / self.total_games_whom(opp)
-
-    def total_draw_perc_whom(self, opp: str) -> float:
-        return self.total_draw_whom(opp) / self.total_games_whom(opp)
-
-    def wg(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.win_good += 1
-        self.total += 1
-
-        self.wins_with[strength][opp] += 1
-        self.wins_whom[opp][strength] += 1
-
-    def wb(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.win_bad += 1
-        self.total += 1
-
-        self.wins_with[strength][opp] += 1
-        self.wins_whom[opp][strength] += 1
-
-    def ws(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.win_same += 1
-        self.total += 1
-
-        self.wins_with[strength][opp] += 1
-        self.wins_whom[opp][strength] += 1
-
-    def lg(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.lose_good += 1
-        self.total += 1
-
-        self.lose_with[strength][opp] += 1
-        self.lose_whom[opp][strength] += 1
-
-    def lb(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.lose_bad += 1
-        self.total += 1
-
-        self.lose_with[strength][opp] += 1
-        self.lose_whom[opp][strength] += 1
-
-    def ls(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.lose_same += 1
-        self.total += 1
-
-        self.lose_with[strength][opp] += 1
-        self.lose_whom[opp][strength] += 1
-
-    def dg(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.draw_good += 1
-        self.total += 1
-
-        self.draw_with[strength][opp] += 1
-        self.draw_whom[opp][strength] += 1
-
-    def db(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.draw_bad += 1
-        self.total += 1
-
-        self.draw_with[strength][opp] += 1
-        self.draw_whom[opp][strength] += 1
-
-    def ds(self, opp: str, strength: Poker.StrengthType) -> None:
-
-        self.draw_same += 1
-        self.total += 1
-
-        self.draw_with[strength][opp] += 1
-        self.draw_whom[opp][strength] += 1
-
-
 class Stats:
+
+    class StatElement:
+
+        def __init__(self, cards: str):
+            self.cards: str = cards
+
+            self.win_good: int = 0
+            self.win_bad: int = 0
+            self.win_same: int = 0
+
+            self.lose_good: int = 0
+            self.lose_bad: int = 0
+            self.lose_same: int = 0
+
+            self.draw_good: int = 0
+            self.draw_bad: int = 0
+            self.draw_same: int = 0
+
+            self.total: int = 0
+
+            self.wins_with: Dict[Poker.StrengthType, Dict[str, int]] = {strength: {versus: 0
+                                                                                   for versus in CardsPair.All}
+                                                                        for strength in Poker.Strength.All}
+
+            self.lose_with: Dict[Poker.StrengthType, Dict[str, int]] = {strength: {versus: 0
+                                                                                   for versus in CardsPair.All}
+                                                                        for strength in Poker.Strength.All}
+
+            self.draw_with: Dict[Poker.StrengthType, Dict[str, int]] = {strength: {versus: 0
+                                                                                   for versus in CardsPair.All}
+                                                                        for strength in Poker.Strength.All}
+
+            self.wins_whom: Dict[str, Dict[Poker.StrengthType, int]] = {versus: {strength: 0
+                                                                                 for strength in Poker.Strength.All}
+                                                                        for versus in CardsPair.All}
+
+            self.lose_whom: Dict[str, Dict[Poker.StrengthType, int]] = {versus: {strength: 0
+                                                                                 for strength in Poker.Strength.All}
+                                                                        for versus in CardsPair.All}
+
+            self.draw_whom: Dict[str, Dict[Poker.StrengthType, int]] = {versus: {strength: 0
+                                                                                 for strength in Poker.Strength.All}
+                                                                        for versus in CardsPair.All}
+
+        def wins(self) -> int:
+            return self.win_good + self.win_bad + self.win_same
+
+        def loses(self) -> int:
+            return self.lose_good + self.lose_bad + self.lose_same
+
+        def draws(self) -> int:
+            return self.draw_good + self.draw_bad + self.draw_same
+
+        def wins_perc(self) -> float:
+            return self.wins() / self.total
+
+        def loses_perc(self) -> float:
+            return self.loses() / self.total
+
+        def draw_perc(self) -> float:
+            return self.draws() / self.total
+
+        def total_games_whom(self, opp: str) -> int:
+            return sum(self.wins_whom[opp].values()) + sum(self.draw_whom[opp].values()) + sum(
+                self.lose_whom[opp].values())
+
+        def total_wins_whom(self, opp: str) -> int:
+            return sum(self.wins_whom[opp].values())
+
+        def total_lose_whom(self, opp: str) -> int:
+            return sum(self.lose_whom[opp].values())
+
+        def total_draw_whom(self, opp: str) -> int:
+            return sum(self.draw_whom[opp].values())
+
+        def total_wins_perc_whom(self, opp: str) -> float:
+            return self.total_wins_whom(opp) / self.total_games_whom(opp)
+
+        def total_lose_perc_whom(self, opp: str) -> float:
+            return self.total_lose_whom(opp) / self.total_games_whom(opp)
+
+        def total_draw_perc_whom(self, opp: str) -> float:
+            return self.total_draw_whom(opp) / self.total_games_whom(opp)
+
+        def wg(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.win_good += 1
+            self.total += 1
+
+            self.wins_with[strength][opp] += 1
+            self.wins_whom[opp][strength] += 1
+
+        def wb(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.win_bad += 1
+            self.total += 1
+
+            self.wins_with[strength][opp] += 1
+            self.wins_whom[opp][strength] += 1
+
+        def ws(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.win_same += 1
+            self.total += 1
+
+            self.wins_with[strength][opp] += 1
+            self.wins_whom[opp][strength] += 1
+
+        def lg(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.lose_good += 1
+            self.total += 1
+
+            self.lose_with[strength][opp] += 1
+            self.lose_whom[opp][strength] += 1
+
+        def lb(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.lose_bad += 1
+            self.total += 1
+
+            self.lose_with[strength][opp] += 1
+            self.lose_whom[opp][strength] += 1
+
+        def ls(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.lose_same += 1
+            self.total += 1
+
+            self.lose_with[strength][opp] += 1
+            self.lose_whom[opp][strength] += 1
+
+        def dg(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.draw_good += 1
+            self.total += 1
+
+            self.draw_with[strength][opp] += 1
+            self.draw_whom[opp][strength] += 1
+
+        def db(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.draw_bad += 1
+            self.total += 1
+
+            self.draw_with[strength][opp] += 1
+            self.draw_whom[opp][strength] += 1
+
+        def ds(self, opp: str, strength: Poker.StrengthType) -> None:
+            self.draw_same += 1
+            self.total += 1
+
+            self.draw_with[strength][opp] += 1
+            self.draw_whom[opp][strength] += 1
 
     stats_file_path: str = 'stats/stat'
 
     def __init__(self):
 
         if exists(Stats.stats_file_path):
-            self.stat: Dict[str, StatElement] = load(open(Stats.stats_file_path, 'rb'))
+            self.stat: Dict[str, Stats.StatElement] = load(open(Stats.stats_file_path, 'rb'))
             self.count: int = sum(s.total for s in self.stat.values()) // 2
 
         else:
-            self.stat: Dict[str, StatElement] = {c: StatElement(c) for c in CardsPair.All}
+            self.stat: Dict[str, Stats.StatElement] = {c: Stats.StatElement(c) for c in CardsPair.All}
             self.count: int = 0
 
         self.deck: Deck = Deck()
