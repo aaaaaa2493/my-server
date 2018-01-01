@@ -2181,13 +2181,15 @@ class Player:
 
 class Board:
 
-    def __init__(self, start_hand: int = 0):
+    def __init__(self, deck: Deck, start_hand: int = 0):
 
         self.flop1: Card = None
         self.flop2: Card = None
         self.flop3: Card = None
         self.turn: Card = None
         self.river: Card = None
+
+        self.deck: Deck = deck
 
         self.hand: int = start_hand
 
@@ -2205,17 +2207,17 @@ class Board:
 
         self.state = BasePlay.Step.Preflop
 
-    def open_flop(self, deck: Deck) -> None:
+    def open_flop(self) -> None:
 
-        deck.skip()
-        self.flop1 = deck.next()
-        self.flop2 = deck.next()
-        self.flop3 = deck.next()
+        self.deck.skip()
+        self.flop1 = self.deck.next()
+        self.flop2 = self.deck.next()
+        self.flop3 = self.deck.next()
         self.state = BasePlay.Step.Flop
 
     def open_flop_with_network(self, table) -> None:
 
-        self.open_flop(table.deck)
+        self.open_flop()
 
         for player in table.players.controlled:
             player.network.flop(self.flop1, self.flop2, self.flop3)
@@ -2224,15 +2226,15 @@ class Board:
             table.network.flop(self.flop1, self.flop2, self.flop3)
             sleep(Table.Delay.Flop)
 
-    def open_turn(self, deck: Deck) -> None:
+    def open_turn(self) -> None:
 
-        deck.skip()
-        self.turn = deck.next()
+        self.deck.skip()
+        self.turn = self.deck.next()
         self.state = BasePlay.Step.Turn
 
     def open_turn_with_network(self, table) -> None:
 
-        self.open_turn(table.deck)
+        self.open_turn()
 
         for player in table.players.controlled:
             player.network.turn(self.turn)
@@ -2241,15 +2243,15 @@ class Board:
             table.network.turn(self.turn)
             sleep(Table.Delay.Turn)
 
-    def open_river(self, deck: Deck) -> None:
+    def open_river(self) -> None:
 
-        deck.skip()
-        self.river = deck.next()
+        self.deck.skip()
+        self.river = self.deck.next()
         self.state = BasePlay.Step.River
 
     def open_river_with_network(self, table) -> None:
 
-        self.open_river(table.deck)
+        self.open_river()
 
         for player in table.players.controlled:
             player.network.river(self.river)
@@ -2258,16 +2260,16 @@ class Board:
             table.network.river(self.river)
             sleep(Table.Delay.River)
 
-    def open(self, deck: Deck) -> None:
+    def open(self) -> None:
 
         if self.state == BasePlay.Step.Preflop:
-            self.open_flop(deck)
+            self.open_flop()
 
         elif self.state == BasePlay.Step.Flop:
-            self.open_turn(deck)
+            self.open_turn()
 
         elif self.state == BasePlay.Step.Turn:
-            self.open_river(deck)
+            self.open_river()
 
         else:
             raise OverflowError('Board can not contain more than 5 cards')
@@ -2286,16 +2288,16 @@ class Board:
         else:
             raise OverflowError('Board can not contain more than 5 cards')
 
-    def open_all(self, deck: Deck) -> None:
+    def open_all(self) -> None:
 
         if self.state == BasePlay.Step.Preflop:
-            self.open_flop(deck)
+            self.open_flop()
 
         if self.state == BasePlay.Step.Flop:
-            self.open_turn(deck)
+            self.open_turn()
 
         if self.state == BasePlay.Step.Turn:
-            self.open_river(deck)
+            self.open_river()
 
     def open_all_with_network(self, table) -> None:
 
@@ -2936,7 +2938,7 @@ class Table:
         self.pot: Pot = Pot()
         self.deck: Deck = Deck()
         self.blinds: Blinds = blinds
-        self.board: Board = Board(start_hand)
+        self.board: Board = Board(self.deck, start_hand)
         self.players: Players = Players(seats, _id)
         self.history: Table.History = Table.History(start_hand)
 
@@ -4701,7 +4703,7 @@ class Stats:
         self.deck: Deck = Deck()
         self.p1: Player = Player(0, 'p0', 0, False)
         self.p2: Player = Player(0, 'P1', 0, False)
-        self.board: Board = Board()
+        self.board: Board = Board(self.deck)
         self.lock = False
         self.last_count: int = self.count
 
@@ -4735,7 +4737,7 @@ class Stats:
             self.p1.add_card(self.deck.next())
             self.p2.add_card(self.deck.next())
 
-        self.board.open_all(self.deck)
+        self.board.open_all()
 
         self.p1.hand = Poker.max_strength(self.p1.cards.get() + self.board.get())
         self.p2.hand = Poker.max_strength(self.p2.cards.get() + self.board.get())
