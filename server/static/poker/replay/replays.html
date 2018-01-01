@@ -1,0 +1,34 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-control" content="no-store">
+    <title>Poker by Vladimir Turov</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/poker.css">
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+</head>
+<body>
+
+    <div id=menu>
+        <div id=state class=text>Выберите турнир</div>
+        <div id=to_main class='item poker' onclick="window.location='/poker'">Назад</div>
+    </div>
+
+<div class=main style='margin-top: 30px;'>
+
+    % for replay in info[::-1]:
+
+        % id, date, tables, players, hands, name = replay
+
+        <div class=replay_info onclick='window.location="/poker/replay/{{id}}"'>
+            {{name.replace('_', ' ').replace('-', '.', 2).replace('-', ':')}}<br>
+            Столов: {{tables}}<br>
+            Игроков: {{players}}<br>
+            Сыграно рук: {{hands}}<br>
+        </div>
+
+    % end
+    
+</div>
+</body>
+</html>

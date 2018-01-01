@@ -1,0 +1,160 @@
+body{
+    background: url(/img/bg.png);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+}
+
+.container{
+    margin: auto;
+    margin-top: 60px;
+    width: 740px;
+    height: 480px;
+}
+
+.chcolor{
+    margin-left: 15px; 
+    margin-top: 15px;
+    position: absolute;
+}
+
+.include_engine{
+    margin-left: 15px;
+    margin-top: 75px;
+    position: absolute;
+}
+
+.table{
+    background: black;
+    width: 480px;
+    height: 480px;
+    cursor: pointer;
+    float: left;
+}
+
+.toolbar{
+    float: left;
+    width: 60px;
+    height: 480px;
+}
+
+textarea{
+    margin-left: 20px;
+    width: 166px;
+    height: 300px;
+    border-width: 0px;
+    background: #ffffff;
+    color: #000000;
+    resize: none;
+    cursor: default;
+}
+
+.button{
+    background: #ffffa8;
+    margin-left: 16px;
+    margin-top: 5px;
+    border-style: solid;
+    border-color: #ece260;
+    border-width: 2px;
+    width: 160px;
+    text-align: center;
+    cursor: pointer;
+}
+
+.result{
+    font-size: 20px;
+    width: 160px;
+    margin-left: 20px;
+    margin-top: 8px;
+    text-align: center;
+}
+
+.button:hover{
+    background: #ece260;
+}
+
+.info{
+    width: 196px;
+    height: 476px;
+    border-style: solid;
+    border-color: #000000;
+    background: white;
+    border-width: 2px;
+    float: left;
+}
+
+.white{
+    background: #eaca99
+} 
+
+.black{
+    background: #c66737
+}
+
+.promotion{
+    background: #45ac12
+}
+
+.section{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+}
+
+.promotion:hover{
+    background: #d0abd3
+}
+
+.figure{
+    width: 60px;
+    height: 60px;
+    position: absolute;
+    z-index: 1;
+}
+
+.candidate_capture, .candidate_capture:hover{
+    background: #ff4e54;
+}
+
+
+.candidate_move:after{
+    content: "";
+    background: #29d52e;
+    display: block;
+    height: 26px;
+    width: 26px;
+    margin-left: 17px;
+    margin-top: 17px;
+    border-radius: 500px;
+    border-style: solid;
+    border-width: 0px;
+}
+
+.last_move:before{
+    content: "";
+    display: block;
+    position: absolute;
+    height: 56px;
+    width: 56px;
+    border-style: solid;
+    border-color: #70a0ff;
+    border-width: 2px;
+}
+
+.chosen, .chosen:hover{
+    background: #0087ff;
+}
+
+
+
+.in_check{
+    background: #ff0000
+}
+
+.text{
+    position:absolute;
+    cursor: default;
+    font-family: monospace;
+    font-size: 30px;
+}

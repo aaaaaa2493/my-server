@@ -1,0 +1,708 @@
+body{
+    background: url(/img/bg.png);
+    -webkit-user-select: none;
+    -moz-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+
+    margin: auto;
+    width: 1125px;
+    height: 400px;
+}
+
+.main{
+    margin: auto;
+    margin-top: 100px;
+    width: 784px;
+    height: 400px;
+}
+
+input[type=range]{
+    -webkit-appearance: none;
+    width: 150px;
+    border-radius: 8px;
+    height: 7px;
+    border: 1px solid #bdc3c7;
+    background-color: #fff;
+    position: absolute;
+    margin-left: 780px;
+    margin-top: 15px;
+}
+
+.chat{
+    margin: 0px;
+    width: 210px;
+    height: 100px;
+    position: absolute;
+    margin-left: -160px;
+    margin-top: -51px;
+    border-width: 2px;
+    border-color: #ece260;
+    background: #ffffff;
+    color: #000000;
+    resize: none;
+    cursor: default;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+.bigger_chat{
+    height: 125px;
+}
+
+table{
+    border-collapse: collapse;
+}
+
+td{
+    padding-right: 8px;
+}
+
+input[type=range]:focus{
+    outline: none;
+}
+
+.info{
+    width: 650px;
+    height: 390px; 
+    position: absolute; 
+    margin-top: -404px;
+    margin-left: 60px; 
+    background: #ffffa8;
+    border-style: solid;
+    border-color: #ece260;
+    border-width: 2px;
+    z-index: 1;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+    text-align: center;
+    overflow: hidden;
+    padding: 5px;
+}
+
+.general_info{
+    width: 450px;
+    height: 20px; 
+    position: absolute; 
+    margin-top: -254px;
+    margin-left: 150px; 
+    background: #ffffa8;
+    border-style: solid;
+    border-color: #ece260;
+    border-width: 2px;
+    z-index: 1;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+    text-align: center;
+    padding: 5px;
+}
+
+#top_players_info{
+    text-align: left;
+    margin: auto;
+}
+
+#cards_reveal{
+    margin: auto;
+    margin-top: 10px;
+}
+
+.hidden{
+    display: none;
+}
+
+.button{
+    background: #ffffa8;
+    border-style: solid;
+    border-color: #ece260;
+    border-width: 2px;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+}
+
+.button:hover{
+    background: #ece260;
+}
+
+.small_button{
+    width: 30px;
+}
+
+.in_general{
+    width: 80px;
+    padding-left: 3px;
+    padding-right: 3px;
+}
+
+.g1{
+    margin-left: 10px;
+}
+
+.g2{
+    margin-left: 110px;
+}
+
+.premove{
+    position: absolute;
+    z-index: -1;
+}
+
+.premove1{
+    margin-top: 45px;
+    margin-left: 470px;
+}
+
+.premove2{
+    margin-top: 45px;
+    margin-left: 630px;
+}
+
+.premove3{
+    margin-top: 45px;
+    margin-left: 790px;
+}
+
+.b1{
+    margin-left: 460px;
+    margin-top: 10px;
+}
+
+.b2{
+    margin-left: 460px;
+    margin-top: 35px;
+}
+
+.b3{
+    margin-left: 460px;
+    margin-top: 60px;
+}
+
+.b4{
+    margin-left: 620px;
+    margin-top: 10px;
+}
+
+.b5{
+    margin-left: 662px;
+    margin-top: 10px;
+}
+
+.b6{
+    margin-left: 706px;
+    margin-top: 10px;
+}
+
+.b7{
+    margin-left: 748px;
+    margin-top: 10px;
+}
+
+.b8{
+    margin-left: 620px;
+    margin-top: 35px;
+}
+
+.minus_button{
+    margin-left: 780px;
+    margin-top: -40px;
+}
+
+.plus_button{
+    margin-left: 820px;
+    margin-top: -40px;
+}
+
+.pot_button{
+    margin-left: 860px;
+    margin-top: -40px;
+}
+
+.all_in_button{
+    margin-left: 900px;
+    margin-top: -40px;
+}
+
+.raise_button{
+    margin-left: 780px;
+    margin-top: 35px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.call_button{
+    margin-left: 620px;
+    margin-top: 35px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.fold_button{
+    margin-left: 460px;
+    margin-top: 35px;
+    padding-top: 10px;
+    padding-bottom: 10px;
+}
+
+.tournament_info_button{
+    margin-left: 65px;
+    margin-top: 10px;
+}
+
+.last_hand_info_button{
+    margin-left: 65px;
+    margin-top: 35px;
+}
+
+.exit_button{
+    margin-left: 65px;
+    margin-top: 60px;
+}
+
+.input_button{
+    background: white;
+    border-style: solid;
+    border-color: #ece260;
+    border-width: 2px;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 780px;
+    margin-top: -15px;
+}
+
+.chat_input{
+    margin-left: -160px;
+    margin-top: 60px;
+    width: 214px;
+}
+
+.table{
+    background: url(/img/poker/poker_table.png);
+    width: 784px;
+    height: 400px;
+}
+
+.player{
+    width: 100px;
+    height: 52px;
+    border-style: solid;
+    border-color: #000000;
+    background: white;
+    border-width: 2px;
+    text-align: center;
+    overflow: hidden;
+    position: absolute;
+    cursor: default;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+}
+
+.table_num{
+    margin-top: -486px;
+    margin-left: -150px;
+    height: 20px;
+    border-color: #ece260;
+    width: 180px;
+}
+
+.hand_num{
+    margin-top: -456px;
+    margin-left: -150px;
+    height: 20px;
+    border-color: #ece260;
+    width: 180px;
+}
+
+.place_num{
+    margin-top: -426px;
+    margin-left: -150px;
+    height: 20px;
+    border-color: #ece260;
+    width: 180px;
+}
+
+.big_blind_shortcut{
+    margin-top: -486px;
+    height: 20px;
+    border-color: #ece260;
+    margin-left: 700px;
+    width: 180px;
+}
+
+.small_blind_shortcut{
+    margin-top: -456px;
+    height: 20px;
+    border-color: #ece260;
+    margin-left: 700px;
+    width: 180px;
+}
+
+.ante_shortcut{
+    margin-top: -426px;
+    height: 20px;
+    border-color: #ece260;
+    margin-left: 700px;
+    width: 180px;
+}
+
+.pot_info{
+    margin-top: -348px;
+    margin-left: 335px;
+    height: 40px;
+    border-color: #ece260;
+}
+
+.replay_info{
+    width: 170px;
+    height: 70px;
+    border-style: solid;
+    border-color: #000000;
+    background: white;
+    border-width: 2px;
+    text-align: center;
+    overflow: hidden;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+    float: left;
+    margin: 10px;
+}
+
+.replay_table_info{
+    height: 40px;
+}
+
+.watch_info{
+    width: 170px;
+    height: 20px;
+    border-style: solid;
+    border-color: #000000;
+    background: white;
+    border-width: 2px;
+    text-align: center;
+    overflow: hidden;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+    float: left;
+    margin: 10px;
+}
+
+.watch_info:hover{
+    background: #ece260;
+}
+
+.replay_info:hover{
+    background: #ece260;
+}
+
+.in_decision{
+    background: #ece260;
+}
+
+.card{
+    height: 80px;
+    position: absolute;
+}
+
+.small_card{
+    width: 23.5px;
+}
+
+.chipstack{
+    width: 0px;
+    height: 0px;
+    position: absolute;
+}
+
+.cc1{
+    margin-left: 0px;
+}
+
+.cc2{
+    margin-left: 40px;
+}
+
+.cc3{
+    margin-left: 80px;
+}
+
+.cc4{
+    margin-left: 120px;
+}
+
+.cr1{
+    position: absolute;
+    margin-top: 0px;
+}
+
+.cr2{
+    position: absolute;
+    margin-top: 30px;
+}
+
+.chip{
+    width: 40px;
+    float: left;
+    position: absolute;
+}
+
+.chips{
+    position: absolute;
+}
+
+#p1{
+    margin-left: 230px;
+    margin-top: 2px;
+}
+
+#p2{
+    margin-left: -50px;
+    margin-top: -116px;
+}
+
+#p3{
+    margin-left: -50px;
+    margin-top: -236px;
+}
+
+#p4{
+    margin-left: -50px;
+    margin-top: -356px;
+}
+
+#p5{
+    margin-left: 50px;
+    margin-top: -466px;
+}
+
+#p6{
+    margin-left: 400px;
+    margin-top: -466px;
+}
+
+#p7{
+    margin-left: 730px;
+    margin-top: -356px;
+}
+
+#p8{
+    margin-left: 730px;
+    margin-top: -236px;
+}
+
+#p9{
+    margin-left: 730px;
+    margin-top: -116px;
+}
+
+#c11{
+    margin-left: 337px;
+    margin-top: 2px;
+}
+
+#c12{
+    margin-left: 397px;
+    margin-top: 2px;
+}
+
+#c21{
+    margin-left: -170px;
+    margin-top: -140px;
+}
+
+#c22{
+    margin-left: -110px;
+    margin-top: -140px;
+}
+
+#c31{
+    margin-left: -170px;
+    margin-top: -260px;
+}
+
+#c32{
+    margin-left: -110px;
+    margin-top: -260px;
+}
+
+#c41{
+    margin-left: -170px;
+    margin-top: -380px;
+}
+
+#c42{
+    margin-left: -110px;
+    margin-top: -380px;
+}
+
+#c51{
+    margin-left: 157px;
+    margin-top: -490px;
+}
+
+#c52{
+    margin-left: 217px;
+    margin-top: -490px;
+}
+
+#c61{
+    margin-left: 507px;
+    margin-top: -490px;
+}
+
+#c62{
+    margin-left: 567px;
+    margin-top: -490px;
+}
+
+#c71{
+    margin-left: 837px;
+    margin-top: -380px;
+}
+
+#c72{
+    margin-left: 897px;
+    margin-top: -380px;
+}
+
+#c81{
+    margin-left: 837px;
+    margin-top: -260px;
+}
+
+#c82{
+    margin-left: 897px;
+    margin-top: -260px;
+}
+
+#c91{
+    margin-left: 837px;
+    margin-top: -140px;
+}
+
+#c92{
+    margin-left: 897px;
+    margin-top: -140px;
+}
+
+#flop1{
+    margin-left: 240px;
+    margin-top: -300px;
+}
+
+#flop2{
+    margin-left: 300px;
+    margin-top: -300px;
+}
+
+#flop3{
+    margin-left: 360px;
+    margin-top: -300px;
+}
+
+#turn{
+    margin-left: 420px;
+    margin-top: -300px;
+}
+
+#river{
+    margin-left: 480px;
+    margin-top: -300px;
+}
+
+.d1{
+    margin-left: 260px;
+    margin-top: -50px;
+}
+
+.d2{
+    margin-left: 60px;
+    margin-top: -100px;
+}
+
+.d3{
+    margin-left: 20px;
+    margin-top: -175px;
+}
+
+.d4{
+    margin-left: 30px;
+    margin-top: -290px;
+}
+
+.d5{
+    margin-left: 95px;
+    margin-top: -365px;
+}
+
+.d6{
+    margin-left: 425px;
+    margin-top: -385px;
+}
+
+.d7{
+    margin-left: 710px;
+    margin-top: -295px;
+}
+
+.d8{
+    margin-left: 725px;
+    margin-top: -175px;
+}
+
+.d9{
+    margin-left: 685px;
+    margin-top: -100px;
+}
+
+#ch0{
+    margin-left: 310px;
+    margin-top: -180px;
+}
+
+#ch1{
+    margin-left: 310px;
+    margin-top: -80px;
+}
+
+#ch2{
+    margin-left: 110px;
+    margin-top: -110px;
+}
+
+#ch3{
+    margin-left: 70px;
+    margin-top: -200px;
+}
+
+#ch4{
+    margin-left: 75px;
+    margin-top: -290px;
+}
+
+#ch5{
+    margin-left: 140px;
+    margin-top: -380px;
+}
+
+#ch6{
+    margin-left: 480px;
+    margin-top: -380px;
+}
+
+#ch7{
+    margin-left: 545px;
+    margin-top: -290px;
+}
+
+#ch8{
+    margin-left: 550px;
+    margin-top: -200px;
+}
+
+#ch9{
+    margin-left: 510px;
+    margin-top: -100px;
+}

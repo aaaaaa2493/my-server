@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-control" content="no-store">
+    <title>Poker by Vladimir Turov</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/index.css">
+    <script src="/static/poker/menu/menu.js" charset="utf-8"></script>
+    <script type="text/javascript">
+    	var state = '{{state}}';
+        var ip = '{{ip}}';
+        var port = '{{port}}';
+    </script>
+</head>
+<body>
+    <div id=menu style='display: none'>
+    	<div id=state class=text>Text</div>
+        <input id=nick type=text onkeyup='textchange(this.value)' placeholder="Введите имя или ник">
+        <div id=register class='item poker' onclick="register()">Зарегистрироваться</div>
+        <div id=connect class='item poker' onclick="register()">Подключиться</div>
+        <div id=create class='item poker' onclick="window.location='/poker/create?key='+admin">Создать игру</div>
+        <div id=delete class='item poker' onclick="window.location='/poker/break?key='+admin">Прервать игру</div>
+        <div id=watch class='item poker' onclick="watch()">Смотреть за игрой</div>
+        <div id=replay class='item poker' onclick="window.location='/poker/replay'">Посмотреть повтор</div>
+        <div id=to_main class='item standard' onclick="window.location='/'">На главную</div>
+    </div>
+</body>
+</html>

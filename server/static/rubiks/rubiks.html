@@ -1,0 +1,140 @@
+<!doctype html>
+<html>
+    <head>
+        <meta charset="UTF-8">
+
+        <title>Rubik's Cube by Vladimir Turov</title>
+        
+        <script src="/static/rubiks/three.min.js"></script>
+        <script src="/static/rubiks/rubiks.js"></script>
+
+        <link rel="stylesheet" type="text/css" href="/static/css/rubiks.css">
+
+    </head>
+
+    <body>
+
+
+        <div id=bar>
+
+            <span class='but chosen' id=tosolve onclick="opensolvetab()">
+                Сборка
+            </span>
+
+            <span class=but id=torepeat onclick="openrepeattab()">
+                Повтор за программой
+            </span>
+
+        </div>
+
+        <div class=tab id=solve>
+
+            <div id=scrambletimerdiv>
+                <span class=scramble id=solvescramble>
+                </span>
+            </div>
+
+            <div id=arrowupdiv>
+                <img src='/img/rubiks/arrows/arrowup.png' width='5%' id='au' onclick="rotateCubeTop()">
+            </div>
+
+            <div id=cubelayerdiv>
+                <div id=leftarrowdiv>
+                    <img src='/img/rubiks/arrows/arrowleft.png' width='50%' id='al' onclick="rotateCubeLeft()">
+                </div>
+                <div id=cube>
+                    
+                </div>
+                <div id=rightarrowdiv>
+                    <img src='/img/rubiks/arrows/arrowright.png' width='50%' id='ar' onclick="rotateCubeRight()">  
+                </div>
+                <div id=rotatepaneldiv>
+
+                    <div class=butrow>
+
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/rc.png" onclick="rotateRightLayerRight()"></span>
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/ra.png" onclick="rotateRightLayerLeft()"></span>
+
+                        <span class=separator></span>
+
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/fc.png" onclick="rotateFrontLayerRight()"></span>
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/fa.png" onclick="rotateFrontLayerLeft()"></span>
+
+                        <span class=separator></span>
+
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/uc.png" onclick="rotateUpLayerRight()"></span>
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/ua.png" onclick="rotateUpLayerLeft()"></span>
+                        
+                    </div>
+
+                    <div class=butrow>
+
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/lc.png" onclick="rotateLeftLayerRight()"></span>
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/la.png" onclick="rotateLeftLayerLeft()"></span>
+
+                        <span class=separator></span>
+
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/bc.png" onclick="rotateBackLayerRight()"></span>
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/ba.png" onclick="rotateBackLayerLeft()"></span>
+
+                        <span class=separator></span>
+
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/dc.png" onclick="rotateBottomLayerRight()"></span>
+                        <span class=rotbut><img class=rotpic src="/img/rubiks/moves/da.png" onclick="rotateBottomLayerLeft()"></span>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div id=arrowdowndiv>
+                <img src='/img/rubiks/arrows/arrowdown.png' width='5%' id='ad' onclick="rotateCubeBottom()">
+            </div>
+
+            <div id=controlpaneldiv>
+                
+                <span class='but extrabut' onclick="window.location='/'">Выход</span>
+                <span class='but extrabut' onclick="undomove()">Отменить ход</span>
+                <span class='but extrabut' onclick="scramblecube()">Разобрать</span>
+
+            </div>
+        </div>
+
+        <div class=tab id=repeat style='display: none'>
+            <div id=scramblerepeatdiv style='height:10%;width:100%;'>
+                <span class=scramble id=repeatscramble>
+                </span>
+            </div>
+
+            <div id=cubelayerdiv2 style='height: 50%;width:100%;padding: 6%;'>
+                <div id=leftarrowdiv2 style='text-align: center;width:30%;height:100%;float:left;'>
+                    <div class='but extrabut' id=prevturn style='margin-top:25%;' onclick="repeatprev()">
+                        <b>Предыдущий</b> <br>
+                        поворот
+                    </div>
+                </div>
+                <div id=cube2 style='width:28%;height: 100%;float: left;'>
+                    
+                </div>
+                <div id=rightarrowdiv2 style='text-align: center;width:30%;height: 100%;float: left;'>
+                    <div class='but extrabut' id=nextturn style='margin-top:25%;' onclick="repeatnext()">
+                        <b>Следующий</b> <br>
+                        поворот
+                    </div>
+                </div>
+
+                
+            </div>
+
+            <div id=controlpaneldiv2 style='padding-left: 6%'>
+
+                    <span class='but extrabut' onclick="window.location='/'">Выход</span>
+                    <span class='but extrabut' onclick="scramblecube()">Разобрать</span>
+
+            </div>
+
+
+        </div>
+
+    </body>
+</html>

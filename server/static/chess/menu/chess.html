@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html>
+<head>
+	<meta charset="utf-8">
+	<meta http-equiv="X-UA-Compatible" content="IE=edge">
+	<title>Chess by Vladimir Turov</title>
+    <link rel="stylesheet" type="text/css" href="static/css/index.css">
+</head>
+<body>
+    <div id=menu>
+        <div class='item chess' onclick="window.location='/chess/engine?strength='+document.getElementById('range').value">Играть против компьютера</div>
+        <div style='font-size: 25px;font-family: helvetica;padding-left:10px;margin-top: 30px;'>
+            <div id=strength style='width: 180px;float:left;'>Сложность: 10</div>
+            <input id=range type=range min=-1 max=20 step=1 onmousemove='document.getElementById("strength").innerHTML = "Сложность: "+this.value' 
+                    onchange='document.getElementById("strength").innerHTML = "Сложность: "+this.value'>
+        </div>
+        <div class='item chess' onclick="window.location='/chess/analysis'">Анализ за доской</div>
+        <div class='item chess' onclick="alert('This mode will be soon')">Создать онлайн партию</div>
+        <div class='item chess' onclick="window.location='/chess/engines?strength1='+document.getElementById('rw').value+'&strength2='+document.getElementById('rb').value">Битва двух компьютеров</div>
+        <div style='font-size: 25px;font-family: helvetica;padding-left:10px;margin-top: 30px;'>
+            <div id=white style='width: 180px;float:left;'>Белые: 10</div>
+            <input id=rw type=range min=-1 max=20 step=1 onmousemove='document.getElementById("white").innerHTML = "Белые: "+this.value' 
+                    onchange='document.getElementById("white").innerHTML = "Белые: "+this.value'>
+        </div>
+        <div style='font-size: 25px;font-family: helvetica;padding-left:10px;margin-top: 30px;'>
+            <div id=black style='width: 180px;float:left;'>Чёрные: 10</div>
+            <input id=rb type=range min=-1 max=20 step=1 onmousemove='document.getElementById("black").innerHTML = "Чёрные: "+this.value' 
+                    onchange='document.getElementById("black").innerHTML = "Чёрные: "+this.value'>
+        </div>
+        <div class='item standard' onclick="window.location='/'">На главную</div>
+    </div>
+</body>
+<script>
+    document.getElementById('range').value = 10;
+    document.getElementById('rw').value = 10;
+    document.getElementById('rb').value = 10;
+</script>
+</html>

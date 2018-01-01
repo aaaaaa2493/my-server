@@ -1,0 +1,332 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="Cache-control" content="no-store">
+    <title>Poker by Vladimir Turov</title>
+    <link rel="stylesheet" type="text/css" href="/static/css/poker.css">
+    <script src="/static/poker/play/worker.js" charset="utf-8"></script>
+
+    <script type="text/javascript">
+        var player_name = '{{name}}';
+        var table_to_spectate = '{{table}}';
+        var replay_id = '{{replay}}';
+        var back_addr = '{{back_addr}}';
+        var ip = '{{ip}}';
+        var port = '{{port}}';
+        var nick = readCookie('nick');
+
+        function playSound(soundfile_mp) {
+
+            var a = new Audio();
+            a.src = soundfile_mp;
+            a.autoplay = true;
+
+        }
+
+    </script>
+</head>
+<body>
+
+<div class=main>
+    <div class=table></div>
+
+    <input id=message type=text class="input_button chat_input hidden" placeholder="input message" onkeyup="post_input_chat(event, this.value)">
+
+    <textarea id=chat disabled=disabled class="chat hidden">Chat:</textarea>
+
+    <div id=pot_info class="player pot_info">Pot:<br><span id=pot_count>0</span></div>
+
+    <div id=table_num class="player table_num hidden">Table #?</div>
+    <div id=hand_num_short_info class="player hand_num hidden"><span>Hand #</span><span id=hand_num>?</span></div>
+    <div id=place_short_info class='player place_num hidden'>? / ?</div>
+
+    <div id="big_blind" class="player big_blind_shortcut hidden"><span>Big blind: </span><span id=big_blind_shortcut>?</span></div>
+    <div id="small_blind" class="player small_blind_shortcut hidden"><span>Small blind: </span><span id=small_blind_shortcut>?</span></div>
+    <div id="ante" class="player ante_shortcut hidden"><span>Ante: </span><span id=ante_shortcut>?</span></div>
+
+    <div id=general_info class="general_info hidden">
+        Wait while all players register
+        <div class="button in_general g1" onclick='document.getElementById("general_info").classList.add("hidden");'>Ok</div>
+    </div>
+
+    <div id=tournament_info class="info hidden">
+          <span>You </span><span id=sit_on>sit on </span><span id=table_num_info>table #?</span><br>
+          <span>Current hand is #</span><span id=hand_num_info>?</span><br><br>
+
+          <span>Big blind: </span><span id=bb_info>?</span><br>
+          <span>Small blind: </span><span id=sb_info>?</span><br>
+          <span>Ante: </span><span id=ante_info>?</span><br><br>
+          
+          <span>Players left: </span><span id=players_left_info>?</span><br>
+          <span id=you_are_on><span>You are on </span><span id=place_info>?</span><span> place</span></span><br>
+          <span>Average stack: </span><span id=average_stack_info>?</span><br><br>
+          
+          Top players:<br><br>
+          <table id=top_players_info></table>
+    </div>
+
+    <div id=last_hand_info class="info hidden">
+              Board: 
+              <img id=flop1_info class=small_card src="/img/poker/cards/UP.png">
+              <img id=flop2_info class=small_card src="/img/poker/cards/UP.png">
+              <img id=flop3_info class=small_card src="/img/poker/cards/UP.png">
+              <img id=turn_info class=small_card src="/img/poker/cards/UP.png">
+              <img id=river_info class=small_card src="/img/poker/cards/UP.png">
+              <span id=your_cards>
+                  Your: 
+                  <img id=your_first_info class=small_card src="/img/poker/cards/UP.png">
+                  <img id=your_second_info class=small_card src="/img/poker/cards/UP.png">
+              </span>
+              
+              <table id=cards_reveal></table>
+      
+    </div>
+
+    <div id=tournament_info_button class='button tournament_info_button hidden' onclick="post_tournament_info()">Tournament info</div>
+    <div id=last_hand_info_button class='button last_hand_info_button hidden' onclick="post_last_hand_info()">Last hand info</div>
+
+    <div id=exit class='button exit_button' onclick='post_socket_clean()'>Quit</div>
+
+    <div id=players></div>
+
+    <div id=decisions>
+
+    <!--
+    
+        <div class='button fold_button' onclick='set_decision("1")'>Fold</div>
+        <div class='button call_button' onclick='set_decision("2")'>Check</div>
+        <div id=raise class='button raise_button' onclick='set_decision("3 " + document.getElementById("range").value)'>Raise 30</div>
+        <input id=range type=range min=30 max=3000 step=1 
+        onmousemove='document.getElementById("raise").innerHTML = (this.value==this.max?"All in ":"Raise ") + this.value' 
+        onchange='document.getElementById("raise").innerHTML = (this.value==this.max?"All in ":"Raise ") + this.value'>
+        <input id=textraise type=text class=input_button placeholder="input amount" onkeyup='textchange(this.value)'>
+
+        <div class='button small_button minus_button' onclick='raise_minus()'>-</div>
+        <div class='button small_button plus_button' onclick='raise_plus()'>+</div>
+        <div class='button small_button pot_button' onclick='raise_pot()'>Pot</div>
+        <div class='button small_button all_in_button' onclick='raise_all()'>All</div>
+
+        -->
+
+    </div>
+
+    <div id=premoves class=hidden>
+
+        <label for=premove1 class='premove premove1'>
+            <input type=checkbox name=premove1 id=premove1 onclick="post_premove(this, '1')">
+            <span id=textpremove1></span>
+        </label>
+
+        <label for=premove2 class='premove premove2'>
+            <input type=checkbox name=premove2 id=premove2 onclick="post_premove(this, '2')">
+            <span id=textpremove2></span>
+        </label>
+
+        <label for=premove3 class='premove premove3'>
+            <input type=checkbox name=premove3 id=premove3 onclick="post_premove(this, '3')">
+            <span id=textpremove3></span>
+        </label>
+
+    </div>
+    
+    <div id=replay_control class=hidden>
+        
+        <div id=replay_pause_play class="button b1" onclick="post_replay_pause_play()">Pause</div>
+        <div id=replay_next_step class="button b4 hidden" onclick="post_replay_next_step()">Next step</div>
+
+        <div id=replay_prev_hand class="button b2" onclick="post_replay_prev_hand()">Previous hand</div>
+        <div id=replay_next_hand class="button b8" onclick="post_replay_next_hand()">Next hand</div>
+
+    </div>
+
+    <div id=cards>
+        <img id=c11 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c12 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=c21 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c22 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=c31 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c32 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=c41 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c42 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=c51 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c52 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=c61 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c62 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=c71 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c72 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=c81 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c82 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=c91 class=card src="/img/poker/cards/ZZ.png">
+        <img id=c92 class=card src="/img/poker/cards/ZZ.png">
+
+        <img id=flop1 class=card src="/img/poker/cards/ZZ.png">
+        <img id=flop2 class=card src="/img/poker/cards/ZZ.png">
+        <img id=flop3 class=card src="/img/poker/cards/ZZ.png">
+        <img id=turn  class=card src="/img/poker/cards/ZZ.png">
+        <img id=river class=card src="/img/poker/cards/ZZ.png">
+    </div>
+
+    <img id=dealer class='chip d1' src="/img/poker/chips/D.png">
+
+    <div id=ch0 class=chips>
+        <div id=p0r1 class=cr1>
+            <div id=p0r1c1 class='chipstack cc1'></div>
+            <div id=p0r1c2 class='chipstack cc2'></div>
+            <div id=p0r1c3 class='chipstack cc3'></div>
+            <div id=p0r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p0r2 class=cr2>
+            <div id=p0r2c1 class='chipstack cc1'></div>
+            <div id=p0r2c2 class='chipstack cc2'></div>
+            <div id=p0r2c3 class='chipstack cc3'></div>
+            <div id=p0r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch5 class=chips>
+        <div id=p5r1 class=cr1>
+            <div id=p5r1c1 class='chipstack cc1'></div>
+            <div id=p5r1c2 class='chipstack cc2'></div>
+            <div id=p5r1c3 class='chipstack cc3'></div>
+            <div id=p5r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p5r2 class=cr2>
+            <div id=p5r2c1 class='chipstack cc1'></div>
+            <div id=p5r2c2 class='chipstack cc2'></div>
+            <div id=p5r2c3 class='chipstack cc3'></div>
+            <div id=p5r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch6 class=chips>
+        <div id=p6r1 class=cr1>
+            <div id=p6r1c1 class='chipstack cc1'></div>
+            <div id=p6r1c2 class='chipstack cc2'></div>
+            <div id=p6r1c3 class='chipstack cc3'></div>
+            <div id=p6r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p6r2 class=cr2>
+            <div id=p6r2c1 class='chipstack cc1'></div>
+            <div id=p6r2c2 class='chipstack cc2'></div>
+            <div id=p6r2c3 class='chipstack cc3'></div>
+            <div id=p6r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch4 class=chips>
+        <div id=p4r1 class=cr1>
+            <div id=p4r1c1 class='chipstack cc1'></div>
+            <div id=p4r1c2 class='chipstack cc2'></div>
+            <div id=p4r1c3 class='chipstack cc3'></div>
+            <div id=p4r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p4r2 class=cr2>
+            <div id=p4r2c1 class='chipstack cc1'></div>
+            <div id=p4r2c2 class='chipstack cc2'></div>
+            <div id=p4r2c3 class='chipstack cc3'></div>
+            <div id=p4r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch7 class=chips>
+        <div id=p7r1 class=cr1>
+            <div id=p7r1c1 class='chipstack cc1'></div>
+            <div id=p7r1c2 class='chipstack cc2'></div>
+            <div id=p7r1c3 class='chipstack cc3'></div>
+            <div id=p7r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p7r2 class=cr2>
+            <div id=p7r2c1 class='chipstack cc1'></div>
+            <div id=p7r2c2 class='chipstack cc2'></div>
+            <div id=p7r2c3 class='chipstack cc3'></div>
+            <div id=p7r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch3 class=chips>
+        <div id=p3r1 class=cr1>
+            <div id=p3r1c1 class='chipstack cc1'></div>
+            <div id=p3r1c2 class='chipstack cc2'></div>
+            <div id=p3r1c3 class='chipstack cc3'></div>
+            <div id=p3r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p3r2 class=cr2>
+            <div id=p3r2c1 class='chipstack cc1'></div>
+            <div id=p3r2c2 class='chipstack cc2'></div>
+            <div id=p3r2c3 class='chipstack cc3'></div>
+            <div id=p3r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch8 class=chips>
+        <div id=p8r1 class=cr1>
+            <div id=p8r1c1 class='chipstack cc1'></div>
+            <div id=p8r1c2 class='chipstack cc2'></div>
+            <div id=p8r1c3 class='chipstack cc3'></div>
+            <div id=p8r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p8r2 class=cr2>
+            <div id=p8r2c1 class='chipstack cc1'></div>
+            <div id=p8r2c2 class='chipstack cc2'></div>
+            <div id=p8r2c3 class='chipstack cc3'></div>
+            <div id=p8r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch2 class=chips>
+        <div id=p2r1 class=cr1>
+            <div id=p2r1c1 class='chipstack cc1'></div>
+            <div id=p2r1c2 class='chipstack cc2'></div>
+            <div id=p2r1c3 class='chipstack cc3'></div>
+            <div id=p2r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p2r2 class=cr2>
+            <div id=p2r2c1 class='chipstack cc1'></div>
+            <div id=p2r2c2 class='chipstack cc2'></div>
+            <div id=p2r2c3 class='chipstack cc3'></div>
+            <div id=p2r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch1 class=chips>
+        <div id=p1r1 class=cr1>
+            <div id=p1r1c1 class='chipstack cc1'></div>
+            <div id=p1r1c2 class='chipstack cc2'></div>
+            <div id=p1r1c3 class='chipstack cc3'></div>
+            <div id=p1r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p1r2 class=cr2>
+            <div id=p1r2c1 class='chipstack cc1'></div>
+            <div id=p1r2c2 class='chipstack cc2'></div>
+            <div id=p1r2c3 class='chipstack cc3'></div>
+            <div id=p1r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+
+    <div id=ch9 class=chips>
+        <div id=p9r1 class=cr1>
+            <div id=p9r1c1 class='chipstack cc1'></div>
+            <div id=p9r1c2 class='chipstack cc2'></div>
+            <div id=p9r1c3 class='chipstack cc3'></div>
+            <div id=p9r1c4 class='chipstack cc4'></div>
+        </div>
+        <div id=p9r2 class=cr2>
+            <div id=p9r2c1 class='chipstack cc1'></div>
+            <div id=p9r2c2 class='chipstack cc2'></div>
+            <div id=p9r2c3 class='chipstack cc3'></div>
+            <div id=p9r2c4 class='chipstack cc4'></div>
+        </div>
+    </div>
+    
+</div>
+</body>
+</html>

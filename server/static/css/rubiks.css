@@ -1,0 +1,229 @@
+html{
+    height: 100%;
+}
+
+body{
+    background: url(/img/bg.png);
+    padding: 10px;
+    margin-left: 15%;
+    height: 92%;
+    cursor: default;
+    font-family: 'calibri';
+    user-select: none;
+}
+
+.but{
+    background-color: #e8e8e8;
+    border-top-left-radius: 8px;
+    border-top-right-radius: 8px;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 2px;
+    height: 50px;
+    padding: 5px;
+    margin: 5px;
+    font-size: 20px;
+}
+
+.but:hover{
+    background-color: #cccccc;
+}
+
+.chosen, .chosen:hover{
+    background-color: white;
+}
+
+.tab{
+    background-color: white;
+    border-radius: 8px;
+    border-style: solid;
+    border-color: #000000;
+    border-width: 2px;
+    width: 80%;
+    height: 80%;
+    margin-top: 5px;
+    padding: 10px;
+}
+
+.scramble{
+    font-size: 30px;
+    user-select: all;
+}
+
+#timer{
+    font-size: 40px;
+    float:right;
+    margin-right: 60px;
+    user-select: all;
+}
+
+#cube{
+    height:100%; 
+    width:28%;
+}
+
+#leftarrowdiv, #cube, #rightarrowdiv, #rotatepaneldiv{
+    float: left;
+}
+
+#cubelayerdiv{
+    height:50%;
+}
+
+#arrowupdiv{
+    height:10%;
+    width:100%; 
+    margin-left:22%;
+}
+
+#rightarrowdiv{
+    height:100%; 
+    width:10%;
+}
+
+#leftarrowdiv{
+    height:100%; 
+    width:10%
+}
+
+#ar{
+    float:left;
+    margin-top:100%;
+}
+
+#al{
+    float:right;
+    margin-top:100%;
+}
+
+#rotatepaneldiv{
+    height:100%; 
+    width:52%;
+}
+
+#scrambletimerdiv{
+    height:10%;
+}
+
+#arrowdowndiv{
+    height:10%;
+    width:100%; 
+    margin-left:22%;
+}
+
+#controlpaneldiv{
+    height:10%;
+    padding: 5%;
+}
+
+.rotpic{
+    border-style: solid;
+    border-radius: 13px;
+    border-width: 3px;
+    border-color: white;
+    width:10%;
+}
+
+.rotpic:hover{
+    border-color: #cccccc;
+}
+
+.separator{
+    width:5%;
+    height:100%;
+    display:inline-block;
+}
+
+.rotbut{
+    width:10%;
+    height:100%;
+    margin:2px;
+}
+
+.butrow{
+    width:100%;
+    height:50%;
+}
+
+.extrabut{
+    border-bottom-left-radius: 8px;
+    border-bottom-right-radius: 8px;
+    border-color: #aaaaaa;
+
+}
+
+table, th, td {
+    border: 1px solid #aaaaaa;
+    border-collapse: collapse;
+}
+
+th, td {
+    padding: 5px;
+}
+
+tr:nth-child(even) {
+  background-color: #eeeeee;
+}
+
+tr:nth-child(odd) {
+  background-color: #cccccc;
+}
+
+/* The switch - the box around the slider */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 60px;
+  height: 34px;
+}
+
+/* Hide default HTML checkbox */
+.switch input {display:none;}
+
+/* The slider */
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: #ccc;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 26px;
+  width: 26px;
+  left: 4px;
+  bottom: 4px;
+  background-color: white;
+  -webkit-transition: .4s;
+  transition: .4s;
+}
+
+input:checked + .slider {
+  background-color: #2196F3;
+}
+
+input:focus + .slider {
+  box-shadow: 0 0 1px #2196F3;
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(26px);
+  -ms-transform: translateX(26px);
+  transform: translateX(26px);
+}
+
+/* Rounded sliders */
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
+}
