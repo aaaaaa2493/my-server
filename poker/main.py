@@ -1,3 +1,4 @@
+import re
 from datetime import datetime
 from itertools import combinations
 from operator import add, sub, mul, truediv, pow, abs, neg, gt
@@ -4424,22 +4425,22 @@ class PokerGame:
 
         class PlayerDecision:
 
-            def __init__(self, result: BasePlay.Result, money: int):
+            def __init__(self, result: BasePlay.ResultType, money: int):
                 self.result: BasePlay.Result = result
                 self.money: int = money
 
-        def __init__(self, name: str, money: int, cards: CardsPair):
+        def __init__(self, name: str, money: int):
             self.name: str = name
             self.money: int = money
             self.is_winner: bool = False
             self.is_loser: bool = False
-            self.cards: CardsPair = cards
+            self.cards: CardsPair = None
             self.preflop: List['PokerGame.MockPlayer.PlayerDecision'] = []
             self.flop: List['PokerGame.MockPlayer.PlayerDecision'] = []
             self.turn: List['PokerGame.MockPlayer.PlayerDecision'] = []
             self.river: List['PokerGame.MockPlayer.PlayerDecision'] = []
 
-        def add_decision(self, step: BasePlay.StepType, result: BasePlay.Result, money: int) -> None:
+        def add_decision(self, step: BasePlay.StepType, result: BasePlay.ResultType, money: int) -> None:
 
             if step == BasePlay.Step.Preflop:
                 self.preflop += [PokerGame.MockPlayer.PlayerDecision(result, money)]
@@ -4454,7 +4455,7 @@ class PokerGame:
 
     class PokerDecision:
 
-        def __init__(self, player: PokerGame.MockPlayer, result: BasePlay.Result, money: int):
+        def __init__(self, player: 'PokerGame.MockPlayer', result: BasePlay.ResultType, money: int):
             self.player: PokerGame.MockPlayer = player
             self.result: BasePlay.Result = result
             self.money: int = money
@@ -4464,24 +4465,27 @@ class PokerGame:
 
     class PokerHand:
 
-        def __init__(self, players: List[PokerGame.MockPlayer]):
+        def __init__(self, players: List['PokerGame.MockPlayer']):
+            self.id: int = 0
             self.players: List[PokerGame.MockPlayer] = players
             self.preflop: List[PokerGame.PokerDecision] = []
             self.flop: List[PokerGame.PokerDecision] = []
             self.turn: List[PokerGame.PokerDecision] = []
             self.river: List[PokerGame.PokerDecision] = []
-            self.deck: Deck = Deck()
-            self.board: Board = Board(self.deck)
+            self.small_blind: int = 0
+            self.big_blind: int = 0
+            self.ante: int = 0
+            self.board: Board = Board(Deck())
             self.curr_step: BasePlay.StepType = BasePlay.Step.Preflop
             self.curr_decisions: List[PokerGame.PokerDecision] = self.preflop
 
         def add_winner(self, name: str) -> None:
             self.get_player(name).is_winner = True
 
-        def get_winners(self) -> List[PokerGame.MockPlayer]:
+        def get_winners(self) -> List['PokerGame.MockPlayer']:
             return [player for player in self.players if player.is_winner]
 
-        def get_losers(self) -> List[PokerGame.MockPlayer]:
+        def get_losers(self) -> List['PokerGame.MockPlayer']:
             return [player for player in self.players if player.is_loser]
 
         def add_loser(self, name: str) -> None:
@@ -4501,10 +4505,10 @@ class PokerGame:
         def set_cards(self, name: str, cards: CardsPair) -> None:
             self.get_player(name).cards = cards
 
-        def get_player(self, name: str) -> PokerGame.MockPlayer:
-            return [player for player in self.players if player.name == name][0]
+        def get_player(self, name: str) -> 'PokerGame.MockPlayer':
+            return max(player for player in self.players if player.name == name)
 
-        def add_decision(self, name: str, result: BasePlay.Result, money: int) -> None:
+        def add_decision(self, name: str, result: BasePlay.ResultType, money: int) -> None:
             player = self.get_player(name)
             self.curr_decisions += [PokerGame.PokerDecision(player, result, money)]
             player.add_decision(self.curr_step, result, money)
@@ -4561,6 +4565,8 @@ class PokerGame:
                 for action in self.river:
                     ret += [' ' * 8 + str(action)]
 
+            ret += [f'    Board: {self.board}']
+
             winners = self.get_winners()
             losers = self.get_losers()
 
@@ -4577,6 +4583,7 @@ class PokerGame:
             return '\n'.join(ret)
 
     def __init__(self):
+        self.id: int = 0
         self.hands: List[PokerGame.PokerHand] = []
         self.curr_hand: PokerGame.PokerHand = None
 
@@ -4593,6 +4600,164 @@ class PokerGame:
             ret += [str(hand)]
             i += 1
         return '\n'.join(ret)
+
+
+class GameParser:
+
+    class RegEx:
+        name = '[a-zA-Z0-9_\-@\' ]+'
+
+        hand_border = re.compile(r'[*]{11} # [0-9]+ [*]{14}')
+        step_border = re.compile(r'[*]{3} [A-Z ]+ [*]{3}')
+        hand_and_game_id = re.compile(r'Hand #([0-9]+): Tournament #([0-9]+)')
+        small_and_big_blind = re.compile(r'\(([0-9]+)/([0-9]+)\)')
+        player_init = re.compile(r'Seat [0-9]+: (' + name + r') \(([0-9]+) in chips\)')
+        find_ante = re.compile('(' + name + r'): posts the ante ([0-9]+)')
+        find_small_blind = re.compile('(' + name + r'): posts small blind ([0-9]+)')
+        find_big_blind = re.compile('(' + name + r'): posts big blind ([0-9]+)')
+
+    path_to_raw_games = 'games/raw/'
+    path_to_parsed_games = 'games/parsed/'
+
+    @staticmethod
+    def parse_game(path: str) -> PokerGame:
+        game = PokerGame()
+        text_game = open(GameParser.path_to_raw_games + path, 'r').read()
+        every_hand = GameParser.RegEx.hand_border.split(text_game)
+
+        # first hand always empty because of separator in start of text
+        for hand in every_hand[1:2]:
+
+            steps = GameParser.RegEx.step_border.split(hand)
+
+            if len(steps) < 3 or len(steps) > 7:
+                raise ValueError(f'Invalid count of steps: {len(steps)} at hand # {every_hand.index(hand)}')
+
+            GameParser.process_initial(game, steps[0])
+            GameParser.process_hole_cards(game, steps[1])
+
+            if len(steps) == 3:
+                GameParser.process_summary(game, steps[2])
+
+            elif len(steps) == 4:
+                GameParser.process_flop(game, steps[2])
+                GameParser.process_summary(game, steps[3])
+
+            elif len(steps) == 5:
+                GameParser.process_flop(game, steps[2])
+                GameParser.process_turn(game, steps[3])
+                GameParser.process_summary(game, steps[4])
+
+            elif len(steps) == 6:
+                GameParser.process_flop(game, steps[2])
+                GameParser.process_turn(game, steps[3])
+                GameParser.process_river(game, steps[4])
+                GameParser.process_summary(game, steps[5])
+
+            elif len(steps) == 7:
+                GameParser.process_flop(game, steps[2])
+                GameParser.process_turn(game, steps[3])
+                GameParser.process_river(game, steps[4])
+                GameParser.process_show_down(game, steps[5])
+                GameParser.process_summary(game, steps[6])
+
+        return game
+
+    @staticmethod
+    def process_initial(game: PokerGame, text: str):
+        every_line = iter(text.strip().split('\n'))
+        first_line = next(every_line)
+
+        if not first_line.startswith('PokerStars Hand #'):
+            raise ValueError('It is not initial step: ' + text)
+
+        match = GameParser.RegEx.hand_and_game_id.search(first_line)
+
+        if game.curr_hand is None:
+            game.id = int(match.group(2))
+
+        hand_id = int(match.group(1))
+
+        match = GameParser.RegEx.small_and_big_blind.search(first_line)
+
+        small_blind = int(match.group(1))
+        big_blind = int(match.group(2))
+        
+        line = next(every_line)
+
+        if not line.startswith('Table '):
+            raise ValueError('It is not initial step (2nd line): ' + text)
+
+        line = next(every_line)
+        players: List[PokerGame.MockPlayer] = []
+
+        while line.startswith('Seat') and '(' in line:
+            match = GameParser.RegEx.player_init.search(line)
+
+            try:
+                name = match.group(1)
+            except AttributeError:
+                print('Found bad name:', line)
+                raise
+
+            money = int(match.group(2))
+            line = next(every_line)
+            players += [PokerGame.MockPlayer(name, money)]
+
+        game.add_hand(players)
+        game.curr_hand.id = hand_id
+        game.curr_hand.small_blind = small_blind
+        game.curr_hand.big_blind = big_blind
+
+        while ': posts the ante ' in line:
+            match = GameParser.RegEx.find_ante.search(line)
+            name = match.group(1)
+            ante = int(match.group(2))
+
+            if game.curr_hand.ante == 0:
+                game.curr_hand.ante = ante
+
+            game.curr_hand.add_decision(name, BasePlay.Result.Ante, ante)
+            line = next(every_line)
+
+        if ': posts small blind' in line:
+            match = GameParser.RegEx.find_small_blind.search(line)
+            name = match.group(1)
+            small_blind = int(match.group(2))
+
+            game.curr_hand.add_decision(name, BasePlay.Result.SmallBlind, small_blind)
+            line = next(every_line)
+
+        if ': posts big blind' in line:
+            match = GameParser.RegEx.find_big_blind.search(line)
+            name = match.group(1)
+            big_blind = int(match.group(2))
+
+            game.curr_hand.add_decision(name, BasePlay.Result.BigBlind, big_blind)
+
+    @staticmethod
+    def process_hole_cards(game: PokerGame, text: str):
+        pass
+
+    @staticmethod
+    def process_flop(game: PokerGame, text: str):
+        pass
+
+    @staticmethod
+    def process_turn(game: PokerGame, text: str):
+        pass
+
+    @staticmethod
+    def process_river(game: PokerGame, text: str):
+        pass
+
+    @staticmethod
+    def process_show_down(game: PokerGame, text: str):
+        pass
+
+    @staticmethod
+    def process_summary(game: PokerGame, text: str):
+        pass
 
 
 class GameManager:
@@ -5057,7 +5222,9 @@ class Stats:
 
 if __name__ == '__main__':
 
-    PlayManager.standings()
-    GameManager().run()
+    # PlayManager.standings()
+    # GameManager().run()
+
+    GameParser.parse_game('hh.txt')
 
     # Evolution(1000, 999, 9, 10000, Blinds.Scheme.Rapid).run()
