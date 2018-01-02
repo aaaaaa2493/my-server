@@ -4418,6 +4418,183 @@ class Network:
         self.send_raw('end')
 
 
+class PokerGame:
+
+    class MockPlayer:
+
+        class PlayerDecision:
+
+            def __init__(self, result: BasePlay.Result, money: int):
+                self.result: BasePlay.Result = result
+                self.money: int = money
+
+        def __init__(self, name: str, money: int, cards: CardsPair):
+            self.name: str = name
+            self.money: int = money
+            self.is_winner: bool = False
+            self.is_loser: bool = False
+            self.cards: CardsPair = cards
+            self.preflop: List['PokerGame.MockPlayer.PlayerDecision'] = []
+            self.flop: List['PokerGame.MockPlayer.PlayerDecision'] = []
+            self.turn: List['PokerGame.MockPlayer.PlayerDecision'] = []
+            self.river: List['PokerGame.MockPlayer.PlayerDecision'] = []
+
+        def add_decision(self, step: BasePlay.StepType, result: BasePlay.Result, money: int) -> None:
+
+            if step == BasePlay.Step.Preflop:
+                self.preflop += [PokerGame.MockPlayer.PlayerDecision(result, money)]
+            elif step == BasePlay.Step.Flop:
+                self.flop += [PokerGame.MockPlayer.PlayerDecision(result, money)]
+            elif step == BasePlay.Step.Turn:
+                self.turn += [PokerGame.MockPlayer.PlayerDecision(result, money)]
+            elif step == BasePlay.Step.River:
+                self.river += [PokerGame.MockPlayer.PlayerDecision(result, money)]
+            else:
+                raise ValueError('No such step id ' + str(step))
+
+    class PokerDecision:
+
+        def __init__(self, player: PokerGame.MockPlayer, result: BasePlay.Result, money: int):
+            self.player: PokerGame.MockPlayer = player
+            self.result: BasePlay.Result = result
+            self.money: int = money
+
+        def __str__(self) -> str:
+            return f'{self.player.name} {BasePlay.Result.ToStr[self.result]} {self.money}'
+
+    class PokerHand:
+
+        def __init__(self, players: List[PokerGame.MockPlayer]):
+            self.players: List[PokerGame.MockPlayer] = players
+            self.preflop: List[PokerGame.PokerDecision] = []
+            self.flop: List[PokerGame.PokerDecision] = []
+            self.turn: List[PokerGame.PokerDecision] = []
+            self.river: List[PokerGame.PokerDecision] = []
+            self.deck: Deck = Deck()
+            self.board: Board = Board(self.deck)
+            self.curr_step: BasePlay.StepType = BasePlay.Step.Preflop
+            self.curr_decisions: List[PokerGame.PokerDecision] = self.preflop
+
+        def add_winner(self, name: str) -> None:
+            self.get_player(name).is_winner = True
+
+        def get_winners(self) -> List[PokerGame.MockPlayer]:
+            return [player for player in self.players if player.is_winner]
+
+        def get_losers(self) -> List[PokerGame.MockPlayer]:
+            return [player for player in self.players if player.is_loser]
+
+        def add_loser(self, name: str) -> None:
+            self.get_player(name).is_loser = True
+
+        def set_flop_cards(self, card1: Card, card2: Card, card3: Card) -> None:
+            self.board.flop1 = card1
+            self.board.flop2 = card2
+            self.board.flop3 = card3
+
+        def set_turn_card(self, card: Card) -> None:
+            self.board.turn = card
+
+        def set_river_card(self, card: Card) -> None:
+            self.board.river = card
+
+        def set_cards(self, name: str, cards: CardsPair) -> None:
+            self.get_player(name).cards = cards
+
+        def get_player(self, name: str) -> PokerGame.MockPlayer:
+            return [player for player in self.players if player.name == name][0]
+
+        def add_decision(self, name: str, result: BasePlay.Result, money: int) -> None:
+            player = self.get_player(name)
+            self.curr_decisions += [PokerGame.PokerDecision(player, result, money)]
+            player.add_decision(self.curr_step, result, money)
+
+        def switch_to_step(self, step: BasePlay.StepType) -> None:
+
+            if step == BasePlay.Step.Preflop:
+                self.curr_decisions = self.preflop
+            elif step == BasePlay.Step.Flop:
+                self.curr_decisions = self.flop
+            elif step == BasePlay.Step.Turn:
+                self.curr_decisions = self.turn
+            elif step == BasePlay.Step.River:
+                self.curr_decisions = self.river
+            else:
+                raise ValueError('No such step id ' + str(step))
+
+        def next_decision(self) -> None:
+            self.curr_step = BasePlay.Step.next_step(self.curr_step)
+            self.switch_to_step(self.curr_step)
+
+        def __str__(self) -> str:
+
+            ret = ['    Players:']
+            for player in self.players:
+                ret += [f'        {player.name} : {player.money} : {player.cards}']
+
+            if self.preflop:
+                ret += ['    Preflop:']
+                for action in self.preflop:
+                    ret += [' ' * 8 + str(action)]
+
+            if self.flop:
+                ret += [f'    Flop: {self.board.flop1.card} '
+                        f'{self.board.flop2.card} '
+                        f'{self.board.flop3.card}']
+                for action in self.flop:
+                    ret += [' ' * 8 + str(action)]
+
+            if self.turn:
+                ret += [f'    Turn: {self.board.flop1.card} '
+                        f'{self.board.flop2.card} '
+                        f'{self.board.flop3.card} '
+                        f'{self.board.turn.card}']
+                for action in self.turn:
+                    ret += [' ' * 8 + str(action)]
+
+            if self.river:
+                ret += [f'    River: {self.board.flop1.card} '
+                        f'{self.board.flop2.card} '
+                        f'{self.board.flop3.card} '
+                        f'{self.board.turn.card} '
+                        f'{self.board.river.card}']
+                for action in self.river:
+                    ret += [' ' * 8 + str(action)]
+
+            winners = self.get_winners()
+            losers = self.get_losers()
+
+            if winners:
+                ret += [f'    Winners:']
+                for winner in winners:
+                    ret += [' ' * 8 + winner.name]
+
+            if losers:
+                ret += [f'    Losers:']
+                for loser in losers:
+                    ret += [' ' * 8 + loser.name]
+
+            return '\n'.join(ret)
+
+    def __init__(self):
+        self.hands: List[PokerGame.PokerHand] = []
+        self.curr_hand: PokerGame.PokerHand = None
+
+    def add_hand(self, players: List['PokerGame.MockPlayer']):
+        new_hand = PokerGame.PokerHand(players)
+        self.hands += [new_hand]
+        self.curr_hand = new_hand
+
+    def __str__(self) -> str:
+        ret = [f'Poker game of {len(self.hands)} hands']
+        i: int = 1
+        for hand in self.hands:
+            ret += [f'Hand #{i}']
+            ret += [str(hand)]
+            i += 1
+        return '\n'.join(ret)
+
+
 class GameManager:
 
     def __init__(self):
