@@ -922,6 +922,7 @@ class BasePlay:
         SmallBlind = 8
         BigBlind = 9
         WinMoney = 10
+        ReturnMoney = 11
 
         ToStr = {DoNotPlay: 'do not play',
                  Fold: 'fold',
@@ -933,7 +934,8 @@ class BasePlay:
                  Ante: 'ante',
                  SmallBlind: 'sb',
                  BigBlind: 'bb',
-                 WinMoney: 'win'}
+                 WinMoney: 'win',
+                 ReturnMoney: 'return'}
 
     DecisionType = int
 
@@ -3206,6 +3208,25 @@ class Table:
 
             if self.players.count_in_game_players() == 1:
 
+                player_max_pot = max(p for p in self.players.in_game_players())
+                second_max_pot = max(p.gived for p in self.players.all_players() if p != player_max_pot)
+                difference = player_max_pot.gived - second_max_pot
+                player_max_pot.gived -= difference
+                player_max_pot.money += difference
+
+                for controlled_player in self.players.controlled:
+                    controlled_player.network.back_excess_money(player_max_pot, difference)
+
+                if self.online:
+                    self.network.back_excess_money(player_max_pot, difference)
+                    sleep(Table.Delay.ExcessMoney)
+
+                self.history.add(player_max_pot, BasePlay.Result.ReturnMoney, difference)
+                Debug.table(f'Table {self.id} hand {self.board.hand}: '
+                            f'{difference} money back to {player_max_pot.name}')
+
+                self.collect_pot()
+
                 self.end_game()
                 return
 
@@ -3234,7 +3255,7 @@ class Table:
                         self.network.back_excess_money(player_max_pot, difference)
                         sleep(Table.Delay.ExcessMoney)
 
-                    self.history.add(player, BasePlay.Result.WinMoney, difference)
+                    self.history.add(player, BasePlay.Result.ReturnMoney, difference)
                     Debug.table(f'Table {self.id} hand {self.board.hand}: {difference} money back to {player.name}')
 
                 self.collect_pot()
@@ -3340,8 +3361,6 @@ class Table:
 
     def end_game(self) -> None:
 
-        self.collect_pot()
-
         Debug.table(f'Table {self.id} hand {self.board.hand}: cards - {self.board}')
 
         if self.players.count_in_game_players() == 1:
@@ -3369,6 +3388,8 @@ class Table:
             self.give_money(winner)
 
         else:
+
+            self.collect_pot()
 
             hand_results = []
 
