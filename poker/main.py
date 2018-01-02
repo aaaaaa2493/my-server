@@ -9,7 +9,7 @@ from random import shuffle, random, choice, uniform, randint
 from statistics import mean
 from threading import Thread, Lock
 from time import sleep
-from typing import List, Dict, Tuple, Callable, Optional
+from typing import List, Dict, Tuple, Callable, Optional, Iterator
 from websocket import create_connection
 from json import loads, dumps
 from copy import deepcopy
@@ -446,7 +446,7 @@ class Poker:
 
             self.cards = cards
 
-        def kickers(self):
+        def kickers(self) -> Iterator[Card.RankType]:
 
             if self.kicker1 is None:
                 return
@@ -2447,19 +2447,19 @@ class Players:
 
         return self.next_player()
 
-    def all_players(self):
+    def all_players(self) -> Iterator[Player]:
 
         for player in self.players:
             if player is not None:
                 yield player
 
-    def in_game_players(self):
+    def in_game_players(self) -> Iterator[Player]:
 
         for player in self.all_players():
             if player.in_game:
                 yield player
 
-    def not_in_game_players(self):
+    def not_in_game_players(self) -> Iterator[Player]:
 
         for player in self.all_players():
             if not player.in_game:
@@ -2472,13 +2472,13 @@ class Players:
             count += 1
         return count
 
-    def all_in_players(self):
+    def all_in_players(self) -> Iterator[Player]:
 
         for player in self.all_players():
             if player.in_all_in():
                 yield player
 
-    def in_game_not_in_all_in_players(self):
+    def in_game_not_in_all_in_players(self) -> Iterator[Player]:
 
         for player in self.all_players():
             if player.in_game_not_in_all_in():
@@ -4664,7 +4664,7 @@ class GameParser:
         return game
 
     @staticmethod
-    def process_initial(game: PokerGame, text: str):
+    def process_initial(game: PokerGame, text: str) -> None:
         every_line = iter(text.strip().split('\n'))
         first_line = next(every_line)
 
@@ -4682,7 +4682,7 @@ class GameParser:
 
         small_blind = int(match.group(1))
         big_blind = int(match.group(2))
-        
+
         line = next(every_line)
 
         if not line.startswith('Table '):
@@ -4736,27 +4736,27 @@ class GameParser:
             game.curr_hand.add_decision(name, BasePlay.Result.BigBlind, big_blind)
 
     @staticmethod
-    def process_hole_cards(game: PokerGame, text: str):
+        pass
+    def process_hole_cards(game: PokerGame, text: str) -> None:
+
+    @staticmethod
+    def process_flop(game: PokerGame, text: str) -> None:
         pass
 
     @staticmethod
-    def process_flop(game: PokerGame, text: str):
+    def process_turn(game: PokerGame, text: str) -> None:
         pass
 
     @staticmethod
-    def process_turn(game: PokerGame, text: str):
+    def process_river(game: PokerGame, text: str) -> None:
         pass
 
     @staticmethod
-    def process_river(game: PokerGame, text: str):
+    def process_show_down(game: PokerGame, text: str) -> None:
         pass
 
     @staticmethod
-    def process_show_down(game: PokerGame, text: str):
-        pass
-
-    @staticmethod
-    def process_summary(game: PokerGame, text: str):
+    def process_summary(game: PokerGame, text: str) -> None:
         pass
 
 
