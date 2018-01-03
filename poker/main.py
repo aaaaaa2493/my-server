@@ -4466,9 +4466,11 @@ class PokerGame:
                 self.result: PokerGame.EventType = result
                 self.money: int = money
 
-        def __init__(self, name: str, money: int):
+        def __init__(self, name: str, money: int, seat: int, is_active: bool):
             self.name: str = name
             self.money: int = money
+            self.seat: int = seat
+            self.is_active = is_active
             self.is_winner: bool = False
             self.is_loser: bool = False
             self.cards: CardsPair = None
@@ -4673,8 +4675,8 @@ class GameParser:
         name_tournament = re.compile(r'Tournament #[0-9]+, ([^-]*) - Level')
         date_tournament = re.compile(r'- ([0-9]{4}/[0-9]{2}/[0-9]{2}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})')
         small_and_big_blind = re.compile(r'\(([0-9]+)/([0-9]+)\)')
-        player_init = re.compile(r'Seat [0-9]+: (' + name + r') \(([0-9]+) in chips\)$')
-        player_init_sitting_out = re.compile(r'Seat [0-9]+: (' + name + r') \(([0-9]+) in chips\) is sitting out$')
+        player_init = re.compile(r'Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\)$')
+        player_init_sitting_out = re.compile(r'Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) is sitting out$')
         find_ante = re.compile('(' + name + r'): posts the ante ([0-9]+)$')
         find_small_blind = re.compile('(' + name + r'): posts small blind ([0-9]+)$')
         find_big_blind = re.compile('(' + name + r'): posts big blind ([0-9]+)$')
@@ -4880,17 +4882,26 @@ class GameParser:
         players: List[PokerGame.MockPlayer] = []
 
         while line.startswith('Seat') and '(' in line:
-            match = GameParser.RegEx.player_init.search(line)
+
+            if not line.endswith('is sitting out'):
+                match = GameParser.RegEx.player_init.search(line)
+                is_active = True
+
+            else:
+                match = GameParser.RegEx.player_init_sitting_out.search(line)
+                is_active = False
+
+            seat = int(match.group(1))
 
             try:
-                name = match.group(1)
+                name = match.group(2)
             except AttributeError:
                 print('Found bad name:', line)
                 raise
 
-            money = int(match.group(2))
+            money = int(match.group(3))
             line = next(every_line)
-            players += [PokerGame.MockPlayer(name, money)]
+            players += [PokerGame.MockPlayer(name, money, seat, is_active)]
 
         game.add_hand(players)
         game.curr_hand.id = hand_id
