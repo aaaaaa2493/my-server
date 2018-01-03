@@ -5148,6 +5148,12 @@ class GameParser:
                     line.endswith('folded on the Flop') or \
                     line.endswith('folded on the Turn') or \
                     line.endswith('folded on the River'):
+
+                try:
+                    line = next(every_line)
+                except StopIteration:
+                    return
+
                 continue
 
             if ' (button) ' in line:
