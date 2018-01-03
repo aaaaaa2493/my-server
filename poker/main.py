@@ -398,7 +398,13 @@ class CardsPair:
         return False
 
     def __str__(self):
-        return Card.str(self.get()) if self.initialized() else 'no no'
+
+        if self.initialized():
+            return f'{self.first.card} {self.second.card}'
+        elif self.first is not None:
+            return f'{self.first.card} ??'
+        else:
+            return '?? ??'
 
 
 class Poker:
