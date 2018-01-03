@@ -4443,6 +4443,7 @@ class PokerGame:
         ChatMessage = '10'
         Disconnected = '11'
         Connected = '12'
+        FinishGame = '13'
 
         ToStr = {Fold: 'fold',
                  Call: 'call',
@@ -4456,7 +4457,8 @@ class PokerGame:
                  ReturnMoney: 'return',
                  ChatMessage: 'chat message',
                  Disconnected: 'disconnected',
-                 Connected: 'connected'}
+                 Connected: 'connected',
+                 FinishGame: 'finish game'}
 
     class MockPlayer:
 
@@ -4514,10 +4516,11 @@ class PokerGame:
 
     class PokerDecision:
 
-        def __init__(self, player: 'PokerGame.MockPlayer', result: PokerGame.EventType, money: int):
+        def __init__(self, player: 'PokerGame.MockPlayer', result: PokerGame.EventType, money: int, msg: str):
             self.player: PokerGame.MockPlayer = player
             self.result: PokerGame.EventType = result
             self.money: int = money
+            self.message: str = msg
 
         def __str__(self) -> str:
             return f'{self.player.name} {PokerGame.Event.ToStr[self.result]} {self.money}'
@@ -4567,9 +4570,9 @@ class PokerGame:
         def get_player(self, name: str) -> 'PokerGame.MockPlayer':
             return max(player for player in self.players if player.name == name)
 
-        def add_decision(self, name: str, result: PokerGame.EventType, money: int) -> None:
+        def add_decision(self, name: str, result: PokerGame.EventType, money: int, msg: str = '') -> None:
             player = self.get_player(name)
-            self.curr_decisions += [PokerGame.PokerDecision(player, result, money)]
+            self.curr_decisions += [PokerGame.PokerDecision(player, result, money, msg)]
             player.add_decision(self.curr_step, result, money)
 
         def switch_to_step(self, step: BasePlay.StepType) -> None:
@@ -4689,12 +4692,12 @@ class GameParser:
         find_is_connected = re.compile(r'^(' + name + r') is connected$')
         find_is_disconnected = re.compile(r'^(' + name + r') is disconnected$')
         find_is_sitting_out = re.compile(r'^(' + name + r') is sitting out$')
-        find_said = re.compile(r'^(' + name + r') said, "[^\n]+"$')
+        find_said = re.compile(r'^(' + name + r') said, "([^\n]+)"$')
         find_finished = re.compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place$')
         find_received = re.compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place '
-                                                 r'and received (\$[0-9]+\.[0-9]{2})\.$')
+                                                  r'and received \$([0-9]+\.[0-9]{2})\.$')
         find_winner = re.compile(r'^(' + name + r') wins the tournament and receives '
-                                               r'(\$[0-9]+\.[0-9]{2}) - congratulations!$')
+                                                r'\$([0-9]+\.[0-9]{2}) - congratulations!$')
         find_does_not_show = re.compile(r'^(' + name + '): doesn\'t show hand$')
         find_has_returned = re.compile(r'^(' + name + r') has returned$')
         find_has_timed_out = re.compile(r'^(' + name + r') has timed out$')
@@ -4784,65 +4787,140 @@ class GameParser:
     @staticmethod
     def process_actions(game: PokerGame, lines: Iterator[str]) -> None:
 
-        try:
-            line = next(lines)
-        except StopIteration:
-            return
+        while True:
 
-        while ':' in line:
+            try:
+                line = next(lines)
+            except StopIteration:
+                return
+
+            match = GameParser.RegEx.find_uncalled_bet.search(line)
+
+            if match is not None:
+                money = int(match.group(1))
+                name = match.group(2)
+                game.curr_hand.add_decision(name, PokerGame.Event.ReturnMoney, money)
+                continue
+
+            match = GameParser.RegEx.find_collect_pot.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                money = int(match.group(2))
+                game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                continue
+
+            match = GameParser.RegEx.find_show_cards.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                cards = match.group(2)
+
+                if len(cards) == 5:
+                    card1, card2 = map(str.upper, cards.split())
+                    pair = CardsPair(Card(card1), Card(card2))
+
+                elif len(cards) == 2:
+                    only_card = Card(cards.upper())
+                    pair = CardsPair(only_card)
+
+                else:
+                    raise ValueError(f'Bad cards shown: {line}')
+
+                game.curr_hand.set_cards(name, pair)
+                continue
+
+            match = GameParser.RegEx.find_is_connected.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                game.curr_hand.add_decision(name, PokerGame.Event.Connected, 0)
+                continue
+
+            match = GameParser.RegEx.find_is_disconnected.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                continue
+
+            match = GameParser.RegEx.find_is_sitting_out.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                continue
+
+            match = GameParser.RegEx.find_said.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                msg = match.group(2)
+                game.curr_hand.add_decision(name, PokerGame.Event.ChatMessage, 0, msg)
+                continue
+
+            match = GameParser.RegEx.find_finished.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                place = match.group(2)
+                game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, 0, place)
+                continue
+
+            match = GameParser.RegEx.find_received.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                place = match.group(2)
+                earn = int(match.group(3).replace('.', ''))
+                game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, earn, place)
+                continue
+
+            match = GameParser.RegEx.find_winner.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                earn = int(match.group(2).replace('.', ''))
+                game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, earn, '1st')
+                continue
+
+            match = GameParser.RegEx.find_does_not_show.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_has_returned.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                game.curr_hand.add_decision(name, PokerGame.Event.Connected, 0)
+                continue
+
+            match = GameParser.RegEx.find_has_timed_out.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_timed_disconnected.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                continue
+
             match = GameParser.RegEx.find_action.search(line)
-            name = match.group(1)
-            action = match.group(2)
+
+            try:
+                name = match.group(1)
+                action = match.group(2)
+            except AttributeError:
+                print('Cannot parse line:', line)
+                raise
 
             result, money = GameParser.parse_action(game.curr_hand.get_player(name),
                                                     game.curr_hand.curr_step, action)
 
             game.curr_hand.add_decision(name, result, money)
-
-            try:
-                line = next(lines)
-            except StopIteration:
-                return
-
-        if line.startswith('Uncalled bet'):
-            match = GameParser.RegEx.find_uncalled_bet.search(line)
-            money = int(match.group(1))
-            name = match.group(2)
-
-            game.curr_hand.add_decision(name, PokerGame.Event.ReturnMoney, money)
-
-            try:
-                line = next(lines)
-            except StopIteration:
-                return
-
-            match = GameParser.RegEx.find_collect_pot.search(line)
-            name = match.group(1)
-            money = int(match.group(2))
-
-            game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
-
-            try:
-                line = next(lines)
-            except StopIteration:
-                return
-
-            GameParser.RegEx.find_show_cards.search(line)
-            name = match.group(1)
-            cards = match.group(2)
-
-            if len(cards) == 5:
-                card1, card2 = map(str.upper, cards.split())
-                pair = CardsPair(Card(card1), Card(card2))
-
-            elif len(cards) == 2:
-                only_card = Card(cards.upper())
-                pair = CardsPair(only_card)
-
-            else:
-                raise ValueError(f'Bad cards shown: {line}')
-
-            game.curr_hand.set_cards(name, pair)
 
     @staticmethod
     def process_initial(game: PokerGame, text: str) -> None:
