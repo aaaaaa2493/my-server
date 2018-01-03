@@ -4494,7 +4494,7 @@ class PokerGame:
             else:
                 raise ValueError('No such step id ' + str(step))
 
-        def add_decision(self, step: BasePlay.StepType, result: PokerGame.EventType, money: int) -> None:
+        def add_decision(self, step: BasePlay.StepType, result: 'PokerGame.EventType', money: int) -> None:
             self.get_list(step).append(PokerGame.MockPlayer.PlayerDecision(result, money))
 
         def gived(self, step: BasePlay.StepType) -> int:
@@ -4516,7 +4516,7 @@ class PokerGame:
 
     class PokerDecision:
 
-        def __init__(self, player: 'PokerGame.MockPlayer', result: PokerGame.EventType, money: int, msg: str):
+        def __init__(self, player: 'PokerGame.MockPlayer', result: 'PokerGame.EventType', money: int, msg: str):
             self.player: PokerGame.MockPlayer = player
             self.result: PokerGame.EventType = result
             self.money: int = money
@@ -4570,7 +4570,7 @@ class PokerGame:
         def get_player(self, name: str) -> 'PokerGame.MockPlayer':
             return max(player for player in self.players if player.name == name)
 
-        def add_decision(self, name: str, result: PokerGame.EventType, money: int, msg: str = '') -> None:
+        def add_decision(self, name: str, result: 'PokerGame.EventType', money: int, msg: str = '') -> None:
             player = self.get_player(name)
             self.curr_decisions += [PokerGame.PokerDecision(player, result, money, msg)]
             player.add_decision(self.curr_step, result, money)
