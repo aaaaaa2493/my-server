@@ -4687,7 +4687,8 @@ class GameParser:
         find_action = re.compile('^(' + name + r'): ([a-z0-9 -]+)$')
         find_flop = re.compile(r'\[(..) (..) (..)]$')
         find_turn = re.compile(r'\[.. .. ..] \[(..)]$')
-        find_river = re.compile(r'\[.. .. ..] \[..] \[(..)]$')
+        find_river = re.compile(r'\[.. .. .. ..] \[(..)]$')
+        find_shows_in_show_down = re.compile(r'^(' + name + r'): shows \[(..) (..)] \([a-zA-Z0-9, +-]+\)$')
 
         find_uncalled_bet = re.compile(r'^Uncalled bet \(([0-9]+)\) returned to (' + name + r')$')
         find_collect_pot = re.compile(r'^(' + name + r') collected ([0-9]+) from pot$')
@@ -4695,7 +4696,7 @@ class GameParser:
         find_is_connected = re.compile(r'^(' + name + r') is connected$')
         find_is_disconnected = re.compile(r'^(' + name + r') is disconnected$')
         find_is_sitting_out = re.compile(r'^(' + name + r') is sitting out$')
-        find_said = re.compile(r'^(' + name + r') said, "([^\n]+)"$')
+        find_said = re.compile(r'^(' + name + ') said, "([^\n]+)"$')
         find_finished = re.compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place$')
         find_received = re.compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place '
                                                   r'and received \$([0-9]+\.[0-9]{2})\.$')
@@ -5093,7 +5094,25 @@ class GameParser:
 
     @staticmethod
     def process_show_down(game: PokerGame, text: str) -> None:
-        pass
+
+        every_line = iter(text.strip().split('\n'))
+        line = next(every_line)
+
+        while ': shows' in line:
+
+            match = GameParser.RegEx.find_shows_in_show_down.search(line)
+            name = match.group(1)
+            card1 = Card(match.group(2).upper())
+            card2 = Card(match.group(3).upper())
+
+            game.curr_hand.set_cards(name, CardsPair(card1, card2))
+
+            try:
+                line = next(every_line)
+            except StopIteration:
+                return
+
+        GameParser.process_actions(game, every_line)
 
     @staticmethod
     def process_summary(game: PokerGame, text: str) -> None:
