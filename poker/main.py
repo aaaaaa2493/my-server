@@ -5163,7 +5163,7 @@ class GameParser:
 
                 name = match.group(1)
                 win_player_cards = game.curr_hand.get_player(name).cards
-                if win_player_cards.cards is not None and win_player_cards.initialized():
+                if win_player_cards is not None and win_player_cards.initialized():
                     game.curr_hand.add_winner(name)
 
             else:
@@ -5183,7 +5183,7 @@ class GameParser:
                     if match is not None:
                         name = match.group(1)
                         win_player_cards = game.curr_hand.get_player(name).cards
-                        if win_player_cards.cards is not None and win_player_cards.initialized():
+                        if win_player_cards is not None and win_player_cards.initialized():
                             game.curr_hand.add_winner(name)
 
                     else:
