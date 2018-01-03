@@ -2,7 +2,7 @@ import re
 from datetime import datetime
 from itertools import combinations
 from operator import add, sub, mul, truediv, pow, abs, neg, gt
-from os import listdir, mkdir, remove
+from os import listdir, mkdir, makedirs, remove
 from os.path import exists
 from pickle import load, dump
 from random import shuffle, random, choice, uniform, randint
@@ -4730,6 +4730,7 @@ class PokerGame:
         self.name: str = ''
         self.date: str = ''
         self.time: str = ''
+        self.source: str = ''
         self.hands: List[PokerGame.PokerHand] = []
         self.curr_hand: PokerGame.PokerHand = None
 
@@ -4737,6 +4738,31 @@ class PokerGame:
         new_hand = PokerGame.PokerHand(players)
         self.hands += [new_hand]
         self.curr_hand = new_hand
+
+    def save(self, path:str = '') -> None:
+
+        if path == '':
+            path = self.source
+
+        if not exists('games'):
+            mkdir('games')
+
+        if not exists('games/parsed'):
+            mkdir('games/parsed')
+
+        path = GameParser.path_to_parsed_games + path
+        *dirs, file_name = path.split('/')
+
+        dirs = '/'.join(dirs)
+
+        if not exists(dirs):
+            makedirs(dirs)
+
+        dump(self, open(path, 'wb'))
+
+    @staticmethod
+    def load(path: str) -> 'PokerGame':
+        return load(open(GameParser.path_to_parsed_games + path, 'rb'))
 
     def __str__(self) -> str:
         ret = [f'Poker game of {len(self.hands)} hands']
@@ -4811,6 +4837,7 @@ class GameParser:
     def parse_game(path: str) -> PokerGame:
         game = PokerGame()
         text_game = open(GameParser.path_to_raw_games + path, 'r').read()
+        game.source = path
         every_hand = GameParser.RegEx.hand_border.split(text_game)
 
         # first hand always empty because of separator in start of text
