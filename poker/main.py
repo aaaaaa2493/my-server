@@ -4682,6 +4682,19 @@ class GameParser:
         find_uncalled_bet = re.compile(r'Uncalled bet \(([0-9]+)\) returned to (' + name + r')')
         find_collect_pot = re.compile(r'(' + name + r') collected ([0-9]+) from pot$')
         find_show_cards = re.compile(r'(' + name + r'): shows \[([2-9AKQJT hdcs]+)]')
+        find_is_connected = re.compile(r'(' + name + r') is connected$')
+        find_is_disconnected = re.compile(r'(' + name + r' is disconnected$')
+        find_is_sitting_out = re.compile(r'(' + name + r' is sitting out$')
+        find_said = re.compile(r'(' + name + r') said, "[^\n]+"$')
+        find_finished = re.compile(r'(' + name + r') finished the tournament in ([0-9]+..) place$')
+        find_received = re.compile(r'(' + name + r') finished the tournament in ([0-9]+..) place '
+                                                 r'and received (\$[0-9]+\.[0-9]{2})\.$')
+        find_winner = re.compile(r'(' + name + r') wins the tournament and receives '
+                                               r'(\$[0-9]+\.[0-9]{2}) - congratulations!$')
+        find_does_not_show = re.compile(r'(' + name + '): doesn\'t show hand$')
+        find_has_returned = re.compile(r'(' + name + r') has returned$')
+        find_has_timed_out = re.compile(r'(' + name + r') has timed out$')
+        find_timed_disconnected = re.compile(r'(' + name + r') has timed out while disconnected$')
 
     path_to_raw_games = 'games/raw/'
     path_to_parsed_games = 'games/parsed/'
@@ -4827,9 +4840,6 @@ class GameParser:
 
             game.curr_hand.set_cards(name, pair)
 
-
-
-
     @staticmethod
     def process_initial(game: PokerGame, text: str) -> None:
         every_line: Iterator[str] = iter(text.strip().split('\n'))
@@ -4929,8 +4939,6 @@ class GameParser:
         game.curr_hand.set_cards(name, pair)
 
         GameParser.process_actions(game, every_line)
-
-
 
     @staticmethod
     def process_flop(game: PokerGame, text: str) -> None:
