@@ -4681,7 +4681,7 @@ class GameParser:
         find_action = re.compile('(' + name + r'): ([a-z0-9 -]+)')
         find_uncalled_bet = re.compile(r'Uncalled bet \(([0-9]+)\) returned to (' + name + r')')
         find_collect_pot = re.compile(r'(' + name + r') collected ([0-9]+) from pot$')
-        find_show_cards = re.compile(r'(' + name + r'): shows \[([2-9AKQJThdcs ]+)]')
+        find_show_cards = re.compile(r'(' + name + r'): shows \[([2-9AKQJT hdcs]+)]')
 
     path_to_raw_games = 'games/raw/'
     path_to_parsed_games = 'games/parsed/'
