@@ -4427,12 +4427,43 @@ class Network:
 
 class PokerGame:
 
+    EventType = str
+
+    class Event:
+        Fold = '0'
+        Call = '1'
+        Check = '2'
+        Raise = '3'
+        Allin = '4'
+        Ante = '5'
+        SmallBlind = '6'
+        BigBlind = '7'
+        WinMoney = '8'
+        ReturnMoney = '9'
+        ChatMessage = '10'
+        Disconnected = '11'
+        Connected = '12'
+
+        ToStr = {Fold: 'fold',
+                 Call: 'call',
+                 Check: 'check',
+                 Raise: 'raise',
+                 Allin: 'all in',
+                 Ante: 'ante',
+                 SmallBlind: 'sb',
+                 BigBlind: 'bb',
+                 WinMoney: 'win',
+                 ReturnMoney: 'return',
+                 ChatMessage: 'chat message',
+                 Disconnected: 'disconnected',
+                 Connected: 'connected'}
+
     class MockPlayer:
 
         class PlayerDecision:
 
-            def __init__(self, result: BasePlay.ResultType, money: int):
-                self.result: BasePlay.Result = result
+            def __init__(self, result: 'PokerGame.EventType', money: int):
+                self.result: PokerGame.EventType = result
                 self.money: int = money
 
         def __init__(self, name: str, money: int):
@@ -4446,28 +4477,48 @@ class PokerGame:
             self.turn: List['PokerGame.MockPlayer.PlayerDecision'] = []
             self.river: List['PokerGame.MockPlayer.PlayerDecision'] = []
 
-        def add_decision(self, step: BasePlay.StepType, result: BasePlay.ResultType, money: int) -> None:
+        def get_list(self, step: BasePlay.StepType) -> List['PokerGame.MockPlayer.PlayerDecision']:
 
             if step == BasePlay.Step.Preflop:
-                self.preflop += [PokerGame.MockPlayer.PlayerDecision(result, money)]
+                return self.preflop
             elif step == BasePlay.Step.Flop:
-                self.flop += [PokerGame.MockPlayer.PlayerDecision(result, money)]
+                return self.flop
             elif step == BasePlay.Step.Turn:
-                self.turn += [PokerGame.MockPlayer.PlayerDecision(result, money)]
+                return self.turn
             elif step == BasePlay.Step.River:
-                self.river += [PokerGame.MockPlayer.PlayerDecision(result, money)]
+                return self.river
             else:
                 raise ValueError('No such step id ' + str(step))
 
+        def add_decision(self, step: BasePlay.StepType, result: PokerGame.EventType, money: int) -> None:
+            self.get_list(step).append(PokerGame.MockPlayer.PlayerDecision(result, money))
+
+        def gived(self, step: BasePlay.StepType) -> int:
+
+            curr_list = self.get_list(step)
+            for action in reversed(curr_list):
+
+                if action.result == PokerGame.Event.Check:
+                    return 0
+
+                elif action.result == PokerGame.Event.Allin or \
+                        action.result == PokerGame.Event.BigBlind or \
+                        action.result == PokerGame.Event.SmallBlind or \
+                        action.result == PokerGame.Event.Call or \
+                        action.result == PokerGame.Event.Raise:
+                    return action.money
+
+            return 0
+
     class PokerDecision:
 
-        def __init__(self, player: 'PokerGame.MockPlayer', result: BasePlay.ResultType, money: int):
+        def __init__(self, player: 'PokerGame.MockPlayer', result: PokerGame.EventType, money: int):
             self.player: PokerGame.MockPlayer = player
-            self.result: BasePlay.Result = result
+            self.result: PokerGame.EventType = result
             self.money: int = money
 
         def __str__(self) -> str:
-            return f'{self.player.name} {BasePlay.Result.ToStr[self.result]} {self.money}'
+            return f'{self.player.name} {PokerGame.Event.ToStr[self.result]} {self.money}'
 
     class PokerHand:
 
@@ -4514,7 +4565,7 @@ class PokerGame:
         def get_player(self, name: str) -> 'PokerGame.MockPlayer':
             return max(player for player in self.players if player.name == name)
 
-        def add_decision(self, name: str, result: BasePlay.ResultType, money: int) -> None:
+        def add_decision(self, name: str, result: PokerGame.EventType, money: int) -> None:
             player = self.get_player(name)
             self.curr_decisions += [PokerGame.PokerDecision(player, result, money)]
             player.add_decision(self.curr_step, result, money)
@@ -4590,6 +4641,9 @@ class PokerGame:
 
     def __init__(self):
         self.id: int = 0
+        self.name: str = ''
+        self.date: str = ''
+        self.time: str = ''
         self.hands: List[PokerGame.PokerHand] = []
         self.curr_hand: PokerGame.PokerHand = None
 
@@ -4616,11 +4670,18 @@ class GameParser:
         hand_border = re.compile(r'[*]{11} # [0-9]+ [*]{14}')
         step_border = re.compile(r'[*]{3} [A-Z ]+ [*]{3}')
         hand_and_game_id = re.compile(r'Hand #([0-9]+): Tournament #([0-9]+)')
+        name_tournament = re.compile(r'Tournament #[0-9]+, ([^-]*) - Level')
+        date_tournament = re.compile(r'- ([0-9]{4}/[0-9]{2}/[0-9]{2}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})')
         small_and_big_blind = re.compile(r'\(([0-9]+)/([0-9]+)\)')
         player_init = re.compile(r'Seat [0-9]+: (' + name + r') \(([0-9]+) in chips\)')
         find_ante = re.compile('(' + name + r'): posts the ante ([0-9]+)')
         find_small_blind = re.compile('(' + name + r'): posts small blind ([0-9]+)')
         find_big_blind = re.compile('(' + name + r'): posts big blind ([0-9]+)')
+        find_dealt_cards = re.compile(r'Dealt to (' + name + r') \[(..) (..)]')
+        find_action = re.compile('(' + name + r'): ([a-z0-9 -]+)')
+        find_uncalled_bet = re.compile(r'Uncalled bet \(([0-9]+)\) returned to (' + name + r')')
+        find_collect_pot = re.compile(r'(' + name + r') collected ([0-9]+) from pot$')
+        find_show_cards = re.compile(r'(' + name + r'): shows \[([2-9AKQJThdcs ]+)]')
 
     path_to_raw_games = 'games/raw/'
     path_to_parsed_games = 'games/parsed/'
@@ -4632,7 +4693,7 @@ class GameParser:
         every_hand = GameParser.RegEx.hand_border.split(text_game)
 
         # first hand always empty because of separator in start of text
-        for hand in every_hand[1:2]:
+        for hand in every_hand[1:11]:
 
             steps = GameParser.RegEx.step_border.split(hand)
 
@@ -4670,19 +4731,129 @@ class GameParser:
         return game
 
     @staticmethod
+    def parse_action(player: PokerGame.MockPlayer, step: BasePlay.StepType, text: str) \
+            -> Tuple[PokerGame.EventType, int]:
+
+        if text == 'folds':
+            return PokerGame.Event.Fold, 0
+
+        elif text == 'checks':
+            return PokerGame.Event.Check, 0
+
+        elif 'all-in' in text:
+            if 'raises' in text:
+                return PokerGame.Event.Allin, int(text.split()[3])
+
+            elif 'bets' in text:
+                return PokerGame.Event.Allin, int(text.split()[1])
+
+            elif 'calls' in text:
+                return PokerGame.Event.Call, int(text.split()[1]) + player.gived(step)
+
+        elif text.startswith('bets'):
+            bets, money = text.split()
+            return PokerGame.Event.Raise, int(money)
+
+        elif text.startswith('calls'):
+            calls, money = text.split()
+            return PokerGame.Event.Call, int(money) + player.gived(step)
+
+        elif text.startswith('raises'):
+            return PokerGame.Event.Raise, int(text.split()[3])
+
+        else:
+            raise ValueError(f'Undefined action: {text}')
+
+    @staticmethod
+    def process_actions(game: PokerGame, lines: Iterator[str]) -> None:
+
+        try:
+            line = next(lines)
+        except StopIteration:
+            return
+
+        while ':' in line:
+            match = GameParser.RegEx.find_action.search(line)
+            name = match.group(1)
+            action = match.group(2)
+
+            result, money = GameParser.parse_action(game.curr_hand.get_player(name),
+                                                    game.curr_hand.curr_step, action)
+
+            game.curr_hand.add_decision(name, result, money)
+
+            try:
+                line = next(lines)
+            except StopIteration:
+                return
+
+        if line.startswith('Uncalled bet'):
+            match = GameParser.RegEx.find_uncalled_bet.search(line)
+            money = int(match.group(1))
+            name = match.group(2)
+
+            game.curr_hand.add_decision(name, PokerGame.Event.ReturnMoney, money)
+
+            try:
+                line = next(lines)
+            except StopIteration:
+                return
+
+            match = GameParser.RegEx.find_collect_pot.search(line)
+            name = match.group(1)
+            money = int(match.group(2))
+
+            game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+
+            try:
+                line = next(lines)
+            except StopIteration:
+                return
+
+            GameParser.RegEx.find_show_cards.search(line)
+            name = match.group(1)
+            cards = match.group(2)
+
+            if len(cards) == 5:
+                card1, card2 = map(str.upper, cards.split())
+                pair = CardsPair(Card(card1), Card(card2))
+
+            elif len(cards) == 2:
+                only_card = Card(cards.upper())
+                pair = CardsPair(only_card)
+
+            else:
+                raise ValueError(f'Bad cards shown: {line}')
+
+            game.curr_hand.set_cards(name, pair)
+
+
+
+
+    @staticmethod
     def process_initial(game: PokerGame, text: str) -> None:
-        every_line = iter(text.strip().split('\n'))
+        every_line: Iterator[str] = iter(text.strip().split('\n'))
         first_line = next(every_line)
 
         if not first_line.startswith('PokerStars Hand #'):
             raise ValueError('It is not initial step: ' + text)
 
         match = GameParser.RegEx.hand_and_game_id.search(first_line)
+        hand_id = int(match.group(1))
 
         if game.curr_hand is None:
             game.id = int(match.group(2))
 
-        hand_id = int(match.group(1))
+            match = GameParser.RegEx.name_tournament.search(first_line)
+            name = match.group(1)
+            name = name.replace(' USD ', ' ').replace('No Limit', 'NL')
+            game.name = name
+
+            match = GameParser.RegEx.date_tournament.search(first_line)
+            date = match.group(1)
+            time = match.group(2)
+            game.date = date
+            game.time = time
 
         match = GameParser.RegEx.small_and_big_blind.search(first_line)
 
@@ -4723,7 +4894,7 @@ class GameParser:
             if game.curr_hand.ante == 0:
                 game.curr_hand.ante = ante
 
-            game.curr_hand.add_decision(name, BasePlay.Result.Ante, ante)
+            game.curr_hand.add_decision(name, PokerGame.Event.Ante, ante)
             line = next(every_line)
 
         if ': posts small blind' in line:
@@ -4731,7 +4902,7 @@ class GameParser:
             name = match.group(1)
             small_blind = int(match.group(2))
 
-            game.curr_hand.add_decision(name, BasePlay.Result.SmallBlind, small_blind)
+            game.curr_hand.add_decision(name, PokerGame.Event.SmallBlind, small_blind)
             line = next(every_line)
 
         if ': posts big blind' in line:
@@ -4739,11 +4910,27 @@ class GameParser:
             name = match.group(1)
             big_blind = int(match.group(2))
 
-            game.curr_hand.add_decision(name, BasePlay.Result.BigBlind, big_blind)
+            game.curr_hand.add_decision(name, PokerGame.Event.BigBlind, big_blind)
 
     @staticmethod
-        pass
     def process_hole_cards(game: PokerGame, text: str) -> None:
+        every_line = iter(text.strip().split('\n'))
+        first_line = next(every_line)
+
+        if not first_line.startswith('Dealt to'):
+            raise ValueError('It is not hole cards step: ' + text)
+
+        match = GameParser.RegEx.find_dealt_cards.search(first_line)
+        name = match.group(1)
+        first_card = Card(match.group(2).upper())
+        second_card = Card(match.group(3).upper())
+        pair = CardsPair(first_card, second_card)
+
+        game.curr_hand.set_cards(name, pair)
+
+        GameParser.process_actions(game, every_line)
+
+
 
     @staticmethod
     def process_flop(game: PokerGame, text: str) -> None:
