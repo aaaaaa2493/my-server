@@ -4685,7 +4685,9 @@ class GameParser:
         find_big_blind = re.compile('^(' + name + r'): posts big blind ([0-9]+)$')
         find_dealt_cards = re.compile(r'^Dealt to (' + name + r') \[(..) (..)]$')
         find_action = re.compile('^(' + name + r'): ([a-z0-9 -]+)$')
-        find_flop = re.compile(r'\[(..) (..) (..)]')
+        find_flop = re.compile(r'\[(..) (..) (..)]$')
+        find_turn = re.compile(r'\[.. .. ..] \[(..)]$')
+        find_river = re.compile(r'\[.. .. ..] \[..] \[(..)]$')
 
         find_uncalled_bet = re.compile(r'^Uncalled bet \(([0-9]+)\) returned to (' + name + r')$')
         find_collect_pot = re.compile(r'^(' + name + r') collected ([0-9]+) from pot$')
@@ -5055,11 +5057,39 @@ class GameParser:
 
     @staticmethod
     def process_turn(game: PokerGame, text: str) -> None:
-        pass
+
+        game.curr_hand.switch_to_step(BasePlay.Step.Turn)
+
+        every_line = iter(text.strip().split('\n'))
+        first_line = next(every_line)
+
+        match = GameParser.RegEx.find_turn.search(first_line)
+
+        if match is None:
+            raise ValueError(f'Bad first line in process turn: {text}')
+
+        turn_card = Card(match.group(1).upper())
+        game.curr_hand.set_turn_card(turn_card)
+
+        GameParser.process_actions(game, every_line)
 
     @staticmethod
     def process_river(game: PokerGame, text: str) -> None:
-        pass
+
+        game.curr_hand.switch_to_step(BasePlay.Step.River)
+
+        every_line = iter(text.strip().split('\n'))
+        first_line = next(every_line)
+
+        match = GameParser.RegEx.find_river.search(first_line)
+
+        if match is None:
+            raise ValueError(f'Bad first line in process river: {text}')
+
+        river_card = Card(match.group(1).upper())
+        game.curr_hand.set_river_card(river_card)
+
+        GameParser.process_actions(game, every_line)
 
     @staticmethod
     def process_show_down(game: PokerGame, text: str) -> None:
