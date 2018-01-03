@@ -4537,6 +4537,7 @@ class PokerGame:
             self.small_blind: int = 0
             self.big_blind: int = 0
             self.ante: int = 0
+            self.total_pot: int = 0
             self.board: Board = Board(Deck())
             self.curr_step: BasePlay.StepType = BasePlay.Step.Preflop
             self.curr_decisions: List[PokerGame.PokerDecision] = self.preflop
@@ -4689,7 +4690,12 @@ class GameParser:
         find_turn = re.compile(r'\[.. .. ..] \[(..)]$')
         find_river = re.compile(r'\[.. .. .. ..] \[(..)]$')
         find_shows_in_show_down = re.compile(r'^(' + name + r'): shows \[(..) (..)] \([a-zA-Z0-9, +-]+\)$')
+        find_total_pot = re.compile(r'^Total pot ([0-9]+) \| Rake [0-9]+$')
+        find_collected_pot_summary = re.compile(r'^Seat [0-9]+: (' + name + r') collected \([0-9]+\)$')
+        find_lost = re.compile(r'^Seat [0-9]+: (' + name + r') showed \[.. ..] and lost with')
+        find_won = re.compile(r'^Seat [0-9]+: (' + name + r') showed \[.. ..] and won \([0-9]+\) with')
 
+        # for processing actions
         find_uncalled_bet = re.compile(r'^Uncalled bet \(([0-9]+)\) returned to (' + name + r')$')
         find_collect_pot = re.compile(r'^(' + name + r') collected ([0-9]+) from pot$')
         find_show_cards = re.compile(r'^(' + name + r'): shows \[([2-9AKQJT hdcs]+)]$')
@@ -5116,7 +5122,79 @@ class GameParser:
 
     @staticmethod
     def process_summary(game: PokerGame, text: str) -> None:
-        pass
+
+        every_line = iter(text.strip().split('\n'))
+        line = next(every_line)
+
+        if not line.startswith('Total pot'):
+            raise ValueError(f'Bad first line of summary: {text}')
+
+        match = GameParser.RegEx.find_total_pot.search(line)
+        total_pot = int(match.group(1))
+        game.curr_hand.total_pot = total_pot
+
+        line = next(every_line)
+
+        if line.startswith('Board'):
+            line = next(every_line)
+
+        if not line.startswith('Seat'):
+            raise ValueError(f'Bad second/third line of summary: {text}')
+
+        while line.startswith('Seat'):
+
+            if line.endswith("folded before Flop (didn't bet)") or \
+                    line.endswith('folded before Flop') or \
+                    line.endswith('folded on the Flop') or \
+                    line.endswith('folded on the Turn') or \
+                    line.endswith('folded on the River'):
+                continue
+
+            if ' (button) ' in line:
+                line = line.replace(' (button) ', ' ')
+            if ' (big blind) ' in line:
+                line = line.replace(' (big blind) ', ' ')
+            if ' (small blind) ' in line:
+                line = line.replace(' (small blind) ', ' ')
+
+            match = GameParser.RegEx.find_collected_pot_summary.search(line)
+
+            if match is not None:
+
+                name = match.group(1)
+                win_player_cards = game.curr_hand.get_player(name).cards
+                if win_player_cards.cards is not None and win_player_cards.initialized():
+                    game.curr_hand.add_winner(name)
+
+            else:
+
+                match = GameParser.RegEx.find_lost.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    lost_player_cards = game.curr_hand.get_player(name).cards
+                    if lost_player_cards is not None and lost_player_cards.initialized():
+                        game.curr_hand.add_loser(name)
+
+                else:
+
+                    match = GameParser.RegEx.find_won.search(line)
+
+                    if match is not None:
+                        name = match.group(1)
+                        win_player_cards = game.curr_hand.get_player(name).cards
+                        if win_player_cards.cards is not None and win_player_cards.initialized():
+                            game.curr_hand.add_winner(name)
+
+                    else:
+                        raise ValueError(f'Bad summary processing line: {line}')
+
+            try:
+                line = next(every_line)
+            except StopIteration:
+                return
+
+        GameParser.process_actions(game, every_line)
 
 
 class GameManager:
