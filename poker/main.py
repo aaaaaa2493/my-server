@@ -4628,6 +4628,7 @@ class PokerGame:
             self.big_blind: int = 0
             self.ante: int = 0
             self.total_pot: int = 0
+            self.table_id: int = 0
             self.board: Board = Board(Deck())
             self.curr_step: BasePlay.StepType = BasePlay.Step.Preflop
             self.curr_events: List[PokerGame.PokerEvent] = self.preflop
@@ -4848,7 +4849,7 @@ class GameParser:
         hand_and_game_id = compile(r'Hand #([0-9]+): Tournament #([0-9]+)')
         name_tournament = compile(r'Tournament #[0-9]+, ([^-]*) - Level')
         date_tournament = compile(r'- ([0-9]{4}/[0-9]{2}/[0-9]{2}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})')
-        number_of_seats = compile(r"^Table '[0-9 ]+' ([2-9])-max Seat #[0-9] is the button$")
+        table_number_and_seats = compile(r"^Table '[0-9]+ ([0-9]+)' ([2-9])-max Seat #[0-9] is the button$")
         small_and_big_blind = compile(r'\(([0-9]+)/([0-9]+)\)')
         player_init = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\)$')
         player_init_sitting_out = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) is sitting out$')
@@ -5208,12 +5209,15 @@ class GameParser:
 
         line = next(every_line)
 
-        match = GameParser.RegEx.number_of_seats.search(line)
+        match = GameParser.RegEx.table_number_and_seats.search(line)
 
-        number_of_seats = match.group(1)
+        table_number = int(match.group(1))
+        number_of_seats = int(match.group(2))
 
         if game.seats == 0:
             game.seats = number_of_seats
+
+        game.curr_hand.table_id = table_number
 
         line = next(every_line)
         players: List[PokerGame.MockPlayer] = []
