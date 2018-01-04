@@ -321,6 +321,10 @@ class CardsPair:
                 self.first: Card = second
                 self.second: Card = first
 
+        elif first is not None and second is None:
+            self.first: Card = first
+            self.second: Card = None
+
         else:
             self.first: Card = None
             self.second: Card = None
