@@ -4001,36 +4001,49 @@ class Network:
 
     port = 9001
 
-    def __init__(self, _id: str, name: str):
+    def __init__(self, _id: str, name: str, is_dummy: bool = False):
 
-        self.socket = create_connection(f'ws://{Network.ip}:{Network.port}')
-        self.socket.send(f'{_id} {name}')
+        self.is_dummy = is_dummy
+
+        if not is_dummy:
+            self.socket = create_connection(f'ws://{Network.ip}:{Network.port}')
+            self.socket.send(f'{_id} {name}')
 
     def __del__(self):
 
-        self.socket.close()
+        if not self.is_dummy:
+            self.socket.close()
 
-    def send(self, obj: dict) -> None:
+    def send(self, obj: dict) -> Optional[str]:
 
-        if self.socket.connected:
-            self.socket.send(dumps(obj))
+        if not self.is_dummy:
+            if self.socket.connected:
+                self.socket.send(dumps(obj))
+        else:
+            return dumps(obj)
 
-    def send_raw(self, text: str) -> None:
+    def send_raw(self, text: str) -> Optional[str]:
 
-        if self.socket.connected:
-            self.socket.send(text)
+        if not self.is_dummy:
+            if self.socket.connected:
+                self.socket.send(text)
+        else:
+            return text
 
     def receive(self) -> dict:
 
-        if self.socket.connected:
+        if self.socket.connected and not self.is_dummy:
             return loads(self.socket.recv())
 
     def receive_raw(self) -> str:
 
-        if self.socket.connected:
+        if self.socket.connected and not self.is_dummy:
             return self.socket.recv()
 
-    def input_decision(self, available) -> List[str]:
+    def input_decision(self, available) -> Optional[List[str]]:
+
+        if self.is_dummy:
+            return
 
         self.send_raw('decision')
 
@@ -4076,7 +4089,7 @@ class Network:
 
         return reply.split()
 
-    def init_hand(self, player: Optional[Player], table: Table, game: Game) -> None:
+    def init_hand(self, player: Optional[Player], table: Table, game: Game) -> Optional[str]:
 
         self.send_raw('new hand')
 
@@ -4138,9 +4151,9 @@ class Network:
 
         to_send['players'] = players
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def ante(self, all_paid: List[Tuple[Player, int]]) -> None:
+    def ante(self, all_paid: List[Tuple[Player, int]]) -> Optional[str]:
 
         to_send = dict()
 
@@ -4156,13 +4169,13 @@ class Network:
 
         to_send['paid'] = paid_send
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def collect_money(self) -> None:
+    def collect_money(self) -> Optional[str]:
 
-        self.send({'type': 'collect money'})
+        return self.send({'type': 'collect money'})
 
-    def blinds(self, button: Player, blind_info: List[Tuple[Player, int]]) -> None:
+    def blinds(self, button: Player, blind_info: List[Tuple[Player, int]]) -> Optional[str]:
 
         to_send = dict()
 
@@ -4179,9 +4192,9 @@ class Network:
 
         to_send['info'] = blind_send
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def blinds_increased(self, sb: int, bb: int, ante: int) -> None:
+    def blinds_increased(self, sb: int, bb: int, ante: int) -> Optional[str]:
 
         to_send = dict()
 
@@ -4190,9 +4203,9 @@ class Network:
         to_send['bb'] = bb
         to_send['ante'] = ante
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def give_cards(self, player: Player) -> None:
+    def give_cards(self, player: Player) -> Optional[str]:
 
         to_send = dict()
 
@@ -4200,22 +4213,22 @@ class Network:
         to_send['first'] = player.cards.first.card
         to_send['second'] = player.cards.second.card
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def deal_cards(self) -> None:
+    def deal_cards(self) -> Optional[str]:
 
-        self.send({'type': 'deal cards'})
+        return self.send({'type': 'deal cards'})
 
-    def delete_player(self, player: Player) -> None:
+    def delete_player(self, player: Player) -> Optional[str]:
 
         to_send = dict()
 
         to_send['type'] = 'delete player'
         to_send['id'] = player.id
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def add_player(self, player: Player, seat: int) -> None:
+    def add_player(self, player: Player, seat: int) -> Optional[str]:
 
         to_send = dict()
 
@@ -4225,9 +4238,9 @@ class Network:
         to_send['stack'] = player.money
         to_send['seat'] = seat
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def resit(self, player: Player, players: Players) -> None:
+    def resit(self, player: Player, players: Players) -> Optional[str]:
 
         self.send_raw('resit ' + str(players.id))
 
@@ -4254,18 +4267,18 @@ class Network:
 
         to_send['players'] = players_send
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def switch_decision(self, player: Player) -> None:
+    def switch_decision(self, player: Player) -> Optional[str]:
 
         to_send = dict()
 
         to_send['type'] = 'switch decision'
         to_send['id'] = player.id
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def made_decision(self, player: Player, decision: BasePlay.ResultType) -> None:
+    def made_decision(self, player: Player, decision: BasePlay.ResultType) -> Optional[str]:
 
         to_send = dict()
 
@@ -4292,9 +4305,9 @@ class Network:
         else:
             raise ValueError(f'I FORGOT ABOUT RESULT ID {decision}')
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def back_excess_money(self, player: Player, money: int) -> None:
+    def back_excess_money(self, player: Player, money: int) -> Optional[str]:
 
         to_send = dict()
 
@@ -4302,9 +4315,9 @@ class Network:
         to_send['id'] = player.id
         to_send['money'] = money
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def flop(self, card1: Card, card2: Card, card3: Card) -> None:
+    def flop(self, card1: Card, card2: Card, card3: Card) -> Optional[str]:
 
         to_send = dict()
 
@@ -4313,27 +4326,27 @@ class Network:
         to_send['card2'] = card2.card
         to_send['card3'] = card3.card
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def turn(self, card: Card) -> None:
+    def turn(self, card: Card) -> Optional[str]:
 
         to_send = dict()
 
         to_send['type'] = 'turn'
         to_send['card'] = card.card
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def river(self, card: Card) -> None:
+    def river(self, card: Card) -> Optional[str]:
 
         to_send = dict()
 
         to_send['type'] = 'river'
         to_send['card'] = card.card
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def open_cards(self, table: Table, for_replay=False) -> None:
+    def open_cards(self, table: Table, for_replay=False) -> Optional[str]:
 
         if for_replay:
             self.send_raw('open cards replay')
@@ -4353,9 +4366,9 @@ class Network:
 
         to_send['cards'] = cards
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def give_money(self, player: Player, money: int) -> None:
+    def give_money(self, player: Player, money: int) -> Optional[str]:
 
         to_send = dict()
 
@@ -4363,18 +4376,18 @@ class Network:
         to_send['id'] = player.id
         to_send['money'] = money
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def money_results(self, results: List[str]) -> None:
+    def money_results(self, results: List[str]) -> Optional[str]:
 
         to_send = dict()
 
         to_send['type'] = 'money results'
         to_send['results'] = results
 
-        self.send(to_send)
+        return self.send(to_send)
 
-    def hand_results(self, board: Board, results: List[Tuple[Poker.Hand, Player, str]]) -> None:
+    def hand_results(self, board: Board, results: List[Tuple[Poker.Hand, Player, str]]) -> Optional[str]:
 
         to_send = dict()
 
@@ -4431,30 +4444,32 @@ class Network:
 
         to_send['results'] = results_send
 
-        self.send(to_send)
+        return self.send(to_send)
 
     def busted(self, place: int) -> None:
 
-        self.send_raw('busted')
-        self.send({'type': 'busted', 'place': place})
-        self.socket.close()
+        if not self.is_dummy:
+            self.send_raw('busted')
+            self.send({'type': 'busted', 'place': place})
+            self.socket.close()
 
-    def clear(self) -> None:
+    def clear(self) -> Optional[str]:
 
-        self.send({'type': 'clear'})
+        return self.send({'type': 'clear'})
 
     def win(self) -> None:
 
-        self.send({'type': 'win'})
-        self.socket.close()
+        if not self.is_dummy:
+            self.send({'type': 'win'})
+            self.socket.close()
 
-    def place(self, place: int) -> None:
+    def place(self, place: int) -> Optional[str]:
 
-        self.send({'type': 'place', 'place': place})
+        return self.send({'type': 'place', 'place': place})
 
-    def end(self) -> None:
+    def end(self) -> Optional[str]:
 
-        self.send_raw('end')
+        return self.send_raw('end')
 
 
 class PokerGame:
@@ -4739,7 +4754,7 @@ class PokerGame:
         self.hands += [new_hand]
         self.curr_hand = new_hand
 
-    def save(self, path:str = '') -> None:
+    def save(self, path: str = '') -> None:
 
         if path == '':
             path = self.source
