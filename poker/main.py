@@ -4,6 +4,7 @@ from itertools import combinations
 from operator import add, sub, mul, truediv, pow, abs, neg, gt
 from os import listdir, mkdir, makedirs, remove
 from os.path import exists
+from shutil import rmtree
 from pickle import load, dump
 from random import shuffle, random, choice, uniform, randint
 from statistics import mean
@@ -4478,6 +4479,10 @@ class Network:
 
 class PokerGame:
 
+    path_to_raw_games = 'games/raw/'
+    path_to_parsed_games = 'games/parsed/'
+    path_to_converted_games = 'games/converted/'
+
     EventType = int
 
     class Event:
@@ -4770,7 +4775,7 @@ class PokerGame:
         if not exists('games/parsed'):
             mkdir('games/parsed')
 
-        path = GameParser.path_to_parsed_games + path
+        path = PokerGame.path_to_parsed_games + path
         *dirs, file_name = path.split('/')
 
         dirs = '/'.join(dirs)
@@ -4782,7 +4787,46 @@ class PokerGame:
 
     @staticmethod
     def load(path: str) -> 'PokerGame':
-        return load(open(GameParser.path_to_parsed_games + path, 'rb'))
+        return load(open(PokerGame.path_to_parsed_games + path, 'rb'))
+
+    def convert(self) -> None:
+
+        if not exists('games'):
+            mkdir('games')
+
+        if not exists('games/converted'):
+            mkdir('games/converted')
+            
+        current_date = datetime.now()
+            
+        if self.date == '' or self.time == '':
+            self.date = current_date.strftime('%Y/%m/%d')
+            self.time = current_date.strftime('%H:%M:%S')
+
+        year, month, day = self.date.split('/')
+
+        if len(month) == 1:
+            month = '0' + month
+        if len(day) == 1:
+            day = '0' + day
+
+        hour, minute, second = self.time.split(':')
+
+        if len(hour) == 1:
+            hour = '0' + hour
+        if len(minute) == 1:
+            minute = '0' + minute
+        if len(second) == 1:
+            second = '0' + second
+
+        folder_name = f'{year}-{month}-{day}_{hour}-{minute}-{second} 1 {self.seats} {len(self.hands)} {self.name}/'
+
+        path = PokerGame.path_to_converted_games + folder_name
+
+        if exists(path):
+            rmtree(path)
+
+        mkdir(path)
 
     def __str__(self) -> str:
         ret = [f'Poker game of {len(self.hands)} hands']
@@ -4851,13 +4895,10 @@ class GameParser:
         find_mucks_hand = re.compile(r'^' + name + r': mucks hand$')
         find_fold_showing_cards = re.compile(r'^(' + name + r'): folds \[([2-9AKQJT hdcs]+)]$')
 
-    path_to_raw_games = 'games/raw/'
-    path_to_parsed_games = 'games/parsed/'
-
     @staticmethod
     def parse_game(path: str) -> PokerGame:
         game = PokerGame()
-        text_game = open(GameParser.path_to_raw_games + path, 'r').read()
+        text_game = open(PokerGame.path_to_raw_games + path, 'r').read()
         game.source = path
         every_hand = GameParser.RegEx.hand_border.split(text_game)
 
@@ -5905,6 +5946,9 @@ if __name__ == '__main__':
     # PlayManager.standings()
     # GameManager().run()
 
-    print(GameParser.parse_game('hh.txt'))
+    game_ = GameParser.parse_game('hh.txt')
+    game_.save()
+    game_.convert()
+    print(game_)
 
     # Evolution(1000, 999, 9, 10000, Blinds.Scheme.Rapid).run()
