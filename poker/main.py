@@ -1,5 +1,5 @@
 from re import compile
-from datetime import datetime
+from datetime import datetime, timedelta
 from itertools import combinations
 from operator import add, sub, mul, truediv, pow, abs, neg, gt
 from os import listdir, mkdir, makedirs, remove
@@ -1660,7 +1660,7 @@ class Player:
             else:
                 raise ValueError(f'Undefined step id {step}')
 
-    def __init__(self, _id: int, name: str, money: int, controlled: bool):
+    def __init__(self, _id: int, name: str, money: int, controlled: bool, is_dummy: bool = False):
 
         self.id: int = _id
         self.name: str = name
@@ -1684,7 +1684,7 @@ class Player:
 
         else:
             self.play: Play = Play()
-            self.network: Network = Network('py', self.name)
+            self.network: Network = Network('py', self.name, is_dummy)
 
     def __str__(self):
 
@@ -3608,6 +3608,7 @@ class Game:
 
         if self.total_tables == 1:
             self.tables: Table.Tables = [Table(self, 0, seats, self.blinds)]
+            self.final_table = self.tables[0]
 
         else:
             self.tables: Table.Tables = [Table(self, _id, seats, self.blinds) for _id in range(1, self.total_tables+1)]
@@ -4802,17 +4803,20 @@ class PokerGame:
         current_date = datetime.now()
             
         if self.date == '' or self.time == '':
-            self.date = current_date.strftime('%Y/%m/%d')
-            self.time = current_date.strftime('%H:%M:%S')
+            date = current_date.strftime('%Y/%m/%d')
+            time = current_date.strftime('%H:%M:%S')
+        else:
+            date = self.date
+            time = self.time
 
-        year, month, day = self.date.split('/')
+        year, month, day = date.split('/')
 
         if len(month) == 1:
             month = '0' + month
         if len(day) == 1:
             day = '0' + day
 
-        hour, minute, second = self.time.split(':')
+        hour, minute, second = time.split(':')
 
         if len(hour) == 1:
             hour = '0' + hour
@@ -4821,7 +4825,7 @@ class PokerGame:
         if len(second) == 1:
             second = '0' + second
 
-        folder_name = f'{year}-{month}-{day}_{hour}-{minute}-{second} 1 {self.seats} {len(self.hands)} {self.name}/'
+        folder_name = f'{year}-{month}-{day}_{hour}-{minute}-{second} 1 {self.seats} {len(self.hands)} {self.name}'
 
         path = PokerGame.path_to_converted_games + folder_name
 
@@ -4829,6 +4833,81 @@ class PokerGame:
             rmtree(path)
 
         mkdir(path)
+
+        time = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), 0)
+        network = Network('', '', True)
+
+        for num, hand in enumerate(self.hands):
+
+            converted: List[Tuple[datetime, str]] = []
+            events: Iterator[PokerGame.PokerEvent] = iter(hand.preflop)
+
+            game = Game(self.seats, self.seats, 0)
+            table = game.final_table
+
+            table.id = hand.table_id
+            table.players.total_seats = self.seats
+            table.board.hand = num + 1
+            table.blinds.ante = hand.ante
+            table.blinds.small_blind = hand.small_blind
+            table.blinds.big_blind = hand.big_blind
+
+            game.average_stack = int(mean(player.money for player in hand.players))
+            game.players_left = len(hand.players)
+
+            players: List[Player] = []
+            find: Dict[int, Player] = dict()
+
+            for player in sorted(hand.players, key=lambda p: p.seat):
+                new_player = Player(player.seat, player.name, player.money, True, True)
+                players += [new_player]
+                find[player.seat] = new_player
+
+            game.top_9 = sorted(players, key=lambda p: p.money, reverse=True)
+            table.players.players = players
+
+            converted += [(time, network.init_hand(None, table, game))]
+            time = time + timedelta(seconds=Table.Delay.InitHand)
+
+            event = next(events)
+
+            if hand.ante > 0:
+
+                paid: List[Tuple[Player, int]] = []
+                while event.event == PokerGame.Event.Ante:
+                    paid += [(find[event.player.seat], event.money)]
+                    event = next(events)
+
+                converted += [(time, network.ante(paid))]
+                time = time + timedelta(seconds=Table.Delay.Ante)
+
+                converted += [(time, network.collect_money())]
+                time = time + timedelta(seconds=Table.Delay.CollectMoney)
+
+            button: Player = find[hand.button_seat]
+
+            blinds_info: List[Tuple[Player, int]] = []
+
+            if event.event == PokerGame.Event.SmallBlind:
+                blinds_info += [(find[event.player.seat], event.money)]
+                event = next(events)
+
+            if event.event == PokerGame.Event.BigBlind:
+                blinds_info += [(find[event.player.seat], event.money)]
+                # event = next(events)
+
+            converted += [(time, network.blinds(button, blinds_info))]
+            time = time + timedelta(seconds=Table.Delay.Blinds)
+
+            output = ''
+
+            for d, s in converted:
+                output += '%s %s %s %s %s %s %s' % (d.year, d.month, d.day, d.hour, d.minute, d.second, d.microsecond)
+                output += '\n'
+                output += s
+                output += '\n'
+
+            open(path + '/%s' % (num,), 'w').write(output)
 
     def __str__(self) -> str:
         ret = [f'Poker game of {len(self.hands)} hands']
