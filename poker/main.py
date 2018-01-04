@@ -4750,6 +4750,7 @@ class PokerGame:
         self.date: str = ''
         self.time: str = ''
         self.source: str = ''
+        self.seats: int = 0
         self.hands: List[PokerGame.PokerHand] = []
         self.curr_hand: PokerGame.PokerHand = None
 
@@ -4803,6 +4804,7 @@ class GameParser:
         hand_and_game_id = re.compile(r'Hand #([0-9]+): Tournament #([0-9]+)')
         name_tournament = re.compile(r'Tournament #[0-9]+, ([^-]*) - Level')
         date_tournament = re.compile(r'- ([0-9]{4}/[0-9]{2}/[0-9]{2}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})')
+        number_of_seats = re.compile(r"^Table '[0-9 ]+' ([2-9])-max Seat #[0-9] is the button$")
         small_and_big_blind = re.compile(r'\(([0-9]+)/([0-9]+)\)')
         player_init = re.compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\)$')
         player_init_sitting_out = re.compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) is sitting out$')
@@ -5165,8 +5167,12 @@ class GameParser:
 
         line = next(every_line)
 
-        if not line.startswith('Table '):
-            raise ValueError('It is not initial step (2nd line): ' + text)
+        match = GameParser.RegEx.number_of_seats.search(line)
+
+        number_of_seats = match.group(1)
+
+        if game.seats == 0:
+            game.seats = number_of_seats
 
         line = next(every_line)
         players: List[PokerGame.MockPlayer] = []
