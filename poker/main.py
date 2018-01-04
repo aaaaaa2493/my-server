@@ -128,6 +128,9 @@ class Card:
 
     RankType = int
 
+    UndefinedCard = 'UP'
+    EmplyCard = 'ZZ'
+
     class Rank:
         Ace = 14
         King = 13
@@ -4366,8 +4369,23 @@ class Network:
         for player in table.players.in_game_players():
             curr = dict()
             curr['id'] = player.id
-            curr['card1'] = player.cards.first.card
-            curr['card2'] = player.cards.second.card
+
+            if player.cards is None:
+                curr['card1'] = Card.UndefinedCard
+                curr['card2'] = Card.UndefinedCard
+
+            else:
+
+                if player.cards.first is not None:
+                    curr['card1'] = player.cards.first.card
+                else:
+                    curr['card1'] = Card.UndefinedCard
+
+                if player.cards.second is not None:
+                    curr['card2'] = player.cards.second.card
+                else:
+                    curr['card2'] = Card.UndefinedCard
+                    
             cards += [curr]
 
         to_send['cards'] = cards
@@ -4858,12 +4876,23 @@ class PokerGame:
             players: List[Player] = []
             find: Dict[int, Player] = dict()
 
-            for player in sorted(hand.players, key=lambda p: p.seat):
+            for seat in range(1, self.seats + 1):
+
+                player = sorted(player for player in hand.players if player.seat == seat)
+                if not player:
+                    player = None
+                elif len(player) == 1:
+                    player = player[0]
+                else:
+                    raise ValueError('Two players with same seat')
+
                 new_player = Player(player.seat, player.name, player.money, True, True)
+                new_player.in_game = True
+                new_player.cards = player.cards
                 players += [new_player]
                 find[player.seat] = new_player
 
-            game.top_9 = sorted(players, key=lambda p: p.money, reverse=True)
+            game.top_9 = sorted([p for p in players if p is not None], key=lambda p: p.money, reverse=True)
             table.players.players = players
 
             converted += [(time, network.init_hand(None, table, game))]
