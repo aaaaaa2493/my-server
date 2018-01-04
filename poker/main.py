@@ -5219,9 +5219,6 @@ class GameParser:
         if game.seats == 0:
             game.seats = number_of_seats
 
-        game.curr_hand.table_id = table_number
-        game.curr_hand.button_seat = button_seat
-
         line = next(every_line)
         players: List[PokerGame.MockPlayer] = []
         out_of_hand: List[PokerGame.MockPlayer] = []
@@ -5264,6 +5261,8 @@ class GameParser:
         game.curr_hand.small_blind = small_blind
         game.curr_hand.big_blind = big_blind
         game.curr_hand.sit_during_game = out_of_hand
+        game.curr_hand.table_id = table_number
+        game.curr_hand.button_seat = button_seat
 
         while ': posts the ante ' in line:
 
