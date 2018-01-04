@@ -129,7 +129,7 @@ class Card:
     RankType = int
 
     UndefinedCard = 'UP'
-    EmplyCard = 'ZZ'
+    EmptyCard = 'ZZ'
 
     class Rank:
         Ace = 14
