@@ -97,8 +97,19 @@ window.onload = function(){
             card1 = document.getElementById(data.id1);
             card2 = document.getElementById(data.id2);
 
-            card1.src = card1.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
-            card2.src = card2.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
+            if(!card1.src.endsWith('UP.png')){
+                card1.src = card1.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
+            }
+            else{
+                card1.src = '/img/poker/cards/ZZ.png';
+            }
+
+            if(!card2.src.endsWith('UP.png')){
+                card2.src = card2.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
+            }
+            else{
+                card2.src = '/img/poker/cards/ZZ.png';
+            }
 
         }
         else if(data.type == 'margin'){

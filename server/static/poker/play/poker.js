@@ -2029,6 +2029,30 @@ function handle(){
         }
 
     }
+    else if(data.type == 'disconnected'){
+
+        post_add_to_chat(seats[id_to_seat[data.id]].name + ' disconnected');
+
+        if(reconnect_mode){
+            handle();
+        }
+        else{
+            setTimeout(handle, 10);
+        }
+
+    }
+    else if(data.type == 'connected'){
+
+        post_add_to_chat(seats[id_to_seat[data.id]].name + ' connected');
+
+        if(reconnect_mode){
+            handle();
+        }
+        else{
+            setTimeout(handle, 10);
+        }
+
+    }
     else if(data.type == 'set decision'){
 
         if(reconnect_mode){

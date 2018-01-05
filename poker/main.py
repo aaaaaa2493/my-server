@@ -145,6 +145,7 @@ class Card:
         Four = 4
         Three = 3
         Two = 2
+        Invalid = 1
 
         All = '23456789TJQKA'
 
@@ -464,6 +465,17 @@ class Poker:
             self.kicker4: Card.RankType = kicker4
             self.kicker5: Card.RankType = kicker5
 
+            if self.kicker1 is None:
+                self.kicker1 = Card.Rank.Invalid
+            elif self.kicker2 is None:
+                self.kicker2 = Card.Rank.Invalid
+            elif self.kicker3 is None:
+                self.kicker3 = Card.Rank.Invalid
+            elif self.kicker4 is None:
+                self.kicker4 = Card.Rank.Invalid
+            elif self.kicker5 is None:
+                self.kicker5 = Card.Rank.Invalid
+
             self.cards = cards
 
         def kickers(self) -> Iterator[Card.RankType]:
@@ -668,6 +680,21 @@ class Poker:
             return Poker.Hand([c2, c3, c1, None, None], Poker.Strength.Pair, c2.rank, c1.rank)
 
         return Poker.Hand([c1, c2, c3, None, None], Poker.Strength.Nothing, c1.rank, c2.rank, c3.rank)
+
+    @staticmethod
+    def strength2(c1: Card, c2: Card) -> Hand:
+
+        c1, c2 = sorted([c1, c2], reverse=True)  # type: Card
+
+        if c1.rank == c2.rank:
+            return Poker.Hand([c1, c2, None, None, None], Poker.Strength.Pair, c1.rank)
+
+        return Poker.Hand([c1, c2, None, None, None], Poker.Strength.Nothing, c1.rank, c2.rank)
+
+    @staticmethod
+    def strength1(c1: Card) -> Hand:
+
+        return Poker.Hand([c1, None, None, None, None], Poker.Strength.Nothing, c1.rank)
 
     @staticmethod
     def max_strength(cards: Card.Cards) -> Hand:
@@ -2848,6 +2875,7 @@ class Table:
         DeletePlayer = 0
         AddPlayer = 0
         SwitchDecision = 0
+        DummyMove = 1
         MadeDecision = 0.1
         ExcessMoney = 0.5
         Flop = 1
@@ -4385,7 +4413,7 @@ class Network:
                     curr['card2'] = player.cards.second.card
                 else:
                     curr['card2'] = Card.UndefinedCard
-                    
+
             cards += [curr]
 
         to_send['cards'] = cards
@@ -4418,25 +4446,25 @@ class Network:
         to_send['type'] = 'hand results'
 
         if board.state == BasePlay.Step.Preflop:
-            to_send['flop1'] = 'UP'
-            to_send['flop2'] = 'UP'
-            to_send['flop3'] = 'UP'
-            to_send['turn'] = 'UP'
-            to_send['river'] = 'UP'
+            to_send['flop1'] = Card.UndefinedCard
+            to_send['flop2'] = Card.UndefinedCard
+            to_send['flop3'] = Card.UndefinedCard
+            to_send['turn'] = Card.UndefinedCard
+            to_send['river'] = Card.UndefinedCard
 
         elif board.state == BasePlay.Step.Flop:
             to_send['flop1'] = board.flop1.card
             to_send['flop2'] = board.flop2.card
             to_send['flop3'] = board.flop3.card
-            to_send['turn'] = 'UP'
-            to_send['river'] = 'UP'
+            to_send['turn'] = Card.UndefinedCard
+            to_send['river'] = Card.UndefinedCard
 
         elif board.state == BasePlay.Step.Turn:
             to_send['flop1'] = board.flop1.card
             to_send['flop2'] = board.flop2.card
             to_send['flop3'] = board.flop3.card
             to_send['turn'] = board.turn.card
-            to_send['river'] = 'UP'
+            to_send['river'] = Card.UndefinedCard
 
         elif board.state == BasePlay.Step.River:
             to_send['flop1'] = board.flop1.card
@@ -4455,13 +4483,23 @@ class Network:
             curr = dict()
             curr['id'] = player.id
             curr['name'] = player.name
-            curr['first'] = player.cards.first.card
-            curr['second'] = player.cards.second.card
-            curr['card1'] = hand.cards[0].card
-            curr['card2'] = hand.cards[1].card
-            curr['card3'] = hand.cards[2].card
-            curr['card4'] = hand.cards[3].card
-            curr['card5'] = hand.cards[4].card
+
+            if player.cards.first is None:
+                curr['first'] = Card.UndefinedCard
+            else:
+                curr['first'] = player.cards.first.card
+
+            if player.cards.second is None:
+                curr['second'] = Card.UndefinedCard
+            else:
+                curr['second'] = player.cards.second.card
+
+            for i in range(5):
+                if hand.cards[i] is None:
+                    curr[f'card{i+1}'] = Card.UndefinedCard
+                else:
+                    curr[f'card{i+1}'] = hand.cards[i].card
+
             curr['result'] = result
 
             results_send += [curr]
@@ -4520,6 +4558,12 @@ class PokerGame:
         Disconnected = 12
         Connected = 13
         FinishGame = 14
+
+        ToResult = {Fold: BasePlay.Result.Fold,
+                    Check: BasePlay.Result.Check,
+                    Call: BasePlay.Result.Call,
+                    Raise: BasePlay.Result.Raise,
+                    Allin: BasePlay.Result.Allin}
 
         ToStr = {Fold: 'fold',
                  Call: 'call',
@@ -4649,6 +4693,7 @@ class PokerGame:
             self.total_pot: int = 0
             self.table_id: int = 0
             self.button_seat: int = 0
+            self.goes_to_showdown: bool = False
             self.board: Board = Board(Deck())
             self.curr_step: BasePlay.StepType = BasePlay.Step.Preflop
             self.curr_events: List[PokerGame.PokerEvent] = self.preflop
@@ -4708,7 +4753,7 @@ class PokerGame:
             else:
                 raise ValueError('No such step id ' + str(step))
 
-        def next_decision(self) -> None:
+        def next_step(self) -> None:
             self.switch_to_step(BasePlay.Step.next_step(self.curr_step))
 
         def __str__(self) -> str:
@@ -4850,7 +4895,9 @@ class PokerGame:
         if exists(path):
             rmtree(path)
 
-        mkdir(path)
+        path += f'/0 {len(self.hands)}'
+
+        makedirs(path)
 
         time = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), 0)
         network = Network('', '', True)
@@ -4858,7 +4905,8 @@ class PokerGame:
         for num, hand in enumerate(self.hands):
 
             converted: List[Tuple[datetime, str]] = []
-            events: Iterator[PokerGame.PokerEvent] = iter(hand.preflop)
+            hand.switch_to_step(BasePlay.Step.Preflop)
+            events: Iterator[PokerGame.PokerEvent] = iter(hand.curr_events)
 
             game = Game(self.seats, self.seats, 0)
             table = game.final_table
@@ -4886,17 +4934,26 @@ class PokerGame:
                 else:
                     raise ValueError('Two players with same seat')
 
-                new_player = Player(player.seat, player.name, player.money, True, True)
-                new_player.in_game = True
-                new_player.cards = player.cards
-                players += [new_player]
-                find[player.seat] = new_player
+                if player is not None:
+                    new_player = Player(player.seat, player.name, player.money, True, True)
+                    new_player.in_game = True
+                    new_player.cards = player.cards
+                    players += [new_player]
+                    find[player.seat] = new_player
+                else:
+                    players += [None]
 
             game.top_9 = sorted([p for p in players if p is not None], key=lambda p: p.money, reverse=True)
             table.players.players = players
 
             converted += [(time, network.init_hand(None, table, game))]
             time = time + timedelta(seconds=Table.Delay.InitHand)
+
+            converted += [(time, network.deal_cards())]
+            time = time + timedelta(seconds=0)
+
+            converted += [(time, network.open_cards(table))]
+            time = time + timedelta(seconds=Table.Delay.DealCards)
 
             event = next(events)
 
@@ -4923,10 +4980,201 @@ class PokerGame:
 
             if event.event == PokerGame.Event.BigBlind:
                 blinds_info += [(find[event.player.seat], event.money)]
-                # event = next(events)
+                event = next(events)
 
             converted += [(time, network.blinds(button, blinds_info))]
             time = time + timedelta(seconds=Table.Delay.Blinds)
+
+            if hand.sit_during_game:
+
+                for player in hand.sit_during_game:
+                    converted += [(time, network.add_player(Player(player.seat, player.name,
+                                                                   player.money, True, True), player.seat - 1))]
+                    time = time + timedelta(seconds=Table.Delay.AddPlayer)
+
+            avoid_in_first_iteration = True
+            need_to_collect_money = True
+
+            while True:
+
+                if hand.curr_step == BasePlay.Step.River:
+                    break
+
+                elif not avoid_in_first_iteration:
+
+                    hand.next_step()
+
+                    need_to_continue = False
+
+                    if hand.curr_step == BasePlay.Step.Flop and \
+                            hand.board.flop1 is not None and \
+                            hand.board.flop2 is not None and \
+                            hand.board.flop3 is not None:
+                        converted += [(time, network.flop(hand.board.flop1, hand.board.flop2, hand.board.flop3))]
+                        time = time + timedelta(seconds=Table.Delay.Flop)
+                        need_to_continue = True
+
+                    elif hand.curr_step == BasePlay.Step.Turn and hand.board.turn is not None:
+                        converted += [(time, network.turn(hand.board.turn))]
+                        time = time + timedelta(seconds=Table.Delay.Turn)
+                        need_to_continue = True
+
+                    elif hand.curr_step == BasePlay.Step.River and hand.board.river is not None:
+                        converted += [(time, network.river(hand.board.river))]
+                        time = time + timedelta(seconds=Table.Delay.River)
+                        need_to_continue = True
+
+                    events = iter(hand.curr_events)
+
+                    try:
+                        event = next(events)
+                    except StopIteration:
+                        if need_to_continue:
+                            continue
+                        else:
+                            break
+
+                else:
+                    avoid_in_first_iteration = False
+
+                while True:
+
+                    if event.event == PokerGame.Event.Fold or \
+                            event.event == PokerGame.Event.Check or \
+                            event.event == PokerGame.Event.Call or \
+                            event.event == PokerGame.Event.Raise or \
+                            event.event == PokerGame.Event.Allin:
+
+                        if event.event == PokerGame.Event.Call or \
+                                event.event == PokerGame.Event.Raise or \
+                                event.event == PokerGame.Event.Allin:
+                            need_to_collect_money = True
+
+                        player = find[event.player.seat]
+                        player.gived = event.money
+
+                        converted += [(time, network.switch_decision(player))]
+                        time = time + timedelta(seconds=Table.Delay.SwitchDecision + Table.Delay.DummyMove)
+
+                        converted += [(time, network.made_decision(player, PokerGame.Event.ToResult[event.event]))]
+                        time = time + timedelta(seconds=Table.Delay.MadeDecision)
+
+                    elif event.event == PokerGame.Event.WinMoney:
+
+                        if need_to_collect_money:
+                            converted += [(time, network.collect_money())]
+                            time = time + timedelta(seconds=Table.Delay.CollectMoney)
+                            need_to_collect_money = False
+
+                        converted += [(time, network.give_money(find[event.player.seat], event.money))]
+                        time = time + timedelta(seconds=Table.Delay.GiveMoney)
+
+                    elif event.event == PokerGame.Event.ReturnMoney:
+
+                        if sum(e.event == PokerGame.Event.Allin or
+                               e.event == PokerGame.Event.Raise or
+                               e.event == PokerGame.Event.Call or
+                               e.event == PokerGame.Event.SmallBlind or
+                               e.event == PokerGame.Event.BigBlind for e in hand.curr_events) == 1:
+                            need_to_collect_money = False
+
+                        converted += [(time, network.back_excess_money(find[event.player.seat], event.money))]
+                        time = time + timedelta(seconds=Table.Delay.ExcessMoney)
+
+                    elif event.event == PokerGame.Event.ChatMessage:
+
+                        converted += [(time, network.send({'type': 'chat',
+                                                           'text': f'{event.player.name}: {event.message}'}))]
+                        time = time + timedelta(seconds=0)
+
+                    elif event.event == PokerGame.Event.ObserverChatMessage:
+
+                        converted += [(time, network.send({'type': 'chat',
+                                                           'text': f'{event.player.name} [observer]: '
+                                                                   f'{event.message}'}))]
+                        time = time + timedelta(seconds=0)
+
+                    elif event.event == PokerGame.Event.Disconnected:
+
+                        converted += [(time, network.send({'type': 'disconnected', 'id': event.player.seat}))]
+                        time = time + timedelta(seconds=0)
+
+                    elif event.event == PokerGame.Event.Connected:
+
+                        converted += [(time, network.send({'type': 'connected', 'id': event.player.seat}))]
+                        time = time + timedelta(seconds=0)
+
+                    elif event.event == PokerGame.Event.FinishGame:
+
+                        if event.money == 0:
+                            converted += [(time, network.send({'type': 'chat',
+                                                               'text': f'{event.player.name} '
+                                                                       f'finished {event.message}'}))]
+                        else:
+                            converted += [(time, network.send({'type': 'chat',
+                                                               'text': f'{event.player.name} '
+                                                                       f'finished {event.message} and get '
+                                                                       f'${event.money // 100}.{event.money % 100}'}))]
+                        time = time + timedelta(seconds=0)
+
+                        if event.message != '1st':
+                            converted += [(time, network.delete_player(find[event.player.seat]))]
+                            time = time + timedelta(seconds=Table.Delay.DeletePlayer)
+
+                    else:
+                        raise ValueError(f'Undefined event id {event.event}')
+
+                    try:
+                        event = next(events)
+                    except StopIteration:
+
+                        time = time + timedelta(seconds=Table.Delay.EndOfRound)
+
+                        if need_to_collect_money:
+
+                            converted += [(time, network.collect_money())]
+                            time = time + timedelta(seconds=Table.Delay.CollectMoney)
+                            need_to_collect_money = False
+
+                        break
+
+            results: List[Tuple[Poker.Hand, Player, str]] = []
+
+            for player in hand.players:
+                if player.cards is not None:
+                    if hand.board.state == BasePlay.Step.Preflop:
+                        if not player.cards.initialized():
+                            curr_hand = Poker.strength1(player.cards.first)
+                        else:
+                            curr_hand = Poker.strength2(player.cards.first, player.cards.second)
+
+                    elif hand.board.state == BasePlay.Step.Flop:
+                        if not player.cards.initialized():
+                            curr_hand = Poker.strength4(player.cards.first, hand.board.flop1,
+                                                        hand.board.flop2, hand.board.flop3)
+                        else:
+                            curr_hand = Poker.strength(player.cards.first, player.cards.second,
+                                                       hand.board.flop1, hand.board.flop2, hand.board.flop3)
+
+                    else:
+                        cards = hand.board.get()
+
+                        if not player.cards.initialized():
+                            cards += [player.cards.first]
+                        else:
+                            cards += [player.cards.first, player.cards.second]
+
+                        curr_hand = Poker.max_strength(cards)
+
+                    results += [(curr_hand, find[player.seat], '')]
+
+            results.sort(reverse=True, key=lambda x: x[0])
+
+            converted += [(time, network.hand_results(hand.board, results))]
+            time = time + timedelta(seconds=Table.Delay.HandResults)
+
+            converted += [(time, network.clear())]
+            time = time + timedelta(seconds=Table.Delay.Clear)
 
             output = ''
 
@@ -5493,6 +5741,7 @@ class GameParser:
     def process_show_down(game: PokerGame, text: str) -> None:
 
         every_line = iter(text.strip().split('\n'))
+        game.curr_hand.goes_to_showdown = True
         GameParser.process_actions(game, every_line)
 
     @staticmethod
@@ -6059,6 +6308,7 @@ if __name__ == '__main__':
 
     # PlayManager.standings()
     # GameManager().run()
+
 
     game_ = GameParser.parse_game('hh.txt')
     game_.save()
