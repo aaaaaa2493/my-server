@@ -399,6 +399,7 @@ class Server:
 
                     if loads(msg)['type'] == 'set decision':
                         client['connect']['to decide'] = False
+
                         self.server.send_message(client['connect'], '1')
                         break
 
@@ -852,7 +853,7 @@ class Server:
                                     curr_client['chat history'] += [message]
 
                                     if len(curr_client['chat history']) > Server.MAX_CHAT_LENGTH:
-                                        _, curr_client['chat history'] = curr_client['chat history']
+                                        _, *curr_client['chat history'] = curr_client['chat history']
 
                                     curr_client['replay'] += [(datetime.now(), message)]
 
