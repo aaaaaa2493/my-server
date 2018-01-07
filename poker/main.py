@@ -4124,6 +4124,9 @@ class Network:
 
         reply = self.receive_raw()
 
+        if reply is None:
+            reply = '1'
+
         return reply.split()
 
     def init_hand(self, player: Optional[Player], table: Table, game: Game) -> Optional[str]:

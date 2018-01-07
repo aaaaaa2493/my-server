@@ -40,6 +40,7 @@ class Debug:
     MessageReceivedFromJS = 1
     MessageReceivedFromSpectator = 1
     ClientLeft = 1
+    Errors = 1
 
     if PythonAndJSConnections:
         @staticmethod
@@ -140,6 +141,15 @@ class Debug:
         def client_left(*args, **kwargs):
             pass
 
+    if Errors:
+        @staticmethod
+        def error(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def error(*args, **kwargs):
+            pass
+
 
 class AbstractClient:
 
@@ -158,13 +168,22 @@ class AbstractClient:
         self.handler: WebSocketHandler = handler
 
     def finish(self):
-        self.handler.finish()
+        try:
+            self.handler.finish()
+        except KeyError:
+            Debug.error(f'Key error possibly double deleting id = {self.id}, name = {self.name}')
 
     def send_raw(self, message: str) -> None:
-        self.handler.send_message(message)
+        try:
+            self.handler.send_message(message)
+        except BrokenPipeError:
+            Debug.error(f'Broken pipe error send raw id = {self.id}, name = {self.name}')
 
     def send(self, obj: dict) -> None:
-        self.handler.send_message(dumps(obj))
+        try:
+            self.handler.send_message(dumps(obj))
+        except BrokenPipeError:
+            Debug.error(f'Broken pipe error send id = {self.id}, name = {self.name}')
 
     def receive(self, srv: 'Server', message: str, client: dict) -> None:
         raise NotImplementedError('Method "receive" is not implemented in derived class')
@@ -187,7 +206,6 @@ class GameEngineClient(AbstractClient):
 
     def __del__(self):
         GameEngineClient.OnlyClient = None
-        self.finish()
 
     def receive(self, srv: 'Server', message: str, client: dict) -> None:
 
@@ -255,21 +273,32 @@ class GameEngineClient(AbstractClient):
             srv.players_in_game = None
             srv.game_name = None
 
+            for curr in list(srv.js_clients.values()):
+                curr.finish()
+
+            for curr in list(srv.py_clients.values()):
+                curr.finish()
+
+            for curr in list(srv.sp_clients):
+                curr.finish()
+
     def left(self, srv: 'Server') -> None:
         del srv.game_engine
         srv.game_engine = None
 
         Debug.client_left('DEL GAME ENGINE')
 
-        for curr in srv.js_clients, srv.py_clients, srv.sp_clients, srv.tb_clients, srv.rp_clients:
-            for client in curr:
-                client.finish()
+        for curr in list(srv.js_clients.values()):
+            curr.finish()
 
-        srv.py_clients = []
-        srv.js_clients = []
-        srv.sp_clients = []
-        srv.tb_clients = []
-        srv.rp_clients = []
+        for curr in list(srv.py_clients.values()):
+            curr.finish()
+
+        for curr in list(srv.sp_clients):
+            curr.finish()
+
+        for curr in list(srv.tb_clients.values()):
+            curr.finish()
 
 
 class UnregisteredClient(AbstractClient):
@@ -497,7 +526,10 @@ class PythonClient(AbstractClient):
     def send_to_js(self, message: str) -> None:
         if self.connected_js is not None:
             Debug.py_to_js(f'To js client {self.name} {message}')
-            self.connected_js.send_raw(message)
+            try:
+                self.connected_js.send_raw(message)
+            except AttributeError:
+                pass
 
     def thinking(self):
 
@@ -1053,7 +1085,10 @@ class Server:
             return
 
         Debug.client_left(f'Client {client["id"]} disconnected')
-        client['client'].left(self)
+        try:
+            client['client'].left(self)
+        except KeyError:
+            Debug.error(f'Key error possibly double deleting in client left id = {client["id"]}')
 
     # Called when a client sends a message
     def message_received(self, client, _, message):
