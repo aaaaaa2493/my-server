@@ -713,9 +713,6 @@ class TableClient(AbstractClient):
         if len(self.chat_history) > Server.MAX_CHAT_LENGTH:
             _, *self.chat_history = self.chat_history
 
-        print("TABLE CAST CHAT MESSAGE")
-        print(self.chat_history)
-
         self.replay += [(datetime.now(), message)]
         self.cast(message)
 
