@@ -206,6 +206,73 @@ function get_src(card){
     return "/img/poker/cards/" + card + ".png";
 }
 
+function shortcut_number_for_player(num){
+
+    num = num + '';
+
+    if(num.length <= 3){
+        return num;
+    }
+    else if(num.length <= 6){
+        return num.substring(0, num.length - 3) + '&thinsp;' + num.substring(num.length - 3, num.length);
+    }
+    else if(num.length <= 9){
+        return num.substring(0, num.length - 6) + '&thinsp;'+ 
+            num.substring(num.length - 6, num.length - 3) + '&thinsp;' + 
+            num.substring(num.length - 3, num.length);
+    }
+    else{
+        return num.substring(0, num.length - 9) + '&thinsp;'
+            num.substring(num.length - 9, num.length - 6) + '&thinsp;' + 
+            num.substring(num.length - 6, num.length - 3) + '&thinsp;' + 
+            num.substring(num.length - 3, num.length);
+    }
+
+}
+
+function shortcut_number_for_decision(num){
+
+    if(num < 1000){
+        return num+'';
+    }
+    else if(num < 10000){
+        return ((num/1000)|0)+'&thinsp;'+(num%1000);
+    }
+    else if(num < 100000){
+        // 46776 -> 46.7k
+        return (((num/100)|0)/10) + 'k' ;
+    }
+    else if(num < 1000000){
+        // 123231 -> 123k
+        return ((num/1000)|0) + 'k';
+    }
+    else if(num < 10000000){
+        // 3 123 345 -> 3.12m
+        return (((num/10000)|0)/100) + 'm';
+    }
+    else if(num < 100000000){
+        // 12 345 678 -> 12.3m
+        return (((num/100000)|0)/10) + 'm';
+    }
+    else if(num < 1000000000){
+        // 123 345 678 -> 123m
+        return ((num/1000000)|0) + 'm';
+    }
+    else if(num < 10000000000){
+        // 1 123 345 678 -> 1.12b
+        return (((num/10000000)|0)/100) + 'b';
+    }
+    else if(num < 100000000000){
+        // 12 123 345 678 -> 12.1b
+        return (((num/100000000)|0)/10) + 'b';
+    }
+    else {
+        // 122 223 345 678 -> 123b
+        return ((num/1000000000)|0) + 'b';
+    }
+
+}
+
 function get_sound(file){
 
     if(file == 'chips'){
@@ -358,10 +425,14 @@ function replay_next_hand(){
     clearTimeout(interval_thinking);
 }
 
-function update_info(id, reason){
+function update_info(id, reason, count=0){
+
+    if(reason != '' && count > 0){
+        reason = reason + ' ' + shortcut_number_for_decision(count);
+    }
 
     seat = seats[id_to_seat[id]];
-    post_inner_html([{id: 'p' + id_to_seat[id], str: seat.name + '<br>' + seat.stack + '<br>' + reason}]);
+    post_inner_html([{id: 'p' + id_to_seat[id], str: seat.name + '<br>' + shortcut_number_for_player(seat.stack) + '<br>' + reason}]);
 
 }
 
@@ -479,7 +550,7 @@ function textchange(text, max_value, min_value){
         }
 
         post_change_value('range', new_value);
-        post_inner_html([{id: 'raise', str: (new_value==max_value?"All in ":"Raise ") + new_value}]);
+        post_inner_html([{id: 'raise', str: (new_value==max_value?"All in ":"Raise ") + shortcut_number_for_decision(new_value)}]);
     }
 
 }
@@ -503,7 +574,7 @@ function raise_minus(value, max_value, min_value){
     new_value = (+value) - (+min_value) > min_value? (+value) - (+min_value): min_value;
 
     post_change_value('range', new_value);
-    post_inner_html([{id: 'raise', str: (new_value==max_value?"All in ":"Raise ") + new_value}]);
+    post_inner_html([{id: 'raise', str: (new_value==max_value?"All in ":"Raise ") + shortcut_number_for_decision(new_value)}]);
 
 }
 
@@ -512,14 +583,14 @@ function raise_plus(value, max_value, min_value){
     new_value = (+value) + (+min_value) < max_value? (+value) + (+min_value) : max_value;
 
     post_change_value('range', new_value);
-    post_inner_html([{id: 'raise', str: (new_value==max_value?"All in ":"Raise ") + new_value}]);
+    post_inner_html([{id: 'raise', str: (new_value==max_value?"All in ":"Raise ") + shortcut_number_for_decision(new_value)}]);
 
 }
 
 function raise_all(max_value){
 
     post_change_value('range', max_value);
-    post_inner_html([{id: 'raise', str: "All in " + max_value}]);
+    post_inner_html([{id: 'raise', str: "All in " + shortcut_number_for_decision(max_value)}]);
 
 }
 
@@ -538,7 +609,7 @@ function raise_pot(value, max_value){
     raise_amount = in_pot + 2 * to_call;
 
     post_change_value('range', raise_amount);
-    post_inner_html([{id: 'raise', str: (raise_amount==max_value?"All in ":"Raise ") + raise_amount}]);
+    post_inner_html([{id: 'raise', str: (raise_amount==max_value?"All in ":"Raise ") + shortcut_number_for_decision(raise_amount)}]);
 
 }
 
@@ -688,7 +759,7 @@ function set_bet(id, count, reason=''){
         seats[id_to_seat[id]].stack -= count - seats[id_to_seat[id]].gived;
         seats[id_to_seat[id]].gived = count;
 
-        update_info(id, reason);
+        update_info(id, reason, count);
 
     }
 
@@ -1153,7 +1224,8 @@ function handle(){
 
                 if(players[i].id !== null){
 
-                    doc_players += '<div id="p' + to_place[i] + '" class="player">' + players[i].name + '<br>' + data.players[i].stack + '</div>';
+                    doc_players += '<div id="p' + to_place[i] + '" class="player">' + players[i].name + '<br>' + 
+                                        shortcut_number_for_player(data.players[i].stack) + '</div>';
 
                     seats[to_place[i]] = {
                         'id': players[i].id,
@@ -1263,7 +1335,7 @@ function handle(){
 
         for(i = 0; i < paid.length; i++){
 
-            set_bet(paid[i].id, paid[i].paid, 'Ante ' + paid[i].paid);
+            set_bet(paid[i].id, paid[i].paid, 'Ante');
 
         }
 
@@ -1300,13 +1372,13 @@ function handle(){
         post_class_add('dealer', 'd' + id_to_seat[button_id]);
 
         if(data.info.length == 1){
-            set_bet(data.info[0].id, data.info[0].paid, 'BB ' + data.info[0].paid);
+            set_bet(data.info[0].id, data.info[0].paid, 'BB');
             curr_bb = data.info[0].paid;
             curr_bb_id = data.info[0].id;
         }
         else{
-            set_bet(data.info[0].id, data.info[0].paid, 'SB ' + data.info[0].paid);
-            set_bet(data.info[1].id, data.info[1].paid, 'BB ' + data.info[1].paid);
+            set_bet(data.info[0].id, data.info[0].paid, 'SB');
+            set_bet(data.info[1].id, data.info[1].paid, 'BB');
             curr_bb = data.info[1].paid;
             curr_bb_id = data.info[1].id;
         }
@@ -1549,7 +1621,7 @@ function handle(){
 
             if(players[i].id !== null){
 
-                all_inner_html.push({id: 'p' + to_place[i], str:  players[i].name + '<br>' + players[i].stack});
+                all_inner_html.push({id: 'p' + to_place[i], str:  players[i].name + '<br>' + shortcut_number_for_player(players[i].stack)});
 
                 seats[to_place[i]] = {
                     'id': players[i].id,
@@ -1685,7 +1757,7 @@ function handle(){
                 premove('1', false);
             }
 
-            set_bet(id_in_decision, data.money, 'Call ' + data.money);
+            set_bet(id_in_decision, data.money, 'Call');
 
         }
         else if(data.result == 'raise'){
@@ -1725,7 +1797,7 @@ function handle(){
                 premove('1', false);
             }
 
-            set_bet(id_in_decision, data.money, 'Raise ' + data.money);
+            set_bet(id_in_decision, data.money, 'Raise');
 
         }
         else if(data.result == 'all in'){
@@ -1759,7 +1831,7 @@ function handle(){
                 premove('1', false);
             }
 
-            set_bet(id_in_decision, data.money, 'All in ' + data.money);
+            set_bet(id_in_decision, data.money, 'All in');
 
         }
 
@@ -2074,7 +2146,6 @@ function handle(){
                 setTimeout(handle, 10);
                 return;
             }
-
             
         }
         else if(premove_second){
@@ -2106,17 +2177,18 @@ function handle(){
             }
             else if(data.decisions[i].type == 'call'){
                 decisions += "<div class='button call_button' onclick='post_set_decision(\"" + (i+1) + "\")'>Call " + 
-                                                                                                        data.decisions[i].money + "</div>";
+                                                    shortcut_number_for_decision(data.decisions[i].money) + "</div>";
                 to_call = data.decisions[i].money;
             }
             else if(data.decisions[i].type == 'raise'){
                 decisions += "<div id=raise class='button raise_button' onclick='post_set_decision(\"" + (i+1) + 
-                                        " \" + document.getElementById(\"range\").value)'>Raise " + data.decisions[i].from + "</div>";
+                                        " \" + document.getElementById(\"range\").value)'>Raise " + 
+                                        shortcut_number_for_decision(data.decisions[i].from) + "</div>";
 
                 decisions += "<input id=range type=range min=" + data.decisions[i].from + " max=" + data.decisions[i].to + 
                                     " step=1 onmousemove='document.getElementById(\"raise\").innerHTML = (this.value==this.max?\"All in \":\"Raise \")" +
-                                    "+ this.value' onchange='document.getElementById(\"raise\").innerHTML = " +
-                                    "(this.value==this.max?\"All in \":\"Raise \") + this.value' value=" + data.decisions[i].from + ">";
+                                    "+ shortcut(this.value)' onchange='document.getElementById(\"raise\").innerHTML = " +
+                                    "(this.value==this.max?\"All in \":\"Raise \") + shortcut(this.value)' value=" + data.decisions[i].from + ">";
 
                 decisions += "<input id=textraise type=text class=input_button placeholder='input amount' onkeyup='post_textchange(this.value)'>";
 
@@ -2127,7 +2199,7 @@ function handle(){
             }
             else if(data.decisions[i].type == 'all in'){
                 decisions += "<div class='button " + (i == 2? "raise_button": "call_button") + "' onclick='post_set_decision(\"" + (i+1) + "\")'>All in " + 
-                                                                                                        data.decisions[i].money + "</div>";
+                                                                            shortcut_number_for_decision(data.decisions[i].money) + "</div>";
             }
 
         }

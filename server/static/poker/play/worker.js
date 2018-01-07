@@ -161,6 +161,49 @@ window.onload = function(){
 
 }
 
+function shortcut(num){
+
+    if(num < 1000){
+        return num+'';
+    }
+    else if(num < 10000){
+        return ((num/1000)|0)+'&thinsp;'+(num%1000);
+    }
+    else if(num < 100000){
+        // 46776 -> 46.7k
+        return (((num/100)|0)/10) + 'k' ;
+    }
+    else if(num < 1000000){
+        // 123231 -> 123k
+        return ((num/1000)|0) + 'k';
+    }
+    else if(num < 10000000){
+        // 3 123 345 -> 3.12m
+        return (((num/10000)|0)/100) + 'm';
+    }
+    else if(num < 100000000){
+        // 12 345 678 -> 12.3m
+        return (((num/100000)|0)/10) + 'm';
+    }
+    else if(num < 1000000000){
+        // 123 345 678 -> 123m
+        return ((num/1000000)|0) + 'm';
+    }
+    else if(num < 10000000000){
+        // 1 123 345 678 -> 1.12b
+        return (((num/10000000)|0)/100) + 'b';
+    }
+    else if(num < 100000000000){
+        // 12 123 345 678 -> 12.1b
+        return (((num/100000000)|0)/10) + 'b';
+    }
+    else {
+        // 122 223 345 678 -> 123b
+        return ((num/1000000000)|0) + 'b';
+    }
+
+}
+
 function post_raise_minus(){
     raise = document.getElementById('range');
     w.postMessage({type: 'raise minus', value: raise.value, min_value: raise.min, max_value: raise.max});
