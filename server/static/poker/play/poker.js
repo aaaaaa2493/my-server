@@ -236,7 +236,8 @@ function shortcut_number_for_decision(num){
         return num+'';
     }
     else if(num < 10000){
-        return ((num/1000)|0)+'&thinsp;'+(num%1000);
+        num = num + '';
+        return num.substring(0, num.length - 3) + '&thinsp;' + num.substring(num.length - 3, num.length);
     }
     else if(num < 100000){
         // 46776 -> 46.7k
@@ -1130,26 +1131,26 @@ function handle(){
             all_inner_html.push({id: 'table_num', str: 'Final table'});
         }
         else{
-            all_inner_html.push({id: 'table_num_info', str: 'table #' + data.table_number});
-            all_inner_html.push({id: 'table_num', str: 'Table #' + data.table_number});
+            all_inner_html.push({id: 'table_num_info', str: 'table #' + shortcut_number_for_player(data.table_number)});
+            all_inner_html.push({id: 'table_num', str: 'Table #' + shortcut_number_for_player(data.table_number)});
         }
 
-        all_inner_html.push({id: 'hand_num_info', str: data.hand_number});
-        all_inner_html.push({id: 'hand_num', str: data.hand_number});
-        all_inner_html.push({id: 'ante_info', str: data.ante});
-        all_inner_html.push({id: 'ante_shortcut', str: data.ante});
-        all_inner_html.push({id: 'sb_info', str: data.sb});
-        all_inner_html.push({id: 'small_blind_shortcut', str: data.sb});
-        all_inner_html.push({id: 'bb_info', str: data.bb});
-        all_inner_html.push({id: 'big_blind_shortcut', str: data.bb});
-        all_inner_html.push({id: 'average_stack_info', str: data.avg_stack});
-        all_inner_html.push({id: 'players_left_info', str: data.players_left});
+        all_inner_html.push({id: 'hand_num_info', str: shortcut_number_for_player(data.hand_number)});
+        all_inner_html.push({id: 'hand_num', str: shortcut_number_for_player(data.hand_number)});
+        all_inner_html.push({id: 'ante_info', str: shortcut_number_for_decision(data.ante)});
+        all_inner_html.push({id: 'ante_shortcut', str: shortcut_number_for_decision(data.ante)});
+        all_inner_html.push({id: 'sb_info', str: shortcut_number_for_decision(data.sb)});
+        all_inner_html.push({id: 'small_blind_shortcut', str: shortcut_number_for_decision(data.sb)});
+        all_inner_html.push({id: 'bb_info', str: shortcut_number_for_decision(data.bb)});
+        all_inner_html.push({id: 'big_blind_shortcut', str: shortcut_number_for_decision(data.bb)});
+        all_inner_html.push({id: 'average_stack_info', str: shortcut_number_for_player(data.avg_stack)});
+        all_inner_html.push({id: 'players_left_info', str: shortcut_number_for_player(data.players_left)});
 
         post_remove_style([{id: 'ch0'}, {id: 'ch1'}, {id: 'ch2'}, {id: 'ch3'}, {id: 'ch4'}, 
                            {id: 'ch5'}, {id: 'ch6'}, {id: 'ch7'}, {id: 'ch8'}, {id: 'ch9'}]);
 
         if(replay_mode || spectate_mode){
-            all_inner_html.push({id: 'place_short_info', str: data.players_left});
+            all_inner_html.push({id: 'place_short_info', str: shortcut_number_for_player(data.players_left)});
         }
 
         players_left = data.players_left;
@@ -1313,7 +1314,7 @@ function handle(){
 
         for(i = 0; i < data.top_9.length; i++){
 
-            top9_info += '<tr><td>' + (i+1) + ')</td><td>' + data.top_9[i].stack + '</td><td>' + data.top_9[i].name + '</td></tr>'
+            top9_info += '<tr><td>' + (i+1) + ')</td><td>' + shortcut_number_for_player(data.top_9[i].stack) + '</td><td>' + data.top_9[i].name + '</td></tr>'
 
         }
 
@@ -1965,7 +1966,7 @@ function handle(){
                                    main_stack_margin_left, main_stack_margin_top]
 
         seats[id_to_seat[data.id]].stack += data.money;
-        set_bet(data.id, data.money, '+' + data.money);
+        set_bet(data.id, data.money, 'Win');
 
         main_stack.money -= data.money;
         set_bet(-1, main_stack.money);

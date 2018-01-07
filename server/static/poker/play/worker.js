@@ -167,7 +167,8 @@ function shortcut(num){
         return num+'';
     }
     else if(num < 10000){
-        return ((num/1000)|0)+'&thinsp;'+(num%1000);
+        num = num + '';
+        return num.substring(0, num.length - 3) + '&thinsp;' + num.substring(num.length - 3, num.length);
     }
     else if(num < 100000){
         // 46776 -> 46.7k
