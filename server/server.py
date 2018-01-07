@@ -15,7 +15,6 @@ from typing import List, Dict, Tuple
 # TODO - сделать не колл 600 а колл 300
 # TODO - сделать так чтобы на каджой улице дефолт не ставился премув
 # TODO - сделать в повторе нормальный чат
-# TODO - сделать на сервере сообщение connected и disconnected когда кто-то отключился и подключился
 # TODO - сделать на слиенте нормальную реализацию отображения отключившегося клиента
 # TODO - сделать так, чтобы при сумме фишей на столе равной сумме в последней руке вместо empty seat места удалялись
 # TODO - сделать нормальную картинку стола
@@ -443,6 +442,8 @@ class JavaScriptClient(AbstractClient):
                                           'id': self.connected_python.game_id})
 
             self.connected_python.connected_table.cast(disconnected_message)
+            self.connected_python.connected_table.chat_message(dumps({'type': 'chat',
+                                                                      'text': f'{self.name} disconnected'}))
 
             for msg in reversed(self.connected_python.history):
 
@@ -518,6 +519,7 @@ class PythonClient(AbstractClient):
         self.in_reconnection = False
 
         self.connected_table.cast(dumps({'type': 'connected', 'id': self.game_id}))
+        self.connected_table.chat_message(dumps({'type': 'chat', 'text': f'{self.name} connected'}))
 
     def send_to_js(self, message: str) -> None:
         if self.connected_js is not None:
