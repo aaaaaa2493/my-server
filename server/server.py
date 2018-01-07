@@ -573,6 +573,7 @@ class PythonClient(AbstractClient):
                 self.was_resit = True
 
                 _, table = message.split()
+                self.connected_table.players.remove(self)
                 self.connected_table = srv.tb_clients[table]
                 self.connected_table.players += [self]
                 self.history = self.connected_table.history[:]

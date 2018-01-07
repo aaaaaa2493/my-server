@@ -3131,8 +3131,6 @@ class Table:
 
         all_paid: int = 0
 
-        print('Collect pot', self.pot.money)
-
         for player in self.players.all_players():
             paid = player.move_money_to_pot()
             self.pot.money += paid
