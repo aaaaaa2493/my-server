@@ -281,47 +281,58 @@ class UnregisteredClient(AbstractClient):
 
         Debug.login(f'Unregistered client {self.id} said: {message}')
 
-        del srv.unregistered_clients[self.id]
-
         client_id, *info = message.split()
         name = info[0]
 
         if client_id == AbstractClient.ID.Replay:
+            del srv.unregistered_clients[self.id]
+            Debug.login(f'Unregistered client {self.id} classified as replay client')
             rp_client = ReplayClient(self.id, name, self.handler)
             client['client'] = rp_client
             srv.rp_clients += [rp_client]
 
         elif client_id != AbstractClient.ID.GameEngine and srv.game_engine is None:
+            Debug.login(f'Unregistered client {self.id} classified not as game engine client')
             self.send({'type': 'finish', 'msg': 'Game server is offline.'})
             self.finish()
 
         elif client_id == AbstractClient.ID.JavaScript and name in srv.js_clients:
+            Debug.login(f'Unregistered client {self.id} classified as already exist javascript client')
             self.send({'type': 'finish', 'msg': 'Player with this name already exists.'})
             self.finish()
 
         elif client_id == AbstractClient.ID.Python:
+            del srv.unregistered_clients[self.id]
+            Debug.login(f'Unregistered client {self.id} classified as python client')
             js_client = srv.js_clients[name]
             py_client = PythonClient(self.id, int(info[1]), js_client, self.handler)
             client['client'] = py_client
             srv.py_clients[name] = py_client
 
         elif client_id == AbstractClient.ID.Table:
+            del srv.unregistered_clients[self.id]
+            Debug.login(f'Unregistered client {self.id} classified as table client')
             tb_client = TableClient(self.id, name, self.handler)
             client['client'] = tb_client
             srv.tb_clients[name] = tb_client
 
         elif client_id == AbstractClient.ID.Spectator and name in srv.tb_clients:
+            del srv.unregistered_clients[self.id]
+            Debug.login(f'Unregistered client {self.id} classified as spectator client')
             sp_client = SpectatorClient(self.id, name, self.handler)
             client['client'] = sp_client
             srv.sp_clients += [sp_client]
             srv.tb_clients[name].connect_spectator(sp_client)
 
         elif client_id == AbstractClient.ID.Spectator:
+            Debug.login(f'Unregistered client {self.id} classified as spectator client trying to watch wrong table')
             self.send({'type': 'finish', 'msg': 'Table is not active.'})
             self.finish()
 
         elif client_id == AbstractClient.ID.JavaScript and \
                 not srv.is_game_started and srv.is_registration_started:
+            del srv.unregistered_clients[self.id]
+            Debug.login(f'Unregistered client {self.id} classified as javascript client')
             js_client = JavaScriptClient(self.id, name, self.handler)
             client['client'] = js_client
             srv.js_clients[name] = js_client
@@ -329,22 +340,28 @@ class UnregisteredClient(AbstractClient):
 
         elif client_id == AbstractClient.ID.JavaScript and srv.is_game_started and \
                 name in srv.py_clients and srv.py_clients[name].is_disconnected:
+            del srv.unregistered_clients[self.id]
+            Debug.login(f'Unregistered client {self.id} classified as reconnected javascript client')
             py_client = srv.py_clients[name]
             js_client = JavaScriptClient.restore(self.id, py_client, self.handler)
             client['client'] = js_client
             srv.js_clients[name] = js_client
 
         elif client_id == AbstractClient.ID.GameEngine and srv.game_engine is None:
+            del srv.unregistered_clients[self.id]
+            Debug.login(f'Unregistered client {self.id} classified as game engine client')
             game_client = GameEngineClient(self.id, self.handler)
             client['client'] = game_client
             srv.game_engine = game_client
 
         elif client_id != AbstractClient.ID.GameEngine and \
                 not srv.is_registration_started and not srv.is_game_started:
+            Debug.login(f'Unregistered client {self.id} classified as something wrong before start of the game')
             self.send({'type': 'finish', 'msg': 'Registration is not started yet.'})
             self.finish()
 
         else:
+            Debug.login(f'Unregistered client {self.id} classified as something wrong')
             self.send({'type': 'finish', 'msg': 'You are not in the game.'})
             self.finish()
 
@@ -664,6 +681,9 @@ class TableClient(AbstractClient):
 
         if len(self.chat_history) > Server.MAX_CHAT_LENGTH:
             _, *self.chat_history = self.chat_history
+
+        print("TABLE CAST CHAT MESSAGE")
+        print(self.chat_history)
 
         self.replay += [(datetime.now(), message)]
         self.cast(message)
