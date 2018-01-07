@@ -1,7 +1,7 @@
 from bottle import route, run, static_file, template, request, abort, redirect, error
 from bottle import ERROR_PAGE_TEMPLATE
-from websocket_server import WebsocketServer
-from threading import Thread
+from websocket_server import WebsocketServer, WebSocketHandler
+from threading import Thread, Lock
 from time import sleep
 from json import loads, dumps
 from json.decoder import JSONDecodeError
@@ -9,6 +9,7 @@ from datetime import datetime
 from os import urandom, listdir, mkdir
 from os.path import exists
 from base64 import b64encode
+from typing import List, Dict, Tuple
 
 # TODO - сделать чтобы появлялся экран о том, что человека кикнули за то, что просрочил время
 # TODO - сделать не колл 600 а колл 300
@@ -23,80 +24,705 @@ from base64 import b64encode
 # TODO - сделать увеличенную форму выбора турнира чтобы было видно и дату и название
 # TODO - сделать так, что если турнир с одним столом то перекидывло сразу на игру и возвращало тоже в выбор турнира
 
+# TODO - глобальное изменение сервера - оптимизация и хранение всех ссылок внутри, избквление от for, создание класса
 
-class Server:
 
+class Debug:
     Debug = 1
+    PythonAndJSConnections = 1
+    ClientTriesToLogin = 1
+    SpectatorInit = 1
+    JSClientRestore = 1
+    GameEngineMessage = 1
+    JSResittingRestore = 1
+    MessageFromPythonToJS = 1
+    MessageFromTableToSpectator = 1
+    MessageReceivedFromJS = 1
+    MessageReceivedFromSpectator = 1
+    ClientLeft = 1
 
-    if Debug:
-        ip = '127.0.0.1'
-        local_ip = '127.0.0.1'
-
+    if PythonAndJSConnections:
+        @staticmethod
+        def connect(*args, **kwargs):
+            print(*args, **kwargs)
     else:
-        ip = '188.134.82.95'
-        local_ip = '192.168.0.100'
+        @staticmethod
+        def connect(*args, **kwargs):
+            pass
 
-    port = 9001
+    if ClientTriesToLogin:
+        @staticmethod
+        def login(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def login(*args, **kwargs):
+            pass
 
-    MAX_THINKING_TIME = 60 * 100 * 100  # Число секунд, умноженное на сто
-    MAX_CHAT_LENGTH = 100  # Максимально количество хранимых сообщений в чате и возвращаемых при перезагрузке страницы
-    MAX_NICK_LENGTH = 14  # Максимально допустимая длина
-    DEFAULT_NICK = 'Anon'  # Если удалось отдать на сервер невалидный ник
+    if SpectatorInit:
+        @staticmethod
+        def spectator_init(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def spectator_init(*args, **kwargs):
+            pass
 
-    def __init__(self):
+    if JSClientRestore:
+        @staticmethod
+        def js_restore(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def js_restore(*args, **kwargs):
+            pass
 
-        self.server = WebsocketServer(Server.port, Server.local_ip)
-        self.server.set_fn_new_client(self.new_client)
-        self.server.set_fn_client_left(self.client_left)
-        self.server.set_fn_message_received(self.message_received)
+    if GameEngineMessage:
+        @staticmethod
+        def engine_msg(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def engine_msg(*args, **kwargs):
+            pass
 
-        self.unregistered_clients = []
-        self.js_clients = []
-        self.py_clients = []
-        self.sp_clients = []
-        self.tb_clients = []
-        self.rp_clients = []
+    if JSResittingRestore:
+        @staticmethod
+        def resitting(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def resitting(*args, **kwargs):
+            pass
 
-        self.main_client = None
-        self.started_time = None
-        self.is_game_started = False
-        self.is_registration_started = False
+    if MessageFromPythonToJS:
+        @staticmethod
+        def py_to_js(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def py_to_js(*args, **kwargs):
+            pass
 
-        self.replays = []
-        self.players_in_game = None
-        self.game_name = None
+    if MessageFromTableToSpectator:
+        @staticmethod
+        def tb_to_sp(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def to_to_sp(*args, **kwargs):
+            pass
 
-    def run(self):
-        self.server.run_forever()
+    if MessageReceivedFromJS:
+        @staticmethod
+        def from_js(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def from_js(*args, **kwargs):
+            pass
 
-    def send_http(self, message):
+    if MessageReceivedFromSpectator:
+        @staticmethod
+        def from_sp(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def from_sp(*args, **kwargs):
+            pass
 
-        self.server.send_message(self.main_client, message)
+    if ClientLeft:
+        @staticmethod
+        def client_left(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def client_left(*args, **kwargs):
+            pass
 
-    def send(self, _id, message):
 
-        self.main_client[_id] = None
+class AbstractClient:
 
-        self.server.send_message(self.main_client, message)
+    class ID:
+        Unregistered = 'un'
+        Python = 'py'
+        JavaScript = 'js'
+        Replay = 'rp'
+        Table = 'tb'
+        Spectator = 'sp'
+        GameEngine = 'ge'
 
-        while self.main_client[_id] is None:
-            sleep(0.1)
+    def __init__(self, _id: int, name: str, handler: WebSocketHandler):
+        self.id: int = _id
+        self.name: str = name
+        self.handler: WebSocketHandler = handler
 
-        receive = self.main_client[_id]
-        del self.main_client[_id]
+    def finish(self):
+        self.handler.finish()
 
-        return receive
+    def send_raw(self, message: str) -> None:
+        self.handler.send_message(message)
 
-    def thinking(self, client):
+    def send(self, obj: dict) -> None:
+        self.handler.send_message(dumps(obj))
 
-        client['to decide'] = True
-        for _ in range(Server.MAX_THINKING_TIME):
-            if not client['to decide']:
+    def receive(self, srv: 'Server', message: str, client: dict) -> None:
+        raise NotImplementedError('Method "receive" is not implemented in derived class')
+
+    def left(self, srv: 'Server') -> None:
+        raise NotImplementedError('Method "left" is not implemented in derived class')
+
+
+class GameEngineClient(AbstractClient):
+
+    OnlyClient = None
+
+    def __init__(self, _id: int, handler: WebSocketHandler):
+        super().__init__(_id, AbstractClient.ID.GameEngine, handler)
+
+        if GameEngineClient.OnlyClient is not None:
+            raise OverflowError('Can not create more than one instance of GameEngineClient!')
+
+        GameEngineClient.OnlyClient = self
+
+    def __del__(self):
+        GameEngineClient.OnlyClient = None
+        self.finish()
+
+    def receive(self, srv: 'Server', message: str, client: dict) -> None:
+
+        Debug.engine_msg(f'GameEngine said: {message}')
+
+        to_whom, message = message.split()
+
+        if to_whom != 'http':
+            raise ValueError('Bas start message in server receive')
+
+        if message == 'start_registration':
+            srv.is_registration_started = True
+
+        elif message == 'start':
+            srv.is_game_started = True
+            srv.is_registration_started = False
+            srv.started_time = datetime.now()
+
+        elif message == 'end':
+            srv.is_game_started = False
+            srv.is_registration_started = False
+
+            total_tables = len(srv.replays)
+            total_players = srv.players_in_game
+            name = srv.game_name
+            total_hands = sum(rep[1] for rep in srv.replays)
+
+            if name == '':
+                tournament_path = ('files/replay/poker/' + str(srv.started_time)[:-7]
+                                   .replace(' ', '_').replace(':', '-') +
+                                   ' %s %s %s' % (total_tables, total_players, total_hands))
+
+            else:
+                tournament_path = ('files/replay/poker/' + str(srv.started_time)[:-7]
+                                   .replace(' ', '_').replace(':', '-') +
+                                   ' %s %s %s %s' % (total_tables, total_players, total_hands, name))
+
+            mkdir(tournament_path)
+
+            for table_num, hands, hands_history in srv.replays:
+
+                table_path = tournament_path + '/%s %s' % (table_num, hands)
+
+                mkdir(table_path)
+
+                for num, hand in enumerate(hands_history):
+                    open(table_path + '/%s' % (num,), 'w').write(ReplayClient.dump_replay(hand))
+
+            srv.replays = []
+            srv.players_in_game = None
+            srv.game_name = None
+
+        elif message.startswith('players'):
+
+            srv.players_in_game = int(message.split(':')[-1])
+
+        elif message.startswith('name'):
+
+            srv.game_name = message.split(':')[-1]
+
+        elif message == 'broken':
+            srv.is_game_started = False
+            srv.is_registration_started = False
+            srv.replays = []
+            srv.players_in_game = None
+            srv.game_name = None
+
+    def left(self, srv: 'Server') -> None:
+        del srv.game_engine
+        srv.game_engine = None
+
+        Debug.client_left('DEL GAME ENGINE')
+
+        for curr in srv.js_clients, srv.py_clients, srv.sp_clients, srv.tb_clients, srv.rp_clients:
+            for client in curr:
+                client.finish()
+
+        srv.py_clients = []
+        srv.js_clients = []
+        srv.sp_clients = []
+        srv.tb_clients = []
+        srv.rp_clients = []
+
+
+class UnregisteredClient(AbstractClient):
+
+    def __init__(self, _id: int, handler: WebSocketHandler):
+        super().__init__(_id, AbstractClient.ID.Unregistered, handler)
+
+    def receive(self, srv: 'Server', message: str, client: dict) -> None:
+
+        Debug.login(f'Unregistered client {self.id} said: {message}')
+
+        del srv.unregistered_clients[self.id]
+
+        client_id, *info = message.split()
+        name = info[0]
+
+        if client_id == AbstractClient.ID.Replay:
+            rp_client = ReplayClient(self.id, name, self.handler)
+            client['client'] = rp_client
+            srv.rp_clients += [rp_client]
+
+        elif client_id != AbstractClient.ID.GameEngine and srv.game_engine is None:
+            self.send({'type': 'finish', 'msg': 'Game server is offline.'})
+            self.finish()
+
+        elif client_id == AbstractClient.ID.JavaScript and name in srv.js_clients:
+            self.send({'type': 'finish', 'msg': 'Player with this name already exists.'})
+            self.finish()
+
+        elif client_id == AbstractClient.ID.Python:
+            js_client = srv.js_clients[name]
+            py_client = PythonClient(self.id, int(info[1]), js_client, self.handler)
+            client['client'] = py_client
+            srv.py_clients[name] = py_client
+
+        elif client_id == AbstractClient.ID.Table:
+            tb_client = TableClient(self.id, name, self.handler)
+            client['client'] = tb_client
+            srv.tb_clients[name] = tb_client
+
+        elif client_id == AbstractClient.ID.Spectator and name in srv.tb_clients:
+            sp_client = SpectatorClient(self.id, name, self.handler)
+            client['client'] = sp_client
+            srv.sp_clients += [sp_client]
+            srv.tb_clients[name].connect_spectator(sp_client)
+
+        elif client_id == AbstractClient.ID.Spectator:
+            self.send({'type': 'finish', 'msg': 'Table is not active.'})
+            self.finish()
+
+        elif client_id == AbstractClient.ID.JavaScript and \
+                not srv.is_game_started and srv.is_registration_started:
+            js_client = JavaScriptClient(self.id, name, self.handler)
+            client['client'] = js_client
+            srv.js_clients[name] = js_client
+            srv.send_http('add ' + name)
+
+        elif client_id == AbstractClient.ID.JavaScript and srv.is_game_started and \
+                name in srv.py_clients and srv.py_clients[name].is_disconnected:
+            py_client = srv.py_clients[name]
+            js_client = JavaScriptClient.restore(self.id, py_client, self.handler)
+            client['client'] = js_client
+            srv.js_clients[name] = js_client
+
+        elif client_id == AbstractClient.ID.GameEngine and srv.game_engine is None:
+            game_client = GameEngineClient(self.id, self.handler)
+            client['client'] = game_client
+            srv.game_engine = game_client
+
+        elif client_id != AbstractClient.ID.GameEngine and \
+                not srv.is_registration_started and not srv.is_game_started:
+            self.send({'type': 'finish', 'msg': 'Registration is not started yet.'})
+            self.finish()
+
+        else:
+            self.send({'type': 'finish', 'msg': 'You are not in the game.'})
+            self.finish()
+
+    def left(self, srv: 'Server') -> None:
+        del srv.unregistered_clients[self.id]
+        Debug.client_left('DEL UNR')
+
+
+class JavaScriptClient(AbstractClient):
+
+    def __init__(self, _id: int, name: str, handler: WebSocketHandler):
+        super().__init__(_id, name, handler)
+        self.connected_python: PythonClient = None
+
+    @staticmethod
+    def restore(_id: int, py_client: 'PythonClient', handler: WebSocketHandler) -> 'JavaScriptClient':
+        new_js = JavaScriptClient(_id, py_client.name, handler)
+        py_client.reconnect_js(new_js)
+        return new_js
+
+    def receive(self, srv: 'Server', message: str, client: dict) -> None:
+
+        Debug.from_js(f'Message from js {self.name}: {message}')
+
+        try:
+            json_message = loads(message)
+
+        except JSONDecodeError:
+            Debug.from_js(f'JSON decode error msg from js {self.name} {message}')
+
+        else:
+
+            if json_message['type'] == 'decision' and 'text' in json_message:
+                if self.connected_python.in_decision:
+                    self.connected_python.in_decision = False
+                    self.connected_python.send_raw(json_message['text'])
+
+            elif json_message['type'] == 'chat' and 'text' in json_message:
+                json_message['text'] = f'[Player {self.name}]: {json_message["text"]}'
+                self.connected_python.connected_table.chat_message(dumps(json_message))
+
+    def left(self, srv: 'Server') -> None:
+        del srv.js_clients[self.name]
+
+        if srv.is_game_started:
+            self.connected_python.connected_js = None
+            self.connected_python.is_disconnected = True
+
+            if self.connected_python.in_reconnection:
+                Debug.client_left('CLIENT DISCONNECTED WHILE TRYING TO RECONNECT')
+                self.connected_python.in_reconnection = False
+
+            disconnected_message = dumps({'type': 'disconnected',
+                                          'id': self.connected_python.game_id})
+
+            self.connected_python.connected_table.cast(disconnected_message)
+
+            for msg in reversed(self.connected_python.history):
+
+                if loads(msg)['type'] == 'set decision':
+                    self.connected_python.in_decision = False
+                    self.connected_python.send_raw('1')
+                    break
+
+                elif loads(msg)['type'] == 'switch decision':
+                    break
+
+        elif self.name in [cl.name for cl in srv.py_clients.values()]:
+            Debug.client_left('SEND HTTP DELETE ' + self.name)
+            srv.send_http('delete ' + self.name)
+
+        Debug.client_left('DEL JS')
+
+
+class PythonClient(AbstractClient):
+
+    def __init__(self, _id: int, game_id: int, js_client: JavaScriptClient, handler: WebSocketHandler):
+
+        super().__init__(_id, js_client.name, handler)
+        self.game_id = game_id
+
+        self.history: List[str] = []
+
+        self.first_resit: bool = True
+        self.is_disconnected: bool = False
+        self.in_reconnection: bool = False
+        self.was_resit: bool = False
+        self.in_decision: bool = False
+        self.is_busted: bool = False
+
+        self.connected_table: TableClient = None
+
+        self.thinking_time: int = Server.MAX_THINKING_TIME
+
+        self.connected_js: JavaScriptClient = js_client
+        js_client.connected_python = self
+
+        Debug.connect(f'connected py and js {self.name}')
+
+    def reconnect_js(self, js_client: JavaScriptClient) -> None:
+        if self.connected_js is not None:
+            raise ValueError(f'Python client {self.name} already has js client')
+
+        if not self.is_disconnected:
+            raise ValueError(f'Python client {self.name} is not disconnected')
+
+        self.connected_js = js_client
+        js_client.connected_python = self
+
+        Debug.js_restore(f'Start restore client {js_client.name} js to py')
+
+        self.in_reconnection = True
+
+        js_client.send({'type': 'reconnect start'})
+
+        for msg in self.history:
+            js_client.send_raw(msg)
+            Debug.js_restore(f'Restore js client {js_client.name} {msg}')
+
+        for chat_msg in self.connected_table.chat_history:
+            js_client.send_raw(chat_msg)
+            Debug.js_restore(f'Restore chat js client {js_client.name} {msg}')
+
+        Debug.js_restore(f'End restore js client {js_client.name}')
+
+        js_client.send({'type': 'reconnect end'})
+
+        self.is_disconnected = False
+        self.in_reconnection = False
+
+        self.connected_table.cast(dumps({'type': 'connected', 'id': self.game_id}))
+
+    def send_to_js(self, message: str) -> None:
+        if self.connected_js is not None:
+            Debug.py_to_js(f'To js client {self.name} {message}')
+            self.connected_js.send_raw(message)
+
+    def thinking(self):
+
+        self.in_decision = True
+        for _ in range(self.thinking_time):
+            if not self.in_decision:
                 break
             sleep(0.01)
         else:
-            client['to decide'] = False
-            self.server.send_message(client, '1')
+            self.in_decision = False
+            self.send_raw('1')
+
+    def receive(self, srv: 'Server', message: str, client: dict):
+
+        if message == 'new hand':
+            self.history = []
+
+        elif message == 'decision':
+
+            if self.is_disconnected:
+                self.send_raw('1')
+
+            else:
+                Thread(target=lambda: self.thinking(), name=f'Thinking {self.name}').start()
+
+        elif message == 'busted':
+            self.is_busted = True
+
+        elif message.startswith('resit'):
+
+            if self.first_resit:
+
+                self.first_resit = False
+
+                _, table = message.split()
+                self.connected_table = srv.tb_clients[table]
+                self.connected_table.players += [self]
+
+            else:
+
+                self.was_resit = True
+
+                _, table = message.split()
+                self.connected_table = srv.tb_clients[table]
+                self.connected_table.players += [self]
+                self.history = self.connected_table.history[:]
+
+        else:
+
+            if self.was_resit:
+
+                self.in_reconnection = True
+                self.was_resit = False
+
+                Debug.resitting(f'Start resitting restore to client {self.name} {message}')
+                self.send_to_js(message)
+
+                self.send_to_js(dumps({'type': 'reconnect start'}))
+
+                for msg in self.history:
+                    self.send_to_js(msg)
+                    Debug.resitting(f'Restore when resit {self.name} {msg}')
+
+                self.send_to_js(dumps({'type': 'reconnect end'}))
+
+                Debug.resitting(f'Reconnected when resit {self.name}')
+                self.in_reconnection = False
+
+            else:
+
+                while self.in_reconnection:
+                    sleep(0.1)
+
+                self.history += [message]
+                self.send_to_js(message)
+
+    def left(self, srv: 'Server'):
+        del srv.py_clients[self.name]
+
+        if self.connected_js is not None and not self.is_busted:
+            self.send_to_js(dumps({'type': 'finish', 'msg': 'Game was broken.'}))
+            self.connected_js.finish()
+
+        Debug.client_left('DEL PY')
+
+
+class SpectatorClient(AbstractClient):
+
+    def __init__(self, _id: int, name: str, handler: WebSocketHandler):
+        super().__init__(_id, name, handler)
+
+        self.connected_table: TableClient = None
+        self.nick: str = None
+
+    def receive(self, srv: 'Server', message: str, client: dict) -> None:
+
+        Debug.from_sp(f'Message from spectator {self.name}: {message}')
+
+        try:
+            json_message = loads(message)
+
+        except JSONDecodeError:
+            Debug.from_sp(f'JSON decode error msg from spectator {self.name} {message}')
+
+        else:
+
+            if json_message['type'] == 'chat' and 'text' in json_message:
+                if self.nick is None:
+                    self.nick = Server.DEFAULT_NICK
+                json_message['text'] = f'[Watcher {self.nick}]: {json_message["text"]}'
+                self.connected_table.chat_message(dumps(json_message))
+
+            elif json_message['type'] == 'nick' and 'nick' in json_message:
+                if self.nick is None:
+                    if 0 < len(json_message['nick']) <= Server.MAX_NICK_LENGTH:
+                        self.nick = json_message['nick']
+                    else:
+                        self.nick = Server.DEFAULT_NICK
+
+    def left(self, srv: 'Server') -> None:
+        del srv.sp_clients[srv.sp_clients.index(self)]
+        del self.connected_table.spectators[self.connected_table.spectators.index(self)]
+        Debug.client_left('DEL SP')
+
+
+class TableClient(AbstractClient):
+
+    def __init__(self, _id: int, name: str, handler: WebSocketHandler):
+        super().__init__(_id, name, handler)
+
+        self.spectators: List[SpectatorClient] = []
+        self.players: List[PythonClient] = []
+
+        self.history: List[str] = []
+        self.chat_history: List[str] = []
+        self.replay: List[Tuple[datetime, str]] = []
+        self.hands_history: List[List[Tuple[datetime, str]]] = []
+
+        self.lock: Lock = Lock()
+        self.open_cards_replay: bool = False
+
+        self.hands: int = 0
+
+    def connect_spectator(self, spectator: SpectatorClient) -> None:
+
+        with self.lock:
+            spectator.send({'type': 'reconnect start'})
+
+            Debug.spectator_init(f'Spectator {spectator.name} reconnect start')
+
+            for msg in self.history:
+                spectator.send_raw(msg)
+                Debug.spectator_init(f'Start spectate {spectator.name} {msg}')
+
+            for chat_msg in self.chat_history:
+                spectator.send_raw(chat_msg)
+                Debug.spectator_init(f'Restore chat {spectator.name} {chat_msg}')
+
+            Debug.spectator_init(f'Spectator {spectator.name} reconnect end')
+
+            spectator.send({'type': 'reconnect end'})
+
+            self.spectators += [spectator]
+            spectator.connected_table = self
+
+    def cast_to_spectators(self, message: str):
+        for spectator in self.spectators:
+            Debug.tb_to_sp(f'Table {self.name} to spectator {spectator.id} {message}')
+            spectator.send_raw(message)
+
+    def cast_to_players(self, message: str):
+        for curr in self.players:
+            curr.send_to_js(message)
+
+    def cast(self, message: str):
+        self.cast_to_spectators(message)
+        self.cast_to_players(message)
+
+    def chat_message(self, message: str):
+        self.chat_history += [message]
+
+        if len(self.chat_history) > Server.MAX_CHAT_LENGTH:
+            _, *self.chat_history = self.chat_history
+
+        self.replay += [(datetime.now(), message)]
+        self.cast(message)
+
+    def receive(self, srv: 'Server', message: str, client: dict) -> None:
+
+        if message == 'new hand':
+
+            if self.replay:
+                self.hands_history += [self.replay]
+
+            self.history = []
+            self.replay = []
+            self.hands += 1
+
+        elif message == 'end':
+            self.finish()
+
+        elif message == 'open cards replay':
+            self.open_cards_replay = True
+
+        elif self.open_cards_replay:
+            self.open_cards_replay = False
+            self.replay += [(datetime.now(), message)]
+
+        else:
+            with self.lock:
+                self.history += [message]
+                self.replay += [(datetime.now(), message)]
+                self.cast_to_spectators(message)
+
+    def left(self, srv: 'Server') -> None:
+        del srv.tb_clients[self.name]
+
+        if self.replay:
+            self.hands_history += [self.replay]
+
+        srv.replays += [(self.name, self.hands, self.hands_history)]
+
+        for curr_client in self.spectators:
+            curr_client.send({'type': 'finish', 'msg': 'Table is closed.'})
+            curr_client.finish()
+
+        for curr_client in self.players:
+            curr_client.send({'type': 'finish', 'msg': 'Table is closed.'})
+            curr_client.finish()
+
+        Debug.client_left('DEL TB')
+
+
+class ReplayClient(AbstractClient):
+
+    def __init__(self, _id: int, name: str, handler: WebSocketHandler):
+        super().__init__(_id, name, handler)
+
+        self.loop: bool = True
+        self.message: str = None
+        self.thread: Thread = Thread(target=lambda: self.handle_replay())
+        self.thread.start()
 
     @staticmethod
     def dump_replay(obj):
@@ -123,13 +749,12 @@ class Server:
 
         return output
 
-    def handle_replay(self, client):
+    def handle_replay(self):
 
-        num, table = client['name'].split(':')
+        num, table = self.name.split(':')
         hand = 0
 
         try:
-
             replays = sorted(listdir('files/replay/poker'))
 
             replay_info = listdir('files/replay/poker/' + replays[int(num)])
@@ -137,206 +762,172 @@ class Server:
             table_info = 'files/replay/poker/' + replays[int(num)] + '/' + \
                          sorted(replay_info, key=lambda x: int(x.split()[0]))[int(table)]
 
-            hand_info = Server.load_replay(open(table_info + '/0', 'r').read())
+            hand_info = ReplayClient.load_replay(open(table_info + '/0', 'r').read())
 
             curr_time = datetime.now()
             start_time = hand_info[0][0]
 
         except IndexError:
-
-            self.server.send_message(client, dumps({'type': 'finish',
-                                                    'msg': 'Can not find replay for this table.'}))
-
-            client['loop'] = False
-            client['handle'].finish()
+            self.send({'type': 'finish', 'msg': 'Can not find replay for this table.'})
+            self.loop = False
+            self.finish()
 
         else:
 
             curr_action = 0
 
-            while client['loop']:
+            while self.loop:
 
                 if exists(table_info + '/' + str(hand)):
-                    hand_info = Server.load_replay(open(table_info + '/' + str(hand), 'r').read())
+                    hand_info = ReplayClient.load_replay(open(table_info + '/' + str(hand), 'r').read())
 
                     for time, message in hand_info[curr_action:]:
 
                         while time - start_time > datetime.now() - curr_time:
                             sleep(0.01)
 
-                            if client['message'] is not None:
+                            if self.message is not None:
                                 break
 
-                            if not client['loop']:
+                            if not self.loop:
                                 return
 
-                        if client['message'] is not None:
+                        if self.message is not None:
                             break
 
-                        if not client['loop']:
+                        if not self.loop:
                             return
 
-                        self.server.send_message(client, message)
+                        self.send_raw(message)
                         curr_action += 1
 
-                    if client['message'] is not None:
+                    if self.message is not None:
 
-                        if client['message'] == 'pause':
+                        if self.message == 'pause':
 
                             while True:
 
-                                client['message'] = None
+                                self.message = None
 
-                                while client['message'] is None:
+                                while self.message is None:
                                     sleep(0.01)
 
-                                    if not client['loop']:
+                                    if not self.loop:
                                         return
 
-                                if not client['loop']:
+                                if not self.loop:
                                     return
 
-                                if client['message'] == 'next step':
+                                if self.message == 'next step':
 
                                     if curr_action < len(hand_info):
-
                                         _, message = hand_info[curr_action]
-                                        self.server.send_message(client, message)
-
+                                        self.send_raw(message)
                                         curr_action += 1
 
                                     else:
-
                                         hand += 1
                                         curr_action = 0
 
                                         if exists(table_info + '/' + str(hand)):
-                                            hand_info = Server.load_replay(
+                                            hand_info = ReplayClient.load_replay(
                                                 open(table_info + '/' + str(hand), 'r').read())
 
                                             _, message = hand_info[curr_action]
-                                            self.server.send_message(client, message)
-
+                                            self.send_raw(message)
                                             curr_action += 1
 
                                         else:
-
                                             hand -= 1
+                                            self.send({'type': 'info', 'msg': 'It was last hand.'})
 
-                                            self.server.send_message(client, dumps({'type': 'info',
-                                                                                    'msg': 'It was last hand.'}))
-
-                                elif client['message'] == 'next hand':
+                                elif self.message == 'next hand':
 
                                     hand += 1
                                     curr_action = 0
 
                                     if exists(table_info + '/' + str(hand)):
-                                        hand_info = Server.load_replay(open(table_info + '/' + str(hand), 'r').read())
+                                        hand_info = ReplayClient.load_replay(
+                                            open(table_info + '/' + str(hand), 'r').read())
 
-                                        self.server.send_message(client, dumps({'type': 'clear'}))
-
+                                        self.send({'type': 'clear'})
                                         _, message = hand_info[curr_action]
-                                        self.server.send_message(client, message)
-
+                                        self.send_raw(message)
                                         curr_action += 1
 
                                     else:
-
                                         hand -= 1
+                                        self.send({'type': 'info', 'msg': 'It was last hand.'})
 
-                                        self.server.send_message(client, dumps({'type': 'info',
-                                                                                'msg': 'It was last hand.'}))
-
-                                elif client['message'] == 'prev hand':
+                                elif self.message == 'prev hand':
 
                                     hand -= 1
                                     curr_action = 0
 
                                     if exists(table_info + '/' + str(hand)):
-                                        hand_info = Server.load_replay(open(table_info + '/' + str(hand), 'r').read())
+                                        hand_info = ReplayClient.load_replay(
+                                            open(table_info + '/' + str(hand), 'r').read())
 
-                                        self.server.send_message(client, dumps({'type': 'clear'}))
-
+                                        self.send({'type': 'clear'})
                                         _, message = hand_info[curr_action]
-                                        self.server.send_message(client, message)
-
+                                        self.send_raw(message)
                                         curr_action += 1
 
                                     else:
-
                                         hand += 1
+                                        self.send({'type': 'info', 'msg': 'It was first hand.'})
 
-                                        self.server.send_message(client, dumps({'type': 'info',
-                                                                                'msg': 'It was first hand.'}))
+                                elif self.message == 'play':
 
-                                elif client['message'] == 'play':
-
-                                    client['message'] = None
+                                    self.message = None
 
                                     if curr_action < len(hand_info):
-
                                         start_time = hand_info[curr_action][0]
                                         curr_time = datetime.now()
-
                                         break
 
                                     else:
-
                                         hand += 1
-
                                         if exists(table_info + '/' + str(hand)):
-                                            hand_info = Server.load_replay(
+                                            hand_info = ReplayClient.load_replay(
                                                 open(table_info + '/' + str(hand), 'r').read())
 
-                                            self.server.send_message(client, dumps({'type': 'clear'}))
-
+                                            self.send({'type': 'clear'})
                                             curr_action = 0
                                             start_time = hand_info[curr_action][0]
                                             curr_time = datetime.now()
-
                                         break
 
-                        elif client['message'] == 'prev hand':
+                        elif self.message == 'prev hand':
 
-                            client['message'] = None
+                            self.message = None
 
                             hand -= 1
                             curr_action = 0
 
                             if exists(table_info + '/' + str(hand)):
-                                hand_info = Server.load_replay(open(table_info + '/' + str(hand), 'r').read())
-
-                                self.server.send_message(client, dumps({'type': 'clear'}))
-
+                                hand_info = ReplayClient.load_replay(open(table_info + '/' + str(hand), 'r').read())
+                                self.send({'type': 'clear'})
                                 start_time = hand_info[curr_action][0]
                                 curr_time = datetime.now()
 
                             else:
-
                                 hand += 1
-
-                                self.server.send_message(client, dumps({'type': 'info',
-                                                                        'msg': 'It was first hand.'}))
-
-                                hand_info = Server.load_replay(open(table_info + '/' + str(hand), 'r').read())
-
-                                self.server.send_message(client, dumps({'type': 'clear'}))
-
+                                self.send({'type': 'info', 'msg': 'It was first hand.'})
+                                hand_info = ReplayClient.load_replay(open(table_info + '/' + str(hand), 'r').read())
+                                self.send({'type': 'clear'})
                                 start_time = hand_info[curr_action][0]
                                 curr_time = datetime.now()
 
-                        elif client['message'] == 'next hand':
+                        elif self.message == 'next hand':
 
-                            client['message'] = None
+                            self.message = None
 
                             hand += 1
 
                             if exists(table_info + '/' + str(hand)):
-                                hand_info = Server.load_replay(open(table_info + '/' + str(hand), 'r').read())
-
-                                self.server.send_message(client, dumps({'type': 'clear'}))
-
+                                hand_info = ReplayClient.load_replay(open(table_info + '/' + str(hand), 'r').read())
+                                self.send({'type': 'clear'})
                                 curr_action = 0
                                 start_time = hand_info[curr_action][0]
                                 curr_time = datetime.now()
@@ -344,23 +935,96 @@ class Server:
                             else:
 
                                 hand -= 1
-
-                                self.server.send_message(client, dumps({'type': 'info',
-                                                                        'msg': 'It was last hand.'}))
-
+                                self.send({'type': 'info', 'msg': 'It was last hand.'})
                     else:
                         hand += 1
                         curr_action = 0
 
                 else:
-                    self.server.send_message(client, dumps({'type': 'finish',
-                                                            'msg': 'Replay ended.'}))
+                    self.send({'type': 'finish', 'msg': 'Replay ended.'})
                     return
+
+    def receive(self, srv: 'Server', message: str, client: dict) -> None:
+
+        if self.message is None:
+
+            if message == 'pause':
+                self.message = 'pause'
+
+            elif message == 'play':
+                self.message = 'play'
+
+            elif message == 'next step':
+                self.message = 'next step'
+
+            elif message == 'prev hand':
+                self.message = 'prev hand'
+
+            elif message == 'next hand':
+                self.message = 'next hand'
+
+    def left(self, srv: 'Server'):
+        del srv.rp_clients[srv.rp_clients.index(self)]
+
+        self.loop = False
+        self.thread.join()
+        self.finish()
+
+        Debug.client_left('DEL RP')
+
+
+class Server:
+
+    if Debug.Debug:
+        ip = '127.0.0.1'
+        local_ip = '127.0.0.1'
+
+    else:
+        ip = '188.134.82.95'
+        local_ip = '192.168.0.100'
+
+    port = 9001
+
+    MAX_THINKING_TIME = 60 * 100 * 100  # Число секунд, умноженное на сто
+    MAX_CHAT_LENGTH = 100  # Максимально количество хранимых сообщений в чате и возвращаемых при перезагрузке страницы
+    MAX_NICK_LENGTH = 14  # Максимально допустимая длина
+    DEFAULT_NICK = 'Anon'  # Если удалось отдать на сервер невалидный ник
+
+    def __init__(self):
+
+        self.server = WebsocketServer(Server.port, Server.local_ip)
+        self.server.set_fn_new_client(self.new_client)
+        self.server.set_fn_client_left(self.client_left)
+        self.server.set_fn_message_received(self.message_received)
+
+        self.unregistered_clients: Dict[int, UnregisteredClient] = dict()
+        self.js_clients: Dict[str, JavaScriptClient] = dict()
+        self.py_clients: Dict[str, PythonClient] = dict()
+        self.sp_clients: List[SpectatorClient] = []
+        self.tb_clients: Dict[str, TableClient] = dict()
+        self.rp_clients: List[ReplayClient] = []
+
+        self.game_engine: GameEngineClient = None
+        self.started_time = None
+        self.is_game_started = False
+        self.is_registration_started = False
+
+        self.replays = []
+        self.players_in_game = None
+        self.game_name = None
+
+    def run(self):
+        self.server.run_forever()
+
+    def send_http(self, message):
+        self.game_engine.send_raw(message)
 
     # Called for every client connecting (after handshake)
     def new_client(self, client, _):
-        print("New client connected and was given id %d" % client['id'])
-        self.unregistered_clients += [client]
+        Debug.login(f'New client connected and was given id {client["id"]}')
+        new_client = UnregisteredClient(client['id'], client['handler'])
+        client['client'] = new_client
+        self.unregistered_clients[new_client.id] = new_client
 
     # Called for every client disconnecting
     def client_left(self, client, _):
@@ -368,554 +1032,15 @@ class Server:
         if client is None:
             return
 
-        print("Client(%d) disconnected" % client['id'])
-
-        if client in self.unregistered_clients:
-            del self.unregistered_clients[self.unregistered_clients.index(client)]
-            print('DEL UNR')
-
-        elif client in self.py_clients:
-            del self.py_clients[self.py_clients.index(client)]
-
-            if client['connect'] is not None and not client['busted']:
-                self.server.send_message(client['connect'], dumps({'type': 'finish',
-                                                                   'msg': 'Game was broken.'}))
-                client['connect']['handler'].finish()
-
-            print('DEL PY')
-
-        elif client in self.js_clients:
-            del self.js_clients[self.js_clients.index(client)]
-
-            if self.is_game_started:
-                client['connect']['connect'] = None
-                client['connect']['disconnection'] = True
-
-                if client['connect']['reconnection']:
-                    print('CLIENT DISCONNECTED WHILE TRYING TO RECONNECT')
-                    client['connect']['reconnection'] = False
-
-                for msg in client['connect']['history'][::-1]:
-
-                    if loads(msg)['type'] == 'set decision':
-                        client['connect']['to decide'] = False
-
-                        self.server.send_message(client['connect'], '1')
-                        break
-
-                    elif loads(msg)['type'] == 'switch decision':
-                        break
-
-            elif client['name'] in [cl['name'] for cl in self.py_clients]:
-                self.send_http('delete ' + client['name'])
-
-            print('DEL JS')
-
-        elif client in self.sp_clients:
-            del self.sp_clients[self.sp_clients.index(client)]
-            del client['table']['watchers'][client['table']['watchers'].index(client)]
-
-            print('DEL SP')
-
-        elif client in self.tb_clients:
-            del self.tb_clients[self.tb_clients.index(client)]
-
-            if client['replay']:
-                client['hands history'] += [client['replay']]
-
-            self.replays += [(client['name'], client['hands'], client['hands history'])]
-
-            for curr_client in client['watchers']:
-                self.server.send_message(curr_client, dumps({'type': 'finish',
-                                                             'msg': 'Table is closed.'}))
-                curr_client['handler'].finish()
-
-            print('DEL TB')
-
-        elif client in self.rp_clients:
-            del self.rp_clients[self.rp_clients.index(client)]
-
-            client['loop'] = False
-            client['thread'].join()
-
-            print('DEL RP')
-
-        elif client is self.main_client:
-            self.main_client = None
-
-            print('DEL MAIN')
-
-            for curr_client in self.js_clients + self.py_clients + self.sp_clients + self.tb_clients + self.rp_clients:
-                curr_client['handler'].finish()
-
-            self.py_clients = []
-            self.js_clients = []
-            self.sp_clients = []
-            self.tb_clients = []
-            self.rp_clients = []
+        Debug.client_left(f'Client {client["id"]} disconnected')
+        client['client'].left(self)
 
     # Called when a client sends a message
     def message_received(self, client, _, message):
-
         if client is None:
             return
-
         message = message.encode('ISO-8859-1').decode()
-
-        if client in self.unregistered_clients:
-
-            print("Client(%d) said: %s" % (client['id'], message))
-
-            from_who, name = message.split()
-            client['name'] = name
-
-            if from_who == 'rp':
-
-                del self.unregistered_clients[self.unregistered_clients.index(client)]
-                self.rp_clients += [client]
-
-                client['loop'] = True
-                client['message'] = None
-                client['thread'] = Thread(target=lambda: self.handle_replay(client))
-                client['thread'].start()
-
-            elif self.main_client is None and from_who != 'main':
-                self.server.send_message(client, dumps({'type': 'finish',
-                                                        'msg': 'Game server is offline.'}))
-                client['handler'].finish()
-
-            elif from_who == 'js' and name in [client['name'] for client in self.js_clients]:
-                self.server.send_message(client, dumps({'type': 'finish',
-                                                        'msg': 'Player with this name already exists.'}))
-                client['handler'].finish()
-
-            elif from_who == 'py':
-                del self.unregistered_clients[self.unregistered_clients.index(client)]
-
-                self.py_clients += [client]
-
-                for curr_client in self.js_clients:
-                    if curr_client['name'] == name:
-
-                        curr_client['connect'] = client
-                        client['connect'] = curr_client
-
-                        client['history'] = []
-                        client['disconnection'] = False
-                        client['reconnection'] = False
-                        client['was resit'] = False
-                        client['first resit'] = True
-                        client['to decide'] = False
-                        client['busted'] = False
-                        client['table'] = None
-
-                        print('connected py', client["id"], 'and js', curr_client["id"])
-                        break
-
-            elif from_who == 'tb':
-
-                del self.unregistered_clients[self.unregistered_clients.index(client)]
-                self.tb_clients += [client]
-
-                client['watchers'] = []
-                client['history'] = []
-                client['hands history'] = []
-                client['chat history'] = []
-                client['busy'] = False
-                client['open cards replay'] = False
-                client['replay'] = []
-                client['hands'] = 0
-
-            elif from_who == 'sp' and name in [cl['name'] for cl in self.tb_clients]:
-
-                del self.unregistered_clients[self.unregistered_clients.index(client)]
-                self.sp_clients += [client]
-
-                for curr_client in self.tb_clients:
-                    if curr_client['name'] == name:
-
-                        curr_client['busy'] = True
-
-                        self.server.send_message(client, dumps({'type': 'reconnect start'}))
-
-                        for msg in curr_client['history']:
-                            self.server.send_message(client, msg)
-                            print('start spectate', client['name'], msg)
-
-                        for chat_msg in curr_client['chat history']:
-                            self.server.send_message(client, chat_msg)
-                            print('start spectate chat', client['name'], chat_msg)
-
-                        self.server.send_message(client, dumps({'type': 'reconnect end'}))
-
-                        curr_client['watchers'] += [client]
-                        client['table'] = curr_client
-                        client['nick'] = None
-
-                        curr_client['busy'] = False
-
-                        break
-
-            elif from_who == 'sp':
-                self.server.send_message(client, dumps({'type': 'finish',
-                                                        'msg': 'Table is not active.'}))
-                client['handler'].finish()
-
-            elif from_who == 'js' and not self.is_game_started and self.is_registration_started:
-
-                del self.unregistered_clients[self.unregistered_clients.index(client)]
-                self.js_clients += [client]
-
-                self.send_http('add ' + name)
-
-            elif from_who == 'js' and (self.is_game_started and name in [client['name'] for client in self.py_clients]
-                                       and max(client for client in self.py_clients
-                                               if client['name'] == name)['disconnection']):
-
-                del self.unregistered_clients[self.unregistered_clients.index(client)]
-                self.js_clients += [client]
-
-                for curr_client in self.py_clients:
-                    if curr_client['name'] == name and curr_client['disconnection']:
-
-                        curr_client['reconnection'] = True
-
-                        self.server.send_message(client, dumps({'type': 'reconnect start'}))
-
-                        for msg in curr_client['history']:
-                            self.server.send_message(client, msg)
-                            print('restore', client['name'], msg)
-
-                        table = curr_client['table']
-
-                        for tb_client in self.tb_clients:
-
-                            if tb_client['name'] == table:
-
-                                for chat_msg in tb_client['chat history']:
-                                    self.server.send_message(client, chat_msg)
-                                    print('restore chat', client['name'], chat_msg)
-
-                                break
-
-                        self.server.send_message(client, dumps({'type': 'reconnect end'}))
-
-                        curr_client['connect'] = client
-                        client['connect'] = curr_client
-
-                        print('reconnected py', curr_client["id"], 'and js', client["id"])
-
-                        curr_client['disconnection'] = False
-                        curr_client['reconnection'] = False
-
-                        break
-
-            elif from_who == 'main' and self.main_client is None:
-                del self.unregistered_clients[self.unregistered_clients.index(client)]
-                self.main_client = client
-
-            elif from_who != 'main' and not self.is_registration_started and not self.is_game_started:
-                self.server.send_message(client, dumps({'type': 'finish',
-                                                        'msg': 'Registration is not started yet.'}))
-                client['handler'].finish()
-
-            else:
-                self.server.send_message(client, dumps({'type': 'finish',
-                                                        'msg': 'You are not in the game.'}))
-                client['handler'].finish()
-
-        elif client is self.main_client:
-
-            print('main said:', message)
-
-            to_whom, message = message.split()
-
-            if to_whom == 'http':
-
-                if message == 'start_registration':
-                    self.is_registration_started = True
-
-                elif message == 'start':
-                    self.is_game_started = True
-                    self.is_registration_started = False
-                    self.started_time = datetime.now()
-
-                elif message == 'end':
-                    self.is_game_started = False
-                    self.is_registration_started = False
-
-                    total_tables = len(self.replays)
-                    total_players = self.players_in_game
-                    name = self.game_name
-                    total_hands = sum(rep[1] for rep in self.replays)
-
-                    if name == '':
-                        tournament_path = ('files/replay/poker/' + str(self.started_time)[:-7]
-                                           .replace(' ', '_').replace(':', '-') +
-                                           ' %s %s %s' % (total_tables, total_players, total_hands))
-
-                    else:
-                        tournament_path = ('files/replay/poker/' + str(self.started_time)[:-7]
-                                           .replace(' ', '_').replace(':', '-') +
-                                           ' %s %s %s %s' % (total_tables, total_players, total_hands, name))
-
-                    mkdir(tournament_path)
-
-                    for table_num, hands, hands_history in self.replays:
-
-                        table_path = tournament_path + '/%s %s' % (table_num, hands)
-
-                        mkdir(table_path)
-
-                        for num, hand in enumerate(hands_history):
-                            open(table_path + '/%s' % (num, ), 'w').write(Server.dump_replay(hand))
-
-                    self.replays = []
-                    self.players_in_game = None
-                    self.game_name = None
-
-                elif message.startswith('players'):
-
-                    self.players_in_game = int(message.split(':')[-1])
-
-                elif message.startswith('name'):
-
-                    self.game_name = message.split(':')[-1]
-
-                elif message == 'broken':
-                    self.is_game_started = False
-                    self.is_registration_started = False
-                    self.replays = []
-                    self.players_in_game = None
-                    self.game_name = None
-
-            else:
-                client[to_whom] = message
-
-        else:
-
-            if client in self.py_clients:
-
-                if message == 'new hand':
-                    client['history'] = []
-
-                elif message == 'decision':
-
-                    if client['disconnection']:
-                        self.server.send_message(client, '1')
-
-                    else:
-                        Thread(target=lambda: self.thinking(client), name='Thinking').start()
-
-                elif message == 'busted':
-                    client['busted'] = True
-
-                elif message.startswith('resit'):
-
-                    if client['first resit']:
-
-                        client['first resit'] = False
-
-                        _, table = message.split()
-                        client['table'] = table
-
-                    else:
-
-                        client['was resit'] = True
-
-                        _, table = message.split()
-                        client['table'] = table
-
-                        for curr_client in self.tb_clients:
-                            if curr_client['name'] == table:
-                                client['history'] = curr_client['history'][:]
-                                break
-                        else:
-                            client['history'] = []
-
-                else:
-
-                    if client['was resit']:
-
-                        client['reconnection'] = True
-                        client['was resit'] = False
-
-                        print('to player', client['name'], '(' + str(client['id']) + ')', message)
-                        self.server.send_message(client['connect'], message)
-
-                        self.server.send_message(client['connect'], dumps({'type': 'reconnect start'}))
-
-                        for msg in client['history']:
-                            self.server.send_message(client['connect'], msg)
-                            print('restore when resit', client['name'], msg)
-
-                        self.server.send_message(client['connect'], dumps({'type': 'reconnect end'}))
-
-                        print('reconnected when resit ', client["id"])
-                        client['reconnection'] = False
-
-                    else:
-
-                        while client['reconnection']:
-                            sleep(0.1)
-
-                        client['history'] += [message]
-
-                        if client['connect'] in self.js_clients:
-
-                            print('to player', client['name'], '(' + str(client['id']) + ')', message)
-                            self.server.send_message(client['connect'], message)
-
-            elif client in self.tb_clients:
-
-                if message == 'new hand':
-
-                    if client['replay']:
-                        client['hands history'] += [client['replay']]
-
-                    client['history'] = []
-                    client['replay'] = []
-                    client['hands'] += 1
-
-                elif message == 'end':
-                    client['handler'].finish()
-
-                elif message == 'open cards replay':
-                    client['open cards replay'] = True
-
-                elif client['open cards replay']:
-                    client['open cards replay'] = False
-                    client['replay'] += [(datetime.now(), message)]
-
-                else:
-
-                    while client['busy']:
-                        sleep(0.1)
-
-                    client['history'] += [message]
-                    client['replay'] += [(datetime.now(), message)]
-
-                    for curr_client in client['watchers']:
-
-                        print('to spectator', curr_client['id'], ':', message)
-                        self.server.send_message(curr_client, message)
-
-            elif client in self.rp_clients:
-
-                if client['message'] is None:
-
-                    if message == 'pause':
-                        client['message'] = 'pause'
-
-                    elif message == 'play':
-                        client['message'] = 'play'
-
-                    elif message == 'next step':
-                        client['message'] = 'next step'
-
-                    elif message == 'prev hand':
-                        client['message'] = 'prev hand'
-
-                    elif message == 'next hand':
-                        client['message'] = 'next hand'
-
-            else:
-
-                print("Client(%d) answered: %s" % (client['id'], message))
-
-                if client in self.js_clients:
-
-                    try:
-                        json_message = loads(message)
-
-                    except JSONDecodeError:
-                        pass
-
-                    else:
-
-                        if json_message['type'] == 'decision':
-
-                            if client['connect']['to decide']:
-                                client['connect']['to decide'] = False
-                                self.server.send_message(client['connect'], json_message['text'])
-
-                        elif json_message['type'] == 'chat':
-
-                            json_message['text'] = '[Player ' + client['name'] + ']: ' + json_message['text']
-                            message = dumps(json_message)
-
-                            table = client['connect']['table']
-
-                            for curr_client in self.tb_clients:
-
-                                if curr_client['name'] == table:
-
-                                    curr_client['chat history'] += [message]
-
-                                    if len(curr_client['chat history']) > Server.MAX_CHAT_LENGTH:
-                                        _, *curr_client['chat history'] = curr_client['chat history']
-
-                                    curr_client['replay'] += [(datetime.now(), message)]
-
-                                    for curr_watcher in curr_client['watchers']:
-                                        print('to spectator', curr_watcher['id'], ':', message)
-                                        self.server.send_message(curr_watcher, message)
-
-                                    break
-
-                            for curr_client in self.js_clients:
-                                if curr_client['connect']['table'] == table:
-                                    print('to player', curr_client['name'], ':', json_message)
-                                    self.server.send_message(curr_client, message)
-
-                elif client in self.sp_clients:
-
-                    try:
-                        json_message = loads(message)
-
-                    except JSONDecodeError:
-                        pass
-
-                    else:
-
-                        if json_message['type'] == 'chat':
-
-                            if client['nick'] is None:
-                                client['nick'] = 'Anon'
-
-                            json_message['text'] = '[Watcher ' + client['nick'] + ']: ' + json_message['text']
-                            message = dumps(json_message)
-
-                            client['table']['chat history'] += [message]
-
-                            if len(client['table']['chat history']) > Server.MAX_CHAT_LENGTH:
-                                _, client['table']['chat history'] = client['table']['chat history']
-
-                            client['table']['replay'] += [(datetime.now(), message)]
-
-                            for curr_watcher in client['table']['watchers']:
-                                print('to spectator', curr_watcher['id'], ':', message)
-                                self.server.send_message(curr_watcher, message)
-
-                            table = client['table']['name']
-
-                            for curr_client in self.js_clients:
-                                if curr_client['connect']['table'] == table:
-                                    print('to player', curr_client['name'], ':', json_message)
-                                    self.server.send_message(curr_client, message)
-
-                        elif json_message['type'] == 'nick':
-
-                            if client['nick'] is None:
-
-                                if 0 < len(json_message['nick']) <= Server.MAX_NICK_LENGTH:
-                                    client['nick'] = json_message['nick']
-
-                                else:
-                                    client['nick'] = Server.DEFAULT_NICK
-
-                else:
-                    raise OverflowError('I DO NOT KNOW WHAT TO DO')
+        client['client'].receive(self, message, client)
 
 
 class Key:
@@ -1066,7 +1191,7 @@ if __name__ == '__main__':
 
         state = 'unknown state'
 
-        if server.main_client is None:
+        if server.game_engine is None:
             state = 'machine not work'
 
         elif not server.is_registration_started and not server.is_game_started:
@@ -1085,7 +1210,7 @@ if __name__ == '__main__':
 
         key = request.query.key if 'key' in request.query else 'no key'
 
-        if server.main_client is None or server.is_game_started:
+        if server.game_engine is None or server.is_game_started:
             redirect('/poker')
 
         elif key not in Key.UsedKeys:
@@ -1099,7 +1224,7 @@ if __name__ == '__main__':
 
         key = request.query.key if 'key' in request.query else 'no key'
 
-        if server.main_client is None or server.is_game_started:
+        if server.game_engine is None or server.is_game_started:
             redirect('/poker')
 
         elif key not in Key.UsedKeys:
@@ -1126,7 +1251,7 @@ if __name__ == '__main__':
 
         key = request.query.key if 'key' in request.query else 'no key'
 
-        if server.main_client is None:
+        if server.game_engine is None:
             redirect('/poker')
 
         elif key not in Key.UsedKeys:
@@ -1140,15 +1265,15 @@ if __name__ == '__main__':
     @route('/poker/watch')
     def poker_tables():
 
-        if server.main_client is None or not server.is_game_started:
+        if server.game_engine is None or not server.is_game_started:
             redirect('/poker')
 
         else:
 
             info = []
 
-            for client in server.tb_clients:
-                info += [client['name']]
+            for client in server.tb_clients.values():
+                info += [client.name]
 
             return template('static/poker/watch/watch.html', info=info)
 

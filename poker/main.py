@@ -1714,7 +1714,7 @@ class Player:
 
         else:
             self.play: Play = Play()
-            self.network: Network = Network('py', self.name, is_dummy)
+            self.network: Network = Network('py', f'{self.name} {self.id}', is_dummy)
 
     def __str__(self):
 
@@ -3684,14 +3684,6 @@ class Game:
 
     def start_game(self) -> None:
 
-        shuffle(self.players)
-        for player in self.players:
-            min_count_players_on_table = min(table.players.count for table in self.tables)
-            tables_with_min_count = [table for table in self.tables if
-                                     table.players.count == min_count_players_on_table]
-            found_table: Table = choice(tables_with_min_count)
-            found_table.players.add_player(player, False)
-
         if any(player.controlled for player in self.players):
 
             self.online = True
@@ -3707,6 +3699,14 @@ class Game:
 
         else:
             Play.ExtendedName = True
+
+        shuffle(self.players)
+        for player in self.players:
+            min_count_players_on_table = min(table.players.count for table in self.tables)
+            tables_with_min_count = [table for table in self.tables if
+                                     table.players.count == min_count_players_on_table]
+            found_table: Table = choice(tables_with_min_count)
+            found_table.players.add_player(player, False)
 
         self.game_started = True
 
@@ -5848,7 +5848,7 @@ class GameManager:
 
     def __init__(self):
 
-        self.network: Network = Network('main', 'main')
+        self.network: Network = Network('ge', 'main')
         self.game: Game = None
 
     def run(self):
@@ -6307,8 +6307,8 @@ class Stats:
 if __name__ == '__main__':
 
     # PlayManager.standings()
-    # GameManager().run()
-
+    GameManager().run()
+    quit()
 
     game_ = GameParser.parse_game('hh.txt')
     game_.save()
