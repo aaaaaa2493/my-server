@@ -2728,6 +2728,9 @@ class Players:
             if loser.controlled:
                 loser.network.busted(game.find_place(loser))
 
+            else:
+                loser.play.busy = False
+
             self.delete_player(loser)
 
         if self.game_without_small_blind and self.count < 3:
