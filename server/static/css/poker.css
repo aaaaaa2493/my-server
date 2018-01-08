@@ -401,6 +401,10 @@ input[type=range]:focus{
     background: #ece260;
 }
 
+.is_disconnected{
+    background: darkgrey;
+}
+
 .card{
     height: 80px;
     position: absolute;

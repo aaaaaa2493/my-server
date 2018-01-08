@@ -1213,6 +1213,14 @@ function handle(){
                 to_place = [1, 2, 3, 4, 5, 6, 7, 8, 9];
             }
 
+            if(seats != undefined){
+                for(seat in seats){
+                    if(seats[seat].id != undefined && seats[seat].disconnected){
+                        post_class_rem([{id: 'p' + seat, class: 'is_disconnected'}]);
+                    }
+                }
+            }
+
             seats = {}
             id_to_seat = {}
             real_seat_to_local_seat = {}
@@ -1225,14 +1233,15 @@ function handle(){
 
                 if(players[i].id !== null){
 
-                    doc_players += '<div id="p' + to_place[i] + '" class="player">' + players[i].name + '<br>' + 
-                                        shortcut_number_for_player(data.players[i].stack) + '</div>';
+                    doc_players += '<div id="p' + to_place[i] + '" class="player' + (players[i].disconnected? ' is_disconnected': '') + 
+                                        '">' + players[i].name + '<br>' + shortcut_number_for_player(data.players[i].stack) + '</div>';
 
                     seats[to_place[i]] = {
                         'id': players[i].id,
                         'name': players[i].name,
                         'real_seat': (seats_shift + i) % data.seats,
-                        'stack': data.players[i].stack,
+                        'stack': players[i].stack,
+                        'disconnected': players[i].disconnected,
                         'gived': 0,
                         'card1': 'c' + to_place[i] + '1',
                         'card2': 'c' + to_place[i] + '2',
@@ -1510,6 +1519,11 @@ function handle(){
 
         seats[_seat].id = undefined;
 
+        if(seats[_seat].disconnected){
+            seats[_seat].disconnected = false;
+            post_class_rem([{id: 'p' + _seat, class: 'is_disconnected'}]);
+        }
+
         post_src([{id: seats[_seat].card1, src: get_src('ZZ')}, {id: seats[_seat].card2, src: get_src('ZZ')}]);
 
         set_empty_seat_info(_seat);
@@ -1532,6 +1546,7 @@ function handle(){
         seat.gived = 0;
         seat.name = data.name;
         seat.stack = data.stack;
+        seat.disconnected = false;
 
         id_to_seat[seat.id] = real_seat_to_local_seat[data.seat];
 
@@ -1614,6 +1629,12 @@ function handle(){
             to_place = [1, 2, 3, 4, 5, 6, 7, 8, 9];
         }
 
+        for(seat in seats){
+            if(seats[seat].id != undefined && seats[seat].disconnected){
+                post_class_rem([{id: 'p' + seat, class: 'is_disconnected'}]);
+            }
+        }
+
         seats = {}
         id_to_seat = {}
         real_seat_to_local_seat = {}
@@ -1624,11 +1645,16 @@ function handle(){
 
                 all_inner_html.push({id: 'p' + to_place[i], str:  players[i].name + '<br>' + shortcut_number_for_player(players[i].stack)});
 
+                if(players[i].disconnected){
+                    post_class_add('p' + to_place[i], 'is_disconnected');
+                }
+
                 seats[to_place[i]] = {
                     'id': players[i].id,
                     'name': players[i].name,
                     'real_seat': (seats_shift + i) % data.seats,
                     'stack': players[i].stack,
+                    'disconnected': players[i].disconnected,
                     'gived': 0,
                     'card1': 'c' + to_place[i] + '1',
                     'card2': 'c' + to_place[i] + '2',
@@ -2104,6 +2130,9 @@ function handle(){
     }
     else if(data.type == 'disconnected'){
 
+        post_class_add('p' + id_to_seat[data.id], 'is_disconnected');
+        seats[id_to_seat[data.id]].disconnected = true;
+
         if(reconnect_mode){
             handle();
         }
@@ -2113,6 +2142,9 @@ function handle(){
 
     }
     else if(data.type == 'connected'){
+
+        post_class_rem([{id: 'p' + id_to_seat[data.id], class: 'is_disconnected'}]);
+        seats[id_to_seat[data.id]].disconnected = false;
 
         if(reconnect_mode){
             handle();

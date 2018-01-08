@@ -3778,17 +3778,9 @@ class Game:
                 while self.tables[0].in_game or self.tables[1].in_game:
                     sleep(0.01)
 
-                if self.tables[0].online:
-                    self.tables[0].network.end()
-
-                if self.tables[1].online:
-                    self.tables[1].network.end()
-
                 last_players = [player for table in self.tables for player in table.players.all_players()]
                 shuffle(last_players)
                 final_table = self.final_table
-                for player in last_players:
-                    final_table.players.add_player(player, False)
 
                 if self.online:
                     final_table.network = Network('tb', '0')
@@ -3796,7 +3788,16 @@ class Game:
                     final_table.players.network = final_table.network
                     final_table.players.online = True
 
+                for player in last_players:
+                    final_table.players.add_player(player, False)
+
                 Debug.resitting('Resit all players to final table')
+
+                if self.tables[0].online:
+                    self.tables[0].network.end()
+
+                if self.tables[1].online:
+                    self.tables[1].network.end()
 
                 self.tables = [final_table]
                 return
@@ -4950,7 +4951,16 @@ class PokerGame:
             game.top_9 = sorted([p for p in players if p is not None], key=lambda p: p.money, reverse=True)
             table.players.players = players
 
-            converted += [(time, network.init_hand(None, table, game))]
+            json_message = loads(network.init_hand(None, table, game))
+            for curr in json_message['players']:
+                if curr['id'] is not None:
+                    pl = max(pl for pl in hand.players if pl.seat == curr['id'])
+                    curr['disconnected'] = not pl.is_active
+                else:
+                    curr['disconnected'] = False
+            init_message = dumps(json_message)
+
+            converted += [(time, init_message)]
             time = time + timedelta(seconds=Table.Delay.InitHand)
 
             converted += [(time, network.deal_cards())]
@@ -5102,10 +5112,16 @@ class PokerGame:
 
                         converted += [(time, network.send({'type': 'disconnected', 'id': event.player.seat}))]
                         time = time + timedelta(seconds=0)
+                        converted += [(time, network.send({'type': 'chat',
+                                                           'text': f'{event.player.name} disconnected'}))]
+                        time = time + timedelta(seconds=0)
 
                     elif event.event == PokerGame.Event.Connected:
 
                         converted += [(time, network.send({'type': 'connected', 'id': event.player.seat}))]
+                        time = time + timedelta(seconds=0)
+                        converted += [(time, network.send({'type': 'chat',
+                                                           'text': f'{event.player.name} connected'}))]
                         time = time + timedelta(seconds=0)
 
                     elif event.event == PokerGame.Event.FinishGame:

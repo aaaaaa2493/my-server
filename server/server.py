@@ -15,7 +15,6 @@ from typing import List, Dict, Tuple
 # TODO - сделать не колл 600 а колл 300
 # TODO - сделать так чтобы на каджой улице дефолт не ставился премув
 # TODO - сделать в повторе нормальный чат
-# TODO - сделать на слиенте нормальную реализацию отображения отключившегося клиента
 # TODO - сделать так, чтобы при сумме фишей на столе равной сумме в последней руке вместо empty seat места удалялись
 # TODO - сделать нормальную картинку стола
 # TODO - сделать увеличенную форму выбора турнира чтобы было видно и дату и название
@@ -584,7 +583,7 @@ class PythonClient(AbstractClient):
                 self.was_resit = False
 
                 Debug.resitting(f'Start resitting restore to client {self.name} {message}')
-                self.send_to_js(message)
+                self.send_to_js(self.connected_table.inject_disconnections(message))
 
                 self.send_to_js(dumps({'type': 'reconnect start'}))
 
@@ -670,6 +669,8 @@ class TableClient(AbstractClient):
         self.lock: Lock = Lock()
         self.open_cards_replay: bool = False
 
+        self.is_new_hand: bool = False
+        self.is_first_hand: bool = True
         self.hands: int = 0
 
     def connect_spectator(self, spectator: SpectatorClient) -> None:
@@ -703,7 +704,10 @@ class TableClient(AbstractClient):
         for curr in self.players:
             curr.send_to_js(message)
 
-    def cast(self, message: str):
+    def cast(self, message: str, is_chat_message: bool = False):
+        if not is_chat_message:
+            self.history += [message]
+        self.replay += [(datetime.now(), message)]
         self.cast_to_spectators(message)
         self.cast_to_players(message)
 
@@ -713,8 +717,18 @@ class TableClient(AbstractClient):
         if len(self.chat_history) > Server.MAX_CHAT_LENGTH:
             _, *self.chat_history = self.chat_history
 
-        self.replay += [(datetime.now(), message)]
-        self.cast(message)
+        self.cast(message, True)
+
+    def inject_disconnections(self, message: str) -> str:
+        json_message = loads(message)
+        players_ids = [curr.game_id for curr in self.players]
+        for curr in json_message['players']:
+            if curr['id'] in players_ids:
+                pl = max(pl for pl in self.players if pl.game_id == curr['id'])
+                curr['disconnected'] = pl.is_disconnected
+            else:
+                curr['disconnected'] = False
+        return dumps(json_message)
 
     def receive(self, srv: 'Server', message: str, client: dict) -> None:
 
@@ -726,6 +740,7 @@ class TableClient(AbstractClient):
             self.history = []
             self.replay = []
             self.hands += 1
+            self.is_new_hand = True
 
         elif message == 'end':
             self.finish()
@@ -739,6 +754,11 @@ class TableClient(AbstractClient):
 
         else:
             with self.lock:
+
+                if self.is_new_hand:
+                    self.is_new_hand = False
+                    message = self.inject_disconnections(message)
+
                 self.history += [message]
                 self.replay += [(datetime.now(), message)]
                 self.cast_to_spectators(message)
@@ -1085,6 +1105,8 @@ class Server:
             client['client'].left(self)
         except KeyError:
             Debug.error(f'Key error possibly double deleting in client left id = {client["id"]}')
+        except ValueError:
+            Debug.error(f'Value error possibly double deleting in client left id = {client["id"]}')
 
     # Called when a client sends a message
     def message_received(self, client, _, message):
