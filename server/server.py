@@ -433,10 +433,6 @@ class JavaScriptClient(AbstractClient):
             self.connected_python.connected_js = None
             self.connected_python.is_disconnected = True
 
-            if self.connected_python.in_reconnection:
-                Debug.client_left('CLIENT DISCONNECTED WHILE TRYING TO RECONNECT')
-                self.connected_python.in_reconnection = False
-
             disconnected_message = dumps({'type': 'disconnected',
                                           'id': self.connected_python.game_id})
 
@@ -470,12 +466,11 @@ class PythonClient(AbstractClient):
 
         self.history: List[str] = []
 
-        self.first_resit: bool = True
         self.is_disconnected: bool = False
-        self.in_reconnection: bool = False
-        self.was_resit: bool = False
         self.in_decision: bool = False
         self.is_busted: bool = False
+
+        self.lock: Lock = Lock()
 
         self.connected_table: TableClient = None
 
@@ -498,35 +493,36 @@ class PythonClient(AbstractClient):
 
         Debug.js_restore(f'Start restore client {js_client.name} js to py')
 
-        self.in_reconnection = True
+        with self.lock:
 
-        js_client.send({'type': 'reconnect start'})
+            js_client.send({'type': 'reconnect start'})
 
-        for msg in self.history:
-            js_client.send_raw(msg)
-            Debug.js_restore(f'Restore js client {js_client.name} {msg}')
+            for msg in self.history:
+                js_client.send_raw(msg)
+                Debug.js_restore(f'Restore js client {js_client.name} {msg}')
 
-        for chat_msg in self.connected_table.chat_history:
-            js_client.send_raw(chat_msg)
-            Debug.js_restore(f'Restore chat js client {js_client.name} {msg}')
+            for chat_msg in self.connected_table.chat_history:
+                js_client.send_raw(chat_msg)
+                Debug.js_restore(f'Restore chat js client {js_client.name} {msg}')
 
-        Debug.js_restore(f'End restore js client {js_client.name}')
+            Debug.js_restore(f'End restore js client {js_client.name}')
 
-        js_client.send({'type': 'reconnect end'})
+            js_client.send({'type': 'reconnect end'})
 
-        self.is_disconnected = False
-        self.in_reconnection = False
+            self.is_disconnected = False
 
         self.connected_table.cast(dumps({'type': 'connected', 'id': self.game_id}))
         self.connected_table.chat_message(dumps({'type': 'chat', 'text': f'{self.name} connected'}))
 
-    def send_to_js(self, message: str) -> None:
+    def send_to_js(self, message: str, need_to_save: bool = False) -> None:
         if self.connected_js is not None:
             Debug.py_to_js(f'To js client {self.name} {message}')
             try:
                 self.connected_js.send_raw(message)
             except AttributeError:
                 pass
+        if need_to_save:
+            self.history += [message]
 
     def thinking(self):
 
@@ -541,15 +537,25 @@ class PythonClient(AbstractClient):
 
     def receive(self, srv: 'Server', message: str, client: dict):
 
-        if message == 'new hand':
+        if message.startswith('new_hand'):
             self.history = []
+            _, message = message.split(' ', 1)
 
-        elif message == 'decision':
+            message = self.connected_table.inject_disconnections(message)
+            with self.lock:
+                self.send_to_js(message, True)
+
+        elif message.startswith('decision'):
 
             if self.is_disconnected:
                 self.send_raw('1')
 
             else:
+                _, message = message.split(' ', 1)
+
+                with self.lock:
+                    self.send_to_js(message, True)
+
                 Thread(target=lambda: self.thinking(), name=f'Thinking {self.name}').start()
 
         elif message == 'busted':
@@ -557,52 +563,40 @@ class PythonClient(AbstractClient):
 
         elif message.startswith('resit'):
 
-            if self.first_resit:
+            _, table_num, message = message.split(' ', 2)
 
-                self.first_resit = False
+            new_table = srv.tb_clients[table_num]
 
-                _, table = message.split()
-                self.connected_table = srv.tb_clients[table]
-                self.connected_table.players += [self]
+            if self.connected_table is not None:
+                self.connected_table.players.remove(self)
+                self.history = new_table.history[:]
+                need_reconnection = True
 
             else:
+                need_reconnection = False
 
-                self.was_resit = True
+            self.connected_table = new_table
+            self.connected_table.players += [self]
 
-                _, table = message.split()
-                self.connected_table.players.remove(self)
-                self.connected_table = srv.tb_clients[table]
-                self.connected_table.players += [self]
-                self.history = self.connected_table.history[:]
+            if need_reconnection:
+                with self.lock:
+
+                    Debug.resitting(f'Start resitting restore to client {self.name} {message}')
+                    self.send_to_js(self.connected_table.inject_disconnections(message))
+
+                    self.send_to_js(dumps({'type': 'reconnect start'}))
+
+                    for msg in self.history:
+                        self.send_to_js(msg)
+                        Debug.resitting(f'Restore when resit {self.name} {msg}')
+
+                    self.send_to_js(dumps({'type': 'reconnect end'}))
+
+                    Debug.resitting(f'Reconnected when resit {self.name}')
 
         else:
-
-            if self.was_resit:
-
-                self.in_reconnection = True
-                self.was_resit = False
-
-                Debug.resitting(f'Start resitting restore to client {self.name} {message}')
-                self.send_to_js(self.connected_table.inject_disconnections(message))
-
-                self.send_to_js(dumps({'type': 'reconnect start'}))
-
-                for msg in self.history:
-                    self.send_to_js(msg)
-                    Debug.resitting(f'Restore when resit {self.name} {msg}')
-
-                self.send_to_js(dumps({'type': 'reconnect end'}))
-
-                Debug.resitting(f'Reconnected when resit {self.name}')
-                self.in_reconnection = False
-
-            else:
-
-                while self.in_reconnection:
-                    sleep(0.1)
-
-                self.history += [message]
-                self.send_to_js(message)
+            with self.lock:
+                self.send_to_js(message, True)
 
     def left(self, srv: 'Server'):
         del srv.py_clients[self.name]
@@ -667,9 +661,7 @@ class TableClient(AbstractClient):
         self.hands_history: List[List[Tuple[datetime, str]]] = []
 
         self.lock: Lock = Lock()
-        self.open_cards_replay: bool = False
 
-        self.is_new_hand: bool = False
         self.is_first_hand: bool = True
         self.hands: int = 0
 
@@ -696,20 +688,23 @@ class TableClient(AbstractClient):
             spectator.connected_table = self
 
     def cast_to_spectators(self, message: str):
-        for spectator in self.spectators:
-            Debug.tb_to_sp(f'Table {self.name} to spectator {spectator.id} {message}')
-            spectator.send_raw(message)
+        with self.lock:
+            for spectator in self.spectators:
+                Debug.tb_to_sp(f'Table {self.name} to spectator {spectator.id} {message}')
+                spectator.send_raw(message)
 
-    def cast_to_players(self, message: str):
-        for curr in self.players:
-            curr.send_to_js(message)
+    def cast_to_javascript(self, message: str):
+        with self.lock:
+            for curr in self.players:
+                curr.send_to_js(message, True)
 
     def cast(self, message: str, is_chat_message: bool = False):
         if not is_chat_message:
+            # because chat messages restored separately with self.chat_history
             self.history += [message]
         self.replay += [(datetime.now(), message)]
         self.cast_to_spectators(message)
-        self.cast_to_players(message)
+        self.cast_to_javascript(message)
 
     def chat_message(self, message: str):
         self.chat_history += [message]
@@ -720,19 +715,22 @@ class TableClient(AbstractClient):
         self.cast(message, True)
 
     def inject_disconnections(self, message: str) -> str:
-        json_message = loads(message)
-        players_ids = [curr.game_id for curr in self.players]
-        for curr in json_message['players']:
-            if curr['id'] in players_ids:
-                pl = max(pl for pl in self.players if pl.game_id == curr['id'])
-                curr['disconnected'] = pl.is_disconnected
-            else:
-                curr['disconnected'] = False
-        return dumps(json_message)
+        with self.lock:
+            json_message = loads(message)
+            players_ids = [curr.game_id for curr in self.players]
+            for curr in json_message['players']:
+                if curr['id'] in players_ids:
+                    pl = max(pl for pl in self.players if pl.game_id == curr['id'])
+                    curr['disconnected'] = pl.is_disconnected
+                else:
+                    curr['disconnected'] = False
+            return dumps(json_message)
 
     def receive(self, srv: 'Server', message: str, client: dict) -> None:
 
-        if message == 'new hand':
+        if message.startswith('new_hand'):
+
+            _, message = message.split(' ', 1)
 
             if self.replay:
                 self.hands_history += [self.replay]
@@ -740,28 +738,52 @@ class TableClient(AbstractClient):
             self.history = []
             self.replay = []
             self.hands += 1
-            self.is_new_hand = True
+
+            message = self.inject_disconnections(message)
+            self.history += [message]
+            self.replay += [(datetime.now(), message)]
+            self.cast_to_spectators(message)
+
+        elif message.startswith('player_hand'):
+
+            _, player_id, message = message.split(' ', 2)
+            player = max(pl for pl in self.players if pl.game_id == int(player_id))
+            player.receive(srv, f'new_hand {message}', client)
 
         elif message == 'end':
             self.finish()
 
-        elif message == 'open cards replay':
-            self.open_cards_replay = True
+        elif message.startswith('add_player'):
 
-        elif self.open_cards_replay:
-            self.open_cards_replay = False
-            self.replay += [(datetime.now(), message)]
+            _, message = message.split(' ', 1)
+
+            json_message = loads(message)
+            if json_message['id'] in [curr.game_id for curr in self.players]:
+                pl = max(pl for pl in self.players if pl.game_id == json_message['id'])
+                json_message['disconnected'] = pl.is_disconnected
+                message = dumps(json_message)
+
+            self.cast(message)
+
+        elif message.startswith('for_replay'):
+
+            _, message = message.split(' ', 1)
+
+            deal_message = dumps({'type': 'deal cards'})
+            init_time = self.replay[0][0]
+
+            self.replay[1:1] = [(init_time, deal_message), (init_time, message)]
+            self.history += [deal_message]
+            self.cast_to_spectators(deal_message)
+
+        elif message.startswith('give_cards'):
+
+            _, player_id, message = message.split(' ', 2)
+            player = max(pl for pl in self.players if pl.game_id == int(player_id))
+            player.send_to_js(message, True)
 
         else:
-            with self.lock:
-
-                if self.is_new_hand:
-                    self.is_new_hand = False
-                    message = self.inject_disconnections(message)
-
-                self.history += [message]
-                self.replay += [(datetime.now(), message)]
-                self.cast_to_spectators(message)
+            self.cast(message)
 
     def left(self, srv: 'Server') -> None:
         del srv.tb_clients[self.name]
@@ -1375,7 +1397,7 @@ if __name__ == '__main__':
 
 
     @route('/poker/replay/<num:int>')
-    def replay(num):
+    def replay_chose_table(num):
 
         replays = sorted(listdir('files/replay/poker'))
 
@@ -1390,17 +1412,17 @@ if __name__ == '__main__':
         return template('static/poker/replay/tables.html', info=sorted(info, key=lambda x: int(x[0])))
 
     @route('/poker/replay/<num:int>/<table:int>')
-    def replay(num, table):
+    def replay_mode(num, table):
         return template('static/poker/play/poker.html', name='', table='', replay='%s:%s' % (num, table),
                         back_addr='/poker/replay/%s' % (num,), ip=Server.ip, port=Server.port)
 
     @route('/poker/play/<name>')
-    def player(name):
+    def player_mode(name):
         return template('static/poker/play/poker.html', name=name, table='', replay='', back_addr='/poker',
                         ip=Server.ip, port=Server.port)
 
     @route('/poker/watch/<table:int>')
-    def spectate(table):
+    def spectate_mode(table):
         return template('static/poker/play/poker.html', name='', table=table, replay='', back_addr='/poker/watch',
                         ip=Server.ip, port=Server.port)
 

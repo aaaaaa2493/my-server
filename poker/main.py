@@ -2607,9 +2607,6 @@ class Players:
 
         self.players[self.curr_seat] = player
 
-        for curr_player in self.controlled:
-            curr_player.network.add_player(player, self.curr_seat)
-
         if self.online:
             self.network.add_player(player, self.curr_seat)
             sleep(Table.Delay.AddPlayer)
@@ -2684,9 +2681,6 @@ class Players:
             del self.controlled[self.controlled.index(player)]
 
         self.count -= 1
-
-        for curr_player in self.controlled:
-            curr_player.network.delete_player(player)
 
         if self.online:
             self.network.delete_player(player)
@@ -3060,17 +3054,9 @@ class Table:
                 self.history.add(player, BasePlay.Result.Ante, paid)
                 Debug.table(f'Table {self.id} hand {self.board.hand}: player {player.name} paid ante {paid}')
 
-            for player in self.players.controlled:
-                player.network.ante(all_paid)
-
             if self.online:
                 self.network.ante(all_paid)
                 sleep(Table.Delay.Ante)
-
-            for player in self.players.controlled:
-                player.network.collect_money()
-
-            if self.online:
                 self.network.collect_money()
                 sleep(Table.Delay.CollectMoney)
 
@@ -3089,9 +3075,6 @@ class Table:
             self.history.add(player2, BasePlay.Result.BigBlind, paid2)
             Debug.table(f'Table {self.id} hand {self.board.hand}: player {player2.name} paid big blind {paid2}')
 
-            for player in self.players.controlled:
-                player.network.blinds(player1, [(player1, paid1), (player2, paid2)])
-
             if self.online:
                 self.network.blinds(player1, [(player1, paid1), (player2, paid2)])
                 sleep(Table.Delay.Blinds)
@@ -3103,9 +3086,6 @@ class Table:
             paid2 = player2.pay_blind(bb)
             self.history.add(player2, BasePlay.Result.BigBlind, paid2)
             Debug.table(f'Table {self.id} hand {self.board.hand}: player {player2.name} paid big blind {paid2}')
-
-            for player in self.players.controlled:
-                player.network.blinds(player1, [(player2, paid2)])
 
             if self.online:
                 self.network.blinds(player1, [(player2, paid2)])
@@ -3122,9 +3102,6 @@ class Table:
             paid3 = player3.pay_blind(bb)
             self.history.add(player3, BasePlay.Result.BigBlind, paid3)
             Debug.table(f'Table {self.id} hand {self.board.hand}: player {player3.name} paid big blind {paid3}')
-
-            for player in self.players.controlled:
-                player.network.blinds(player1, [(player2, paid2), (player3, paid3)])
 
             if self.online:
                 self.network.blinds(player1, [(player2, paid2), (player3, paid3)])
@@ -3143,9 +3120,6 @@ class Table:
 
         if all_paid > 0:
 
-            for player in self.players.controlled:
-                player.network.collect_money()
-
             if self.online:
                 self.network.collect_money()
                 sleep(Table.Delay.CollectMoney)
@@ -3163,15 +3137,14 @@ class Table:
                 self.players.get_curr_seat().add_card(self.deck.next())
             button.add_card(self.deck.next())
 
-        self.players.lock.release()
-
         self.history.deal(self.players)
 
         for player in self.players.controlled:
-            player.network.give_cards(player)
+            self.network.give_cards(player)
+
+        self.players.lock.release()
 
         if self.online:
-            self.network.deal_cards()
             self.network.open_cards(self, True)
             sleep(Table.Delay.DealCards)
 
@@ -3187,7 +3160,7 @@ class Table:
             return
 
         for player in self.players.controlled:
-            player.network.init_hand(player, self, self.game)
+            self.network.init_hand(player, self, self.game)
             player.network.place(self.game.find_place(player))
 
         if self.online:
@@ -3237,17 +3210,11 @@ class Table:
                             max(p.gived for p in self.players.in_game_not_in_all_in_players()) >=
                             max(p.gived for p in self.players.all_in_players())):
 
-                    for controlled_player in self.players.controlled:
-                        controlled_player.network.switch_decision(player)
-
                     if self.online:
                         self.network.switch_decision(player)
                         sleep(Table.Delay.SwitchDecision)
 
                     result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
-
-                    for controlled_player in self.players.controlled:
-                        controlled_player.network.made_decision(player, result)
 
                     if self.online:
                         self.network.made_decision(player, result)
@@ -3290,9 +3257,6 @@ class Table:
                 player_max_pot.gived -= difference
                 player_max_pot.money += difference
 
-                for controlled_player in self.players.controlled:
-                    controlled_player.network.back_excess_money(player_max_pot, difference)
-
                 if self.online:
                     self.network.back_excess_money(player_max_pot, difference)
                     sleep(Table.Delay.ExcessMoney)
@@ -3324,9 +3288,6 @@ class Table:
                     player_max_pot.gived -= difference
                     player_max_pot.money += difference
 
-                    for controlled_player in self.players.controlled:
-                        controlled_player.network.back_excess_money(player_max_pot, difference)
-
                     if self.online:
                         self.network.back_excess_money(player_max_pot, difference)
                         sleep(Table.Delay.ExcessMoney)
@@ -3335,9 +3296,6 @@ class Table:
                     Debug.table(f'Table {self.id} hand {self.board.hand}: {difference} money back to {player.name}')
 
                 self.collect_pot()
-
-                for controlled_player in self.players.controlled:
-                    controlled_player.network.open_cards(self)
 
                 if self.online:
                     self.network.open_cards(self)
@@ -3357,9 +3315,6 @@ class Table:
                 Debug.table(f'Table {self.id} hand {self.board.hand}: open cards')
 
                 self.collect_pot()
-
-                for controlled_player in self.players.controlled:
-                    controlled_player.network.open_cards(self)
 
                 if self.online:
                     self.network.open_cards(self)
@@ -3381,9 +3336,6 @@ class Table:
         self.pot.money -= winner.wins
 
         self.history.add(winner, BasePlay.Result.WinMoney, winner.wins)
-
-        for controlled_player in self.players.controlled:
-            controlled_player.network.give_money(winner, winner.wins)
 
         if self.online:
             self.network.give_money(winner, winner.wins)
@@ -3414,9 +3366,6 @@ class Table:
             else:
                 Debug.table(f'Table {self.id} hand {self.board.hand}: player {player.name} has {player.money} money')
 
-        for player in self.players.controlled:
-            player.network.money_results(results)
-
         if self.online:
             self.network.money_results(results)
             sleep(Table.Delay.MoneyResults)
@@ -3425,9 +3374,6 @@ class Table:
 
         for player in self.players.all_players():
             player.drop_cards()
-
-            if player.controlled:
-                player.network.clear()
 
         if self.online:
             self.network.clear()
@@ -3440,9 +3386,6 @@ class Table:
         Debug.table(f'Table {self.id} hand {self.board.hand}: cards - {self.board}')
 
         if self.players.count_in_game_players() == 1:
-
-            for player in self.players.controlled:
-                player.network.hand_results(self.board, [])
 
             if self.online:
                 self.network.hand_results(self.board, [])
@@ -3480,9 +3423,6 @@ class Table:
                 player.play.goes_to_showdown += 1
 
             hand_results.sort(reverse=True, key=lambda x: x[0])
-
-            for player in self.players.controlled:
-                player.network.hand_results(self.board, hand_results)
 
             if self.online:
                 self.network.hand_results(self.board, hand_results)
@@ -3733,10 +3673,6 @@ class Game:
         ante = self.blinds.ante
 
         for table in self.tables:
-
-            for player in table.players.controlled:
-                player.network.blinds_increased(sb, bb, ante)
-
             if table.online:
                 table.network.blinds_increased(sb, bb, ante)
                 sleep(Table.Delay.BlindsIncreased)
@@ -4040,9 +3976,10 @@ class Network:
 
     port = 9001
 
-    def __init__(self, _id: str, name: str, is_dummy: bool = False):
+    def __init__(self, _id: str, name: str, is_dummy: bool = False, need_disconnect_info: bool = True):
 
         self.is_dummy = is_dummy
+        self.need_disconnect_info = need_disconnect_info
 
         if not is_dummy:
             self.socket = create_connection(f'ws://{Network.ip}:{Network.port}')
@@ -4084,8 +4021,6 @@ class Network:
         if self.is_dummy:
             return
 
-        self.send_raw('decision')
-
         to_send = dict()
 
         to_send['type'] = 'set decision'
@@ -4122,7 +4057,7 @@ class Network:
 
         to_send['decisions'] = decisions
 
-        self.send(to_send)
+        self.send_raw(f'decision {dumps(to_send)}')
 
         reply = self.receive_raw()
 
@@ -4132,8 +4067,6 @@ class Network:
         return reply.split()
 
     def init_hand(self, player: Optional[Player], table: Table, game: Game) -> Optional[str]:
-
-        self.send_raw('new hand')
 
         to_send = dict()
 
@@ -4193,7 +4126,10 @@ class Network:
 
         to_send['players'] = players
 
-        return self.send(to_send)
+        if self.need_disconnect_info:
+            return self.send_raw(f'{"new_hand" if player is None else f"player_hand {player.id} "} {dumps(to_send)}')
+        else:
+            return self.send(to_send)
 
     def ante(self, all_paid: List[Tuple[Player, int]]) -> Optional[str]:
 
@@ -4255,7 +4191,7 @@ class Network:
         to_send['first'] = player.cards.first.card
         to_send['second'] = player.cards.second.card
 
-        return self.send(to_send)
+        return self.send_raw(f'give_cards {player.id} {dumps(to_send)}')
 
     def deal_cards(self) -> Optional[str]:
 
@@ -4280,11 +4216,12 @@ class Network:
         to_send['stack'] = player.money
         to_send['seat'] = seat
 
-        return self.send(to_send)
+        if self.need_disconnect_info:
+            return self.send_raw(f'add_player {dumps(to_send)}')
+        else:
+            return self.send(to_send)
 
     def resit(self, player: Player, players: Players) -> Optional[str]:
-
-        self.send_raw('resit ' + str(players.id))
 
         to_send = dict()
 
@@ -4309,7 +4246,10 @@ class Network:
 
         to_send['players'] = players_send
 
-        return self.send(to_send)
+        if self.need_disconnect_info:
+            return self.send_raw(f'resit {players.id} {dumps(to_send)}')
+        else:
+            return self.send(to_send)
 
     def switch_decision(self, player: Player) -> Optional[str]:
 
@@ -4390,9 +4330,6 @@ class Network:
 
     def open_cards(self, table: Table, for_replay=False) -> Optional[str]:
 
-        if for_replay:
-            self.send_raw('open cards replay')
-
         to_send = dict()
 
         to_send['type'] = 'open cards'
@@ -4423,7 +4360,11 @@ class Network:
 
         to_send['cards'] = cards
 
-        return self.send(to_send)
+        if for_replay:
+            return self.send_raw(f'for_replay {dumps(to_send)}')
+
+        else:
+            return self.send(to_send)
 
     def give_money(self, player: Player, money: int) -> Optional[str]:
 
@@ -4905,7 +4846,7 @@ class PokerGame:
         makedirs(path)
 
         time = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), 0)
-        network = Network('', '', True)
+        network = Network('', '', True, False)
 
         for num, hand in enumerate(self.hands):
 
