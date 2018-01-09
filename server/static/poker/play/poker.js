@@ -2102,8 +2102,10 @@ function handle(){
     }
     else if(data.type == 'disconnected'){
 
-        post_class_add('p' + id_to_seat[data.id], 'is_disconnected');
-        seats[id_to_seat[data.id]].disconnected = true;
+        if(id_to_seat[data.id] != undefined){
+            post_class_add('p' + id_to_seat[data.id], 'is_disconnected');
+            seats[id_to_seat[data.id]].disconnected = true;
+        }
 
         if(reconnect_mode){
             handle();

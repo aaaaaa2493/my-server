@@ -431,24 +431,27 @@ class JavaScriptClient(AbstractClient):
 
         if srv.is_game_started:
             self.connected_python.connected_js = None
-            self.connected_python.is_disconnected = True
 
-            disconnected_message = dumps({'type': 'disconnected',
-                                          'id': self.connected_python.game_id})
+            if not self.connected_python.is_busted:
 
-            self.connected_python.connected_table.cast(disconnected_message)
-            self.connected_python.connected_table.chat_message(dumps({'type': 'chat',
-                                                                      'text': f'{self.name} disconnected'}))
+                self.connected_python.is_disconnected = True
 
-            for msg in reversed(self.connected_python.history):
+                disconnected_message = dumps({'type': 'disconnected',
+                                              'id': self.connected_python.game_id})
 
-                if loads(msg)['type'] == 'set decision':
-                    self.connected_python.in_decision = False
-                    self.connected_python.send_raw('1')
-                    break
+                self.connected_python.connected_table.cast(disconnected_message)
+                self.connected_python.connected_table.chat_message(dumps({'type': 'chat',
+                                                                          'text': f'{self.name} disconnected'}))
 
-                elif loads(msg)['type'] == 'switch decision':
-                    break
+                for msg in reversed(self.connected_python.history):
+
+                    if loads(msg)['type'] == 'set decision':
+                        self.connected_python.in_decision = False
+                        self.connected_python.send_raw('1')
+                        break
+
+                    elif loads(msg)['type'] == 'switch decision':
+                        break
 
         elif self.name in [cl.name for cl in srv.py_clients.values()]:
             Debug.client_left('SEND HTTP DELETE ' + self.name)
