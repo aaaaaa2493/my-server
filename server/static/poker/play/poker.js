@@ -1396,18 +1396,20 @@ function handle(){
     }
     else if(data.type == 'blinds increased'){
 
-        to_general_info = 'Blinds now ' + data.sb + ' / ' + data.bb;
+        to_general_info = 'Blinds now ' + shortcut_number_for_decision(data.sb) + ' / ' + shortcut_number_for_decision(data.bb);
 
         if(data.ante != 0){
-            to_general_info += ' ante ' + data.ante;
+            to_general_info += ' ante ' + shortcut_number_for_decision(data.ante);
         }
 
         to_general_info += '.';
 
         to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
-        post_inner_html([{id: 'general_info', str: to_general_info}, {id: 'big_blind_shortcut', str: data.bb}, 
-                         {id: 'small_blind_shortcut', str: data.sb}, {id: 'ante_shortcut', str: data.ante}]);
+        post_inner_html([{id: 'general_info', str: to_general_info}, 
+                         {id: 'big_blind_shortcut', str: shortcut_number_for_decision(data.bb)}, 
+                         {id: 'small_blind_shortcut', str: shortcut_number_for_decision(data.sb)}, 
+                         {id: 'ante_shortcut', str: shortcut_number_for_decision(data.ante)}]);
 
         post_class_rem([{id: 'general_info', class: 'hidden'}]);
 
