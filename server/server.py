@@ -5,7 +5,7 @@ from threading import Thread, Lock
 from time import sleep
 from json import loads, dumps
 from json.decoder import JSONDecodeError
-from datetime import datetime
+from datetime import datetime, timedelta
 from os import urandom, listdir, mkdir
 from os.path import exists
 from base64 import b64encode
@@ -105,7 +105,7 @@ class Debug:
             print(*args, **kwargs)
     else:
         @staticmethod
-        def to_to_sp(*args, **kwargs):
+        def tb_to_sp(*args, **kwargs):
             pass
 
     if MessageReceivedFromJS:
@@ -475,6 +475,8 @@ class PythonClient(AbstractClient):
         self.connected_table: TableClient = None
 
         self.thinking_time: int = Server.MAX_THINKING_TIME
+        self.back_counting: int = Server.START_COUNTING_TIME
+        self.kicked_thinking_time: int = Server.MAX_THINKING_TIME_AFTER_KICK
 
         self.connected_js: JavaScriptClient = js_client
         js_client.connected_python = self
@@ -527,13 +529,20 @@ class PythonClient(AbstractClient):
     def thinking(self):
 
         self.in_decision = True
-        for _ in range(self.thinking_time):
+        end_thinking_time = datetime.now() + timedelta(seconds=self.thinking_time)
+        back_counting = self.back_counting + 1
+        while datetime.now() < end_thinking_time:
+            sleep(0.01)
             if not self.in_decision:
                 break
-            sleep(0.01)
+            if (end_thinking_time - datetime.now()).seconds < back_counting:
+                back_counting -= 1
+                self.connected_table.cast(dumps({'type': 'back counting', 'time': back_counting, 'id': self.game_id}))
         else:
-            self.in_decision = False
-            self.send_raw('1')
+            self.send_to_js(dumps({'type': 'kick'}))
+            self.thinking_time = self.kicked_thinking_time
+            if self.connected_js is not None:
+                self.connected_js.finish()
 
     def receive(self, srv: 'Server', message: str, client: dict):
 
@@ -552,6 +561,10 @@ class PythonClient(AbstractClient):
 
             else:
                 _, message = message.split(' ', 1)
+
+                json_message = loads(message)
+                json_message['time'] = self.thinking_time
+                message = dumps(json_message)
 
                 with self.lock:
                     self.send_to_js(message, True)
@@ -1075,7 +1088,9 @@ class Server:
 
     port = 9001
 
-    MAX_THINKING_TIME = 60 * 100 * 100  # Число секунд, умноженное на сто
+    MAX_THINKING_TIME = 60  # Время раздумий в секундах
+    MAX_THINKING_TIME_AFTER_KICK = 20  # Время на раздумье после одной просрочки
+    START_COUNTING_TIME = 20  # Время с которого начать обратный отсчёт
     MAX_CHAT_LENGTH = 100  # Максимально количество хранимых сообщений в чате и возвращаемых при перезагрузке страницы
     MAX_NICK_LENGTH = 14  # Максимально допустимая длина
     DEFAULT_NICK = 'Anon'  # Если удалось отдать на сервер невалидный ник

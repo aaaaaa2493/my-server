@@ -448,34 +448,6 @@ function set_empty_seat_info(seat){
 
 }
 
-function start_thinking(id){
-
-    if(replay_in_pause == false){
-
-        curr_id_thinking = id;
-        time_thinking = 60;
-        interval_thinking = setTimeout(loop_thinking, 1000);
-
-    }
-    
-}
-
-function loop_thinking(){
-
-    time_thinking--;
-
-    if(time_thinking <= 20 && time_thinking >= 0){
-        update_info(curr_id_thinking, time_thinking + ' sec');
-    }
-    else if(time_thinking < 0){
-        post_inner_html([{id: 'decisions', str: ''}]);
-        return;
-    }
-
-    interval_thinking = setTimeout(loop_thinking, 1000);
-
-}
-
 function stop_thinking(){
     clearTimeout(interval_thinking);
 }
@@ -1720,8 +1692,6 @@ function handle(){
 
         id_in_decision = data.id;
 
-        start_thinking(data.id);
-
         if(reconnect_mode){
             handle();
         }
@@ -2145,6 +2115,34 @@ function handle(){
 
         post_class_rem([{id: 'p' + id_to_seat[data.id], class: 'is_disconnected'}]);
         seats[id_to_seat[data.id]].disconnected = false;
+
+        if(reconnect_mode){
+            handle();
+        }
+        else{
+            setTimeout(handle, 10);
+        }
+
+    }
+    else if(data.type == 'kick'){
+
+        socket.clean = true;
+
+        to_general_info = 'You was kicked. You have 20 seconds to think now.';
+        to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
+                           'window.location=window.location;\'>Refresh</div>';
+
+        post_inner_html([{id: 'general_info', str: to_general_info}]);
+        post_class_rem([{id: 'general_info', class: 'hidden'}]);
+
+        post_inner_html([{id: 'decisions', str: ''}]);
+
+        return;
+
+    }
+    else if(data.type == 'back counting'){
+
+        update_info(data.id, data.time + ' sec');
 
         if(reconnect_mode){
             handle();
