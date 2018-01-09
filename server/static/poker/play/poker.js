@@ -746,7 +746,7 @@ function set_bet(id, count, reason=''){
 
     }
 
-    post_inner_html([{id: 'pot_count', str: pot_count}]);
+    post_inner_html([{id: 'pot_count', str: shortcut_number_for_player(pot_count)}]);
 
     amounts = [];
 
