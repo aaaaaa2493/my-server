@@ -1,6 +1,10 @@
+from scipy.interpolate import splrep, splev
+from matplotlib.pyplot import plot, show
+from numpy import linspace
 from re import compile
 from datetime import datetime, timedelta
 from itertools import combinations
+from functools import lru_cache
 from operator import add, sub, mul, truediv, pow, abs, neg, gt
 from os import listdir, mkdir, makedirs, remove
 from os.path import exists
@@ -25,9 +29,9 @@ class Debug:
     InputDecision = 0
     Resitting = 0
     Standings = 0
-    GameProgress = 1
+    GameProgress = 0
     Evolution = 1
-    PlayManager = 0
+    PlayManager = 1
     GameManager = 1
     Error = 1
 
@@ -1027,6 +1031,14 @@ class BasePlay:
                  CheckRaise: 'check then raise',
                  CheckAllin: 'check then all in'}
 
+    ModeType = int
+
+    class Mode:
+        Evolution = 0
+        Parse = 1
+        GameEngine = 2
+        Testing = 3
+
     def __init__(self):
 
         self.fold = 0
@@ -1154,6 +1166,7 @@ class BasePlay:
 class Play:
 
     ExtendedName = False
+    Mode: BasePlay.ModeType = BasePlay.Mode.GameEngine
 
     def __init__(self):
 
@@ -1177,6 +1190,8 @@ class Play:
         self.busy = False
 
         self.name = '???'
+        
+        self.plays_history: List[Tuple[int, int]] = []
 
         self.wins: int = 0
         self.total_plays: int = 0
@@ -1184,18 +1199,24 @@ class Play:
 
     def __str__(self):
 
-        if Play.ExtendedName:
+        if Play.Mode == BasePlay.Mode.Evolution:
             return f'<Gen{self.generation} e{self.exemplar:<6} ' \
-                   f'f{self.previous} p{int(self.average_places * 1000):<3} g{self.total_plays}' \
+                   f'f{self.previous} p{int(self.average_places * 1000):<3} g{self.total_plays:<6} ' \
+                   f'{len(self.plays_history):<4} {round(self.value(), 2)}' \
                    f'{(" " + self.wins * "*" + " ") if self.wins else ""}>'
 
         else:
+            return self.name
 
-            if self.name != '???':
-                return self.name
+    @staticmethod
+    @lru_cache(1024)
+    def calc_norm(out_of: int) -> float:
+        return out_of / sum(1 / i for i in range(1, out_of + 1))
 
-            else:
-                return f'ex{self.exemplar} {str(self.wins) + "*" if self.wins else ""}'
+    def value(self) -> float:
+        if len(self.plays_history) == 0:
+            return 0
+        return sum(1 / place * self.calc_norm(out_of) for place, out_of in self.plays_history) / len(self.plays_history)
 
     def mutate(self, percent: float) -> None:
 
@@ -1220,10 +1241,17 @@ class Play:
 
     def set_place(self, place: int, out_of: int) -> None:
 
-        if out_of == 999:
+        if Play.Mode == BasePlay.Mode.Evolution:
 
-            if place == 1 and out_of == 999:
+            if place == 1:
                 self.wins += 1
+
+            try:
+                self.plays_history = self.plays_history
+            except AttributeError:
+                self.plays_history = []
+
+            self.plays_history += [(place, out_of)]
 
             restore_places = self.total_plays * self.average_places
             self.total_plays += 1
@@ -1236,11 +1264,9 @@ class PlayManager:
 
     Plays = List[Play]
 
-    EnableShortInit = True
-
     _initialized = False
     _bank_of_plays: Plays = None
-    _zero_gen_count: int = 10000
+    _zero_gen_count: int = 50000
 
     @staticmethod
     def init():
@@ -1252,7 +1278,7 @@ class PlayManager:
         if not exists('play'):
             mkdir('play')
 
-        if PlayManager.EnableShortInit and 'all' in listdir('play'):
+        if not Play.Mode == BasePlay.Mode.Evolution and 'all' in listdir('play'):
             PlayManager._initialized = True
             PlayManager._bank_of_plays = load(open('play/all', 'rb'))
             for play in PlayManager._bank_of_plays:
@@ -1263,6 +1289,10 @@ class PlayManager:
         generations = listdir('play')
 
         for gen_path in generations:
+
+            if gen_path == 'all':
+                continue
+
             Debug.play_manager(f'Initialize generation {gen_path}')
             exemplars = listdir(f'play/{gen_path}')
 
@@ -1291,29 +1321,30 @@ class PlayManager:
         if not PlayManager._initialized:
             PlayManager.init()
 
-        if not PlayManager.EnableShortInit:
+        if Play.Mode == BasePlay.Mode.Evolution:
 
             indexes_to_delete = []
 
             for index, play in enumerate(PlayManager._bank_of_plays):
 
-                if (play.total_plays > 10 and play.average_places > 0.8 and play.wins == 0 or
-                        play.total_plays > 50 and play.average_places > 0.45 and play.wins == 0 or
-                        play.total_plays > 100 and play.average_places > 0.40 and play.wins < 1 or
-                        play.total_plays > 200 and play.average_places > 0.35 and play.wins < 2 or
-                        play.total_plays > 300 and play.average_places > 0.30 and play.wins < 3 or
-                        play.total_plays > 400 and play.average_places > 0.25 and play.wins < 4 or
-                        play.total_plays > 500 and play.average_places > 0.20 and play.wins < 6 or
-                        play.total_plays > 600 and play.average_places > 0.15 and play.wins < 8 or
-                        play.total_plays > 700 and play.average_places > 0.13 and play.wins < 10 or
-                        play.total_plays > 800 and play.average_places > 0.12 and play.wins < 12):
+                if (play.total_plays > 10 and play.average_places > 0.8 and play.value() < 1 or
+                        play.total_plays > 50 and play.average_places > 0.45 and play.value() < 2 or
+                        play.total_plays > 100 and play.average_places > 0.40 and play.value() < 3 or
+                        play.total_plays > 200 and play.average_places > 0.35 and play.value() < 4 or
+                        play.total_plays > 300 and play.average_places > 0.30 and play.value() < 5 or
+                        play.total_plays > 400 and play.average_places > 0.25 and play.value() < 6 or
+                        play.total_plays > 500 and play.average_places > 0.20 and play.value() < 7 or
+                        play.total_plays > 600 and play.average_places > 0.15 and play.value() < 8 or
+                        play.total_plays > 700 and play.average_places > 0.13 and play.value() < 9 or
+                        play.total_plays > 800 and play.average_places > 0.12 and play.value() < 10):
 
                     indexes_to_delete += [index]
                     remove(f'play/{play.generation}/{play.exemplar}')
 
                     Debug.play_manager(f'Delete bad play gen {play.generation} '
                                        f'ex {play.exemplar} after {play.total_plays} games '
-                                       f'wins {play.wins} avg {int(play.average_places * 1000)}')
+                                       f'wins {play.wins} avg {int(play.average_places * 1000)} '
+                                       f'new games {len(play.plays_history)} value {round(play.value(), 2)}')
 
             for index in reversed(indexes_to_delete):
                 NameManager.add_name(PlayManager._bank_of_plays[index].name)
@@ -1327,7 +1358,7 @@ class PlayManager:
         if not PlayManager._initialized:
             PlayManager.init()
 
-        if not PlayManager.EnableShortInit:
+        if Play.Mode == BasePlay.Mode.Evolution:
 
             if not exists(f'play/{play.generation}'):
                 mkdir(f'play/{play.generation}')
@@ -1340,7 +1371,7 @@ class PlayManager:
         if not PlayManager._initialized:
             PlayManager.init()
 
-        if not PlayManager.EnableShortInit:
+        if Play.Mode == BasePlay.Mode.Evolution:
 
             zero_plays = [play.exemplar for play in PlayManager._bank_of_plays if play.generation == 0]
             zero_count = len(zero_plays)
@@ -1367,7 +1398,7 @@ class PlayManager:
 
         if only_profitable:
             best_plays = sorted([play for play in PlayManager._bank_of_plays if play.total_plays > 10],
-                                key=lambda p: p.average_places)[:100]
+                                key=lambda p: p.value(), reverse=True)[:100]
 
             for play in best_plays:
                 if not play.busy:
@@ -1395,10 +1426,10 @@ class PlayManager:
 
         Debug.evolution(f'Top {count} exemplars of evolution:')
 
-        for place, play in enumerate(sorted([play for play in PlayManager._bank_of_plays if play.total_plays > 100],
-                                            key=lambda p: p.average_places / (1 + p.wins * 100 / p.total_plays +
-                                                                              p.total_plays / 1000))[:count]):
-            Debug.evolution(f'{place + 1}) {play}')
+        for place, play in enumerate(sorted([play for play in PlayManager._bank_of_plays
+                                             if len(play.plays_history) > 10 and play.value() > 1],
+                                            key=lambda p: p.value(), reverse=True)[:count]):
+            Debug.evolution(f'{place + 1:<2}) {play}')
 
 
 class NameManager:
@@ -1464,7 +1495,7 @@ class NameManager:
                 raise IndexError('This name was not busy')
 
         else:
-            raise IndexError("Trying to add name that already exists as free")
+            raise IndexError("Trying to add name that already exists as free " + name)
 
     @staticmethod
     def save():
@@ -3828,7 +3859,12 @@ class Game:
                     player.network.win()
                 Debug.evolution(f'Game wins {player.name}')
 
-        for place, player in enumerate(sorted(self.players, key=lambda p: p.lose_time, reverse=True)):
+        sorted_players = sorted(self.players, key=lambda p: p.lose_time, reverse=True)
+
+        for place, player in enumerate(sorted_players[:10]):
+            Debug.evolution(f'{place+1:>4}) {player.play}')
+
+        for place, player in enumerate(sorted_players):
             Debug.standings(f'{place+1:>4}) {player.name}')
             if not player.controlled:
                 player.play.set_place(place+1, self.players_count)
@@ -5157,6 +5193,58 @@ class PokerGame:
         return '\n'.join(ret)
 
 
+class NeuralNetwork:
+
+    class PokerDecision:
+
+        class Bubble:
+
+            # coefficients for y = ax**2 + bx + c
+            A_COEFFICIENT = 1501 / 1764
+            B_COEFFICIENT = 10375 / 588
+            C_COEFFICIENT = - 8375 / 882
+
+            def __init__(self, total_players: int, total_prizes: int):
+
+                a = self.A_COEFFICIENT
+                b = self.B_COEFFICIENT
+                c = self.C_COEFFICIENT - total_players
+
+                self.total_prizes = total_prizes
+                self.total_players = total_players
+
+                self.bubble_count = round((-b + (b*b - 4*a*c)**.5) / (2*a))
+
+                x_points = [total_prizes - 1,
+                            total_prizes,
+                            total_prizes + 1,
+                            total_prizes + self.bubble_count + 1,
+                            total_prizes + 2 * self.bubble_count + 1,
+                            total_prizes + 3 * self.bubble_count + 1,
+                            total_prizes + 4 * self.bubble_count + 1,
+                            total_prizes + 5 * self.bubble_count + 1,
+                            total_prizes + 6 * self.bubble_count + 1,
+                            total_prizes + 7 * self.bubble_count + 1,
+                            total_players + 7 * self.bubble_count + 1,
+                            total_players + 7 * self.bubble_count + 2,
+                            total_players + 7 * self.bubble_count + 3]
+
+                y_points = [1, 1, 1, 0.8, 0.2, 0.02, 0.002, 0, 0, 0, 0, 0, 0]
+
+                self.spline = splrep(x_points, y_points)
+
+            def get(self, point: float) -> float:
+                if point < self.total_prizes + 1 or point > self.total_players:
+                    return 0
+                return float(splev([point], self.spline))
+
+            def show(self, points: int = 10000):
+                x_coords = linspace(0, self.total_players, points)
+                y_coords = [self.get(i) for i in x_coords]
+                plot(x_coords, y_coords)
+                show()
+
+
 class GameParser:
 
     class RegEx:
@@ -5921,7 +6009,7 @@ class GameManager:
 
 class Evolution:
 
-    def __init__(self, games: int, players: int, seats: int, money: int,
+    def __init__(self, games: int, seats: int, players: int, money: int,
                  blinds_scheme: Blinds.SchemeType = Blinds.Scheme.Standard):
 
         self.games: int = games
@@ -5929,6 +6017,7 @@ class Evolution:
         self.seats: int = seats
         self.money: int = money
         self.blinds_scheme: Blinds.SchemeType = blinds_scheme
+        Play.EvolutionMode = True
 
     def run(self) -> None:
 
@@ -5936,7 +6025,7 @@ class Evolution:
 
             game = Game(self.players, self.seats, self.money, self.blinds_scheme)
 
-            for __ in range(game.total_players):
+            for _ in range(game.total_players):
                 game.add_player()
 
             Debug.evolution(f'Start game #{num + 1}')
@@ -6265,15 +6354,27 @@ class Stats:
                 break
 
 
+class Run:
+
+    def __init__(self, mode: BasePlay.ModeType):
+
+        Play.Mode = mode
+        if mode == BasePlay.Mode.GameEngine:
+            # PlayManager.standings()
+            GameManager().run()
+
+        elif mode == BasePlay.Mode.Parse:
+            game = GameParser.parse_game('hh.txt')
+            game.save()
+            game.convert()
+
+        elif mode == BasePlay.Mode.Evolution:
+            PlayManager.standings()
+            Evolution(100000, 9, 999, 10000, Blinds.Scheme.Rapid).run()
+
+        elif mode == BasePlay.Mode.Testing:
+            NeuralNetwork.PokerDecision.Bubble(100, 9).show()
+
+
 if __name__ == '__main__':
-
-    # PlayManager.standings()
-    GameManager().run()
-    quit()
-
-    game_ = GameParser.parse_game('hh.txt')
-    game_.save()
-    game_.convert()
-    print(game_)
-
-    # Evolution(1000, 999, 9, 10000, Blinds.Scheme.Rapid).run()
+    Run(BasePlay.Mode.Testing)
