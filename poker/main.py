@@ -4675,6 +4675,7 @@ class PokerGame:
             self.total_pot: int = 0
             self.table_id: int = 0
             self.button_seat: int = 0
+            self.players_left: int = 0
             self.goes_to_showdown: bool = False
             self.board: Board = Board(Deck())
             self.curr_step: BasePlay.StepType = BasePlay.Step.Preflop
@@ -4743,6 +4744,7 @@ class PokerGame:
             ret = [f'    Small blind: {self.small_blind}']
             ret += [f'    Big blind: {self.big_blind}']
             ret += [f'    Ante: {self.ante}']
+            ret += [f'    Players left: {self.players_left}']
             ret += [f'    Total pot: {self.total_pot}']
 
             ret += ['    Players:']
@@ -5278,6 +5280,7 @@ class GameParser:
         find_lost = compile(r'^Seat [0-9]+: (' + name + r') showed \[(..) (..)] and lost with')
         find_won = compile(r'^Seat [0-9]+: (' + name + r') showed \[(..) (..)] and won \([0-9]+\) with')
         find_mucked_cards = compile(r'^Seat [0-9]+: (' + name + r') mucked \[(..) (..)]$')
+        find_place = compile(r'^([0-9]+)(th|nd|rd|st)$')
 
         # for processing actions
         find_uncalled_bet = compile(r'^Uncalled bet \(([0-9]+)\) returned to (' + name + r')$')
@@ -5489,6 +5492,8 @@ class GameParser:
                 name = match.group(1)
                 place = match.group(2)
                 game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, 0, place)
+                match = GameParser.RegEx.find_place.search(place)
+                game.curr_hand.players_left = int(match.group(1))
                 continue
 
             match = GameParser.RegEx.find_received.search(line)
@@ -5498,6 +5503,8 @@ class GameParser:
                 place = match.group(2)
                 earn = int(match.group(3).replace('.', ''))
                 game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, earn, place)
+                match = GameParser.RegEx.find_place.search(place)
+                game.curr_hand.players_left = int(match.group(1))
                 continue
 
             match = GameParser.RegEx.find_winner.search(line)
