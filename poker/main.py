@@ -5185,6 +5185,24 @@ class PokerGame:
 
             open(path + '/%s' % (num,), 'w').write(output)
 
+    def approximate_players_left(self):
+
+        good_hands = [(self.hands.index(hand), hand) for hand in self.hands if hand.players_left > 0]
+
+        if self.hands[0].players_left == 0:
+            players_difference = good_hands[0][1].players_left - good_hands[1][1].players_left
+            hands_difference = good_hands[1][0] - good_hands[0][0]
+            players_per_hand = players_difference / hands_difference
+            for count, index in enumerate(range(good_hands[0][0] - 1, -1, -1)):
+                self.hands[index].players_left = good_hands[0][1].players_left + int((count + 1) * players_per_hand)
+
+        for (from_index, from_hand), (to_index, to_hand) in zip(good_hands, good_hands[1:]):
+            players_difference = from_hand.players_left - to_hand.players_left
+            hands_difference = to_index - from_index
+            players_per_hand = players_difference / hands_difference
+            for count, hand_index in enumerate(range(from_index + 1, to_index)):
+                self.hands[hand_index].players_left = from_hand.players_left - int((count + 1) * players_per_hand) - 1
+
     def __str__(self) -> str:
         ret = [f'Poker game of {len(self.hands)} hands']
         i: int = 1
@@ -5348,6 +5366,7 @@ class GameParser:
                 GameParser.process_show_down(game, steps[5])
                 GameParser.process_summary(game, steps[6])
 
+        game.approximate_players_left()
         return game
 
     @staticmethod
@@ -6374,6 +6393,7 @@ class Run:
             game = GameParser.parse_game('hh.txt')
             game.save()
             game.convert()
+            print(game)
 
         elif mode == BasePlay.Mode.Evolution:
             PlayManager.standings()
@@ -6384,4 +6404,4 @@ class Run:
 
 
 if __name__ == '__main__':
-    Run(BasePlay.Mode.Testing)
+    Run(BasePlay.Mode.Parse)
