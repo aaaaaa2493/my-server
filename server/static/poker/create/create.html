@@ -17,16 +17,16 @@
         <div class='text'>Создание игры</div>
 
         <div class='text small_text'>Общее количество участников</div>
-        <input id=total_count style='margin-top: 10px;' type=text onkeyup='textchange(this)' placeholder="Общее количество участников" value='9'>
+        <input id=total_count style='margin-top: 10px;' type=text onkeyup='text_change(this)' placeholder="Общее количество участников" value='9'>
 
         <div class='text small_text'>Количество виртуальных игроков</div>
-        <input id=unreal_count style='margin-top: 10px;' type=text onkeyup='textchange(this)' placeholder="Количество виртуальных игроков" value='0'>
+        <input id=unreal_count style='margin-top: 10px;' type=text onkeyup='text_change(this)' placeholder="Количество виртуальных игроков" value='0'>
 
         <div class='text small_text'>Количество игроков за столом (2-9)</div>
-        <input id=table_count style='margin-top: 10px;' type=text onkeyup='textchange(this)' placeholder="Количество игроков за столом (2-9)" value='9'>
+        <input id=table_count style='margin-top: 10px;' type=text onkeyup='text_change(this)' placeholder="Количество игроков за столом (2-9)" value='9'>
 
         <div class='text small_text'>Начальное количество фишек</div>
-        <input id=chip_count style='margin-top: 10px;' type=text onkeyup='textchange(this)' placeholder="Начальное количество фишек" value='1000'>
+        <input id=chip_count style='margin-top: 10px;' type=text onkeyup='text_change(this)' placeholder="Начальное количество фишек" value='1000'>
 
         <div id=create class='item poker' onclick="create_game()">Создать</div>
         <div id=back class='item poker' onclick="window.location='/poker'">Назад</div>

@@ -100,7 +100,7 @@
         <input id=range type=range min=30 max=3000 step=1 
         onmousemove='document.getElementById("raise").innerHTML = (this.value==this.max?"All in ":"Raise ") + this.value' 
         onchange='document.getElementById("raise").innerHTML = (this.value==this.max?"All in ":"Raise ") + this.value'>
-        <input id=textraise type=text class=input_button placeholder="input amount" onkeyup='textchange(this.value)'>
+        <input id=textraise type=text class=input_button placeholder="input amount" onkeyup='text_change(this.value)'>
 
         <div class='button small_button minus_button' onclick='raise_minus()'>-</div>
         <div class='button small_button plus_button' onclick='raise_plus()'>+</div>

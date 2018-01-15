@@ -15,7 +15,7 @@
 <body>
     <div id=menu style='display: none'>
     	<div id=state class=text>Text</div>
-        <input id=nick type=text onkeyup='textchange(this.value)' placeholder="Введите имя или ник">
+        <input id=nick type=text onkeyup='text_change(this.value)' placeholder="Введите имя или ник">
         <div id=register class='item poker' onclick="register()">Зарегистрироваться</div>
         <div id=connect class='item poker' onclick="register()">Подключиться</div>
         <div id=create class='item poker' onclick="window.location='/poker/create?key='+admin">Создать игру</div>
