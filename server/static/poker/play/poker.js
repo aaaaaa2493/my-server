@@ -4,90 +4,90 @@ onmessage = function(event){
     let data = event.data;
 
     switch(data.type){
-        case 'start':
-            player_name = data.player_name;
-            table_to_spectate = data.table_to_spectate;
-            replay_id = data.replay_id;
-            back_addr = data.back_addr;
-            ip = data.ip;
-            port = data.port;
-            nick = data.nick;
-            start();
-            break;
+    case 'start':
+        player_name = data.player_name;
+        table_to_spectate = data.table_to_spectate;
+        replay_id = data.replay_id;
+        back_addr = data.back_addr;
+        ip = data.ip;
+        port = data.port;
+        nick = data.nick;
+        start();
+        break;
 
-        case 'raise minus':
-            raise_minus(data.value, data.max_value, data.min_value);
-            break;
+    case 'raise minus':
+        raise_minus(data.value, data.max_value, data.min_value);
+        break;
 
-        case 'raise plus':
-            raise_plus(data.value, data.max_value, data.min_value);
-            break;
+    case 'raise plus':
+        raise_plus(data.value, data.max_value, data.min_value);
+        break;
 
-        case 'raise all':
-            raise_all(data.max_value);
-            break;
+    case 'raise all':
+        raise_all(data.max_value);
+        break;
 
-        case 'raise pot':
-            raise_pot(data.max_value);
-            break;
+    case 'raise pot':
+        raise_pot(data.max_value);
+        break;
 
-        case 'textraise':
-            text_change(data.text, data.max_value, data.min_value);
-            break;
+    case 'textraise':
+        text_change(data.text, data.max_value, data.min_value);
+        break;
 
-        case 'socket close':
-            socket.close();
-            break;
+    case 'socket close':
+        socket.close();
+        break;
 
-        case 'socket stay':
-            socket.stay = true;
-            socket.close();
-            break;
+    case 'socket stay':
+        socket.stay = true;
+        socket.close();
+        break;
 
-        case 'socket clean':
-            socket.clean = true;
-            socket.close();
-            break;
+    case 'socket clean':
+        socket.clean = true;
+        socket.close();
+        break;
 
-        case 'set decision':
-            set_decision(data.value);
-            break;
+    case 'set decision':
+        set_decision(data.value);
+        break;
 
-        case 'pause play':
-            replay_pause_play();
-            break;
+    case 'pause play':
+        replay_pause_play();
+        break;
 
-        case 'next step':
-            replay_next_step();
-            break;
+    case 'next step':
+        replay_next_step();
+        break;
 
-        case 'prev hand':
-            replay_prev_hand();
-            break;
+    case 'prev hand':
+        replay_prev_hand();
+        break;
 
-        case 'next hand':
-            replay_next_hand();
-            break;
+    case 'next hand':
+        replay_next_hand();
+        break;
 
-        case 'tournament info':
-            t_info_click();
-            break;
+    case 'tournament info':
+        t_info_click();
+        break;
 
-        case 'last hand info':
-            lh_info_click();
-            break;
+    case 'last hand info':
+        lh_info_click();
+        break;
 
-        case 'chat message':
-            chat_message(data.key, data.text);
-            break;
+    case 'chat message':
+        chat_message(data.key, data.text);
+        break;
 
-        case 'premove':
-            premove(data.answer, data.checked);
-            break;
+    case 'premove':
+        premove(data.answer, data.checked);
+        break;
 
-        default:
-            console.log(`Worker: bad type ${data.type}`);
-            break;
+    default:
+        console.log(`Worker: bad type ${data.type}`);
+        break;
     }
 };
 
@@ -151,22 +151,25 @@ function post_set_premove(obj){
 
 console.log('in worker');
 
-const available_chips = [[1000000000, '16'],
-                         [250000000, '15'],
-                         [100000000, '14'],
-                         [25000000, '13'],
-                         [5000000, '12'],
-                         [1000000, '11'],
-                         [500000, '10'],
-                         [100000, '9'],
-                         [25000, '8'],
-                         [5000, '7'],
-                         [1000, '6'],
-                         [500, '5'],
-                         [100, '4'],
-                         [25, '3'],
-                         [5, '2'],
-                         [1, '1']];
+const available_chips = [
+    [1000000000, '16'],
+    [250000000, '15'],
+    [100000000, '14'],
+    [25000000, '13'],
+    [5000000, '12'],
+    [1000000, '11'],
+    [500000, '10'],
+    [100000, '9'],
+    [25000, '8'],
+    [5000, '7'],
+    [1000, '6'],
+    [500, '5'],
+    [100, '4'],
+    [25, '3'],
+    [5, '2'],
+    [1, '1']
+];
+
 let socket;
 let player_name;
 let nick;
@@ -208,20 +211,22 @@ let chipstack;
 let my_id;
 let is_in_game = false;
 
-const gauss = [0, 0.001, 0.002, 0.003, 0.004, 0.006, 0.009, 0.013, 0.018, 0.024,
-               0.032, 0.042, 0.054, 0.068, 0.085, 0.105, 0.128, 0.155, 0.185, 0.219,
-               0.256, 0.296, 0.339, 0.384, 0.430, 0.477, 0.524, 0.571, 0.617, 0.662,
-               0.705, 0.745, 0.782, 0.816, 0.846, 0.873, 0.896, 0.916, 0.933, 0.947,
-               0.959, 0.969, 0.977, 0.983, 0.988, 0.992, 0.995, 0.997, 0.999, 1];
+const gauss = [
+    0, 0.001, 0.002, 0.003, 0.004, 0.006, 0.009, 0.013, 0.018, 0.024,
+    0.032, 0.042, 0.054, 0.068, 0.085, 0.105, 0.128, 0.155, 0.185, 0.219,
+    0.256, 0.296, 0.339, 0.384, 0.430, 0.477, 0.524, 0.571, 0.617, 0.662,
+    0.705, 0.745, 0.782, 0.816, 0.846, 0.873, 0.896, 0.916, 0.933, 0.947,
+    0.959, 0.969, 0.977, 0.983, 0.988, 0.992, 0.995, 0.997, 0.999, 1
+];
 
 Array.prototype.remove = function(from, to) {
-  let rest = this.slice((to || from) + 1 || this.length);
-  this.length = from < 0 ? this.length + from : from;
-  return this.push.apply(this, rest);
+    let rest = this.slice((to || from) + 1 || this.length);
+    this.length = from < 0 ? this.length + from : from;
+    return this.push.apply(this, rest);
 };
 
 function get_src(card){
-    return "/img/poker/cards/" + card + ".png";
+    return '/img/poker/cards/' + card + '.png';
 }
 
 function shortcut_number_for_player(num){
@@ -297,24 +302,24 @@ function get_sound(file){
     if(file === 'chips'){
         let type_sound = parseInt(Math.random()*5);
 
-        return "/music/poker/chips/chip" + (type_sound+1) + ".mp3";
+        return '/music/poker/chips/chip' + (type_sound+1) + '.mp3';
     }
     else if(file === 'fold'){
-        return "/music/poker/cards/fold.mp3";
+        return '/music/poker/cards/fold.mp3';
     }
     else if(file === 'check'){
-        return "/music/poker/cards/check.mp3";
+        return '/music/poker/cards/check.mp3';
     }
     else if(file === 'attention'){
-        return "/music/poker/attention/alert.mp3";
+        return '/music/poker/attention/alert.mp3';
     }
     else if(file === 'collect'){
-        return "/music/poker/chips/collect.mp3";
+        return '/music/poker/chips/collect.mp3';
     }
     else if(file === 'grab'){
-        return "/music/poker/chips/grab.mp3";
+        return '/music/poker/chips/grab.mp3';
     }
-
+    return 'sound file not found';
 }
 
 function get_margin_left(i){
@@ -474,8 +479,13 @@ function clear_table(){
 
     let zz_src = get_src('ZZ');
 
-    let all_src = [{id: 'flop1', src: zz_src}, {id: 'flop2', src: zz_src}, {id: 'flop3', src: zz_src},
-                   {id: 'turn', src: zz_src}, {id: 'river', src: zz_src}];
+    let all_src = [
+        {id: 'flop1', src: zz_src},
+        {id: 'flop2', src: zz_src},
+        {id: 'flop3', src: zz_src},
+        {id: 'turn', src: zz_src},
+        {id: 'river', src: zz_src}
+    ];
 
     clear_decision();
 
@@ -541,7 +551,7 @@ function text_change(text, max_value, min_value){
             post_change_value('range', new_value);
             post_inner_html([{
                 id: 'raise',
-                str: (new_value === max_value ? "All in " : "Raise ") + shortcut_number_for_decision(new_value)
+                str: (new_value === max_value ? 'All in ' : 'Raise ') + shortcut_number_for_decision(new_value)
             }]);
         }
     }
@@ -566,7 +576,7 @@ function raise_minus(value, max_value, min_value){
     let new_value = (+value) - (+min_value) > min_value? (+value) - (+min_value): min_value;
 
     post_change_value('range', new_value);
-    post_inner_html([{id: 'raise', str: (new_value===max_value?"All in ":"Raise ") + shortcut_number_for_decision(new_value)}]);
+    post_inner_html([{id: 'raise', str: (new_value===max_value?'All in ':'Raise ') + shortcut_number_for_decision(new_value)}]);
 
 }
 
@@ -575,14 +585,14 @@ function raise_plus(value, max_value, min_value){
     let new_value = (+value) + (+min_value) < max_value? (+value) + (+min_value) : max_value;
 
     post_change_value('range', new_value);
-    post_inner_html([{id: 'raise', str: (new_value===max_value?"All in ":"Raise ") + shortcut_number_for_decision(new_value)}]);
+    post_inner_html([{id: 'raise', str: (new_value===max_value?'All in ':'Raise ') + shortcut_number_for_decision(new_value)}]);
 
 }
 
 function raise_all(max_value){
 
     post_change_value('range', max_value);
-    post_inner_html([{id: 'raise', str: "All in " + shortcut_number_for_decision(max_value)}]);
+    post_inner_html([{id: 'raise', str: 'All in ' + shortcut_number_for_decision(max_value)}]);
 
 }
 
@@ -601,7 +611,7 @@ function raise_pot(max_value){
     let raise_amount = in_pot + 2 * to_call;
 
     post_change_value('range', raise_amount);
-    post_inner_html([{id: 'raise', str: (raise_amount===max_value?"All in ":"Raise ") + shortcut_number_for_decision(raise_amount)}]);
+    post_inner_html([{id: 'raise', str: (raise_amount===max_value?'All in ':'Raise ') + shortcut_number_for_decision(raise_amount)}]);
 
 }
 
@@ -648,9 +658,11 @@ function lh_info_click(){
 
 function premove(answer, checked){
 
-    let all_premoves = [{id: 'premove1', checked: false},
-                        {id: 'premove2', checked: false},
-                        {id: 'premove3', checked: false}];
+    let all_premoves = [
+        {id: 'premove1', checked: false},
+        {id: 'premove2', checked: false},
+        {id: 'premove3', checked: false}
+    ];
 
     premove_first = false;
     premove_second = false;
@@ -735,9 +747,11 @@ function made_controlled_player(is_fold){
             post_class_add('premoves', 'hidden');
         }
         else{
-            post_inner_html([{id: 'textpremove1', str: 'Check/Fold'}, 
-                             {id: 'textpremove2', str: 'Check'}, 
-                             {id: 'textpremove3', str: 'Call any'}]);
+            post_inner_html([
+                {id: 'textpremove1', str: 'Check/Fold'},
+                {id: 'textpremove2', str: 'Check'},
+                {id: 'textpremove3', str: 'Call any'}
+            ]);
         }
 
     }
@@ -831,8 +845,16 @@ function set_bet(id, count, reason=''){
     let chip23 = seat_to_set_bet.ch23;
     let chip24 = seat_to_set_bet.ch24;
 
-    let all_chips = [{id: chip11, str: ''}, {id: chip12, str: ''}, {id: chip13, str: ''}, {id: chip14, str: ''},
-                     {id: chip21, str: ''}, {id: chip22, str: ''}, {id: chip23, str: ''}, {id: chip24, str: ''}];
+    let all_chips = [
+        {id: chip11, str: ''},
+        {id: chip12, str: ''},
+        {id: chip13, str: ''},
+        {id: chip14, str: ''},
+        {id: chip21, str: ''},
+        {id: chip22, str: ''},
+        {id: chip23, str: ''},
+        {id: chip24, str: ''}
+    ];
 
     let chip_order;
 
@@ -899,9 +921,11 @@ function move_stacks_to_main(){
 
             let curr_chipstack = save_positions_chipstacks[i];
 
-            all_margin.push({id: curr_chipstack[1], 
-                             left: (curr_chipstack[2] + parseInt((curr_chipstack[4] - curr_chipstack[2]) * percent_done)) + 'px',
-                             top: (curr_chipstack[3] + parseInt((curr_chipstack[5] - curr_chipstack[3]) * percent_done)) + 'px'});
+            all_margin.push({
+                id: curr_chipstack[1],
+                left: (curr_chipstack[2] + parseInt((curr_chipstack[4] - curr_chipstack[2]) * percent_done)) + 'px',
+                top: (curr_chipstack[3] + parseInt((curr_chipstack[5] - curr_chipstack[3]) * percent_done)) + 'px'
+            });
 
         }
 
@@ -939,9 +963,11 @@ function move_stack_from_main(){
 
         let percent_done = gauss[frames_last];
 
-        post_margin([{id: chipstack[1], 
-                     left: (chipstack[2] + parseInt((chipstack[4] - chipstack[2]) * percent_done)) + 'px',
-                     top: (chipstack[3] + parseInt((chipstack[5] - chipstack[3]) * percent_done)) + 'px'}]);
+        post_margin([{
+            id: chipstack[1],
+            left: (chipstack[2] + parseInt((chipstack[4] - chipstack[2]) * percent_done)) + 'px',
+            top: (chipstack[3] + parseInt((chipstack[5] - chipstack[3]) * percent_done)) + 'px'
+        }]);
 
         setTimeout(move_stack_from_main, 10);
     }
@@ -984,8 +1010,14 @@ function collect_money(){
             let chipstack_margin_left = get_margin_left(seat.chipstack_id);
             let chipstack_margin_top = get_margin_top(seat.chipstack_id);
 
-            save_positions_chipstacks.push([seat.chipstack_id, chipstack, chipstack_margin_left, chipstack_margin_top,
-                                                          main_stack_margin_left, main_stack_margin_top]);
+            save_positions_chipstacks.push([
+                seat.chipstack_id,
+                chipstack,
+                chipstack_margin_left,
+                chipstack_margin_top,
+                main_stack_margin_left,
+                main_stack_margin_top
+            ]);
 
             if(replay_in_pause || reconnect_mode){
                 set_bet(seat.id, 0);
@@ -1147,8 +1179,11 @@ function handle(){
         all_inner_html.push({id: 'average_stack_info', str: shortcut_number_for_player(data.avg_stack)});
         all_inner_html.push({id: 'players_left_info', str: shortcut_number_for_player(data.players_left)});
 
-        post_remove_style([{id: 'ch0'}, {id: 'ch1'}, {id: 'ch2'}, {id: 'ch3'}, {id: 'ch4'}, 
-                           {id: 'ch5'}, {id: 'ch6'}, {id: 'ch7'}, {id: 'ch8'}, {id: 'ch9'}]);
+        post_remove_style([
+            {id: 'ch0'}, {id: 'ch1'}, {id: 'ch2'},
+            {id: 'ch3'}, {id: 'ch4'}, {id: 'ch5'},
+            {id: 'ch6'}, {id: 'ch7'}, {id: 'ch8'}, {id: 'ch9'}
+        ]);
 
         if(replay_mode || spectate_mode){
             all_inner_html.push({id: 'place_short_info', str: shortcut_number_for_player(data.players_left)});
@@ -1403,14 +1438,18 @@ function handle(){
             is_in_game = true;
 
             if(curr_bb_id === my_id){
-                post_inner_html([{id: 'textpremove1', str: 'Check/Fold'}, 
-                                 {id: 'textpremove2', str: 'Check'}, 
-                                 {id: 'textpremove3', str: 'Call any'}]);
+                post_inner_html([
+                    {id: 'textpremove1', str: 'Check/Fold'},
+                    {id: 'textpremove2', str: 'Check'},
+                    {id: 'textpremove3', str: 'Call any'}
+                ]);
             }
             else{
-                post_inner_html([{id: 'textpremove1', str: 'Fold'}, 
-                                 {id: 'textpremove2', str: 'Call ' + curr_bb}, 
-                                 {id: 'textpremove3', str: 'Call any'}]);
+                post_inner_html([
+                    {id: 'textpremove1', str: 'Fold'},
+                    {id: 'textpremove2', str: 'Call ' + curr_bb},
+                    {id: 'textpremove3', str: 'Call any'}
+                ]);
             }
 
         }
@@ -1438,10 +1477,12 @@ function handle(){
 
         to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
-        post_inner_html([{id: 'general_info', str: to_general_info}, 
-                         {id: 'big_blind_shortcut', str: shortcut_number_for_decision(data.bb)}, 
-                         {id: 'small_blind_shortcut', str: shortcut_number_for_decision(data.sb)}, 
-                         {id: 'ante_shortcut', str: shortcut_number_for_decision(data.ante)}]);
+        post_inner_html([
+            {id: 'general_info', str: to_general_info},
+            {id: 'big_blind_shortcut', str: shortcut_number_for_decision(data.bb)},
+            {id: 'small_blind_shortcut', str: shortcut_number_for_decision(data.sb)},
+            {id: 'ante_shortcut', str: shortcut_number_for_decision(data.ante)}
+        ]);
 
         post_class_rem([{id: 'general_info', class: 'hidden'}]);
 
@@ -1771,9 +1812,11 @@ function handle(){
 
             if(id_in_decision === my_id){
                 post_class_rem([{id: 'premoves', class: 'hidden'}]);
-                post_inner_html([{id: 'textpremove1', str: 'Check/Fold'}, 
-                                 {id: 'textpremove2', str: 'Check'}, 
-                                 {id: 'textpremove3', str: 'Call any'}]);
+                post_inner_html([
+                    {id: 'textpremove1', str: 'Check/Fold'},
+                    {id: 'textpremove2', str: 'Check'},
+                    {id: 'textpremove3', str: 'Call any'}
+                ]);
                 premove('1', false);
             }
 
@@ -1785,9 +1828,11 @@ function handle(){
             if(id_in_decision === my_id){
 
                 post_class_rem([{id: 'premoves', class: 'hidden'}]);
-                post_inner_html([{id: 'textpremove1', str: 'Check/Fold'}, 
-                                 {id: 'textpremove2', str: 'Check'}, 
-                                 {id: 'textpremove3', str: 'Call any'}]);
+                post_inner_html([
+                    {id: 'textpremove1', str: 'Check/Fold'},
+                    {id: 'textpremove2', str: 'Check'},
+                    {id: 'textpremove3', str: 'Call any'}
+                ]);
 
                 premove('1', false);
             }
@@ -1803,18 +1848,22 @@ function handle(){
 
                 if(myself.stack + myself.gived > data.money){
 
-                    post_inner_html([{id: 'textpremove1', str: 'Fold'}, 
-                                 {id: 'textpremove2', str: 'Call ' + data.money}, 
-                                 {id: 'textpremove3', str: 'Call any'}]);
+                    post_inner_html([
+                        {id: 'textpremove1', str: 'Fold'},
+                        {id: 'textpremove2', str: 'Call ' + data.money},
+                        {id: 'textpremove3', str: 'Call any'}
+                    ]);
 
                 }
                 else{
 
                     post_class_add('premove3', 'hidden');
 
-                    post_inner_html([{id: 'textpremove1', str: 'Fold'}, 
-                                 {id: 'textpremove2', str: 'Call ' + data.money}, 
-                                 {id: 'textpremove3', str: ''}]);
+                    post_inner_html([
+                        {id: 'textpremove1', str: 'Fold'},
+                        {id: 'textpremove2', str: 'Call ' + data.money},
+                        {id: 'textpremove3', str: ''}
+                    ]);
 
                 }
 
@@ -1825,9 +1874,11 @@ function handle(){
             else if(id_in_decision === my_id){
 
                 post_class_rem([{id: 'premoves', class: 'hidden'}]);
-                post_inner_html([{id: 'textpremove1', str: 'Check/Fold'}, 
-                                 {id: 'textpremove2', str: 'Check'}, 
-                                 {id: 'textpremove3', str: 'Call any'}]);
+                post_inner_html([
+                    {id: 'textpremove1', str: 'Check/Fold'},
+                    {id: 'textpremove2', str: 'Check'},
+                    {id: 'textpremove3', str: 'Call any'}
+                ]);
 
                 premove('1', false);
             }
@@ -1843,18 +1894,22 @@ function handle(){
 
                 if(myself.stack + myself.gived > data.money){
 
-                    post_inner_html([{id: 'textpremove1', str: 'Fold'}, 
-                                 {id: 'textpremove2', str: 'Call ' + data.money}, 
-                                 {id: 'textpremove3', str: 'Call any'}]);
+                    post_inner_html([
+                        {id: 'textpremove1', str: 'Fold'},
+                        {id: 'textpremove2', str: 'Call ' + data.money},
+                        {id: 'textpremove3', str: 'Call any'}
+                    ]);
 
                 }
                 else{
 
                     post_class_add('premove3', 'hidden');
 
-                    post_inner_html([{id: 'textpremove1', str: 'Fold'}, 
-                                 {id: 'textpremove2', str: 'Call ' + data.money}, 
-                                 {id: 'textpremove3', str: ''}]);
+                    post_inner_html([
+                        {id: 'textpremove1', str: 'Fold'},
+                        {id: 'textpremove2', str: 'Call ' + data.money},
+                        {id: 'textpremove3', str: ''}
+                    ]);
 
                 }
 
@@ -1907,15 +1962,17 @@ function handle(){
 
         clear_decision();
 
-        post_src([{id: 'flop1', src: get_src(data.card1)}, 
-                  {id: 'flop2', src: get_src(data.card2)}, 
-                  {id: 'flop3', src: get_src(data.card3)}]);
+        post_src([
+            {id: 'flop1', src: get_src(data.card1)},
+            {id: 'flop2', src: get_src(data.card2)},
+            {id: 'flop3', src: get_src(data.card3)}
+        ]);
 
         if(reconnect_mode){
             handle();
         }
         else{
-            post_play_sound("fold");
+            post_play_sound('fold');
             setTimeout(handle, 10);
         }
 
@@ -1930,7 +1987,7 @@ function handle(){
             handle();
         }
         else{
-            post_play_sound("fold");
+            post_play_sound('fold');
             setTimeout(handle, 10);
         }
 
@@ -1945,7 +2002,7 @@ function handle(){
             handle();
         }
         else{
-            post_play_sound("fold");
+            post_play_sound('fold');
             setTimeout(handle, 10);
         }
 
@@ -1995,8 +2052,14 @@ function handle(){
         let chipstack_margin_left = get_margin_left(id_to_seat[data.id]);
         let chipstack_margin_top = get_margin_top(id_to_seat[data.id]);
 
-        chipstack = [data.id, _chipstack, chipstack_margin_left, chipstack_margin_top,
-                                   main_stack_margin_left, main_stack_margin_top];
+        chipstack = [
+            data.id,
+            _chipstack,
+            chipstack_margin_left,
+            chipstack_margin_top,
+            main_stack_margin_left,
+            main_stack_margin_top
+        ];
 
         let seat = seats.get(id_to_seat[data.id]);
         seat.stack += data.money;
@@ -2237,36 +2300,40 @@ function handle(){
         for(let i = 0; i < data.decisions.length; i++){
 
             if(data.decisions[i].type === 'fold'){
-                decisions += "<div class='button fold_button' onclick='post_set_decision(\"" + (i+1) + "\")'>Fold</div>";
+                decisions += `<div class='button fold_button' onclick='post_set_decision("${i+1}")'>Fold</div>`;
             }
             else if(data.decisions[i].type === 'check'){
-                decisions += "<div class='button call_button' onclick='post_set_decision(\"" + (i+1) + "\")'>Check</div>";
+                decisions += `<div class='button call_button' onclick='post_set_decision("${i+1}")'>Check</div>`;
             }
             else if(data.decisions[i].type === 'call'){
-                decisions += "<div class='button call_button' onclick='post_set_decision(\"" + (i+1) + "\")'>Call " + 
-                                                    shortcut_number_for_decision(data.decisions[i].money) + "</div>";
+                decisions += `<div class='button call_button' onclick='post_set_decision("${i+1}")'>
+                    Call ${shortcut_number_for_decision(data.decisions[i].money)}</div>`;
                 to_call = data.decisions[i].money;
             }
             else if(data.decisions[i].type === 'raise'){
-                decisions += "<div id=raise class='button raise_button' onclick='post_set_decision(\"" + (i+1) + 
-                                        " \" + document.getElementById(\"range\").value)'>Raise " + 
-                                        shortcut_number_for_decision(data.decisions[i].from) + "</div>";
+                decisions += `<div id=raise class='button raise_button' onclick=
+                                'post_set_decision("${i+1}" + document.getElementById("range").value)'>
+                                Raise ${shortcut_number_for_decision(data.decisions[i].from)}</div>`;
 
-                decisions += "<input id=range type=range min=" + data.decisions[i].from + " max=" + data.decisions[i].to + 
-                                    " step=1 onmousemove='document.getElementById(\"raise\").innerHTML = (this.value===this.max?\"All in \":\"Raise \")" +
-                                    "+ shortcut(this.value)' onchange='document.getElementById(\"raise\").innerHTML = " +
-                                    "(this.value===this.max?\"All in \":\"Raise \") + shortcut(this.value)' value=" + data.decisions[i].from + ">";
+                decisions += `<input id=range type=range min=${data.decisions[i].from} max=${data.decisions[i].to} 
+                                step=1 onmousemove='document.getElementById("raise").innerHTML = 
+                                (this.value === this.max? "All in ": "Raise ") + shortcut(this.value)' 
+                                onchange='document.getElementById("raise").innerHTML =
+                                (this.value === this.max? "All in ": "Raise ") + shortcut(this.value)' 
+                                value=${data.decisions[i].from}>`;
 
-                decisions += "<input id=textraise type=text class=input_button placeholder='input amount' onkeyup='post_textchange(this.value)'>";
+                decisions += `<input id=textraise type=text class=input_button placeholder='input amount' 
+                                onkeyup='post_textchange(this.value)'>`;
 
-                decisions += "<div class='button small_button minus_button' onclick='post_raise_minus()'>-</div>" +
-                                       "<div class='button small_button plus_button' onclick='post_raise_plus()'>+</div>" +
-                                       "<div class='button small_button pot_button' onclick='post_raise_pot()'>Pot</div>" +
-                                       "<div class='button small_button all_in_button' onclick='post_raise_all()'>All</div>";
+                decisions += `<div class='button small_button minus_button' onclick='post_raise_minus()'>-</div>
+                              <div class='button small_button plus_button' onclick='post_raise_plus()'>+</div>
+                              <div class='button small_button pot_button' onclick='post_raise_pot()'>Pot</div>
+                              <div class='button small_button all_in_button' onclick='post_raise_all()'>All</div>`;
             }
             else if(data.decisions[i].type === 'all in'){
-                decisions += "<div class='button " + (i === 2? "raise_button": "call_button") + "' onclick='post_set_decision(\"" + (i+1) + "\")'>All in " +
-                                                                            shortcut_number_for_decision(data.decisions[i].money) + "</div>";
+                decisions += `<div class='button ${i === 2? 'raise_button': 'call_button'}' 
+                                onclick='post_set_decision("${i+1}")'>
+                                All in ${shortcut_number_for_decision(data.decisions[i].money)}</div>`;
             }
 
         }
