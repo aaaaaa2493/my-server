@@ -3,70 +3,91 @@ onmessage = function(event){
 
     let data = event.data;
 
-    if(data.type === 'start'){
+    switch(data.type){
+        case 'start':
+            player_name = data.player_name;
+            table_to_spectate = data.table_to_spectate;
+            replay_id = data.replay_id;
+            back_addr = data.back_addr;
+            ip = data.ip;
+            port = data.port;
+            nick = data.nick;
+            start();
+            break;
 
-        player_name = data.player_name;
-        table_to_spectate = data.table_to_spectate;
-        replay_id = data.replay_id;
-        back_addr = data.back_addr;
-        ip = data.ip;
-        port = data.port;
-        nick = data.nick;
+        case 'raise minus':
+            raise_minus(data.value, data.max_value, data.min_value);
+            break;
 
-        start();
-    }
-    else if(data.type === 'raise minus'){
-        raise_minus(data.value, data.max_value, data.min_value);
-    }
-    else if(data.type === 'raise plus'){
-        raise_plus(data.value, data.max_value, data.min_value);
-    }
-    else if(data.type === 'raise all'){
-        raise_all(data.max_value);
-    }
-    else if(data.type === 'raise pot'){
-        raise_pot(data.max_value);
-    }
-    else if(data.type === 'textraise'){
-        text_change(data.text, data.max_value, data.min_value);
-    }
-    else if(data.type === 'socket close'){
-        socket.close();
-    }
-    else if(data.type === 'socket stay'){
-        socket.stay = true;
-        socket.close();
-    }
-    else if(data.type === 'socket clean'){
-        socket.clean = true;
-        socket.close();
-    }
-    else if(data.type === 'set decision'){
-        set_decision(data.value);
-    }
-    else if(data.type === 'pause play'){
-        replay_pause_play();
-    }
-    else if(data.type === 'next step'){
-        replay_next_step();
-    }
-    else if(data.type === 'prev hand'){
-        replay_prev_hand();
-    }
-    else if(data.type === 'next hand'){
-        replay_next_hand();
-    }
-    else if(data.type === 'tournament info'){
-        t_info_click();
-    }
-    else if(data.type === 'last hand info'){
-        lh_info_click();
-    }
-    else if(data.type === 'chat message'){
-        chat_message(data.key, data.text);
-    }
-    else if(data.type === 'premove'){
-        premove(data.answer, data.checked);
+        case 'raise plus':
+            raise_plus(data.value, data.max_value, data.min_value);
+            break;
+
+        case 'raise all':
+            raise_all(data.max_value);
+            break;
+
+        case 'raise pot':
+            raise_pot(data.max_value);
+            break;
+
+        case 'textraise':
+            text_change(data.text, data.max_value, data.min_value);
+            break;
+
+        case 'socket close':
+            socket.close();
+            break;
+
+        case 'socket stay':
+            socket.stay = true;
+            socket.close();
+            break;
+
+        case 'socket clean':
+            socket.clean = true;
+            socket.close();
+            break;
+
+        case 'set decision':
+            set_decision(data.value);
+            break;
+
+        case 'pause play':
+            replay_pause_play();
+            break;
+
+        case 'next step':
+            replay_next_step();
+            break;
+
+        case 'prev hand':
+            replay_prev_hand();
+            break;
+
+        case 'next hand':
+            replay_next_hand();
+            break;
+
+        case 'tournament info':
+            t_info_click();
+            break;
+
+        case 'last hand info':
+            lh_info_click();
+            break;
+
+        case 'chat message':
+            chat_message(data.key, data.text);
+            break;
+
+        case 'premove':
+            premove(data.answer, data.checked);
+            break;
+
+        default:
+            console.log(`Worker: bad type ${data.type}`);
+            break;
     }
 };
 
