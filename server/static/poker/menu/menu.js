@@ -27,7 +27,7 @@ function eraseCookie(name) {
     createCookie(name,"",-1);
 }
 
-function textchange(text){
+function text_change(text){
 
     if(text.length == 0){
         return;

@@ -29,7 +29,7 @@ function eraseCookie(name) {
     createCookie(name,"",-1);
 }
 
-function textchange(input){
+function text_change(input){
 
     text = input.value;
 
@@ -133,10 +133,10 @@ function start(){
 
 function create_game(){
 
-    textchange(document.getElementById('total_count'));
-    textchange(document.getElementById('unreal_count'));
-    textchange(document.getElementById('table_count'));
-    textchange(document.getElementById('chip_count'));
+    text_change(document.getElementById('total_count'));
+    text_change(document.getElementById('unreal_count'));
+    text_change(document.getElementById('table_count'));
+    text_change(document.getElementById('chip_count'));
 
     window.location='/poker/create/c?key=' + admin + 
                                     '&total_count=' + document.getElementById('total_count').value +
