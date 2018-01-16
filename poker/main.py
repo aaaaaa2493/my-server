@@ -6404,4 +6404,4 @@ class Run:
 
 
 if __name__ == '__main__':
-    Run(BasePlay.Mode.Parse)
+    Run(BasePlay.Mode.GameEngine)

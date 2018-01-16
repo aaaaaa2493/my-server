@@ -1,9 +1,14 @@
 class Handler{
-    constructor(){
+    constructor(socket){
         this.in_loop = false;
         this.reconnect_mode = false;
         this.wait_for_init = true;
+        this.spectate_mode = false;
+        this.replay_mode = false;
+        this.game_mode = false;
+        this.resit_mode = false;
         this.queue = [];
+        this.socket = socket;
     }
 
     async handle(){
@@ -21,13 +26,13 @@ class Handler{
             let data = this.queue.shift();
 
             if(data.type === 'broken'){
-                socket.close();
+                this.socket.close();
                 return;
             }
 
             if(data.type === 'finish'){
 
-                socket.clean = true;
+                this.socket.clean = true;
 
                 let to_general_info = data.msg;
                 to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
@@ -58,7 +63,7 @@ class Handler{
             if(data.type === 'reconnect end'){
                 this.reconnect_mode = false;
 
-                if(!spectate_mode && !resit_mode && !replay_mode){
+                if(!this.spectate_mode && !this.resit_mode && !this.replay_mode){
 
                     let to_general_info = 'Reconnection was successful.';
                     to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
@@ -68,12 +73,12 @@ class Handler{
 
                 }
 
-                resit_mode = false;
+                this.resit_mode = false;
 
                 continue;
             }
 
-            if(!this.reconnect_mode && this.wait_for_initialize && data.type !== 'init hand'){
+            if(!this.reconnect_mode && this.wait_for_init && data.type !== 'init hand'){
                 continue;
             }
 
@@ -161,7 +166,7 @@ class Handler{
                 break;
 
             case 'busted':
-                this.busted();
+                this.busted(data);
                 break;
 
             case 'clear':
@@ -199,6 +204,9 @@ class Handler{
             case 'set decision':
                 this.set_decision(data);
                 break;
+
+            default:
+                break;
             }
 
         }
@@ -207,13 +215,13 @@ class Handler{
     init_hand(data){
         let all_inner_html = [];
 
-        if(wait_for_initialize){
+        if(this.wait_for_init){
 
-            wait_for_initialize = false;
+            this.wait_for_init = false;
 
             let to_general_info;
 
-            if(!spectate_mode && !replay_mode){
+            if(!this.spectate_mode && !this.replay_mode){
                 to_general_info = 'Game started. Good luck!';
             }
             else{
@@ -236,7 +244,7 @@ class Handler{
                 {id: 'hand_num_short_info', class: 'hidden'}, {id: 'place_short_info', class: 'hidden'}, {id: 'chat', class: 'hidden'},
                 {id: 'big_blind', class: 'hidden'}, {id: 'small_blind', class: 'hidden'}, {id: 'ante', class: 'hidden'}]);
 
-            if(!replay_mode){
+            if(!this.replay_mode){
                 post_class_rem([{id: 'message', class: 'hidden'}]);
             }
 
@@ -269,7 +277,7 @@ class Handler{
             {id: 'ch6'}, {id: 'ch7'}, {id: 'ch8'}, {id: 'ch9'}
         ]);
 
-        if(replay_mode || spectate_mode){
+        if(this.replay_mode || this.spectate_mode){
             all_inner_html.push({id: 'place_short_info', str: shortcut_number_for_player(data.players_left)});
         }
 
@@ -280,13 +288,13 @@ class Handler{
         let players = data.players;
         table_number = data.table_number;
 
-        if(seats === undefined || replay_mode === true){
+        if(seats === undefined || this.replay_mode === true){
 
             seats_shift = 0;
 
             let need_to_shift = false;
 
-            if(!spectate_mode && !replay_mode){
+            if(!this.spectate_mode && !this.replay_mode){
                 for(let i = 0; i < players.length; i++){
                     if(players[i].controlled){
                         need_to_shift = true;
@@ -426,7 +434,7 @@ class Handler{
 
             for(let i = 0; i < players.length; i++){
 
-                if(players[i].id !== undefined){
+                if(players[i].id !== null){
 
                     let curr_seat = seats.get(id_to_seat[players[i].id]);
 
@@ -498,7 +506,7 @@ class Handler{
             curr_bb_id = data.info[1].id;
         }
 
-        if(!replay_mode && !spectate_mode){
+        if(!this.replay_mode && !this.spectate_mode){
 
             post_class_rem([{id: 'premoves', class: 'hidden'}]);
             is_in_game = true;
@@ -582,7 +590,7 @@ class Handler{
 
             if(seat.id !== undefined){
 
-                if(seat.chipstack_id !== 1 || (seat.chipstack_id === 1 && !resit_mode)){
+                if(seat.chipstack_id !== 1 || (seat.chipstack_id === 1 && !this.resit_mode)){
 
                     all_src.push({id: seat.card1, src: up_src});
                     all_src.push({id: seat.card2, src: up_src});
@@ -631,17 +639,10 @@ class Handler{
         else{
             update_info(data.id, 'New player');
         }
-
-        if(reconnect_mode){
-            handle();
-        }
-        else{
-            setTimeout(handle, 10);
-        }
     }
 
     resit(data){
-        resit_mode = true;
+        this.resit_mode = true;
 
         let all_inner_html = [];
 
@@ -799,12 +800,12 @@ class Handler{
                 made_controlled_player(true);
             }
 
-            if(id_to_seat[id_in_decision] === 1 && !spectate_mode && !replay_mode){
+            if(id_to_seat[id_in_decision] === 1 && !this.spectate_mode && !this.replay_mode){
 
                 post_src_hide(seat.card1, seat.card2);
 
             }
-            else if(replay_mode){
+            else if(this.replay_mode){
 
                 post_src_hide(seat.card1, seat.card2);
 
@@ -852,7 +853,7 @@ class Handler{
         }
         else if(data.result === 'raise'){
 
-            if(is_in_game && id_in_decision !== my_id && !spectate_mode && !replay_mode){
+            if(is_in_game && id_in_decision !== my_id && !this.spectate_mode && !this.replay_mode){
 
                 let myself = seats.get(id_to_seat[my_id]);
 
@@ -898,7 +899,7 @@ class Handler{
         }
         else if(data.result === 'all in'){
 
-            if(is_in_game && id_in_decision !== my_id && !spectate_mode && !replay_mode){
+            if(is_in_game && id_in_decision !== my_id && !this.spectate_mode && !this.replay_mode){
 
                 let myself = seats.get(id_to_seat[my_id]);
 
@@ -991,7 +992,7 @@ class Handler{
     open_cards(data){
         clear_decision();
 
-        if(!spectate_mode && !replay_mode){
+        if(!this.spectate_mode && !this.replay_mode){
             made_controlled_player(true);
             post_class_rem([{id: 'premove3', class: 'hidden'}]);
         }
@@ -1011,7 +1012,7 @@ class Handler{
     }
 
     give_money(data){
-        if(!spectate_mode && !replay_mode){
+        if(!this.spectate_mode && !this.replay_mode){
             made_controlled_player(true);
             post_class_rem([{id: 'premove3', class: 'hidden'}]);
         }
@@ -1040,7 +1041,7 @@ class Handler{
         main_stack.money -= data.money;
         set_bet(-1, main_stack.money);
 
-        if(!replay_in_pause && !reconnect_mode){
+        if(!replay_in_pause && !this.reconnect_mode){
 
             frames_last = frames_moving;
             cannot_move_chips = true;
@@ -1050,12 +1051,12 @@ class Handler{
         }
     }
 
-    money_results(data){
+    money_results(){
         console.log('money results');
     }
 
     hand_results(data){
-        if(!spectate_mode && !replay_mode){
+        if(!this.spectate_mode && !this.replay_mode){
             post_src([{id: 'your_first_info', src: get_src(first_card)}, {id: 'your_second_info', src: get_src(second_card)}]);
         }
 
@@ -1082,8 +1083,8 @@ class Handler{
         post_inner_html([{id: 'cards_reveal', str: table_fill}]);
     }
 
-    busted(){
-        socket.clean = true;
+    busted(data){
+        this.socket.clean = true;
 
         let to_general_info = 'You are busted! You finished ' + data.place + '.';
 
@@ -1104,7 +1105,7 @@ class Handler{
     }
 
     win(){
-        socket.clean = true;
+        this.socket.clean = true;
 
         let to_general_info = 'Congratulations! You are winner!';
         to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
@@ -1119,13 +1120,13 @@ class Handler{
     place(data){
         post_inner_html([{id: 'place_info', str: data.place}]);
 
-        if(!replay_mode && !spectate_mode){
+        if(!this.replay_mode && !this.spectate_mode){
             post_inner_html([{id: 'place_short_info', str: data.place + ' / ' + players_left}]);
         }
     }
 
     chat(data){
-         post_add_to_chat(data.text);
+        post_add_to_chat(data.text);
     }
 
     disconnected(data){
@@ -1143,7 +1144,7 @@ class Handler{
     }
 
     kick(){
-        socket.clean = true;
+        this.socket.clean = true;
 
         let to_general_info = 'You was kicked. You have 20 seconds to think now.';
         to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
@@ -1157,7 +1158,7 @@ class Handler{
         this.in_loop = false;
     }
 
-    back_counting(){
+    back_counting(data){
         update_info(data.id, data.time + ' sec');
     }
 
@@ -1212,7 +1213,7 @@ class Handler{
             }
             else if(data.decisions[i].type === 'raise'){
                 decisions += `<div id=raise class='button raise_button' onclick=
-                                'post_set_decision("${i+1}" + document.getElementById("range").value)'>
+                                'post_set_decision("${i+1} " + document.getElementById("range").value)'>
                                 Raise ${shortcut_number_for_decision(data.decisions[i].from)}</div>`;
 
                 decisions += `<input id=range type=range min=${data.decisions[i].from} max=${data.decisions[i].to} 
@@ -1243,6 +1244,119 @@ class Handler{
 
 }
 
+class GameHandler extends Handler{
+    constructor(name, socket){
+        super(socket);
+        this.name = name;
+        this.game_mode = true;
+    }
+
+    static create(name, socket){
+        return new GameHandler(name, socket);
+    }
+
+    open(){
+        this.socket.send('js ' + this.name);
+    }
+}
+
+class SpectatorHandler extends Handler{
+    constructor(table_and_nick, socket){
+        super(socket);
+        this.table_to_spectate = table_and_nick[0];
+        this.nick = table_and_nick[1];
+        this.spectate_mode = true;
+    }
+
+    open(){
+        post_inner_html([{id: 'sit_on', str: 'watch '}]);
+        post_inner_html([{id: 'you_are_on', str: ''}]);
+        post_inner_html([{id: 'your_cards', str: ''}]);
+
+        this.socket.send('sp ' + this.table_to_spectate);
+        this.socket.send(JSON.stringify({type: 'nick', nick: this.nick}));
+    }
+}
+
+class ReplayHandler extends Handler{
+    constructor(id, socket){
+        super(socket);
+        this.replay_id = id;
+        this.replay_mode = true;
+    }
+
+    open(){
+        post_inner_html([{id: 'sit_on', str: 'watch replay of '}]);
+        post_inner_html([{id: 'you_are_on', str: ''}]);
+        post_inner_html([{id: 'your_cards', str: ''}]);
+
+        post_class_rem([{id: 'replay_control', class: 'hidden'}]);
+        post_bigger_chat();
+
+        this.socket.send('rp ' + this.replay_id);
+    }
+}
+
+class Socket{
+    constructor(ip, port, back_addr){
+        this.ip = ip;
+        this.port = port;
+        this.back_addr = back_addr;
+    }
+
+    create_connection(name_entity, class_entity){
+
+        this.clean = false;
+        this.stay = false;
+
+        this.handler = new class_entity(name_entity, this);
+
+        this.socket = new WebSocket(`ws://${this.ip}:${this.port}`);
+
+        this.socket.onopen = () => this.handler.open();
+        this.socket.onclose = (e) => this.close(e);
+        this.socket.onmessage = (e) => this.message(e);
+
+        this.handler.handle();
+    }
+
+    close(event){
+        if(this.stay){
+            clear_table();
+
+            this.socket = undefined;
+            this.handler.loop = false;
+            seats = undefined;
+
+            post_inner_html([{id: 'players', str: ''}]);
+
+            this.create_connection([table_number, this.handler.name], SpectatorHandler);
+
+        } else {
+
+            if (event.wasClean || this.clean) {
+                console.log('Соединение закрыто чисто');
+            } else {
+                post_alert('Обрыв соединения');
+            }
+            //alert('Код: ' + event.code + ' причина: ' + event.reason);
+
+            post_location(this.back_addr);
+
+        }
+    }
+
+    message(event){
+        console.log(event.data);
+        this.handler.queue.push(JSON.parse(event.data));
+    }
+
+    send(message){
+        console.log('Websocket send ' + message);
+        this.socket.send(message);
+    }
+}
+
 onmessage = function(event){
     console.log('in worker: ', event.data);
 
@@ -1250,14 +1364,16 @@ onmessage = function(event){
 
     switch(data.type){
     case 'start':
-        player_name = data.player_name;
-        table_to_spectate = data.table_to_spectate;
-        replay_id = data.replay_id;
-        back_addr = data.back_addr;
-        ip = data.ip;
-        port = data.port;
-        nick = data.nick;
-        start();
+        new_socket = new Socket(data.ip, data.port, data.back_addr);
+        if(data.player_name !== ''){
+            new_socket.create_connection(data.player_name, GameHandler);
+        }
+        else if(data.table_to_spectate !== ''){
+            new_socket.create_connection([data.table_to_spectate, data.nick], SpectatorHandler);
+        }
+        else if(data.replay_id !== ''){
+            new_socket.create_connection(data.replay_id, ReplayHandler);
+        }
         break;
 
     case 'raise minus':
@@ -1281,17 +1397,17 @@ onmessage = function(event){
         break;
 
     case 'socket close':
-        socket.close();
+        new_socket.socket.close();
         break;
 
     case 'socket stay':
-        socket.stay = true;
-        socket.close();
+        new_socket.stay = true;
+        new_socket.socket.close();
         break;
 
     case 'socket clean':
-        socket.clean = true;
-        socket.close();
+        new_socket.clean = true;
+        new_socket.socket.close();
         break;
 
     case 'set decision':
@@ -1415,14 +1531,8 @@ const available_chips = [
     [1, '1']
 ];
 
-let socket;
-let player_name;
-let nick;
-let table_to_spectate;
-let replay_id;
-let back_addr;
-let ip;
-let port;
+let new_socket;
+
 let seats;
 let total_seats;
 let id_to_seat;
@@ -1437,9 +1547,6 @@ let table_number;
 let first_card;
 let players_left;
 let second_card;
-let spectate_mode = false;
-let replay_mode = false;
-let resit_mode = false;
 let premove_first = false;
 let premove_second = false;
 let premove_third = false;
@@ -1651,7 +1758,7 @@ function replay_pause_play(){
         post_class_add('replay_next_step', 'hidden');
         post_inner_html([{id: 'replay_pause_play', str: 'Pause'}]);
 
-        socket.send('play');
+        new_socket.send('play');
 
     }
     else{
@@ -1661,14 +1768,14 @@ function replay_pause_play(){
         post_class_rem([{id: 'replay_next_step', class: 'hidden'}]);
         post_inner_html([{id: 'replay_pause_play', str: 'Play'}]);
 
-        socket.send('pause');
+        new_socket.send('pause');
 
     }
 
 }
 
 function replay_next_step(){
-    socket.send('next step');
+    new_socket.send('next step');
 }
 
 function replay_prev_hand(){
@@ -1678,7 +1785,7 @@ function replay_prev_hand(){
         return;
     }
 
-    socket.send('prev hand');
+    new_socket.send('prev hand');
     post_inner_html([{id: 'chat', str: 'Chat:'}]);
     clearTimeout(interval_thinking);
 }
@@ -1690,7 +1797,7 @@ function replay_next_hand(){
         return;
     }
 
-    socket.send('next hand');
+    new_socket.send('next hand');
     post_inner_html([{id: 'chat', str: 'Chat:'}]);
     clearTimeout(interval_thinking);
 }
@@ -1809,8 +1916,8 @@ function chat_message(key, text){
 
         post_change_value('message', '');
 
-        if(!replay_mode){
-            socket.send(JSON.stringify({type: 'chat', text: text}));
+        if(!new_socket.handler.replay_mode){
+            new_socket.send(JSON.stringify({type: 'chat', text: text}));
         }
 
     }
@@ -1855,6 +1962,10 @@ function raise_pot(max_value){
     }
 
     let raise_amount = in_pot + 2 * to_call;
+
+    if(raise_amount > max_value){
+        raise_amount = max_value;
+    }
 
     post_change_value('range', raise_amount);
     post_inner_html([{id: 'raise', str: (raise_amount===max_value?'All in ':'Raise ') + shortcut_number_for_decision(raise_amount)}]);
@@ -1978,13 +2089,13 @@ function clear_decision(){
 function set_decision(to_send){
 
     post_inner_html([{id: 'decisions', str: ''}]);
-    socket.send(JSON.stringify({type: 'decision', text: to_send}));
+    new_socket.send(JSON.stringify({type: 'decision', text: to_send}));
 
 }
 
 function made_controlled_player(is_fold){
 
-    if(!spectate_mode && !replay_mode){
+    if(new_socket.handler.game_mode){
 
         premove('1', false);
 
@@ -2290,94 +2401,4 @@ function collect_money(){
 
     }
 
-}
-
-function socket_open(){
-
-
-    if((''+player_name) !== ''){
-
-        socket.send('js ' + player_name);
-
-    } else if ((''+table_to_spectate) !== ''){
-
-        spectate_mode = true;
-
-        post_inner_html([{id: 'sit_on', str: 'watch '}]);
-        post_inner_html([{id: 'you_are_on', str: ''}]);
-        post_inner_html([{id: 'your_cards', str: ''}]);
-
-        socket.send('sp ' + table_to_spectate);
-        socket.send(JSON.stringify({type: 'nick', nick: nick}));
-
-    } else if((''+replay_id) !== '') {
-
-        replay_mode = true;
-
-        post_inner_html([{id: 'sit_on', str: 'watch replay of '}]);
-        post_inner_html([{id: 'you_are_on', str: ''}]);
-        post_inner_html([{id: 'your_cards', str: ''}]);
-
-        post_class_rem([{id: 'replay_control', class: 'hidden'}]);
-        post_bigger_chat();
-
-        socket.send('rp ' + replay_id);
-
-    }
-
-}
-
-function socket_close(event){
-
-    if(socket.stay){
-
-        clear_table();
-
-        socket = undefined;
-        seats = undefined;
-        wait_for_initialize = true;
-
-        post_inner_html([{id: 'players', str: ''}]);
-
-        player_name = '';
-        table_to_spectate = table_number;
-        
-        start();
-
-    } else {
-
-        if (event.wasClean || socket.clean) {
-            console.log('Соединение закрыто чисто');
-        } else {
-            post_alert('Обрыв соединения');
-        }
-        //alert('Код: ' + event.code + ' причина: ' + event.reason);
-
-        post_location(back_addr);
-
-    }
-
-}
-
-function socket_message(event) {
-
-    console.log(event.data);
-    queue.push(JSON.parse(event.data));
-
-}
-
-function start(){
-
-    if(socket === undefined){
-        socket = new WebSocket('ws://' + ip + ':' + port);
-
-        socket.clean = false;
-        socket.stay = false;
-
-        socket.onopen = socket_open;
-        socket.onclose = socket_close;
-        socket.onmessage = socket_message;
-
-        setTimeout(handle, 10);
-    }
 }

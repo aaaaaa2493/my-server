@@ -23,18 +23,18 @@ from typing import List, Dict, Tuple
 
 class Debug:
     Debug = 1
-    PythonAndJSConnections = 1
-    ClientTriesToLogin = 1
-    SpectatorInit = 1
-    JSClientRestore = 1
-    GameEngineMessage = 1
-    JSResittingRestore = 1
-    MessageFromPythonToJS = 1
-    MessageFromTableToSpectator = 1
-    MessageReceivedFromJS = 1
-    MessageReceivedFromSpectator = 1
-    ClientLeft = 1
-    Errors = 1
+    PythonAndJSConnections = 0
+    ClientTriesToLogin = 0
+    SpectatorInit = 0
+    JSClientRestore = 0
+    GameEngineMessage = 0
+    JSResittingRestore = 0
+    MessageFromPythonToJS = 0
+    MessageFromTableToSpectator = 0
+    MessageReceivedFromJS = 0
+    MessageReceivedFromSpectator = 0
+    ClientLeft = 0
+    Errors = 0
 
     if PythonAndJSConnections:
         @staticmethod
@@ -856,7 +856,6 @@ class ReplayClient(AbstractClient):
         return output
 
     def handle_replay(self):
-
         num, table = self.name.split(':')
         hand = 0
 
