@@ -13,6 +13,7 @@ class Handler{
 
     async handle(){
         this.in_loop = true;
+
         while(this.in_loop) {
 
             if(!this.reconnect_mode){
@@ -38,8 +39,8 @@ class Handler{
                 to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
                                    'post_socket_close();\'>Ok</div>';
 
-                post_inner_html([{id: 'general_info', str: to_general_info}]);
-                post_class_rem([{id: 'general_info', class: 'hidden'}]);
+                worker.inner_html([{id: 'general_info', str: to_general_info}]);
+                worker.class_rem([{id: 'general_info', class: 'hidden'}]);
 
                 return;
             }
@@ -49,8 +50,8 @@ class Handler{
                 let to_general_info = data.msg;
                 to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
-                post_inner_html([{id: 'general_info', str: to_general_info}]);
-                post_class_rem([{id: 'general_info', class: 'hidden'}]);
+                worker.inner_html([{id: 'general_info', str: to_general_info}]);
+                worker.class_rem([{id: 'general_info', class: 'hidden'}]);
 
                 continue;
             }
@@ -68,8 +69,8 @@ class Handler{
                     let to_general_info = 'Reconnection was successful.';
                     to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
-                    post_inner_html([{id: 'general_info', str: to_general_info}]);
-                    post_class_rem([{id: 'general_info', class: 'hidden'}]);
+                    worker.inner_html([{id: 'general_info', str: to_general_info}]);
+                    worker.class_rem([{id: 'general_info', class: 'hidden'}]);
 
                 }
 
@@ -239,13 +240,13 @@ class Handler{
 
             all_inner_html.push({id: 'general_info', str: to_general_info});
 
-            post_class_rem([{id: 'general_info', class: 'hidden'}, {id: 'tournament_info_button', class: 'hidden'},
+            worker.class_rem([{id: 'general_info', class: 'hidden'}, {id: 'tournament_info_button', class: 'hidden'},
                 {id: 'last_hand_info_button', class: 'hidden'}, {id: 'table_num', class: 'hidden'},
                 {id: 'hand_num_short_info', class: 'hidden'}, {id: 'place_short_info', class: 'hidden'}, {id: 'chat', class: 'hidden'},
                 {id: 'big_blind', class: 'hidden'}, {id: 'small_blind', class: 'hidden'}, {id: 'ante', class: 'hidden'}]);
 
             if(!this.replay_mode){
-                post_class_rem([{id: 'message', class: 'hidden'}]);
+                worker.class_rem([{id: 'message', class: 'hidden'}]);
             }
 
         }
@@ -271,7 +272,7 @@ class Handler{
         all_inner_html.push({id: 'average_stack_info', str: shortcut_number_for_player(data.avg_stack)});
         all_inner_html.push({id: 'players_left_info', str: shortcut_number_for_player(data.players_left)});
 
-        post_remove_style([
+        worker.remove_style([
             {id: 'ch0'}, {id: 'ch1'}, {id: 'ch2'},
             {id: 'ch3'}, {id: 'ch4'}, {id: 'ch5'},
             {id: 'ch6'}, {id: 'ch7'}, {id: 'ch8'}, {id: 'ch9'}
@@ -342,7 +343,7 @@ class Handler{
             if(seats !== undefined){
                 for(let [,seat] of seats){
                     if(seat.id !== undefined && seat.disconnected){
-                        post_class_rem([{id: 'p' + seat.chipstack_id, class: 'is_disconnected'}]);
+                        worker.class_rem([{id: 'p' + seat.chipstack_id, class: 'is_disconnected'}]);
                     }
                 }
             }
@@ -457,7 +458,7 @@ class Handler{
 
         all_inner_html.push({id: 'top_players_info', str: top9_info});
 
-        post_inner_html(all_inner_html);
+        worker.inner_html(all_inner_html);
     }
 
     ante(data){
@@ -470,7 +471,7 @@ class Handler{
         }
 
         if(!this.reconnect_mode){
-            post_play_sound('chips');
+            worker.play_sound('chips');
         }
     }
 
@@ -478,18 +479,18 @@ class Handler{
         collect_money();
 
         if(!this.reconnect_mode){
-            post_play_sound('collect');
+            worker.play_sound('collect');
         }
     }
 
     blinds(data){
         let button_id = data.button;
 
-        post_class_rem([{id: 'dealer', class: 'd1'}, {id: 'dealer', class: 'd2'}, {id: 'dealer', class: 'd3'},
+        worker.class_rem([{id: 'dealer', class: 'd1'}, {id: 'dealer', class: 'd2'}, {id: 'dealer', class: 'd3'},
             {id: 'dealer', class: 'd4'}, {id: 'dealer', class: 'd5'}, {id: 'dealer', class: 'd6'},
             {id: 'dealer', class: 'd7'}, {id: 'dealer', class: 'd8'}, {id: 'dealer', class: 'd9'}]);
 
-        post_class_add('dealer', 'd' + id_to_seat[button_id]);
+        worker.class_add('dealer', 'd' + id_to_seat[button_id]);
 
         let curr_bb;
         let curr_bb_id;
@@ -508,18 +509,18 @@ class Handler{
 
         if(!this.replay_mode && !this.spectate_mode){
 
-            post_class_rem([{id: 'premoves', class: 'hidden'}]);
+            worker.class_rem([{id: 'premoves', class: 'hidden'}]);
             is_in_game = true;
 
             if(curr_bb_id === my_id){
-                post_inner_html([
+                worker.inner_html([
                     {id: 'textpremove1', str: 'Check/Fold'},
                     {id: 'textpremove2', str: 'Check'},
                     {id: 'textpremove3', str: 'Call any'}
                 ]);
             }
             else{
-                post_inner_html([
+                worker.inner_html([
                     {id: 'textpremove1', str: 'Fold'},
                     {id: 'textpremove2', str: 'Call ' + curr_bb},
                     {id: 'textpremove3', str: 'Call any'}
@@ -529,7 +530,7 @@ class Handler{
         }
 
         if(!this.reconnect_mode){
-            post_play_sound('chips');
+            worker.play_sound('chips');
         }
     }
 
@@ -544,14 +545,14 @@ class Handler{
 
         to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
-        post_inner_html([
+        worker.inner_html([
             {id: 'general_info', str: to_general_info},
             {id: 'big_blind_shortcut', str: shortcut_number_for_decision(data.bb)},
             {id: 'small_blind_shortcut', str: shortcut_number_for_decision(data.sb)},
             {id: 'ante_shortcut', str: shortcut_number_for_decision(data.ante)}
         ]);
 
-        post_class_rem([{id: 'general_info', class: 'hidden'}]);
+        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
     }
 
     give_cards(data){
@@ -578,7 +579,7 @@ class Handler{
 
         }
 
-        post_src(all_src);
+        worker.src(all_src);
     }
 
     deal_cards(){
@@ -599,7 +600,7 @@ class Handler{
             }
         }
 
-        post_src(all_src);
+        worker.src(all_src);
     }
 
     delete_player(data){
@@ -611,10 +612,10 @@ class Handler{
 
         if(seat.disconnected){
             seat.disconnected = false;
-            post_class_rem([{id: 'p' + seat.chipstack_id, class: 'is_disconnected'}]);
+            worker.class_rem([{id: 'p' + seat.chipstack_id, class: 'is_disconnected'}]);
         }
 
-        post_src([{id: seat.card1, src: get_src('ZZ')}, {id: seat.card2, src: get_src('ZZ')}]);
+        worker.src([{id: seat.card1, src: get_src('ZZ')}, {id: seat.card2, src: get_src('ZZ')}]);
 
         set_empty_seat_info(seat.chipstack_id);
 
@@ -633,7 +634,7 @@ class Handler{
         id_to_seat[seat.id] = real_seat_to_local_seat[data.seat];
 
         if(table_number === 0){
-            post_class_rem([{id: 'p' + real_seat_to_local_seat[data.seat], class: 'hidden'}]);
+            worker.class_rem([{id: 'p' + real_seat_to_local_seat[data.seat], class: 'hidden'}]);
             update_info(data.id, '');
         }
         else{
@@ -650,19 +651,19 @@ class Handler{
             let to_general_info = 'You was resit on final table.';
             to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
-            post_inner_html([{id: 'general_info', str: to_general_info}]);
-            post_class_rem([{id: 'general_info', class: 'hidden'}]);
+            worker.inner_html([{id: 'general_info', str: to_general_info}]);
+            worker.class_rem([{id: 'general_info', class: 'hidden'}]);
 
-            post_inner_html([{id: 'table_num_info', str: 'final table'}]);
+            worker.inner_html([{id: 'table_num_info', str: 'final table'}]);
         }
         else{
             let to_general_info = 'You was resit on table #' + data.table_number;
             to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
-            post_inner_html([{id: 'general_info', str: to_general_info}]);
-            post_class_rem([{id: 'general_info', class: 'hidden'}]);
+            worker.inner_html([{id: 'general_info', str: to_general_info}]);
+            worker.class_rem([{id: 'general_info', class: 'hidden'}]);
 
-            post_inner_html([{id: 'table_num_info', str: 'table #' + data.table_number}]);
+            worker.inner_html([{id: 'table_num_info', str: 'table #' + data.table_number}]);
         }
 
         let players = data.players;
@@ -705,7 +706,7 @@ class Handler{
 
         for(let [,seat] of seats){
             if(seat.id !== undefined && seat.disconnected){
-                post_class_rem([{id: 'p' + seat.chipstack_id, class: 'is_disconnected'}]);
+                worker.class_rem([{id: 'p' + seat.chipstack_id, class: 'is_disconnected'}]);
             }
         }
 
@@ -720,7 +721,7 @@ class Handler{
                 all_inner_html.push({id: 'p' + to_place[i], str:  players[i].name + '<br>' + shortcut_number_for_player(players[i].stack)});
 
                 if(players[i].disconnected){
-                    post_class_add('p' + to_place[i], 'is_disconnected');
+                    worker.class_add('p' + to_place[i], 'is_disconnected');
                 }
 
                 seats.set(to_place[i], {
@@ -753,7 +754,7 @@ class Handler{
 
                 if(data.table_number === 0){
 
-                    post_class_add('p' + to_place[i], 'hidden');
+                    worker.class_add('p' + to_place[i], 'hidden');
 
                 }
 
@@ -778,13 +779,13 @@ class Handler{
             }
         }
 
-        post_inner_html(all_inner_html);
+        worker.inner_html(all_inner_html);
     }
 
     switch_decision(data){
         clear_decision();
 
-        post_class_add('p' + id_to_seat[data.id], 'in_decision');
+        worker.class_add('p' + id_to_seat[data.id], 'in_decision');
 
         id_in_decision = data.id;
     }
@@ -802,17 +803,19 @@ class Handler{
 
             if(id_to_seat[id_in_decision] === 1 && !this.spectate_mode && !this.replay_mode){
 
-                post_src_hide(seat.card1, seat.card2);
+                worker.src_hide(seat.card1, seat.card2);
 
             }
             else if(this.replay_mode){
 
-                post_src_hide(seat.card1, seat.card2);
+                worker.src_hide(seat.card1, seat.card2);
 
             }
             else{
-                post_src([{id: seat.card1, src: get_src('ZZ')},
-                    {id: seat.card2, src: get_src('ZZ')}]);
+                worker.src([
+                    {id: seat.card1, src: get_src('ZZ')},
+                    {id: seat.card2, src: get_src('ZZ')}
+                ]);
 
             }
 
@@ -822,8 +825,8 @@ class Handler{
         else if(data.result === 'check'){
 
             if(id_in_decision === my_id){
-                post_class_rem([{id: 'premoves', class: 'hidden'}]);
-                post_inner_html([
+                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                worker.inner_html([
                     {id: 'textpremove1', str: 'Check/Fold'},
                     {id: 'textpremove2', str: 'Check'},
                     {id: 'textpremove3', str: 'Call any'}
@@ -838,8 +841,8 @@ class Handler{
 
             if(id_in_decision === my_id){
 
-                post_class_rem([{id: 'premoves', class: 'hidden'}]);
-                post_inner_html([
+                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                worker.inner_html([
                     {id: 'textpremove1', str: 'Check/Fold'},
                     {id: 'textpremove2', str: 'Check'},
                     {id: 'textpremove3', str: 'Call any'}
@@ -859,7 +862,7 @@ class Handler{
 
                 if(myself.stack + myself.gived > data.money){
 
-                    post_inner_html([
+                    worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
                         {id: 'textpremove2', str: 'Call ' + data.money},
                         {id: 'textpremove3', str: 'Call any'}
@@ -868,9 +871,9 @@ class Handler{
                 }
                 else{
 
-                    post_class_add('premove3', 'hidden');
+                    worker.class_add('premove3', 'hidden');
 
-                    post_inner_html([
+                    worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
                         {id: 'textpremove2', str: 'Call ' + data.money},
                         {id: 'textpremove3', str: ''}
@@ -884,8 +887,8 @@ class Handler{
             }
             else if(id_in_decision === my_id){
 
-                post_class_rem([{id: 'premoves', class: 'hidden'}]);
-                post_inner_html([
+                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                worker.inner_html([
                     {id: 'textpremove1', str: 'Check/Fold'},
                     {id: 'textpremove2', str: 'Check'},
                     {id: 'textpremove3', str: 'Call any'}
@@ -905,7 +908,7 @@ class Handler{
 
                 if(myself.stack + myself.gived > data.money){
 
-                    post_inner_html([
+                    worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
                         {id: 'textpremove2', str: 'Call ' + data.money},
                         {id: 'textpremove3', str: 'Call any'}
@@ -914,9 +917,9 @@ class Handler{
                 }
                 else{
 
-                    post_class_add('premove3', 'hidden');
+                    worker.class_add('premove3', 'hidden');
 
-                    post_inner_html([
+                    worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
                         {id: 'textpremove2', str: 'Call ' + data.money},
                         {id: 'textpremove3', str: ''}
@@ -936,17 +939,17 @@ class Handler{
 
         }
 
-        post_inner_html([{id: 'decisions', str: ''}]);
+        worker.inner_html([{id: 'decisions', str: ''}]);
 
         if(!this.reconnect_mode){
             if(data.result === 'all in' || data.result === 'raise' || data.result === 'call'){
-                post_play_sound('chips');
+                worker.play_sound('chips');
             }
             else if(data.result === 'fold'){
-                post_play_sound('fold');
+                worker.play_sound('fold');
             }
             else if(data.result === 'check'){
-                post_play_sound('check');
+                worker.play_sound('check');
             }
         }
     }
@@ -958,34 +961,34 @@ class Handler{
     flop(data){
         clear_decision();
 
-        post_src([
+        worker.src([
             {id: 'flop1', src: get_src(data.card1)},
             {id: 'flop2', src: get_src(data.card2)},
             {id: 'flop3', src: get_src(data.card3)}
         ]);
 
         if(!this.reconnect_mode){
-            post_play_sound('fold');
+            worker.play_sound('fold');
         }
     }
 
     turn(data){
         clear_decision();
 
-        post_src([{id: 'turn', src: get_src(data.card)}]);
+        worker.src([{id: 'turn', src: get_src(data.card)}]);
 
         if(!this.reconnect_mode){
-            post_play_sound('fold');
+            worker.play_sound('fold');
         }
     }
 
     river(data){
         clear_decision();
 
-        post_src([{id: 'river', src: get_src(data.card)}]);
+        worker.src([{id: 'river', src: get_src(data.card)}]);
 
         if(!this.reconnect_mode){
-            post_play_sound('fold');
+            worker.play_sound('fold');
         }
     }
 
@@ -994,7 +997,7 @@ class Handler{
 
         if(!this.spectate_mode && !this.replay_mode){
             made_controlled_player(true);
-            post_class_rem([{id: 'premove3', class: 'hidden'}]);
+            worker.class_rem([{id: 'premove3', class: 'hidden'}]);
         }
 
         let all_src = [];
@@ -1008,13 +1011,13 @@ class Handler{
 
         }
 
-        post_src(all_src);
+        worker.src(all_src);
     }
 
     give_money(data){
         if(!this.spectate_mode && !this.replay_mode){
             made_controlled_player(true);
-            post_class_rem([{id: 'premove3', class: 'hidden'}]);
+            worker.class_rem([{id: 'premove3', class: 'hidden'}]);
         }
 
         let _chipstack = 'ch' + id_to_seat[data.id];
@@ -1047,7 +1050,7 @@ class Handler{
             cannot_move_chips = true;
 
             move_stack_from_main();
-            post_play_sound('grab');
+            worker.play_sound('grab');
         }
     }
 
@@ -1057,10 +1060,10 @@ class Handler{
 
     hand_results(data){
         if(!this.spectate_mode && !this.replay_mode){
-            post_src([{id: 'your_first_info', src: get_src(first_card)}, {id: 'your_second_info', src: get_src(second_card)}]);
+            worker.src([{id: 'your_first_info', src: get_src(first_card)}, {id: 'your_second_info', src: get_src(second_card)}]);
         }
 
-        post_src([{id: 'flop1_info', src: get_src(data.flop1)}, {id: 'flop2_info', src: get_src(data.flop2)},
+        worker.src([{id: 'flop1_info', src: get_src(data.flop1)}, {id: 'flop2_info', src: get_src(data.flop2)},
             {id: 'flop3_info', src: get_src(data.flop3)}, {id: 'turn_info', src: get_src(data.turn)},
             {id: 'river_info', src: get_src(data.river)}]);
 
@@ -1080,7 +1083,7 @@ class Handler{
 
         }
 
-        post_inner_html([{id: 'cards_reveal', str: table_fill}]);
+        worker.inner_html([{id: 'cards_reveal', str: table_fill}]);
     }
 
     busted(data){
@@ -1094,8 +1097,8 @@ class Handler{
         to_general_info += '<div class="button in_general g2" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
                            'post_socket_close();\'>Quit</div>';
 
-        post_inner_html([{id: 'general_info', str: to_general_info}]);
-        post_class_rem([{id: 'general_info', class: 'hidden'}]);
+        worker.inner_html([{id: 'general_info', str: to_general_info}]);
+        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
 
         this.in_loop = false;
     }
@@ -1111,34 +1114,34 @@ class Handler{
         to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
                            'post_socket_close();\'>Ok</div>';
 
-        post_inner_html([{id: 'general_info', str: to_general_info}]);
-        post_class_rem([{id: 'general_info', class: 'hidden'}]);
+        worker.inner_html([{id: 'general_info', str: to_general_info}]);
+        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
 
         this.in_loop = false;
     }
 
     place(data){
-        post_inner_html([{id: 'place_info', str: data.place}]);
+        worker.inner_html([{id: 'place_info', str: data.place}]);
 
         if(!this.replay_mode && !this.spectate_mode){
-            post_inner_html([{id: 'place_short_info', str: data.place + ' / ' + players_left}]);
+            worker.inner_html([{id: 'place_short_info', str: data.place + ' / ' + players_left}]);
         }
     }
 
     chat(data){
-        post_add_to_chat(data.text);
+        worker.add_to_chat(data.text);
     }
 
     disconnected(data){
         if(id_to_seat[data.id] !== undefined){
-            post_class_add('p' + id_to_seat[data.id], 'is_disconnected');
+            worker.class_add('p' + id_to_seat[data.id], 'is_disconnected');
             let seat = seats.get(id_to_seat[data.id]);
             seat.disconnected = true;
         }
     }
 
     connected(data){
-        post_class_rem([{id: 'p' + id_to_seat[data.id], class: 'is_disconnected'}]);
+        worker.class_rem([{id: 'p' + id_to_seat[data.id], class: 'is_disconnected'}]);
         let seat = seats.get(id_to_seat[data.id]);
         seat.disconnected = false;
     }
@@ -1150,10 +1153,10 @@ class Handler{
         to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
                            'window.location=window.location;\'>Refresh</div>';
 
-        post_inner_html([{id: 'general_info', str: to_general_info}]);
-        post_class_rem([{id: 'general_info', class: 'hidden'}]);
+        worker.inner_html([{id: 'general_info', str: to_general_info}]);
+        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
 
-        post_inner_html([{id: 'decisions', str: ''}]);
+        worker.inner_html([{id: 'decisions', str: ''}]);
 
         this.in_loop = false;
     }
@@ -1192,9 +1195,9 @@ class Handler{
             return;
         }
 
-        post_class_rem([{id: 'premoves', class: 'hidden'}]);
+        worker.class_rem([{id: 'premoves', class: 'hidden'}]);
 
-        post_play_sound('attention');
+        worker.play_sound('attention');
 
         let decisions = '';
 
@@ -1239,7 +1242,7 @@ class Handler{
 
         }
 
-        post_inner_html([{id: 'decisions', str: decisions}]);
+        worker.inner_html([{id: 'decisions', str: decisions}]);
     }
 
 }
@@ -1249,10 +1252,6 @@ class GameHandler extends Handler{
         super(socket);
         this.name = name;
         this.game_mode = true;
-    }
-
-    static create(name, socket){
-        return new GameHandler(name, socket);
     }
 
     open(){
@@ -1269,9 +1268,9 @@ class SpectatorHandler extends Handler{
     }
 
     open(){
-        post_inner_html([{id: 'sit_on', str: 'watch '}]);
-        post_inner_html([{id: 'you_are_on', str: ''}]);
-        post_inner_html([{id: 'your_cards', str: ''}]);
+        worker.inner_html([{id: 'sit_on', str: 'watch '}]);
+        worker.inner_html([{id: 'you_are_on', str: ''}]);
+        worker.inner_html([{id: 'your_cards', str: ''}]);
 
         this.socket.send('sp ' + this.table_to_spectate);
         this.socket.send(JSON.stringify({type: 'nick', nick: this.nick}));
@@ -1286,12 +1285,12 @@ class ReplayHandler extends Handler{
     }
 
     open(){
-        post_inner_html([{id: 'sit_on', str: 'watch replay of '}]);
-        post_inner_html([{id: 'you_are_on', str: ''}]);
-        post_inner_html([{id: 'your_cards', str: ''}]);
+        worker.inner_html([{id: 'sit_on', str: 'watch replay of '}]);
+        worker.inner_html([{id: 'you_are_on', str: ''}]);
+        worker.inner_html([{id: 'your_cards', str: ''}]);
 
-        post_class_rem([{id: 'replay_control', class: 'hidden'}]);
-        post_bigger_chat();
+        worker.class_rem([{id: 'replay_control', class: 'hidden'}]);
+        worker.bigger_chat();
 
         this.socket.send('rp ' + this.replay_id);
     }
@@ -1314,8 +1313,8 @@ class Socket{
         this.socket = new WebSocket(`ws://${this.ip}:${this.port}`);
 
         this.socket.onopen = () => this.handler.open();
-        this.socket.onclose = (e) => this.close(e);
-        this.socket.onmessage = (e) => this.message(e);
+        this.socket.onclose = e => this.close(e);
+        this.socket.onmessage = e => this.message(e);
 
         this.handler.handle();
     }
@@ -1328,7 +1327,7 @@ class Socket{
             this.handler.loop = false;
             seats = undefined;
 
-            post_inner_html([{id: 'players', str: ''}]);
+            worker.inner_html([{id: 'players', str: ''}]);
 
             this.create_connection([table_number, this.handler.name], SpectatorHandler);
 
@@ -1337,11 +1336,11 @@ class Socket{
             if (event.wasClean || this.clean) {
                 console.log('Соединение закрыто чисто');
             } else {
-                post_alert('Обрыв соединения');
+                worker.alert('Обрыв соединения');
             }
             //alert('Код: ' + event.code + ' причина: ' + event.reason);
 
-            post_location(this.back_addr);
+            worker.location(this.back_addr);
 
         }
     }
@@ -1352,165 +1351,178 @@ class Socket{
     }
 
     send(message){
-        console.log('Websocket send ' + message);
+        console.log('WebSocket send ' + message);
         this.socket.send(message);
     }
 }
 
-onmessage = function(event){
-    console.log('in worker: ', event.data);
-
-    let data = event.data;
-
-    switch(data.type){
-    case 'start':
-        new_socket = new Socket(data.ip, data.port, data.back_addr);
-        if(data.player_name !== ''){
-            new_socket.create_connection(data.player_name, GameHandler);
-        }
-        else if(data.table_to_spectate !== ''){
-            new_socket.create_connection([data.table_to_spectate, data.nick], SpectatorHandler);
-        }
-        else if(data.replay_id !== ''){
-            new_socket.create_connection(data.replay_id, ReplayHandler);
-        }
-        break;
-
-    case 'raise minus':
-        raise_minus(data.value, data.max_value, data.min_value);
-        break;
-
-    case 'raise plus':
-        raise_plus(data.value, data.max_value, data.min_value);
-        break;
-
-    case 'raise all':
-        raise_all(data.max_value);
-        break;
-
-    case 'raise pot':
-        raise_pot(data.max_value);
-        break;
-
-    case 'textraise':
-        text_change(data.text, data.max_value, data.min_value);
-        break;
-
-    case 'socket close':
-        new_socket.socket.close();
-        break;
-
-    case 'socket stay':
-        new_socket.stay = true;
-        new_socket.socket.close();
-        break;
-
-    case 'socket clean':
-        new_socket.clean = true;
-        new_socket.socket.close();
-        break;
-
-    case 'set decision':
-        set_decision(data.value);
-        break;
-
-    case 'pause play':
-        replay_pause_play();
-        break;
-
-    case 'next step':
-        replay_next_step();
-        break;
-
-    case 'prev hand':
-        replay_prev_hand();
-        break;
-
-    case 'next hand':
-        replay_next_hand();
-        break;
-
-    case 'tournament info':
-        t_info_click();
-        break;
-
-    case 'last hand info':
-        lh_info_click();
-        break;
-
-    case 'chat message':
-        chat_message(data.key, data.text);
-        break;
-
-    case 'premove':
-        premove(data.answer, data.checked);
-        break;
-
-    default:
-        console.log(`Worker: bad type ${data.type}`);
-        break;
+class WorkerConnection{
+    constructor(){
+        console.log('Worker initialized');
     }
-};
 
-function post_inner_html(obj){
-    postMessage({type: 'inner html', obj: obj});
-}
+    message(event){
+        console.log('in worker: ', event.data);
 
-function post_change_value(id, value){
-    postMessage({type: 'change value', id: id, value: value});
-}
+        let data = event.data;
 
-function post_remove_style(obj){
-    postMessage({type: 'remove style', obj: obj});
-}
+        switch(data.type){
+        case 'start':
+            this.socket = new Socket(data.ip, data.port, data.back_addr);
+            if(data.player_name !== ''){
+                this.socket.create_connection(data.player_name, GameHandler);
+            }
+            else if(data.table_to_spectate !== ''){
+                this.socket.create_connection([data.table_to_spectate, data.nick], SpectatorHandler);
+            }
+            else if(data.replay_id !== ''){
+                this.socket.create_connection(data.replay_id, ReplayHandler);
+            }
+            break;
 
-function post_class_add(id, cls){
-    postMessage({type: 'class add', id: id, class: cls});
-}
+        case 'raise minus':
+            raise_minus(data.value, data.max_value, data.min_value);
+            break;
 
-function post_class_rem(obj){
-    postMessage({type: 'class rem', obj: obj});
-}
+        case 'raise plus':
+            raise_plus(data.value, data.max_value, data.min_value);
+            break;
 
-function post_src(obj){
-    postMessage({type: 'src', obj: obj});
-}
+        case 'raise all':
+            raise_all(data.max_value);
+            break;
 
-function post_src_hide(id1, id2){
-    postMessage({type: 'src hide', id1: id1, id2: id2});
-}
+        case 'raise pot':
+            raise_pot(data.max_value);
+            break;
 
-function post_margin(obj){
-    postMessage({type: 'margin', obj: obj});
-}
+        case 'textraise':
+            text_change(data.text, data.max_value, data.min_value);
+            break;
 
-function post_alert(msg){
-    postMessage({type: 'alert', msg: msg});
-}
+        case 'socket close':
+            this.socket.socket.close();
+            break;
 
-function post_location(location){
-    postMessage({type: 'location', to: location});
-}
+        case 'socket stay':
+            this.socket.stay = true;
+            this.socket.socket.close();
+            break;
 
-function post_play_sound(file){
-    if(!replay_in_pause){
-        postMessage({type: 'sound', file: get_sound(file)});
+        case 'socket clean':
+            this.socket.clean = true;
+            this.socket.socket.close();
+            break;
+
+        case 'set decision':
+            set_decision(data.value);
+            break;
+
+        case 'pause play':
+            replay_pause_play();
+            break;
+
+        case 'next step':
+            replay_next_step();
+            break;
+
+        case 'prev hand':
+            replay_prev_hand();
+            break;
+
+        case 'next hand':
+            replay_next_hand();
+            break;
+
+        case 'tournament info':
+            t_info_click();
+            break;
+
+        case 'last hand info':
+            lh_info_click();
+            break;
+
+        case 'chat message':
+            chat_message(data.key, data.text);
+            break;
+
+        case 'premove':
+            premove(data.answer, data.checked);
+            break;
+
+        default:
+            console.log(`Worker: bad type ${data.type}`);
+            break;
+        }
     }
+
+    send(obj){
+        postMessage(obj);
+    }
+
+    inner_html(obj){
+        this.send({type: 'inner html', obj: obj});
+    }
+
+    change_value(id, value){
+        this.send({type: 'change value', id: id, value: value});
+    }
+
+    remove_style(obj){
+        this.send({type: 'remove style', obj: obj});
+    }
+
+    class_add(id, cls){
+        this.send({type: 'class add', id: id, class: cls});
+    }
+
+    class_rem(obj){
+        this.send({type: 'class rem', obj: obj});
+    }
+
+    src(obj){
+        this.send({type: 'src', obj: obj});
+    }
+
+    src_hide(id1, id2){
+        this.send({type: 'src hide', id1: id1, id2: id2});
+    }
+
+    margin(obj){
+        this.send({type: 'margin', obj: obj});
+    }
+
+    alert(msg){
+        this.send({type: 'alert', msg: msg});
+    }
+
+    location(location){
+        this.send({type: 'location', to: location});
+    }
+
+    play_sound(file){
+        if(!replay_in_pause){
+            this.send({type: 'sound', file: get_sound(file)});
+        }
+    }
+
+    add_to_chat(text){
+        this.send({type: 'add to chat', text: text});
+    }
+
+    bigger_chat(){
+        this.send({type: 'bigger chat'});
+    }
+
+    set_premove(obj){
+        this.send({type: 'premove', obj: obj});
+    }
+
 }
 
-function post_add_to_chat(text){
-    postMessage({type: 'add to chat', text: text});
-}
+let worker = new WorkerConnection();
 
-function post_bigger_chat(){
-    postMessage({type: 'bigger chat'});
-}
-
-function post_set_premove(obj){
-    postMessage({type: 'premove', obj: obj});
-}
-
-console.log('in worker');
+onmessage = e => worker.message(e);
 
 const available_chips = [
     [1000000000, '16'],
@@ -1530,8 +1542,6 @@ const available_chips = [
     [5, '2'],
     [1, '1']
 ];
-
-let new_socket;
 
 let seats;
 let total_seats;
@@ -1755,27 +1765,27 @@ function replay_pause_play(){
 
         replay_in_pause = false;
 
-        post_class_add('replay_next_step', 'hidden');
-        post_inner_html([{id: 'replay_pause_play', str: 'Pause'}]);
+        worker.class_add('replay_next_step', 'hidden');
+        worker.inner_html([{id: 'replay_pause_play', str: 'Pause'}]);
 
-        new_socket.send('play');
+        worker.socket.send('play');
 
     }
     else{
 
         replay_in_pause = true;
 
-        post_class_rem([{id: 'replay_next_step', class: 'hidden'}]);
-        post_inner_html([{id: 'replay_pause_play', str: 'Play'}]);
+        worker.class_rem([{id: 'replay_next_step', class: 'hidden'}]);
+        worker.inner_html([{id: 'replay_pause_play', str: 'Play'}]);
 
-        new_socket.send('pause');
+        worker.socket.send('pause');
 
     }
 
 }
 
 function replay_next_step(){
-    new_socket.send('next step');
+    worker.socket.send('next step');
 }
 
 function replay_prev_hand(){
@@ -1785,8 +1795,8 @@ function replay_prev_hand(){
         return;
     }
 
-    new_socket.send('prev hand');
-    post_inner_html([{id: 'chat', str: 'Chat:'}]);
+    worker.socket.send('prev hand');
+    worker.inner_html([{id: 'chat', str: 'Chat:'}]);
     clearTimeout(interval_thinking);
 }
 
@@ -1797,8 +1807,8 @@ function replay_next_hand(){
         return;
     }
 
-    new_socket.send('next hand');
-    post_inner_html([{id: 'chat', str: 'Chat:'}]);
+    worker.socket.send('next hand');
+    worker.inner_html([{id: 'chat', str: 'Chat:'}]);
     clearTimeout(interval_thinking);
 }
 
@@ -1809,17 +1819,19 @@ function update_info(id, reason, count=0){
     }
 
     let seat = seats.get(id_to_seat[id]);
-    post_inner_html([{id: 'p' + id_to_seat[id], str: seat.name + '<br>' + shortcut_number_for_player(seat.stack) + '<br>' + reason}]);
+    worker.inner_html([
+        {id: 'p' + id_to_seat[id], str: seat.name + '<br>' + shortcut_number_for_player(seat.stack) + '<br>' + reason}
+    ]);
 
 }
 
 function set_empty_seat_info(seat){
 
     if(table_number === 0){
-        post_class_add('p' + seat, 'hidden');
+        worker.class_add('p' + seat, 'hidden');
     }
     else{
-        post_inner_html([{id: 'p' + seat, str: '<br>Empty seat'}]);
+        worker.inner_html([{id: 'p' + seat, str: '<br>Empty seat'}]);
     }
 
 }
@@ -1855,7 +1867,7 @@ function clear_table(){
 
     set_bet(-1, 0);
 
-    post_src(all_src);
+    worker.src(all_src);
 
 }
 
@@ -1863,7 +1875,7 @@ function text_change(text, max_value, min_value){
 
     if(text.length > 0) {
         if (text.length === 1 && text === '0') {
-            post_change_value('textraise', '');
+            worker.change_value('textraise', '');
         }
         else {
 
@@ -1886,7 +1898,7 @@ function text_change(text, max_value, min_value){
 
             }
 
-            post_change_value('textraise', new_text);
+            worker.change_value('textraise', new_text);
 
             if (new_text === '') {
                 new_text = min_value;
@@ -1901,8 +1913,8 @@ function text_change(text, max_value, min_value){
                 new_value = min_value;
             }
 
-            post_change_value('range', new_value);
-            post_inner_html([{
+            worker.change_value('range', new_value);
+            worker.inner_html([{
                 id: 'raise',
                 str: (new_value === max_value ? 'All in ' : 'Raise ') + shortcut_number_for_decision(new_value)
             }]);
@@ -1914,10 +1926,10 @@ function chat_message(key, text){
 
     if(key === 13 && text.length > 0){ // enter key is 13
 
-        post_change_value('message', '');
+        worker.change_value('message', '');
 
-        if(!new_socket.handler.replay_mode){
-            new_socket.send(JSON.stringify({type: 'chat', text: text}));
+        if(!worker.socket.handler.replay_mode){
+            worker.socket.send(JSON.stringify({type: 'chat', text: text}));
         }
 
     }
@@ -1928,8 +1940,8 @@ function raise_minus(value, max_value, min_value){
 
     let new_value = (+value) - (+min_value) > min_value? (+value) - (+min_value): min_value;
 
-    post_change_value('range', new_value);
-    post_inner_html([{id: 'raise', str: (new_value===max_value?'All in ':'Raise ') + shortcut_number_for_decision(new_value)}]);
+    worker.change_value('range', new_value);
+    worker.inner_html([{id: 'raise', str: (new_value===max_value?'All in ':'Raise ') + shortcut_number_for_decision(new_value)}]);
 
 }
 
@@ -1937,15 +1949,15 @@ function raise_plus(value, max_value, min_value){
 
     let new_value = (+value) + (+min_value) < max_value? (+value) + (+min_value) : max_value;
 
-    post_change_value('range', new_value);
-    post_inner_html([{id: 'raise', str: (new_value===max_value?'All in ':'Raise ') + shortcut_number_for_decision(new_value)}]);
+    worker.change_value('range', new_value);
+    worker.inner_html([{id: 'raise', str: (new_value===max_value?'All in ':'Raise ') + shortcut_number_for_decision(new_value)}]);
 
 }
 
 function raise_all(max_value){
 
-    post_change_value('range', max_value);
-    post_inner_html([{id: 'raise', str: 'All in ' + shortcut_number_for_decision(max_value)}]);
+    worker.change_value('range', max_value);
+    worker.inner_html([{id: 'raise', str: 'All in ' + shortcut_number_for_decision(max_value)}]);
 
 }
 
@@ -1967,8 +1979,10 @@ function raise_pot(max_value){
         raise_amount = max_value;
     }
 
-    post_change_value('range', raise_amount);
-    post_inner_html([{id: 'raise', str: (raise_amount===max_value?'All in ':'Raise ') + shortcut_number_for_decision(raise_amount)}]);
+    worker.change_value('range', raise_amount);
+    worker.inner_html([
+        {id: 'raise', str: (raise_amount===max_value?'All in ':'Raise ') + shortcut_number_for_decision(raise_amount)}
+    ]);
 
 }
 
@@ -1981,12 +1995,12 @@ function t_info_click(){
         }
 
         is_t_info_active = true;
-        post_class_rem([{id: 'tournament_info', class: 'hidden'}]);
+        worker.class_rem([{id: 'tournament_info', class: 'hidden'}]);
     }
     else{
 
         is_t_info_active = false;
-        post_class_add('tournament_info', 'hidden');
+        worker.class_add('tournament_info', 'hidden');
 
     }
 
@@ -2001,13 +2015,13 @@ function lh_info_click(){
         }
 
         is_lh_info_active = true;
-        post_class_rem([{id: 'last_hand_info', class: 'hidden'}]);
+        worker.class_rem([{id: 'last_hand_info', class: 'hidden'}]);
 
     }
     else{
 
         is_lh_info_active = false;
-        post_class_add('last_hand_info', 'hidden');
+        worker.class_add('last_hand_info', 'hidden');
 
     }
 
@@ -2042,7 +2056,7 @@ function premove(answer, checked){
 
     }
 
-    post_set_premove(all_premoves);
+    worker.set_premove(all_premoves);
 
 }
 
@@ -2083,28 +2097,28 @@ function clear_decision(){
 
     }
 
-    post_class_rem(all_rem);
+    worker.class_rem(all_rem);
 }
 
 function set_decision(to_send){
 
-    post_inner_html([{id: 'decisions', str: ''}]);
-    new_socket.send(JSON.stringify({type: 'decision', text: to_send}));
+    worker.inner_html([{id: 'decisions', str: ''}]);
+    worker.socket.send(JSON.stringify({type: 'decision', text: to_send}));
 
 }
 
 function made_controlled_player(is_fold){
 
-    if(new_socket.handler.game_mode){
+    if(worker.socket.handler.game_mode){
 
         premove('1', false);
 
         if(is_fold){
             is_in_game = false;
-            post_class_add('premoves', 'hidden');
+            worker.class_add('premoves', 'hidden');
         }
         else{
-            post_inner_html([
+            worker.inner_html([
                 {id: 'textpremove1', str: 'Check/Fold'},
                 {id: 'textpremove2', str: 'Check'},
                 {id: 'textpremove3', str: 'Call any'}
@@ -2140,7 +2154,7 @@ function set_bet(id, count, reason=''){
 
     }
 
-    post_inner_html([{id: 'pot_count', str: shortcut_number_for_player(pot_count)}]);
+    worker.inner_html([{id: 'pot_count', str: shortcut_number_for_player(pot_count)}]);
 
     let amounts = [];
 
@@ -2260,7 +2274,7 @@ function set_bet(id, count, reason=''){
 
     }
 
-    post_inner_html(all_chips);
+    worker.inner_html(all_chips);
 
 }
 
@@ -2286,7 +2300,7 @@ function move_stacks_to_main(){
 
         }
 
-        post_margin(all_margin);
+        worker.margin(all_margin);
 
         setTimeout(move_stacks_to_main, 10);
     }
@@ -2306,7 +2320,7 @@ function move_stacks_to_main(){
 
         set_bet(-1, main_stack.money);
 
-        post_margin(all_margin);
+        worker.margin(all_margin);
 
     }
 
@@ -2320,7 +2334,7 @@ function move_stack_from_main(){
 
         let percent_done = gauss[frames_last];
 
-        post_margin([{
+        worker.margin([{
             id: chipstack[1],
             left: (chipstack[2] + parseInt((chipstack[4] - chipstack[2]) * percent_done)) + 'px',
             top: (chipstack[3] + parseInt((chipstack[5] - chipstack[3]) * percent_done)) + 'px'
@@ -2332,7 +2346,7 @@ function move_stack_from_main(){
 
         cannot_move_chips = false;
 
-        post_margin([{id: chipstack[1], left: chipstack[2] + 'px', top: chipstack[3] + 'px'}]);
+        worker.margin([{id: chipstack[1], left: chipstack[2] + 'px', top: chipstack[3] + 'px'}]);
 
     }
 
@@ -2384,7 +2398,7 @@ function collect_money(){
 
     }
 
-    post_remove_style(all_chips);
+    worker.remove_style(all_chips);
 
     if(save_positions_chipstacks.length > 0){
 
