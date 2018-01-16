@@ -1405,7 +1405,6 @@ let premove_first = false;
 let premove_second = false;
 let premove_third = false;
 let replay_in_pause = false;
-let interval_thinking;
 let save_positions_chipstacks;
 let frames_moving = 50;
 let frames_last;
