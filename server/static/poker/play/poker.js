@@ -223,12 +223,12 @@ class Handler{
 
             let to_general_info;
 
-            if(!this.spectate_mode && !this.replay_mode){
+            if(this.game_mode){
                 to_general_info = 'Game started. Good luck!';
             }
             else{
 
-                if(data.table_number !== 0){
+                if(data.is_final){
                     to_general_info = 'You are watching table #' + data.table_number;
                 }
                 else{
@@ -253,7 +253,7 @@ class Handler{
         }
 
 
-        if(data.table_number === 0){
+        if(data.is_final){
             all_inner_html.push({id: 'table_num_info', str: 'final table'});
             all_inner_html.push({id: 'table_num', str: 'Final table'});
         }
@@ -274,9 +274,11 @@ class Handler{
         all_inner_html.push({id: 'players_left_info', str: shortcut_number_for_player(data.players_left)});
 
         worker.remove_style([
-            {id: 'ch0'}, {id: 'ch1'}, {id: 'ch2'},
-            {id: 'ch3'}, {id: 'ch4'}, {id: 'ch5'},
-            {id: 'ch6'}, {id: 'ch7'}, {id: 'ch8'}, {id: 'ch9'}
+            {id: 'ch0'}, {id: 'ch1'},
+            {id: 'ch2'}, {id: 'ch3'},
+            {id: 'ch4'}, {id: 'ch5'},
+            {id: 'ch6'}, {id: 'ch7'},
+            {id: 'ch8'}, {id: 'ch9'}
         ]);
 
         if(this.replay_mode || this.spectate_mode){
@@ -323,9 +325,11 @@ class Handler{
     blinds(data){
         let button_id = data.button;
 
-        worker.class_rem([{id: 'dealer', class: 'd1'}, {id: 'dealer', class: 'd2'}, {id: 'dealer', class: 'd3'},
+        worker.class_rem([
+            {id: 'dealer', class: 'd1'}, {id: 'dealer', class: 'd2'}, {id: 'dealer', class: 'd3'},
             {id: 'dealer', class: 'd4'}, {id: 'dealer', class: 'd5'}, {id: 'dealer', class: 'd6'},
-            {id: 'dealer', class: 'd7'}, {id: 'dealer', class: 'd8'}, {id: 'dealer', class: 'd9'}]);
+            {id: 'dealer', class: 'd7'}, {id: 'dealer', class: 'd8'}, {id: 'dealer', class: 'd9'}
+        ]);
 
         worker.class_add('dealer', 'd' + this.seats.id_to_local_seat[button_id]);
 
@@ -538,7 +542,7 @@ class Handler{
         }
         else if(data.result === 'raise'){
 
-            if(is_in_game && this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
+            if(this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
 
                 let myself = this.seats.get_by_id(this.seats.my_id);
 
@@ -584,7 +588,7 @@ class Handler{
         }
         else if(data.result === 'all in'){
 
-            if(is_in_game && this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
+            if(this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
 
                 let myself = this.seats.get_by_id(this.seats.my_id);
 
@@ -1000,7 +1004,7 @@ class Player{
         this.disconnected = data.disconnected;
         this.stack = data.stack;
         this.local_seat = local_seat;
-        this.chipstack = new Chipstack(local_seat, data.gived);
+        this.chipstack = new Chipstack(local_seat, 0);
         this.card1 = 'c' + local_seat + '1';
         this.card2 = 'c' + local_seat + '2';
     }
@@ -1024,22 +1028,16 @@ class Seats{
         let players = data.players;
         this.table_number = data.table_number;
 
-        this.is_final_table = data.is_final;
+        this.is_final = data.is_final;
 
         if (need_to_shift) {
-            for (let i = 0; i < players.length; i++) {
-                if (players[i].controlled) {
-                    this.my_id = players[i].id;
-                    break;
-                }
+
+            while (players[0].controlled === undefined || players[0].controlled === false) {
+                players.push(players.shift());
+                seats_shift++;
             }
 
-            if (need_to_shift) {
-                while (players[0].controlled === undefined || players[0].controlled === false) {
-                    players.push(players.shift());
-                    seats_shift++;
-                }
-            }
+            this.my_id = players[0].id;
         }
 
         let to_place;
@@ -1079,27 +1077,26 @@ class Seats{
 
         for (let i = 0; i < to_place.length; i++) {
 
+            this.real_seat_to_local_seat[(seats_shift + i) % data.seats] = to_place[i];
+
             if (players[i].id !== null) {
 
                 doc_players += `<div id=p${to_place[i]} class='player${players[i].disconnected ? ' is_disconnected' : ''}'>
                     ${players[i].name}<br>${shortcut_number_for_player(players[i].stack)}</div>`;
 
-                this.seats.set(to_place[i], new Player(players[i], to_place[i], (seats_shift + i) % data.seats));
+                this.seats.set(to_place[i], new Player(players[i], to_place[i]));
 
                 this.id_to_local_seat[players[i].id] = to_place[i];
-                this.real_seat_to_local_seat[(seats_shift + i) % data.seats] = to_place[i];
 
             }
             else {
 
-                if (data.table_number !== 0) {
+                if (!data.is_final) {
                     doc_players += '<div id="p' + to_place[i] + '" class="player"><br>Empty seat</div>';
                 }
                 else {
                     doc_players += '<div id="p' + to_place[i] + '" class="player hidden"><br>Empty seat</div>';
                 }
-
-                this.real_seat_to_local_seat[(seats_shift + i) % data.seats] = to_place[i];
 
             }
         }
@@ -1114,11 +1111,11 @@ class Seats{
     add_player(data){
         let local_seat = this.real_seat_to_local_seat[data.seat];
 
-        this.seats.set(local_seat, new Player(data, local_seat, data.seat));
+        this.seats.set(local_seat, new Player(data, local_seat));
 
-        this.id_to_local_seat[data.id] = this.real_seat_to_local_seat[data.seat];
+        this.id_to_local_seat[data.id] = local_seat;
 
-        if(this.is_final_table){
+        if(this.is_final){
             worker.class_rem([{id: 'p' + local_seat, class: 'hidden'}]);
             update_info(data.id, '');
         }
@@ -1134,7 +1131,7 @@ class Seats{
 
         set_empty_seat_info(seat.local_seat);
         
-        this.seats.delete(this.id_to_local_seat[id]);
+        this.seats.delete(seat.local_seat);
         this.id_to_local_seat[id] = undefined;
     }
 
@@ -1410,7 +1407,6 @@ let frames_moving = 50;
 let frames_last;
 let cannot_move_chips = false;
 let chipstack;
-let is_in_game = false;
 
 const gauss = [
     0, 0.001, 0.002, 0.003, 0.004, 0.006, 0.009, 0.013, 0.018, 0.024,
@@ -1428,6 +1424,10 @@ Array.prototype.remove = function(from, to) {
 
 function sleep(ms) {
     return new Promise(resolve => setTimeout(resolve, ms));
+}
+
+function print(str){
+    console.log(str);
 }
 
 function get_src(card){
