@@ -3027,12 +3027,13 @@ class Table:
 
             self.curr.add(player, result, money)
 
-    def __init__(self, game, _id: int, seats: int, blinds: Blinds, start_hand: int = 1):
+    def __init__(self, game, _id: int, seats: int, blinds: Blinds, is_final: bool, start_hand: int = 1):
 
         self.game = game
         self.id: int = _id
         self.in_game = False
         self.wait: bool = False
+        self.is_final: bool = is_final
         self.thread: Thread = None
         self.network: Network = None
         self.online: bool = False
@@ -3610,12 +3611,13 @@ class Game:
         self.blinds: Blinds = Blinds(blinds, self)
 
         if self.total_tables == 1:
-            self.tables: Table.Tables = [Table(self, 0, seats, self.blinds)]
+            self.tables: Table.Tables = [Table(self, 0, seats, self.blinds, True)]
             self.final_table = self.tables[0]
 
         else:
-            self.tables: Table.Tables = [Table(self, _id, seats, self.blinds) for _id in range(1, self.total_tables+1)]
-            self.final_table = Table(self, 0, self.total_seats, self.blinds)
+            self.tables: Table.Tables = [Table(self, _id, seats, self.blinds, False)
+                                         for _id in range(1, self.total_tables+1)]
+            self.final_table = Table(self, 0, self.total_seats, self.blinds, True)
 
         self.average_stack: int = None
         self.players_left: int = None
@@ -4115,6 +4117,7 @@ class Network:
         to_send['bb'] = table.blinds.big_blind
         to_send['avg_stack'] = game.average_stack
         to_send['players_left'] = game.players_left
+        to_send['is_final'] = table.is_final
 
         top_9 = list()
 
