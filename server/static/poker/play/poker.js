@@ -327,7 +327,7 @@ class Handler{
             {id: 'dealer', class: 'd4'}, {id: 'dealer', class: 'd5'}, {id: 'dealer', class: 'd6'},
             {id: 'dealer', class: 'd7'}, {id: 'dealer', class: 'd8'}, {id: 'dealer', class: 'd9'}]);
 
-        worker.class_add('dealer', 'd' + this.seats.id_to_seat[button_id]);
+        worker.class_add('dealer', 'd' + this.seats.id_to_local_seat[button_id]);
 
         let curr_bb;
         let curr_bb_id;
@@ -344,7 +344,7 @@ class Handler{
             curr_bb_id = data.info[1].id;
         }
 
-        if(!this.replay_mode && !this.spectate_mode){
+        if(this.game_mode){
 
             worker.class_rem([{id: 'premoves', class: 'hidden'}]);
             is_in_game = true;
@@ -397,9 +397,9 @@ class Handler{
 
         let all_src = [];
 
-        for(let [,seat] of this.seats.seats){
+        for(let seat of this.seats.all()){
 
-            if(seat.chipstack_id === 1){
+            if(seat.local_seat === 1){
 
                 all_src.push({id: seat.card1, src: get_src(data.first)});
                 all_src.push({id: seat.card2, src: get_src(data.second)});
@@ -407,11 +407,9 @@ class Handler{
                 first_card = data.first;
                 second_card = data.second;
             }
-            else if(seat.id !== undefined){
-
+            else{
                 all_src.push({id: seat.card1, src:  up_src});
                 all_src.push({id: seat.card2, src:  up_src});
-
             }
 
         }
@@ -424,16 +422,10 @@ class Handler{
 
         let all_src = [];
 
-        for(let [,seat] of this.seats.seats){
-
-            if(seat.id !== undefined){
-
-                if(seat.chipstack_id !== 1 || (seat.chipstack_id === 1 && !this.resit_mode)){
-
-                    all_src.push({id: seat.card1, src: up_src});
-                    all_src.push({id: seat.card2, src: up_src});
-
-                }
+        for(let seat of this.seats.all()){
+            if(seat.local_seat !== 1 || (seat.local_seat === 1 && !this.resit_mode)){
+                all_src.push({id: seat.card1, src: up_src});
+                all_src.push({id: seat.card2, src: up_src});
             }
         }
 
@@ -441,48 +433,17 @@ class Handler{
     }
 
     delete_player(data){
-        let seat = this.seats.seats.get(this.seats.id_to_seat[data.id]);
-
-        set_bet(data.id, 0);
-
-        seat.id = undefined;
-
-        if(seat.disconnected){
-            seat.disconnected = false;
-            worker.class_rem([{id: 'p' + seat.chipstack_id, class: 'is_disconnected'}]);
-        }
-
-        worker.src([{id: seat.card1, src: get_src('ZZ')}, {id: seat.card2, src: get_src('ZZ')}]);
-
-        set_empty_seat_info(seat.chipstack_id);
-
-        this.seats.id_to_seat[data.id] = undefined;
+        this.seats.delete_player(data.id);
     }
 
     add_player(data){
-        let seat = this.seats.seats.get(this.seats.real_seat_to_local_seat[data.seat]);
-
-        seat.id = data.id;
-        seat.gived = 0;
-        seat.name = data.name;
-        seat.stack = data.stack;
-        seat.disconnected = false;
-
-        this.seats.id_to_seat[seat.id] = this.seats.real_seat_to_local_seat[data.seat];
-
-        if(table_number === 0){
-            worker.class_rem([{id: 'p' + this.seats.real_seat_to_local_seat[data.seat], class: 'hidden'}]);
-            update_info(data.id, '');
-        }
-        else{
-            update_info(data.id, 'New player');
-        }
+        this.seats.add_player(data);
     }
 
     resit(data){
         this.resit_mode = true;
 
-        if(data.table_number === 0){
+        if(data.is_final){
             let to_general_info = 'You was resit on final table.';
             to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
@@ -507,7 +468,7 @@ class Handler{
     switch_decision(data){
         clear_decision();
 
-        worker.class_add('p' + this.seats.id_to_seat[data.id], 'in_decision');
+        worker.class_add('p' + this.seats.id_to_local_seat[data.id], 'in_decision');
 
         this.seats.id_in_decision = data.id;
     }
@@ -515,7 +476,7 @@ class Handler{
     made_decision(data){
         stop_thinking();
 
-        let seat = this.seats.seats.get(this.seats.id_to_seat[this.seats.id_in_decision]);
+        let seat = this.seats.get_by_id(this.seats.id_in_decision);
 
         if(data.result === 'fold'){
 
@@ -523,7 +484,7 @@ class Handler{
                 made_controlled_player(true);
             }
 
-            if(this.seats.id_to_seat[this.seats.id_in_decision] === 1 && !this.spectate_mode && !this.replay_mode){
+            if(this.seats.id_to_local_seat[this.seats.id_in_decision] === 1 && this.game_mode){
 
                 worker.src_hide(seat.card1, seat.card2);
 
@@ -580,9 +541,9 @@ class Handler{
 
             if(is_in_game && this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
 
-                let myself = this.seats.seats.get(this.seats.id_to_seat[this.seats.my_id]);
+                let myself = this.seats.get_by_id(this.seats.my_id);
 
-                if(myself.stack + myself.gived > data.money){
+                if(myself.chipstack.money + myself.gived > data.money){
 
                     worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
@@ -626,9 +587,9 @@ class Handler{
 
             if(is_in_game && this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
 
-                let myself = this.seats.seats.get(this.seats.id_to_seat[this.seats.my_id]);
+                let myself = this.seats.get_by_id(this.seats.my_id);
 
-                if(myself.stack + myself.gived > data.money){
+                if(myself.chipstack.money + myself.gived > data.money){
 
                     worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
@@ -677,7 +638,7 @@ class Handler{
     }
 
     excess_money(data){
-        set_bet(data.id, this.seats.seats.get(this.seats.id_to_seat[data.id]).gived - data.money);
+        set_bet(data.id, this.seats.get_by_id(data.id).gived - data.money);
     }
 
     flop(data){
@@ -726,7 +687,7 @@ class Handler{
 
         for(let i = 0; i < data.cards.length; i++){
 
-            let seat = this.seats.seats.get(this.seats.id_to_seat[data.cards[i].id]);
+            let seat = this.seats.get_by_id(data.cards[i].id);
 
             all_src.push({id: seat.card1, src: get_src(data.cards[i].card1)});
             all_src.push({id: seat.card2, src: get_src(data.cards[i].card2)});
@@ -737,18 +698,20 @@ class Handler{
     }
 
     give_money(data){
-        if(!this.spectate_mode && !this.replay_mode){
+        if(this.game_mode){
             made_controlled_player(true);
             worker.class_rem([{id: 'premove3', class: 'hidden'}]);
         }
 
-        let _chipstack = 'ch' + this.seats.id_to_seat[data.id];
+        let seat = this.seats.get_by_id(data.id);
+
+        let _chipstack = 'ch' + seat.local_seat;
 
         let main_stack_margin_left = get_margin_left(0);
         let main_stack_margin_top = get_margin_top(0);
 
-        let chipstack_margin_left = get_margin_left(this.seats.id_to_seat[data.id]);
-        let chipstack_margin_top = get_margin_top(this.seats.id_to_seat[data.id]);
+        let chipstack_margin_left = get_margin_left(seat.local_seat);
+        let chipstack_margin_top = get_margin_top(seat.local_seat);
 
         chipstack = [
             data.id,
@@ -759,8 +722,7 @@ class Handler{
             main_stack_margin_top
         ];
 
-        let seat = this.seats.seats.get(this.seats.id_to_seat[data.id]);
-        seat.stack += data.money;
+        seat.chipstack.money += data.money;
         set_bet(data.id, data.money, 'Win');
 
         this.seats.main_stack.money -= data.money;
@@ -855,16 +817,16 @@ class Handler{
     }
 
     disconnected(data){
-        if(this.seats.id_to_seat[data.id] !== undefined){
-            worker.class_add('p' + this.seats.id_to_seat[data.id], 'is_disconnected');
-            let seat = this.seats.seats.get(this.seats.id_to_seat[data.id]);
+        if(this.seats.id_to_local_seat[data.id] !== undefined){
+            let seat = this.seats.get_by_id(data.id);
+            worker.class_add('p' + seat.local_seat, 'is_disconnected');
             seat.disconnected = true;
         }
     }
 
     connected(data){
-        worker.class_rem([{id: 'p' + this.seats.id_to_seat[data.id], class: 'is_disconnected'}]);
-        let seat = this.seats.seats.get(this.seats.id_to_seat[data.id]);
+        let seat = this.seats.get_by_id(data.id);
+        worker.class_rem([{id: 'p' + seat.local_seat, class: 'is_disconnected'}]);
         seat.disconnected = false;
     }
 
@@ -1018,6 +980,38 @@ class ReplayHandler extends Handler{
     }
 }
 
+class Chipstack{
+    constructor(local_seat, money){
+        this.money = money;
+        this.ch11 = 'p' + local_seat + 'r1c1';
+        this.ch12 = 'p' + local_seat + 'r1c2';
+        this.ch13 = 'p' + local_seat + 'r1c3';
+        this.ch14 = 'p' + local_seat + 'r1c4';
+        this.ch21 = 'p' + local_seat + 'r2c1';
+        this.ch22 = 'p' + local_seat + 'r2c2';
+        this.ch23 = 'p' + local_seat + 'r2c3';
+        this.ch24 = 'p' + local_seat + 'r2c4';
+    }
+}
+
+class Player{
+    constructor(data, local_seat, real_seat){
+        this.id = data.id;
+        this.name = data.name;
+        this.real_seat = real_seat;
+        this.disconnected = data.disconnected;
+        this.gived = data.gived;
+        this.local_seat = local_seat;
+        this.chipstack = new Chipstack(local_seat, data.stack);
+        this.card1 = 'c' + local_seat + '1';
+        this.card2 = 'c' + local_seat + '2';
+    }
+
+    delete_cards(){
+        worker.src([{id: this.card1, src: get_src('ZZ')}, {id: this.card2, src: get_src('ZZ')}]);
+    }
+}
+
 class Seats{
     constructor(data, need_to_shift) {
 
@@ -1031,6 +1025,8 @@ class Seats{
 
         let players = data.players;
         this.table_number = data.table_number;
+
+        this.is_final_table = data.is_final;
 
         if (need_to_shift) {
             for (let i = 0; i < players.length; i++) {
@@ -1076,7 +1072,7 @@ class Seats{
         }
 
         this.seats = new Map();
-        this.id_to_seat = {};
+        this.id_to_local_seat = {};
         this.real_seat_to_local_seat = {};
 
         inner_html.push({id: 'players', str: ''});
@@ -1090,27 +1086,9 @@ class Seats{
                 doc_players += `<div id=p${to_place[i]} class='player${players[i].disconnected ? ' is_disconnected' : ''}'>
                     ${players[i].name}<br>${shortcut_number_for_player(players[i].stack)}</div>`;
 
-                this.seats.set(to_place[i], {
-                    'id': players[i].id,
-                    'name': players[i].name,
-                    'real_seat': (seats_shift + i) % data.seats,
-                    'stack': players[i].stack,
-                    'disconnected': players[i].disconnected,
-                    'gived': 0,
-                    'chipstack_id': to_place[i],
-                    'card1': 'c' + to_place[i] + '1',
-                    'card2': 'c' + to_place[i] + '2',
-                    'ch11': 'p' + to_place[i] + 'r1c1',
-                    'ch12': 'p' + to_place[i] + 'r1c2',
-                    'ch13': 'p' + to_place[i] + 'r1c3',
-                    'ch14': 'p' + to_place[i] + 'r1c4',
-                    'ch21': 'p' + to_place[i] + 'r2c1',
-                    'ch22': 'p' + to_place[i] + 'r2c2',
-                    'ch23': 'p' + to_place[i] + 'r2c3',
-                    'ch24': 'p' + to_place[i] + 'r2c4',
-                });
+                this.seats.set(to_place[i], new Player(players[i], to_place[i], (seats_shift + i) % data.seats));
 
-                this.id_to_seat[players[i].id] = to_place[i];
+                this.id_to_local_seat[players[i].id] = to_place[i];
                 this.real_seat_to_local_seat[(seats_shift + i) % data.seats] = to_place[i];
 
             }
@@ -1123,22 +1101,6 @@ class Seats{
                     doc_players += '<div id="p' + to_place[i] + '" class="player hidden"><br>Empty seat</div>';
                 }
 
-                this.seats.set(to_place[i], {
-                    'id': undefined,
-                    'real_seat': (seats_shift + i) % data.seats,
-                    'chipstack_id': to_place[i],
-                    'card1': 'c' + to_place[i] + '1',
-                    'card2': 'c' + to_place[i] + '2',
-                    'ch11': 'p' + to_place[i] + 'r1c1',
-                    'ch12': 'p' + to_place[i] + 'r1c2',
-                    'ch13': 'p' + to_place[i] + 'r1c3',
-                    'ch14': 'p' + to_place[i] + 'r1c4',
-                    'ch21': 'p' + to_place[i] + 'r2c1',
-                    'ch22': 'p' + to_place[i] + 'r2c2',
-                    'ch23': 'p' + to_place[i] + 'r2c3',
-                    'ch24': 'p' + to_place[i] + 'r2c4',
-                });
-
                 this.real_seat_to_local_seat[(seats_shift + i) % data.seats] = to_place[i];
 
             }
@@ -1146,19 +1108,46 @@ class Seats{
 
         inner_html.push({id: 'players', str: doc_players});
 
-        this.main_stack = {
-            'ch11': 'p0r1c1',
-            'ch12': 'p0r1c2',
-            'ch13': 'p0r1c3',
-            'ch14': 'p0r1c4',
-            'ch21': 'p0r2c1',
-            'ch22': 'p0r2c2',
-            'ch23': 'p0r2c3',
-            'ch24': 'p0r2c4',
-            'money': 0,
-        };
+        this.main_stack = new Chipstack('0', 0);
 
         worker.inner_html(inner_html);
+    }
+
+    add_player(data){
+        let local_seat = this.real_seat_to_local_seat[data.seat];
+
+        this.seats.set(local_seat, new Player(data, local_seat, data.seat));
+
+        this.id_to_local_seat[data.id] = this.real_seat_to_local_seat[data.seat];
+
+        if(this.is_final_table){
+            worker.class_rem([{id: 'p' + local_seat, class: 'hidden'}]);
+            update_info(data.id, '');
+        }
+        else{
+            update_info(data.id, 'New player');
+        }
+    }
+
+    delete_player(id){
+        let seat = this.get_by_id(id);
+
+        seat.delete_cards();
+
+        set_empty_seat_info(seat.local_seat);
+        
+        this.seats.delete(this.id_to_local_seat[id]);
+        this.id_to_local_seat[id] = undefined;
+    }
+
+    * all(){
+        for(let [,seat] of this.seats){
+            yield seat;
+        }
+    }
+
+    get_by_id(id){
+        return this.seats.get(this.id_to_local_seat[id]);
     }
 
 }
@@ -1192,8 +1181,6 @@ class Socket{
 
             this.socket = undefined;
             this.handler.loop = false;
-
-            worker.inner_html([{id: 'players', str: ''}]);
 
             this.create_connection([table_number, this.handler.name], SpectatorHandler);
 
@@ -1676,10 +1663,10 @@ function update_info(id, reason, count=0){
         reason = reason + ' ' + shortcut_number_for_decision(count);
     }
 
-    let seat = worker.socket.handler.seats.seats.get( worker.socket.handler.seats.id_to_seat[id]);
+    let seat = worker.socket.handler.seats.seats.get( worker.socket.handler.seats.id_to_local_seat[id]);
     worker.inner_html([
         {
-            id: 'p' + worker.socket.handler.seats.id_to_seat[id],
+            id: 'p' + worker.socket.handler.seats.id_to_local_seat[id],
             str: seat.name + '<br>' + shortcut_number_for_player(seat.stack) + '<br>' + reason
         }
     ]);
@@ -1687,7 +1674,7 @@ function update_info(id, reason, count=0){
 }
 
 function set_empty_seat_info(seat){
-
+// TODO : handle 'is_disconnected' attribute when setting empty
     if(table_number === 0){
         worker.class_add('p' + seat, 'hidden');
     }
@@ -1715,7 +1702,7 @@ function clear_table(){
 
     clear_decision();
 
-    for(let [,seat] of worker.socket.handler.seats.seats){
+    for(let seat of worker.socket.handler.seats.all()){
 
         all_src.push({id: seat.card1, src: zz_src});
         all_src.push({id: seat.card2, src: zz_src});
@@ -1997,7 +1984,7 @@ function set_bet(id, count, reason=''){
 
     if(id !== -1){
 
-        let seat = worker.socket.handler.seats.seats.get(worker.socket.handler.seats.id_to_seat[id]);
+        let seat = worker.socket.handler.seats.seats.get(worker.socket.handler.seats.id_to_local_seat[id]);
 
         seat.stack -= count - seat.gived;
         seat.gived = count;
@@ -2066,7 +2053,7 @@ function set_bet(id, count, reason=''){
         seat_to_set_bet = worker.socket.handler.seats.main_stack;
     }
     else{
-        seat_to_set_bet = worker.socket.handler.seats.seats.get(worker.socket.handler.seats.id_to_seat[id]);
+        seat_to_set_bet = worker.socket.handler.seats.seats.get(worker.socket.handler.seats.id_to_local_seat[id]);
     }
 
     let chip11 = seat_to_set_bet.ch11;
@@ -2229,22 +2216,22 @@ function collect_money(){
 
     let all_chips = [];
 
-    for(let [,seat] of worker.socket.handler.seats.seats){
+    for(let seat of worker.socket.handler.seats.all()){
 
-        if(seat.id !== undefined && seat.gived > 0){
+        if(seat.gived > 0){
 
             worker.socket.handler.seats.main_stack.money += seat.gived;
             seat.stack -= seat.gived;
 
-            chipstack = 'ch' + seat.chipstack_id;
+            chipstack = 'ch' + seat.local_seat;
 
             all_chips.push({id: chipstack});
 
-            let chipstack_margin_left = get_margin_left(seat.chipstack_id);
-            let chipstack_margin_top = get_margin_top(seat.chipstack_id);
+            let chipstack_margin_left = get_margin_left(seat.local_seat);
+            let chipstack_margin_top = get_margin_top(seat.local_seat);
 
             save_positions_chipstacks.push([
-                seat.chipstack_id,
+                seat.local_seat,
                 chipstack,
                 chipstack_margin_left,
                 chipstack_margin_top,
