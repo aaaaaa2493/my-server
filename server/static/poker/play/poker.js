@@ -474,7 +474,6 @@ class Handler{
     }
 
     made_decision(data){
-        stop_thinking();
 
         let seat = this.seats.get_by_id(this.seats.id_in_decision);
 
@@ -995,14 +994,13 @@ class Chipstack{
 }
 
 class Player{
-    constructor(data, local_seat, real_seat){
+    constructor(data, local_seat){
         this.id = data.id;
         this.name = data.name;
-        this.real_seat = real_seat;
         this.disconnected = data.disconnected;
-        this.gived = data.gived;
+        this.stack = data.stack;
         this.local_seat = local_seat;
-        this.chipstack = new Chipstack(local_seat, data.stack);
+        this.chipstack = new Chipstack(local_seat, data.gived);
         this.card1 = 'c' + local_seat + '1';
         this.card2 = 'c' + local_seat + '2';
     }
@@ -1604,8 +1602,6 @@ function get_margin_top(i){
 
 function replay_pause_play(){
 
-    clearTimeout(interval_thinking);
-
     if(replay_in_pause){
 
         replay_in_pause = false;
@@ -1642,7 +1638,6 @@ function replay_prev_hand(){
 
     worker.socket.send('prev hand');
     worker.inner_html([{id: 'chat', str: 'Chat:'}]);
-    clearTimeout(interval_thinking);
 }
 
 function replay_next_hand(){
@@ -1654,7 +1649,6 @@ function replay_next_hand(){
 
     worker.socket.send('next hand');
     worker.inner_html([{id: 'chat', str: 'Chat:'}]);
-    clearTimeout(interval_thinking);
 }
 
 function update_info(id, reason, count=0){
@@ -1682,10 +1676,6 @@ function set_empty_seat_info(seat){
         worker.inner_html([{id: 'p' + seat, str: '<br>Empty seat'}]);
     }
 
-}
-
-function stop_thinking(){
-    clearTimeout(interval_thinking);
 }
 
 function clear_table(){
