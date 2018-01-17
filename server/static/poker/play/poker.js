@@ -2027,23 +2027,23 @@ function set_bet(id, count, reason=''){
 
     }
 
-    let seat_to_set_bet;
+    let chipstack_to_set_bet;
 
     if(id === -1){
-        seat_to_set_bet = worker.socket.handler.seats.main_stack;
+        chipstack_to_set_bet = worker.socket.handler.seats.main_stack;
     }
     else{
-        seat_to_set_bet = worker.socket.handler.seats.get_by_id(id);
+        chipstack_to_set_bet = worker.socket.handler.seats.get_by_id(id).chipstack;
     }
 
-    let chip11 = seat_to_set_bet.ch11;
-    let chip12 = seat_to_set_bet.ch12;
-    let chip13 = seat_to_set_bet.ch13;
-    let chip14 = seat_to_set_bet.ch14;
-    let chip21 = seat_to_set_bet.ch21;
-    let chip22 = seat_to_set_bet.ch22;
-    let chip23 = seat_to_set_bet.ch23;
-    let chip24 = seat_to_set_bet.ch24;
+    let chip11 = chipstack_to_set_bet.ch11;
+    let chip12 = chipstack_to_set_bet.ch12;
+    let chip13 = chipstack_to_set_bet.ch13;
+    let chip14 = chipstack_to_set_bet.ch14;
+    let chip21 = chipstack_to_set_bet.ch21;
+    let chip22 = chipstack_to_set_bet.ch22;
+    let chip23 = chipstack_to_set_bet.ch23;
+    let chip24 = chipstack_to_set_bet.ch24;
 
     let all_chips = [
         {id: chip11, str: ''},
