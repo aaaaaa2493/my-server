@@ -6,6 +6,7 @@ class Handler{
         this.spectate_mode = false;
         this.replay_mode = false;
         this.game_mode = false;
+        this.in_game = false;
         this.resit_mode = false;
         this.queue = [];
         this.socket = socket;
@@ -351,7 +352,7 @@ class Handler{
         if(this.game_mode){
 
             worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-            is_in_game = true;
+            this.in_game = true;
 
             if(curr_bb_id === this.seats.my_id){
                 worker.inner_html([
@@ -363,7 +364,7 @@ class Handler{
             else{
                 worker.inner_html([
                     {id: 'textpremove1', str: 'Fold'},
-                    {id: 'textpremove2', str: 'Call ' + curr_bb},
+                    {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(curr_bb)},
                     {id: 'textpremove3', str: 'Call any'}
                 ]);
             }
@@ -403,13 +404,13 @@ class Handler{
 
         for(let seat of this.seats.all()){
 
-            if(seat.local_seat === 1){
+            if(seat.id === this.seats.my_id){
 
                 all_src.push({id: seat.card1, src: get_src(data.first)});
                 all_src.push({id: seat.card2, src: get_src(data.second)});
 
-                first_card = data.first;
-                second_card = data.second;
+                seat.first_card = data.first;
+                seat.second_card = data.second;
             }
             else{
                 all_src.push({id: seat.card1, src:  up_src});
@@ -542,15 +543,15 @@ class Handler{
         }
         else if(data.result === 'raise'){
 
-            if(this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
+            if(this.in_game && this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
 
                 let myself = this.seats.get_by_id(this.seats.my_id);
 
-                if(myself.chipstack.money + myself.gived > data.money){
+                if(myself.stack + myself.chipstack.money > data.money){
 
                     worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
-                        {id: 'textpremove2', str: 'Call ' + data.money},
+                        {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(data.money)},
                         {id: 'textpremove3', str: 'Call any'}
                     ]);
 
@@ -561,7 +562,7 @@ class Handler{
 
                     worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
-                        {id: 'textpremove2', str: 'Call ' + data.money},
+                        {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(data.money)},
                         {id: 'textpremove3', str: ''}
                     ]);
 
@@ -588,15 +589,15 @@ class Handler{
         }
         else if(data.result === 'all in'){
 
-            if(this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
+            if(this.in_game && this.seats.id_in_decision === this.seats.my_id && this.game_mode){
 
                 let myself = this.seats.get_by_id(this.seats.my_id);
 
-                if(myself.chipstack.money + myself.gived > data.money){
+                if(myself.stack + myself.chipstack.money > data.money){
 
                     worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
-                        {id: 'textpremove2', str: 'Call ' + data.money},
+                        {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(data.money)},
                         {id: 'textpremove3', str: 'Call any'}
                     ]);
 
@@ -607,7 +608,7 @@ class Handler{
 
                     worker.inner_html([
                         {id: 'textpremove1', str: 'Fold'},
-                        {id: 'textpremove2', str: 'Call ' + data.money},
+                        {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(data.money)},
                         {id: 'textpremove3', str: ''}
                     ]);
 
@@ -641,7 +642,7 @@ class Handler{
     }
 
     excess_money(data){
-        set_bet(data.id, this.seats.get_by_id(data.id).gived - data.money);
+        set_bet(data.id, this.seats.get_by_id(data.id).chipstack.money - data.money);
     }
 
     flop(data){
@@ -681,7 +682,7 @@ class Handler{
     open_cards(data){
         clear_decision();
 
-        if(!this.spectate_mode && !this.replay_mode){
+        if(this.game_mode){
             made_controlled_player(true);
             worker.class_rem([{id: 'premove3', class: 'hidden'}]);
         }
@@ -742,11 +743,11 @@ class Handler{
     }
 
     money_results(){
-        console.log('money results');
+        print('money results');
     }
 
     hand_results(data){
-        if(!this.spectate_mode && !this.replay_mode){
+        if(this.game_mode){
             worker.src([{id: 'your_first_info', src: get_src(first_card)}, {id: 'your_second_info', src: get_src(second_card)}]);
         }
 
@@ -877,7 +878,7 @@ class Handler{
             return;
         }
         else if(premove_third){
-            set_decision('2');
+            set_decision('2'); // because third is call any
             made_controlled_player(false);
             return;
         }
@@ -1656,10 +1657,10 @@ function update_info(id, reason, count=0){
         reason = reason + ' ' + shortcut_number_for_decision(count);
     }
 
-    let seat = worker.socket.handler.seats.seats.get( worker.socket.handler.seats.id_to_local_seat[id]);
+    let seat = worker.socket.handler.seats.get_by_id(id);
     worker.inner_html([
         {
-            id: 'p' + worker.socket.handler.seats.id_to_local_seat[id],
+            id: 'p' + seat.local_seat,
             str: seat.name + '<br>' + shortcut_number_for_player(seat.stack) + '<br>' + reason
         }
     ]);
@@ -1696,9 +1697,7 @@ function clear_table(){
         all_src.push({id: seat.card1, src: zz_src});
         all_src.push({id: seat.card2, src: zz_src});
 
-        if(seat.id !== undefined){
-            set_bet(seat.id, 0);
-        }
+        set_bet(seat.id, 0);
 
     }
 
@@ -1802,12 +1801,8 @@ function raise_pot(max_value){
 
     let in_pot = worker.socket.handler.seats.main_stack.money;
 
-    for(let [,seat] of worker.socket.handler.seats.seats){
-
-        if(seat.id !== undefined){
-            in_pot += seat.gived;
-        }
-
+    for(let seat of worker.socket.handler.seats.all()){
+        in_pot += seat.chipstack.money;
     }
 
     let raise_amount = in_pot + 2 * to_call;
@@ -1952,7 +1947,7 @@ function made_controlled_player(is_fold){
         premove('1', false);
 
         if(is_fold){
-            is_in_game = false;
+            worker.socket.handler.in_game = false;
             worker.class_add('premoves', 'hidden');
         }
         else{
@@ -1973,10 +1968,10 @@ function set_bet(id, count, reason=''){
 
     if(id !== -1){
 
-        let seat = worker.socket.handler.seats.seats.get(worker.socket.handler.seats.id_to_local_seat[id]);
+        let seat = worker.socket.handler.seats.get_by_id(id);
 
-        seat.stack -= count - seat.gived;
-        seat.gived = count;
+        seat.stack -= count - seat.chipstack.money;
+        seat.chipstack.money = count;
 
         update_info(id, reason, count);
 
@@ -1984,12 +1979,8 @@ function set_bet(id, count, reason=''){
 
     let pot_count = worker.socket.handler.seats.main_stack.money;
 
-    for(let [,seat] of worker.socket.handler.seats.seats){
-
-        if(seat.id !== undefined){
-            pot_count += seat.gived;
-        }
-
+    for(let seat of worker.socket.handler.seats.all()){
+        pot_count += seat.chipstack.money;
     }
 
     worker.inner_html([{id: 'pot_count', str: shortcut_number_for_player(pot_count)}]);
@@ -2042,7 +2033,7 @@ function set_bet(id, count, reason=''){
         seat_to_set_bet = worker.socket.handler.seats.main_stack;
     }
     else{
-        seat_to_set_bet = worker.socket.handler.seats.seats.get(worker.socket.handler.seats.id_to_local_seat[id]);
+        seat_to_set_bet = worker.socket.handler.seats.get_by_id(id);
     }
 
     let chip11 = seat_to_set_bet.ch11;
@@ -2207,10 +2198,10 @@ function collect_money(){
 
     for(let seat of worker.socket.handler.seats.all()){
 
-        if(seat.gived > 0){
+        if(seat.chipstack.money > 0){
 
-            worker.socket.handler.seats.main_stack.money += seat.gived;
-            seat.stack -= seat.gived;
+            worker.socket.handler.seats.main_stack.money += seat.chipstack.money;
+            seat.stack -= seat.chipstack.money;
 
             chipstack = 'ch' + seat.local_seat;
 
@@ -2228,7 +2219,7 @@ function collect_money(){
                 main_stack_margin_top
             ]);
 
-            if(replay_in_pause || this.reconnect_mode){
+            if(replay_in_pause || worker.socket.handler.reconnect_mode){
                 set_bet(seat.id, 0);
             }
 
@@ -2240,7 +2231,7 @@ function collect_money(){
 
     if(save_positions_chipstacks.length > 0){
 
-        if(!replay_in_pause && !this.reconnect_mode){
+        if(!replay_in_pause && !worker.socket.handler.reconnect_mode){
 
             frames_last = frames_moving;
             cannot_move_chips = true;
