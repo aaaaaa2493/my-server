@@ -2440,7 +2440,7 @@ class Players:
 
     TablePlayers = List[Optional[Player]]
 
-    def __init__(self, seats: int, _id: int):
+    def __init__(self, seats: int, _id: int, is_final: bool):
 
         self.players: Players.TablePlayers = [None] * seats
         self.controlled: Players.TablePlayers = []
@@ -2455,6 +2455,7 @@ class Players:
         self.wait_to_leave: int = 0
         self.total_seats: int = seats
         self.count: int = 0
+        self.is_final: bool = is_final
         self.game_without_small_blind: bool = False
         self.lock: Lock = Lock()
 
@@ -3045,7 +3046,7 @@ class Table:
         self.deck: Deck = Deck()
         self.blinds: Blinds = blinds
         self.board: Board = Board(self.deck, start_hand)
-        self.players: Players = Players(seats, _id)
+        self.players: Players = Players(seats, _id, is_final)
         self.history: Table.History = Table.History(start_hand)
 
     def __del__(self):
@@ -4266,6 +4267,7 @@ class Network:
 
         to_send['type'] = 'resit'
         to_send['table_number'] = players.id
+        to_send['is_final'] = players.is_final
 
         players_send = list()
 
