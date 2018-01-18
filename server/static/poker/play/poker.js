@@ -985,6 +985,53 @@ class ReplayHandler extends Handler{
         this.socket.send('rp ' + this.replay_id);
     }
 
+    pause_play(){
+        if(this.in_pause){
+
+            this.in_pause = false;
+
+            worker.class_add('replay_next_step', 'hidden');
+            worker.inner_html([{id: 'replay_pause_play', str: 'Pause'}]);
+
+            this.socket.send('play');
+
+        }
+        else{
+
+            this.in_pause = true;
+
+            worker.class_rem([{id: 'replay_next_step', class: 'hidden'}]);
+            worker.inner_html([{id: 'replay_pause_play', str: 'Play'}]);
+
+            this.socket.send('pause');
+
+        }
+    }
+
+    next_step(){
+        this.socket.send('next step');
+    }
+
+    async prev_hand(){
+
+        while(cannot_move_chips){
+            await sleep(10);
+        }
+
+        this.socket.send('prev hand');
+        worker.inner_html([{id: 'chat', str: 'Chat:'}]);
+    }
+
+    async next_hand(){
+
+        while(cannot_move_chips){
+            await sleep(10);
+        }
+
+        this.socket.send('next hand');
+        worker.inner_html([{id: 'chat', str: 'Chat:'}]);
+    }
+
     init_hand(data){
 
         if(this.wait_for_init){
@@ -1525,19 +1572,19 @@ class WorkerConnection{
             break;
 
         case 'pause play':
-            replay_pause_play();
+            this.socket.hamdler.pause_play();
             break;
 
         case 'next step':
-            replay_next_step();
+            this.socket.hamdler.next_step();
             break;
 
         case 'prev hand':
-            replay_prev_hand();
+            this.socket.hamdler.prev_hand();
             break;
 
         case 'next hand':
-            replay_next_hand();
+            this.socket.hamdler.next_hand();
             break;
 
         case 'tournament info':
@@ -1848,57 +1895,6 @@ function get_margin_top(i){
 
 }
 
-function replay_pause_play(){
-
-    if(worker.socket.handler.in_pause){
-
-        worker.socket.handler.in_pause = false;
-
-        worker.class_add('replay_next_step', 'hidden');
-        worker.inner_html([{id: 'replay_pause_play', str: 'Pause'}]);
-
-        worker.socket.send('play');
-
-    }
-    else{
-
-        worker.socket.handler.in_pause = true;
-
-        worker.class_rem([{id: 'replay_next_step', class: 'hidden'}]);
-        worker.inner_html([{id: 'replay_pause_play', str: 'Play'}]);
-
-        worker.socket.send('pause');
-
-    }
-
-}
-
-function replay_next_step(){
-    worker.socket.send('next step');
-}
-
-function replay_prev_hand(){
-
-    if(cannot_move_chips){
-        setTimeout(replay_prev_hand, 10);
-        return;
-    }
-
-    worker.socket.send('prev hand');
-    worker.inner_html([{id: 'chat', str: 'Chat:'}]);
-}
-
-function replay_next_hand(){
-
-    if(cannot_move_chips){
-        setTimeout(replay_next_hand, 10);
-        return;
-    }
-
-    worker.socket.send('next hand');
-    worker.inner_html([{id: 'chat', str: 'Chat:'}]);
-}
-
 function update_info(id, reason, count=0){
 
     if(reason !== '' && count > 0){
@@ -1915,13 +1911,13 @@ function update_info(id, reason, count=0){
 
 }
 
-function set_empty_seat_info(seat){
+function set_empty_seat_info(local_seat){
 // TODO : handle 'is_disconnected' attribute when setting empty
     if(worker.socket.handler.seats.is_final){
-        worker.class_add('p' + seat, 'hidden');
+        worker.class_add('p' + local_seat, 'hidden');
     }
     else{
-        worker.inner_html([{id: 'p' + seat, str: '<br>Empty seat'}]);
+        worker.inner_html([{id: 'p' + local_seat, str: '<br>Empty seat'}]);
     }
 
 }
