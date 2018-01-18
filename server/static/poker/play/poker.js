@@ -12,6 +12,7 @@ class Handler{
         this.seats = undefined;
         this.info = new InfoCreator();
         this.raises = new Raises(this);
+        this.tabs = new TabController();
     }
 
     async handle(){
@@ -1708,6 +1709,83 @@ class InfoCreator{
         ]);
     }
 
+}
+
+class TabController{
+    constructor(){
+        this.info = new InfoTab();
+        this.last_hand = new LastHandTab();
+
+        this.current = this.info;
+        this.is_visible = true;
+
+        this.find_tab = {
+            'info': this.info,
+            'last hand': this.last_hand
+        };
+    }
+
+    hide(){
+        if(this.is_visible){
+            this.is_visible = false;
+        }
+    }
+
+    show(){
+        if(!this.is_visible){
+            this.is_visible = true;
+        }
+    }
+
+    open(tab){
+        this.show();
+
+        let new_tab = this.find_tab[tab];
+
+        if(new_tab !== undefined && new_tab !== this.current){
+            this.current.deactivate();
+            this.current = new_tab;
+            this.current.activate();
+        }
+    }
+
+    message(message){
+        this.current.message(JSON.parse(message));
+    }
+}
+
+class BaseTab{
+    constructor(){
+        this.is_active = false;
+    }
+
+    activate(){
+        this.is_active = true;
+    }
+
+    deactivate(){
+        this.is_active = false;
+    }
+
+    message(){
+        print('BaseTab.message()');
+    }
+}
+
+class InfoTab extends BaseTab{
+    message(){
+        if(this.is_active){
+            print('InfoTab.message()');
+        }
+    }
+}
+
+class LastHandTab extends BaseTab{
+    message(){
+        if(this.is_active){
+            print('LastHandTab.message()');
+        }
+    }
 }
 
 class Socket{
