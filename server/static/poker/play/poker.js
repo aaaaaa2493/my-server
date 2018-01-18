@@ -11,6 +11,7 @@ class Handler{
         this.socket = socket;
         this.seats = undefined;
         this.info = new InfoCreator();
+        this.raises = new Raises(this);
     }
 
     async handle(){
@@ -1273,6 +1274,51 @@ class Seats{
 
 }
 
+class Raises{
+    constructor(handler){
+        this.handler = handler;
+    }
+
+    raise(value, is_max){
+        worker.change_value('range', value);
+        let text_value = shortcut_number_for_decision(value);
+        let action = is_max ? 'All in' : 'Raise';
+        worker.inner_html([
+            {id: 'raise', str: `${action} ${text_value}`}
+        ]);
+    }
+
+    minus(value, max_value, min_value){
+        let new_value = (+value) - (+min_value) > min_value ? (+value) - (+min_value) : min_value;
+        this.raise(new_value, new_value === max_value);
+    }
+
+    plus(value, max_value, min_value){
+        let new_value = (+value) + (+min_value) < max_value? (+value) + (+min_value) : max_value;
+        this.raise(new_value, new_value === max_value);
+    }
+
+    all(max_value){
+        this.raise(max_value, true);
+    }
+
+    pot(max_value){
+        let in_pot = this.handler.seats.main_stack.money;
+
+        for(let seat of this.handler.seats.all()){
+            in_pot += seat.chipstack.money;
+        }
+
+        let raise_amount = in_pot + 2 * this.handler.seats.to_call;
+
+        if(raise_amount > max_value){
+            raise_amount = max_value;
+        }
+
+        this.raise(raise_amount, raise_amount === max_value);
+    }
+}
+
 class Premoves{
     constructor(){
         this.first = false;
@@ -1534,19 +1580,19 @@ class WorkerConnection{
             break;
 
         case 'raise minus':
-            raise_minus(data.value, data.max_value, data.min_value);
+            this.socket.handler.raises.minus(data.value, data.max_value, data.min_value);
             break;
 
         case 'raise plus':
-            raise_plus(data.value, data.max_value, data.min_value);
+            this.socket.handler.raises.plus(data.value, data.max_value, data.min_value);
             break;
 
         case 'raise all':
-            raise_all(data.max_value);
+            this.socket.handler.raises.all(data.max_value);
             break;
 
         case 'raise pot':
-            raise_pot(data.max_value);
+            this.socket.handler.raises.pot(data.max_value);
             break;
 
         case 'textraise':
@@ -2013,53 +2059,6 @@ function chat_message(key, text){
         }
 
     }
-}
-
-
-function raise_minus(value, max_value, min_value){
-
-    let new_value = (+value) - (+min_value) > min_value? (+value) - (+min_value): min_value;
-
-    worker.change_value('range', new_value);
-    worker.inner_html([{id: 'raise', str: (new_value===max_value?'All in ':'Raise ') + shortcut_number_for_decision(new_value)}]);
-
-}
-
-function raise_plus(value, max_value, min_value){
-
-    let new_value = (+value) + (+min_value) < max_value? (+value) + (+min_value) : max_value;
-
-    worker.change_value('range', new_value);
-    worker.inner_html([{id: 'raise', str: (new_value===max_value?'All in ':'Raise ') + shortcut_number_for_decision(new_value)}]);
-
-}
-
-function raise_all(max_value){
-
-    worker.change_value('range', max_value);
-    worker.inner_html([{id: 'raise', str: 'All in ' + shortcut_number_for_decision(max_value)}]);
-
-}
-
-function raise_pot(max_value){
-
-    let in_pot = worker.socket.handler.seats.main_stack.money;
-
-    for(let seat of worker.socket.handler.seats.all()){
-        in_pot += seat.chipstack.money;
-    }
-
-    let raise_amount = in_pot + 2 * worker.socket.handler.seats.to_call;
-
-    if(raise_amount > max_value){
-        raise_amount = max_value;
-    }
-
-    worker.change_value('range', raise_amount);
-    worker.inner_html([
-        {id: 'raise', str: (raise_amount===max_value?'All in ':'Raise ') + shortcut_number_for_decision(raise_amount)}
-    ]);
-
 }
 
 function t_info_click(){
