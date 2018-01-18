@@ -19,7 +19,7 @@ class Handler{
         while(this.in_loop) {
 
             if(!this.reconnect_mode){
-                await sleep(100);
+                await sleep(10);
             }
 
             if(this.queue.length === 0){
@@ -495,7 +495,6 @@ class Handler{
     give_money(data){
 
         this.seats.clear_decision_states();
-        this.seats.clear_decisions();
 
         let seat = this.seats.get_by_id(data.id);
 
@@ -955,11 +954,12 @@ class SpectatorHandler extends Handler{
 
         if(this.wait_for_init){
             this.info.watching_table(data.table_number, data.is_final);
-            worker.inner_html([
-                {id: 'place_short_info', str: shortcut_number_for_player(data.players_left)}
-            ]);
             worker.class_rem([{id: 'message', class: 'hidden'}]);
         }
+
+        worker.inner_html([
+            {id: 'place_short_info', str: shortcut_number_for_player(data.players_left)}
+        ]);
         
         super.init_hand(data);
 
@@ -989,10 +989,11 @@ class ReplayHandler extends Handler{
 
         if(this.wait_for_init){
             this.info.watching_table(data.table_number, data.is_final);
-            worker.inner_html([
-                {id: 'place_short_info', str: shortcut_number_for_player(data.players_left)}
-            ]);
         }
+
+        worker.inner_html([
+            {id: 'place_short_info', str: shortcut_number_for_player(data.players_left)}
+        ]);
 
         super.init_hand(data);
 
