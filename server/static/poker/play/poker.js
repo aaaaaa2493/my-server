@@ -1908,19 +1908,19 @@ class WorkerConnection{
             break;
 
         case 'pause play':
-            this.socket.hamdler.pause_play();
+            this.socket.handler.pause_play();
             break;
 
         case 'next step':
-            this.socket.hamdler.next_step();
+            this.socket.handler.next_step();
             break;
 
         case 'prev hand':
-            this.socket.hamdler.prev_hand();
+            this.socket.handler.prev_hand();
             break;
 
         case 'next hand':
-            this.socket.hamdler.next_hand();
+            this.socket.handler.next_hand();
             break;
 
         case 'tournament info':
