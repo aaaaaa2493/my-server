@@ -216,6 +216,15 @@ class Handler{
         }
     }
 
+    chat_message(key, text){
+        if(key === 13 && text.length > 0){ // enter key is 13
+            worker.change_value('message', '');
+            if(!this.replay_mode){
+                worker.socket.send(JSON.stringify({type: 'chat', text: text}));
+            }
+        }
+    }
+
     init_hand(data){
         let all_inner_html = [];
 
@@ -290,7 +299,7 @@ class Handler{
 
         for(let i = 0; i < paid.length; i++){
 
-            set_bet(paid[i].id, paid[i].paid, 'Ante');
+            this.seats.set_bet(paid[i].id, paid[i].paid, 'Ante');
 
         }
 
@@ -327,11 +336,11 @@ class Handler{
         worker.class_add('dealer', 'd' + this.seats.id_to_local_seat[button_id]);
 
         if(data.info.length === 1){
-            set_bet(data.info[0].id, data.info[0].paid, 'BB');
+            this.seats.set_bet(data.info[0].id, data.info[0].paid, 'BB');
         }
         else{
-            set_bet(data.info[0].id, data.info[0].paid, 'SB');
-            set_bet(data.info[1].id, data.info[1].paid, 'BB');
+            this.seats.set_bet(data.info[0].id, data.info[0].paid, 'SB');
+            this.seats.set_bet(data.info[1].id, data.info[1].paid, 'BB');
         }
 
         if(!this.reconnect_mode){
@@ -398,23 +407,23 @@ class Handler{
         switch (data.result){
         case 'fold':
             worker.src_hide(seat.card1, seat.card2);
-            update_info(this.seats.id_in_decision, 'Fold');
+            this.seats.update_info(this.seats.id_in_decision, 'Fold');
             break;
 
         case 'check':
-            update_info(this.seats.id_in_decision, 'Check');
+            this.seats.update_info(this.seats.id_in_decision, 'Check');
             break;
 
         case 'call':
-            set_bet(this.seats.id_in_decision, data.money, 'Call');
+            this.seats.set_bet(this.seats.id_in_decision, data.money, 'Call');
             break;
 
         case 'raise':
-            set_bet(this.seats.id_in_decision, data.money, 'Raise');
+            this.seats.set_bet(this.seats.id_in_decision, data.money, 'Raise');
             break;
 
         case 'all in':
-            set_bet(this.seats.id_in_decision, data.money, 'All in');
+            this.seats.set_bet(this.seats.id_in_decision, data.money, 'All in');
             break;
 
         default:
@@ -435,7 +444,7 @@ class Handler{
     }
 
     excess_money(data){
-        set_bet(data.id, this.seats.get_by_id(data.id).chipstack.money - data.money);
+        this.seats.set_bet(data.id, this.seats.get_by_id(data.id).chipstack.money - data.money);
     }
 
     flop(data){
@@ -517,10 +526,10 @@ class Handler{
         ];
 
         seat.chipstack.money += data.money;
-        set_bet(data.id, data.money, 'Win');
+        this.seats.set_bet(data.id, data.money, 'Win');
 
         this.seats.main_stack.money -= data.money;
-        set_bet(-1, this.seats.main_stack.money);
+        this.seats.set_bet(-1, this.seats.main_stack.money);
 
         if(!this.in_pause && !this.reconnect_mode){
 
@@ -570,7 +579,7 @@ class Handler{
     }
 
     clear(){
-        clear_table();
+        this.seats.clear();
     }
 
     win(){
@@ -608,7 +617,7 @@ class Handler{
     }
 
     back_counting(data){
-        update_info(data.id, data.time + ' sec');
+        this.seats.update_info(data.id, data.time + ' sec');
     }
 
     set_decision(){
@@ -633,6 +642,11 @@ class GameHandler extends Handler{
 
     premove(num_answer, is_checked){
         this.premoves.set(num_answer, is_checked);
+    }
+
+    send_decision(to_send){
+        worker.inner_html([{id: 'decisions', str: ''}]);
+        this.socket.send(JSON.stringify({type: 'decision', text: to_send}));
     }
 
     init_hand(data){
@@ -861,24 +875,24 @@ class GameHandler extends Handler{
         // all premoves checking flags stays in 'this.made_decision' method
         if(this.premoves.first){
             if(data.decisions[1].type === 'check'){
-                set_decision('2'); // if 'check/fold' then autoclick 'check'
+                this.send_decision('2'); // if 'check/fold' then autoclick 'check'
                 // but 'check/fold' flag stays so if someone raises then autoclick 'fold'
                 return;
             }
             else{
                 // autoclick 'fold'
-                set_decision('1');
+                this.send_decision('1');
                 return;
             }
         }
         else if(this.premoves.second){
             // autoclick 'call'
-            set_decision('2');
+            this.send_decision('2');
             return;
         }
         else if(this.premoves.third){
             // because third is 'call any' so autoclick 'call'
-            set_decision('2');
+            this.send_decision('2');
             return;
         }
 
@@ -1198,10 +1212,10 @@ class Seats{
 
         if(this.is_final){
             worker.class_rem([{id: 'p' + local_seat, class: 'hidden'}]);
-            update_info(data.id, '');
+            this.update_info(data.id, '');
         }
         else{
-            update_info(data.id, 'New player');
+            this.update_info(data.id, 'New player');
         }
     }
 
@@ -1210,7 +1224,7 @@ class Seats{
 
         seat.delete_cards();
 
-        set_empty_seat_info(seat.local_seat);
+        this.set_empty_seat(seat.local_seat);
         
         this.seats.delete(seat.local_seat);
         this.id_to_local_seat[id] = undefined;
@@ -1228,7 +1242,7 @@ class Seats{
 
     clear_decisions(){
         for(let seat of worker.socket.handler.seats.all()){
-            update_info(seat.id, '');
+            this.update_info(seat.id, '');
         }
     }
 
@@ -1272,6 +1286,204 @@ class Seats{
         worker.class_rem(all_rem);
     }
 
+    set_bet(id, count, reason=''){
+
+        if(id !== -1){
+
+            let seat = this.get_by_id(id);
+
+            seat.stack -= count - seat.chipstack.money;
+            seat.chipstack.money = count;
+
+            this.update_info(id, reason, count);
+
+        }
+
+        let pot_count = this.main_stack.money;
+
+        for(let seat of this.all()){
+            pot_count += seat.chipstack.money;
+        }
+
+        worker.inner_html([
+            {id: 'pot_count', str: shortcut_number_for_player(pot_count)}
+        ]);
+
+        let amounts = [];
+
+        for(let i = 0; i < available_chips.length; i++){
+            if(count >= available_chips[i][0]){
+                let int_amount = parseInt(count / available_chips[i][0]);
+                amounts.push([available_chips[i][1], int_amount]);
+                count -= int_amount * available_chips[i][0];
+            }
+        }
+
+        while(amounts.length > 8){
+
+            let min_betweens = -1;
+            let index_betweens = -1;
+
+            for(let i = 0; i < amounts.length - 1; i++){
+
+                let curr_between = 0;
+
+                for(let j = 1; j < amounts[i].length; j += 2){
+                    curr_between += amounts[i][j];
+                }
+
+                for(let j = 1; j < amounts[i+1].length; j += 2){
+                    curr_between += amounts[i+1][j];
+                }
+
+                if(curr_between <= min_betweens || min_betweens === -1){
+                    min_betweens = curr_between;
+                    index_betweens = i;
+                }
+
+            }
+
+            for(let i = 0; i < amounts[index_betweens + 1].length; i++){
+                amounts[index_betweens].push(amounts[index_betweens + 1][i]);
+            }
+
+            amounts.remove(index_betweens + 1);
+
+        }
+
+        let chipstack_to_set_bet;
+
+        if(id === -1){
+            chipstack_to_set_bet = this.main_stack;
+        }
+        else{
+            chipstack_to_set_bet = this.get_by_id(id).chipstack;
+        }
+
+        let chip11 = chipstack_to_set_bet.ch11;
+        let chip12 = chipstack_to_set_bet.ch12;
+        let chip13 = chipstack_to_set_bet.ch13;
+        let chip14 = chipstack_to_set_bet.ch14;
+        let chip21 = chipstack_to_set_bet.ch21;
+        let chip22 = chipstack_to_set_bet.ch22;
+        let chip23 = chipstack_to_set_bet.ch23;
+        let chip24 = chipstack_to_set_bet.ch24;
+
+        let all_chips = [
+            {id: chip11, str: ''},
+            {id: chip12, str: ''},
+            {id: chip13, str: ''},
+            {id: chip14, str: ''},
+            {id: chip21, str: ''},
+            {id: chip22, str: ''},
+            {id: chip23, str: ''},
+            {id: chip24, str: ''}
+        ];
+
+        let chip_order;
+
+        if(amounts.length === 8){
+            chip_order = [chip21, chip22, chip23, chip24, chip11, chip12, chip13, chip14];
+        }
+        else if(amounts.length === 7){
+            chip_order = [chip21, chip22, chip23, chip11, chip12, chip13, chip14];
+        }
+        else if(amounts.length === 6){
+            chip_order = [chip21, chip22, chip11, chip12, chip13, chip14];
+        }
+        else if(amounts.length === 5){
+            chip_order = [chip21, chip11, chip12, chip13, chip14];
+        }
+        else if(amounts.length === 4){
+            chip_order = [chip11, chip12, chip13, chip14];
+        }
+        else if(amounts.length === 3){
+            chip_order = [chip12, chip13, chip14];
+        }
+        else if(amounts.length === 2){
+            chip_order = [chip12, chip13];
+        }
+        else if(amounts.length === 1){
+            chip_order = [chip12];
+        }
+
+        for(let i = 0; i < amounts.length; i++){
+            let curr_chips = chip_order[i];
+            let curr_height = 0;
+            let total_height_str = '';
+
+            for(let j = 1; j < amounts[i].length; j += 2){
+
+                for(let k = 0; k < amounts[i][j]; k++){
+
+                    total_height_str += '<img class=chip src="/img/poker/chips/' + amounts[i][j-1] + '.png" style="margin-top: -' + curr_height + 'px">';
+                    curr_height += 5;
+
+                }
+
+            }
+
+            all_chips.push({id: curr_chips, str: total_height_str});
+
+        }
+
+        worker.inner_html(all_chips);
+
+    }
+
+    clear(){
+        let zz_src = get_src('ZZ');
+
+        let all_src = [
+            {id: 'flop1', src: zz_src},
+            {id: 'flop2', src: zz_src},
+            {id: 'flop3', src: zz_src},
+            {id: 'turn', src: zz_src},
+            {id: 'river', src: zz_src}
+        ];
+
+        this.clear_decision_states();
+
+        for(let seat of this.all()){
+
+            all_src.push({id: seat.card1, src: zz_src});
+            all_src.push({id: seat.card2, src: zz_src});
+
+            this.set_bet(seat.id, 0);
+
+        }
+
+        this.set_bet(-1, 0);
+
+        worker.src(all_src);
+    }
+
+    set_empty_seat(local_seat){
+    // TODO : handle 'is_disconnected' attribute when setting empty
+        if(this.is_final){
+            worker.class_add('p' + local_seat, 'hidden');
+        }
+        else{
+            worker.inner_html([
+                {id: 'p' + local_seat, str: '<br>Empty seat'}
+            ]);
+        }
+
+    }
+
+    update_info(id, reason, count=0){
+        if(reason !== '' && count > 0){
+            reason = reason + ' ' + shortcut_number_for_decision(count);
+        }
+
+        let seat = worker.socket.handler.seats.get_by_id(id);
+        worker.inner_html([
+            {
+                id: 'p' + seat.local_seat,
+                str: seat.name + '<br>' + shortcut_number_for_player(seat.stack) + '<br>' + reason
+            }
+        ]);
+    }
 }
 
 class Raises{
@@ -1523,7 +1735,7 @@ class Socket{
 
     close(event){
         if(this.stay){
-            clear_table();
+            this.handler.seats.clear();
 
             this.socket = undefined;
             this.handler.loop = false;
@@ -1614,7 +1826,7 @@ class WorkerConnection{
             break;
 
         case 'set decision':
-            set_decision(data.value);
+            this.socket.handler.send_decision(data.value);
             break;
 
         case 'pause play':
@@ -1642,11 +1854,11 @@ class WorkerConnection{
             break;
 
         case 'chat message':
-            chat_message(data.key, data.text);
+            this.socket.handler.chat_message(data.key, data.text);
             break;
 
         case 'premove':
-            worker.socket.handler.premove(data.answer, data.checked);
+            this.socket.handler.premove(data.answer, data.checked);
             break;
 
         default:
@@ -1941,62 +2153,6 @@ function get_margin_top(i){
 
 }
 
-function update_info(id, reason, count=0){
-
-    if(reason !== '' && count > 0){
-        reason = reason + ' ' + shortcut_number_for_decision(count);
-    }
-
-    let seat = worker.socket.handler.seats.get_by_id(id);
-    worker.inner_html([
-        {
-            id: 'p' + seat.local_seat,
-            str: seat.name + '<br>' + shortcut_number_for_player(seat.stack) + '<br>' + reason
-        }
-    ]);
-
-}
-
-function set_empty_seat_info(local_seat){
-// TODO : handle 'is_disconnected' attribute when setting empty
-    if(worker.socket.handler.seats.is_final){
-        worker.class_add('p' + local_seat, 'hidden');
-    }
-    else{
-        worker.inner_html([{id: 'p' + local_seat, str: '<br>Empty seat'}]);
-    }
-
-}
-
-function clear_table(){
-
-    let zz_src = get_src('ZZ');
-
-    let all_src = [
-        {id: 'flop1', src: zz_src},
-        {id: 'flop2', src: zz_src},
-        {id: 'flop3', src: zz_src},
-        {id: 'turn', src: zz_src},
-        {id: 'river', src: zz_src}
-    ];
-
-    worker.socket.handler.seats.clear_decision_states();
-
-    for(let seat of worker.socket.handler.seats.all()){
-
-        all_src.push({id: seat.card1, src: zz_src});
-        all_src.push({id: seat.card2, src: zz_src});
-
-        set_bet(seat.id, 0);
-
-    }
-
-    set_bet(-1, 0);
-
-    worker.src(all_src);
-
-}
-
 function text_change(text, max_value, min_value){
 
     if(text.length > 0) {
@@ -2048,19 +2204,6 @@ function text_change(text, max_value, min_value){
     }
 }
 
-function chat_message(key, text){
-
-    if(key === 13 && text.length > 0){ // enter key is 13
-
-        worker.change_value('message', '');
-
-        if(!worker.socket.handler.replay_mode){
-            worker.socket.send(JSON.stringify({type: 'chat', text: text}));
-        }
-
-    }
-}
-
 function t_info_click(){
 
     if(is_t_info_active === false){
@@ -2102,154 +2245,6 @@ function lh_info_click(){
 
 }
 
-function set_decision(to_send){
-    worker.inner_html([{id: 'decisions', str: ''}]);
-    worker.socket.send(JSON.stringify({type: 'decision', text: to_send}));
-}
-
-function set_bet(id, count, reason=''){
-
-    if(id !== -1){
-
-        let seat = worker.socket.handler.seats.get_by_id(id);
-
-        seat.stack -= count - seat.chipstack.money;
-        seat.chipstack.money = count;
-
-        update_info(id, reason, count);
-
-    }
-
-    let pot_count = worker.socket.handler.seats.main_stack.money;
-
-    for(let seat of worker.socket.handler.seats.all()){
-        pot_count += seat.chipstack.money;
-    }
-
-    worker.inner_html([{id: 'pot_count', str: shortcut_number_for_player(pot_count)}]);
-
-    let amounts = [];
-
-    for(let i = 0; i < available_chips.length; i++){
-        if(count >= available_chips[i][0]){
-            let int_amount = parseInt(count / available_chips[i][0]);
-            amounts.push([available_chips[i][1], int_amount]);
-            count -= int_amount * available_chips[i][0];
-        }
-    }
-
-    while(amounts.length > 8){
-
-        let min_betweens = -1;
-        let index_betweens = -1;
-
-        for(let i = 0; i < amounts.length - 1; i++){
-
-            let curr_between = 0;
-
-            for(let j = 1; j < amounts[i].length; j += 2){
-                curr_between += amounts[i][j];
-            }
-
-            for(let j = 1; j < amounts[i+1].length; j += 2){
-                curr_between += amounts[i+1][j];
-            }
-
-            if(curr_between <= min_betweens || min_betweens === -1){
-                min_betweens = curr_between;
-                index_betweens = i;
-            }
-
-        }
-
-        for(let i = 0; i < amounts[index_betweens + 1].length; i++){
-            amounts[index_betweens].push(amounts[index_betweens + 1][i]);
-        }
-
-        amounts.remove(index_betweens + 1);
-
-    }
-
-    let chipstack_to_set_bet;
-
-    if(id === -1){
-        chipstack_to_set_bet = worker.socket.handler.seats.main_stack;
-    }
-    else{
-        chipstack_to_set_bet = worker.socket.handler.seats.get_by_id(id).chipstack;
-    }
-
-    let chip11 = chipstack_to_set_bet.ch11;
-    let chip12 = chipstack_to_set_bet.ch12;
-    let chip13 = chipstack_to_set_bet.ch13;
-    let chip14 = chipstack_to_set_bet.ch14;
-    let chip21 = chipstack_to_set_bet.ch21;
-    let chip22 = chipstack_to_set_bet.ch22;
-    let chip23 = chipstack_to_set_bet.ch23;
-    let chip24 = chipstack_to_set_bet.ch24;
-
-    let all_chips = [
-        {id: chip11, str: ''},
-        {id: chip12, str: ''},
-        {id: chip13, str: ''},
-        {id: chip14, str: ''},
-        {id: chip21, str: ''},
-        {id: chip22, str: ''},
-        {id: chip23, str: ''},
-        {id: chip24, str: ''}
-    ];
-
-    let chip_order;
-
-    if(amounts.length === 8){
-        chip_order = [chip21, chip22, chip23, chip24, chip11, chip12, chip13, chip14];
-    }
-    else if(amounts.length === 7){
-        chip_order = [chip21, chip22, chip23, chip11, chip12, chip13, chip14];
-    }
-    else if(amounts.length === 6){
-        chip_order = [chip21, chip22, chip11, chip12, chip13, chip14];
-    }
-    else if(amounts.length === 5){
-        chip_order = [chip21, chip11, chip12, chip13, chip14];
-    }
-    else if(amounts.length === 4){
-        chip_order = [chip11, chip12, chip13, chip14];
-    }
-    else if(amounts.length === 3){
-        chip_order = [chip12, chip13, chip14];
-    }
-    else if(amounts.length === 2){
-        chip_order = [chip12, chip13];
-    }
-    else if(amounts.length === 1){
-        chip_order = [chip12];
-    }
-
-    for(let i = 0; i < amounts.length; i++){
-        let curr_chips = chip_order[i];
-        let curr_height = 0;
-        let total_height_str = '';
-
-        for(let j = 1; j < amounts[i].length; j += 2){
-
-            for(let k = 0; k < amounts[i][j]; k++){
-
-                total_height_str += '<img class=chip src="/img/poker/chips/' + amounts[i][j-1] + '.png" style="margin-top: -' + curr_height + 'px">';
-                curr_height += 5;
-
-            }
-
-        }
-
-        all_chips.push({id: curr_chips, str: total_height_str});
-
-    }
-
-    worker.inner_html(all_chips);
-
-}
-
 function move_stacks_to_main(){
 
     frames_last -= 1;
@@ -2286,11 +2281,11 @@ function move_stacks_to_main(){
 
             all_margin.push({id: curr_chipstack[1], left: curr_chipstack[2] + 'px', top: curr_chipstack[3] + 'px'});
 
-            set_bet(worker.socket.handler.seats.seats.get(curr_chipstack[0]).id, 0);
+            worker.socket.handler.seats.set_bet(worker.socket.handler.seats.seats.get(curr_chipstack[0]).id, 0);
 
         }
 
-        set_bet(-1, worker.socket.handler.seats.main_stack.money);
+        worker.socket.handler.seats.set_bet(-1, worker.socket.handler.seats.main_stack.money);
 
         worker.margin(all_margin);
 
@@ -2361,7 +2356,7 @@ function collect_money(){
             ]);
 
             if(worker.socket.handler.in_pause || worker.socket.handler.reconnect_mode){
-                set_bet(seat.id, 0);
+                worker.socket.handler.seats.set_bet(seat.id, 0);
             }
 
         }
@@ -2380,7 +2375,7 @@ function collect_money(){
             setTimeout(move_stacks_to_main, 10);
         }
         else{
-            set_bet(-1, worker.socket.handler.seats.main_stack.money);
+            worker.socket.handler.seats.set_bet(-1, worker.socket.handler.seats.main_stack.money);
         }
 
     }
