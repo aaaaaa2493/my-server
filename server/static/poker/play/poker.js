@@ -1,16 +1,16 @@
 class Handler{
     constructor(socket){
         this.in_loop = false;
+        this.in_pause = false; // TODO - for Replay, need to delete
         this.reconnect_mode = false;
         this.wait_for_init = true;
         this.spectate_mode = false;
         this.replay_mode = false;
         this.game_mode = false;
-        this.in_game = false;
-        this.resit_mode = false;
         this.queue = [];
         this.socket = socket;
         this.seats = undefined;
+        this.info = new InfoCreator();
     }
 
     async handle(){
@@ -222,37 +222,20 @@ class Handler{
 
             this.wait_for_init = false;
 
-            let to_general_info;
-
-            if(this.game_mode){
-                to_general_info = 'Game started. Good luck!';
-            }
-            else{
-
-                if(data.is_final){
-                    to_general_info = 'You are watching table #' + data.table_number;
-                }
-                else{
-                    to_general_info = 'You are watching final table';
-                }
-
-            }
-
-            to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
-
-            all_inner_html.push({id: 'general_info', str: to_general_info});
-
-            worker.class_rem([{id: 'general_info', class: 'hidden'}, {id: 'tournament_info_button', class: 'hidden'},
-                {id: 'last_hand_info_button', class: 'hidden'}, {id: 'table_num', class: 'hidden'},
-                {id: 'hand_num_short_info', class: 'hidden'}, {id: 'place_short_info', class: 'hidden'}, {id: 'chat', class: 'hidden'},
-                {id: 'big_blind', class: 'hidden'}, {id: 'small_blind', class: 'hidden'}, {id: 'ante', class: 'hidden'}]);
-
-            if(!this.replay_mode){
-                worker.class_rem([{id: 'message', class: 'hidden'}]);
-            }
+            worker.class_rem([
+                {id: 'general_info', class: 'hidden'},
+                {id: 'tournament_info_button', class: 'hidden'},
+                {id: 'last_hand_info_button', class: 'hidden'},
+                {id: 'table_num', class: 'hidden'},
+                {id: 'hand_num_short_info', class: 'hidden'},
+                {id: 'place_short_info', class: 'hidden'},
+                {id: 'chat', class: 'hidden'},
+                {id: 'big_blind', class: 'hidden'},
+                {id: 'small_blind', class: 'hidden'},
+                {id: 'ante', class: 'hidden'}
+            ]);
 
         }
-
 
         if(data.is_final){
             all_inner_html.push({id: 'table_num_info', str: 'final table'});
@@ -282,17 +265,17 @@ class Handler{
             {id: 'ch8'}, {id: 'ch9'}
         ]);
 
-        if(this.replay_mode || this.spectate_mode){
-            all_inner_html.push({id: 'place_short_info', str: shortcut_number_for_player(data.players_left)});
-        }
-
         this.seats = new Seats(data, this.game_mode);
 
         let top9_info = '';
 
         for(let i = 0; i < data.top_9.length; i++){
 
-            top9_info += '<tr><td>' + (i+1) + ')</td><td>' + shortcut_number_for_player(data.top_9[i].stack) + '</td><td>' + data.top_9[i].name + '</td></tr>';
+            top9_info += `<tr>
+                            <td>${i+1}</td>
+                            <td>${shortcut_number_for_player(data.top_9[i].stack)}</td>
+                            <td>${data.top_9[i].name}</td>
+                          </tr>`;
 
         }
 
@@ -318,6 +301,8 @@ class Handler{
     collect_money(){
         collect_money();
 
+        this.seats.clear_decision_states();
+
         if(!this.reconnect_mode){
             worker.play_sound('collect');
         }
@@ -327,48 +312,25 @@ class Handler{
         let button_id = data.button;
 
         worker.class_rem([
-            {id: 'dealer', class: 'd1'}, {id: 'dealer', class: 'd2'}, {id: 'dealer', class: 'd3'},
-            {id: 'dealer', class: 'd4'}, {id: 'dealer', class: 'd5'}, {id: 'dealer', class: 'd6'},
-            {id: 'dealer', class: 'd7'}, {id: 'dealer', class: 'd8'}, {id: 'dealer', class: 'd9'}
+            {id: 'dealer', class: 'd1'},
+            {id: 'dealer', class: 'd2'},
+            {id: 'dealer', class: 'd3'},
+            {id: 'dealer', class: 'd4'},
+            {id: 'dealer', class: 'd5'},
+            {id: 'dealer', class: 'd6'},
+            {id: 'dealer', class: 'd7'},
+            {id: 'dealer', class: 'd8'},
+            {id: 'dealer', class: 'd9'}
         ]);
 
         worker.class_add('dealer', 'd' + this.seats.id_to_local_seat[button_id]);
 
-        let curr_bb;
-        let curr_bb_id;
-
         if(data.info.length === 1){
             set_bet(data.info[0].id, data.info[0].paid, 'BB');
-            curr_bb = data.info[0].paid;
-            curr_bb_id = data.info[0].id;
         }
         else{
             set_bet(data.info[0].id, data.info[0].paid, 'SB');
             set_bet(data.info[1].id, data.info[1].paid, 'BB');
-            curr_bb = data.info[1].paid;
-            curr_bb_id = data.info[1].id;
-        }
-
-        if(this.game_mode){
-
-            worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-            this.in_game = true;
-
-            if(curr_bb_id === this.seats.my_id){
-                worker.inner_html([
-                    {id: 'textpremove1', str: 'Check/Fold'},
-                    {id: 'textpremove2', str: 'Check'},
-                    {id: 'textpremove3', str: 'Call any'}
-                ]);
-            }
-            else{
-                worker.inner_html([
-                    {id: 'textpremove1', str: 'Fold'},
-                    {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(curr_bb)},
-                    {id: 'textpremove3', str: 'Call any'}
-                ]);
-            }
-
         }
 
         if(!this.reconnect_mode){
@@ -377,49 +339,22 @@ class Handler{
     }
 
     blinds_increased(data){
-        let to_general_info = 'Blinds now ' + shortcut_number_for_decision(data.sb) + ' / ' + shortcut_number_for_decision(data.bb);
 
-        if(data.ante !== 0){
-            to_general_info += ' ante ' + shortcut_number_for_decision(data.ante);
-        }
+        let text_bb = shortcut_number_for_decision(data.bb);
+        let text_sb = shortcut_number_for_decision(data.sb);
+        let text_ante = shortcut_number_for_decision(data.ante);
 
-        to_general_info += '.';
-
-        to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
+        this.info.blinds_increasing(text_bb, text_sb, text_ante);
 
         worker.inner_html([
-            {id: 'general_info', str: to_general_info},
-            {id: 'big_blind_shortcut', str: shortcut_number_for_decision(data.bb)},
-            {id: 'small_blind_shortcut', str: shortcut_number_for_decision(data.sb)},
-            {id: 'ante_shortcut', str: shortcut_number_for_decision(data.ante)}
+            {id: 'big_blind_shortcut', str: text_bb},
+            {id: 'small_blind_shortcut', str: text_sb},
+            {id: 'ante_shortcut', str: text_ante}
         ]);
-
-        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
     }
 
-    give_cards(data){
-        let up_src = get_src('UP');
-
-        let all_src = [];
-
-        for(let seat of this.seats.all()){
-
-            if(seat.id === this.seats.my_id){
-
-                all_src.push({id: seat.card1, src: get_src(data.first)});
-                all_src.push({id: seat.card2, src: get_src(data.second)});
-
-                seat.first_card = data.first;
-                seat.second_card = data.second;
-            }
-            else{
-                all_src.push({id: seat.card1, src:  up_src});
-                all_src.push({id: seat.card2, src:  up_src});
-            }
-
-        }
-
-        worker.src(all_src);
+    give_cards(){
+        print('Handler.give_cards()');
     }
 
     deal_cards(){
@@ -428,10 +363,8 @@ class Handler{
         let all_src = [];
 
         for(let seat of this.seats.all()){
-            if(seat.local_seat !== 1 || (seat.local_seat === 1 && !this.resit_mode)){
-                all_src.push({id: seat.card1, src: up_src});
-                all_src.push({id: seat.card2, src: up_src});
-            }
+            all_src.push({id: seat.card1, src: up_src});
+            all_src.push({id: seat.card2, src: up_src});
         }
 
         worker.src(all_src);
@@ -445,33 +378,12 @@ class Handler{
         this.seats.add_player(data);
     }
 
-    resit(data){
-        this.resit_mode = true;
-
-        if(data.is_final){
-            let to_general_info = 'You was resit on final table.';
-            to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
-
-            worker.inner_html([{id: 'general_info', str: to_general_info}]);
-            worker.class_rem([{id: 'general_info', class: 'hidden'}]);
-
-            worker.inner_html([{id: 'table_num_info', str: 'final table'}]);
-        }
-        else{
-            let to_general_info = 'You was resit on table #' + data.table_number;
-            to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
-
-            worker.inner_html([{id: 'general_info', str: to_general_info}]);
-            worker.class_rem([{id: 'general_info', class: 'hidden'}]);
-
-            worker.inner_html([{id: 'table_num_info', str: 'table #' + data.table_number}]);
-        }
-
-        this.seats = new Seats(data, this.game_mode);
+    resit(){
+        print('Handler.resit()');
     }
 
     switch_decision(data){
-        clear_decision();
+        this.seats.clear_decision_states();
 
         worker.class_add('p' + this.seats.id_to_local_seat[data.id], 'in_decision');
 
@@ -482,151 +394,31 @@ class Handler{
 
         let seat = this.seats.get_by_id(this.seats.id_in_decision);
 
-        if(data.result === 'fold'){
-
-            if(this.seats.id_in_decision === this.seats.my_id){
-                made_controlled_player(true);
-            }
-
-            if(this.seats.id_to_local_seat[this.seats.id_in_decision] === 1 && this.game_mode){
-
-                worker.src_hide(seat.card1, seat.card2);
-
-            }
-            else if(this.replay_mode){
-
-                worker.src_hide(seat.card1, seat.card2);
-
-            }
-            else{
-                worker.src([
-                    {id: seat.card1, src: get_src('ZZ')},
-                    {id: seat.card2, src: get_src('ZZ')}
-                ]);
-
-            }
-
+        switch (data.result){
+        case 'fold':
+            worker.src_hide(seat.card1, seat.card2);
             update_info(this.seats.id_in_decision, 'Fold');
+            break;
 
-        }
-        else if(data.result === 'check'){
-
-            if(this.seats.id_in_decision === this.seats.my_id){
-                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-                worker.inner_html([
-                    {id: 'textpremove1', str: 'Check/Fold'},
-                    {id: 'textpremove2', str: 'Check'},
-                    {id: 'textpremove3', str: 'Call any'}
-                ]);
-                premove('1', false);
-            }
-
+        case 'check':
             update_info(this.seats.id_in_decision, 'Check');
+            break;
 
-        }
-        else if(data.result === 'call'){
-
-            if(this.seats.id_in_decision === this.seats.my_id){
-
-                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-                worker.inner_html([
-                    {id: 'textpremove1', str: 'Check/Fold'},
-                    {id: 'textpremove2', str: 'Check'},
-                    {id: 'textpremove3', str: 'Call any'}
-                ]);
-
-                premove('1', false);
-            }
-
+        case 'call':
             set_bet(this.seats.id_in_decision, data.money, 'Call');
+            break;
 
-        }
-        else if(data.result === 'raise'){
-
-            if(this.in_game && this.seats.id_in_decision !== this.seats.my_id && this.game_mode){
-
-                let myself = this.seats.get_by_id(this.seats.my_id);
-
-                if(myself.stack + myself.chipstack.money > data.money){
-
-                    worker.inner_html([
-                        {id: 'textpremove1', str: 'Fold'},
-                        {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(data.money)},
-                        {id: 'textpremove3', str: 'Call any'}
-                    ]);
-
-                }
-                else{
-
-                    worker.class_add('premove3', 'hidden');
-
-                    worker.inner_html([
-                        {id: 'textpremove1', str: 'Fold'},
-                        {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(data.money)},
-                        {id: 'textpremove3', str: ''}
-                    ]);
-
-                }
-
-                if(premove_second){
-                    premove('2', false);
-                }
-            }
-            else if(this.seats.id_in_decision === this.seats.my_id){
-
-                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-                worker.inner_html([
-                    {id: 'textpremove1', str: 'Check/Fold'},
-                    {id: 'textpremove2', str: 'Check'},
-                    {id: 'textpremove3', str: 'Call any'}
-                ]);
-
-                premove('1', false);
-            }
-
+        case 'raise':
             set_bet(this.seats.id_in_decision, data.money, 'Raise');
+            break;
 
-        }
-        else if(data.result === 'all in'){
-
-            if(this.in_game && this.seats.id_in_decision === this.seats.my_id && this.game_mode){
-
-                let myself = this.seats.get_by_id(this.seats.my_id);
-
-                if(myself.stack + myself.chipstack.money > data.money){
-
-                    worker.inner_html([
-                        {id: 'textpremove1', str: 'Fold'},
-                        {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(data.money)},
-                        {id: 'textpremove3', str: 'Call any'}
-                    ]);
-
-                }
-                else{
-
-                    worker.class_add('premove3', 'hidden');
-
-                    worker.inner_html([
-                        {id: 'textpremove1', str: 'Fold'},
-                        {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(data.money)},
-                        {id: 'textpremove3', str: ''}
-                    ]);
-
-                }
-
-                if(premove_second){
-                    premove('2', false);
-                }
-            }
-            else if(this.seats.id_in_decision === this.seats.my_id){
-                premove('1', false);
-            }
-
+        case 'all in':
             set_bet(this.seats.id_in_decision, data.money, 'All in');
+            break;
 
+        default:
+            break;
         }
-
-        worker.inner_html([{id: 'decisions', str: ''}]);
 
         if(!this.reconnect_mode){
             if(data.result === 'all in' || data.result === 'raise' || data.result === 'call'){
@@ -646,7 +438,8 @@ class Handler{
     }
 
     flop(data){
-        clear_decision();
+        this.seats.clear_decision_states();
+        this.seats.clear_decisions();
 
         worker.src([
             {id: 'flop1', src: get_src(data.card1)},
@@ -660,7 +453,8 @@ class Handler{
     }
 
     turn(data){
-        clear_decision();
+        this.seats.clear_decision_states();
+        this.seats.clear_decisions();
 
         worker.src([{id: 'turn', src: get_src(data.card)}]);
 
@@ -670,7 +464,8 @@ class Handler{
     }
 
     river(data){
-        clear_decision();
+        this.seats.clear_decision_states();
+        this.seats.clear_decisions();
 
         worker.src([{id: 'river', src: get_src(data.card)}]);
 
@@ -680,12 +475,8 @@ class Handler{
     }
 
     open_cards(data){
-        clear_decision();
-
-        if(this.game_mode){
-            made_controlled_player(true);
-            worker.class_rem([{id: 'premove3', class: 'hidden'}]);
-        }
+        this.seats.clear_decision_states();
+        this.seats.clear_decisions();
 
         let all_src = [];
 
@@ -702,10 +493,9 @@ class Handler{
     }
 
     give_money(data){
-        if(this.game_mode){
-            made_controlled_player(true);
-            worker.class_rem([{id: 'premove3', class: 'hidden'}]);
-        }
+
+        this.seats.clear_decision_states();
+        this.seats.clear_decisions();
 
         let seat = this.seats.get_by_id(data.id);
 
@@ -732,7 +522,7 @@ class Handler{
         this.seats.main_stack.money -= data.money;
         set_bet(-1, this.seats.main_stack.money);
 
-        if(!replay_in_pause && !this.reconnect_mode){
+        if(!this.in_pause && !this.reconnect_mode){
 
             frames_last = frames_moving;
             cannot_move_chips = true;
@@ -743,17 +533,18 @@ class Handler{
     }
 
     money_results(){
-        print('money results');
+        print('Handler.money_results()');
     }
 
     hand_results(data){
-        if(this.game_mode){
-            worker.src([{id: 'your_first_info', src: get_src(first_card)}, {id: 'your_second_info', src: get_src(second_card)}]);
-        }
 
-        worker.src([{id: 'flop1_info', src: get_src(data.flop1)}, {id: 'flop2_info', src: get_src(data.flop2)},
-            {id: 'flop3_info', src: get_src(data.flop3)}, {id: 'turn_info', src: get_src(data.turn)},
-            {id: 'river_info', src: get_src(data.river)}]);
+        worker.src([
+            {id: 'flop1_info', src: get_src(data.flop1)},
+            {id: 'flop2_info', src: get_src(data.flop2)},
+            {id: 'flop3_info', src: get_src(data.flop3)},
+            {id: 'turn_info', src: get_src(data.turn)},
+            {id: 'river_info', src: get_src(data.river)}
+        ]);
 
         let table_fill = '';
 
@@ -774,21 +565,8 @@ class Handler{
         worker.inner_html([{id: 'cards_reveal', str: table_fill}]);
     }
 
-    busted(data){
-        this.socket.clean = true;
-
-        let to_general_info = 'You are busted! You finished ' + data.place + '.';
-
-        to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
-                           'post_socket_stay();\'>Watch</div>';
-
-        to_general_info += '<div class="button in_general g2" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
-                           'post_socket_close();\'>Quit</div>';
-
-        worker.inner_html([{id: 'general_info', str: to_general_info}]);
-        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
-
-        this.in_loop = false;
+    busted(){
+        print('Handler.busted()');
     }
 
     clear(){
@@ -796,24 +574,14 @@ class Handler{
     }
 
     win(){
-        this.socket.clean = true;
-
-        let to_general_info = 'Congratulations! You are winner!';
-        to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
-                           'post_socket_close();\'>Ok</div>';
-
-        worker.inner_html([{id: 'general_info', str: to_general_info}]);
-        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
-
-        this.in_loop = false;
+        print('Handler.win()');
     }
 
     place(data){
-        worker.inner_html([{id: 'place_info', str: data.place}]);
-
-        if(!this.replay_mode && !this.spectate_mode){
-            worker.inner_html([{id: 'place_short_info', str: data.place + ' / ' + players_left}]);
-        }
+        worker.inner_html([{
+            id: 'place_info',
+            str: data.place
+        }]);
     }
 
     chat(data){
@@ -821,6 +589,7 @@ class Handler{
     }
 
     disconnected(data){
+        // TODO - нужна ли проверка на undefined?
         if(this.seats.id_to_local_seat[data.id] !== undefined){
             let seat = this.seats.get_by_id(data.id);
             worker.class_add('p' + seat.local_seat, 'is_disconnected');
@@ -835,55 +604,285 @@ class Handler{
     }
 
     kick(){
-        this.socket.clean = true;
-
-        let to_general_info = 'You was kicked. You have 20 seconds to think now.';
-        to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
-                           'window.location=window.location;\'>Refresh</div>';
-
-        worker.inner_html([{id: 'general_info', str: to_general_info}]);
-        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
-
-        worker.inner_html([{id: 'decisions', str: ''}]);
-
-        this.in_loop = false;
+        print('Handler.kick()');
     }
 
     back_counting(data){
         update_info(data.id, data.time + ' sec');
     }
 
+    set_decision(){
+        print('Handler.set_decision()');
+    }
+
+}
+
+class GameHandler extends Handler{
+    constructor(name, socket){
+        super(socket);
+        this.name = name;
+        this.game_mode = true;
+        this.resit_mode = false;
+        this.in_game = false;
+        this.premoves = new Premoves();
+    }
+
+    open(){
+        this.socket.send('js ' + this.name);
+    }
+
+    premove(num_answer, is_checked){
+        this.premoves.set(num_answer, is_checked);
+    }
+
+    init_hand(data){
+
+        if(this.wait_for_init){
+            this.info.basic('Game started. Good luck!');
+            worker.class_rem([{id: 'message', class: 'hidden'}]);
+        }
+
+        super.init_hand(data);
+
+    }
+
+    blinds(data){
+
+        // TODO - проверить, надо ли проверять на пересадку
+
+        this.in_game = true;
+
+        let curr_bb;
+        let curr_bb_id;
+
+        if(data.info.length === 1){
+            curr_bb = data.info[0].paid;
+            curr_bb_id = data.info[0].id;
+        }
+        else{
+            curr_bb = data.info[1].paid;
+            curr_bb_id = data.info[1].id;
+        }
+
+        if(curr_bb_id === this.seats.my_id){
+            if (curr_bb < this.seats.me.stack){
+                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                this.premoves.check_fold();
+            }
+            else{
+                // TODO - если нахожусь в олл-ин - то скрыть превув
+            }
+
+        }
+        else{
+            if (this.seats.bb < this.seats.me.stack){
+                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                this.premoves.call_fold(this.seats.bb);
+            }
+            else{
+                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                // TODO - показать возможность олл-ина
+            }
+        }
+
+        super.blinds(data);
+    }
+
+    give_cards(data){
+        let up_card = get_src('UP');
+
+        let src_list = [];
+
+        for(let seat of this.seats.all()){
+            if(seat.id === this.seats.my_id){
+                src_list.push({id: seat.card1, src: get_src(data.first)});
+                src_list.push({id: seat.card2, src: get_src(data.second)});
+                seat.first_card = data.first;
+                seat.second_card = data.second;
+            }
+            else{
+                src_list.push({id: seat.card1, src: up_card});
+                src_list.push({id: seat.card2, src: up_card});
+            }
+        }
+
+        worker.src(src_list);
+    }
+
+    resit(data){
+        this.resit_mode = true;
+
+        this.info.resit(data.table_number, data.is_final);
+
+        if(data.is_final){
+            worker.inner_html([{id: 'table_num_info', str: 'final table'}]);
+        }
+        else{
+            worker.inner_html([{id: 'table_num_info', str: 'table #' + data.table_number}]);
+        }
+
+        this.seats = new Seats(data, this.game_mode);
+    }
+
+    made_decision(data){
+
+        if(this.seats.id_in_decision === this.seats.my_id){
+
+            switch (data.result){
+            case 'fold':
+                this.in_game = false;
+                this.premoves.hide();
+                break;
+
+            case 'check':
+            case 'raise':
+                this.premoves.reset();
+                this.premoves.check_fold();
+                break;
+
+            case 'call':
+                if(this.seats.me.all_money() === data.money){
+                    this.premoves.hide();
+                }
+                else{
+                    this.premoves.reset();
+                    this.premoves.check_fold();
+                }
+                break;
+
+            case 'all in':
+                this.premoves.hide();
+                break;
+
+            default:
+                break;
+            }
+
+            worker.inner_html([{id: 'decisions', str: ''}]);
+
+        }
+        else if(this.in_game){
+            switch (data.result){
+            case 'raise':
+            case 'all in':
+
+                if(this.premoves.second){
+                    // fold stays at fold, 'call any' stays at 'call any' or moved to 'all in'
+                    // only 'call' resets
+                    this.premoves.reset();
+                }
+
+                if(this.seats.me.all_money() <= data.money){
+                    this.premoves.two_choices_mode();
+                    this.premoves.all_in_fold(this.seats.me.all_money());
+                }
+                else{
+                    this.premoves.call_fold(data.money);
+                }
+                break;
+
+            default:
+                break;
+            }
+        }
+
+        super.made_decision(data);
+    }
+
+    flop(data){
+        this.premoves.reset();
+        super.flop(data);
+    }
+
+    turn(data){
+        this.premoves.reset();
+        super.turn(data);
+    }
+
+    river(data){
+        this.premoves.reset();
+        super.river(data);
+    }
+
+    open_cards(data){
+        this.premoves.hide();
+        this.in_game = false;
+        super.open_cards(data);
+    }
+
+    give_money(data){
+        this.premoves.hide();
+        super.give_money(data);
+    }
+
+    hand_results(data){
+        worker.src([
+            {id: 'your_first_info', src: get_src(this.seats.me.first_card)},
+            {id: 'your_second_info', src: get_src(this.seats.me.second_card)}
+        ]);
+
+        super.hand_results(data);
+    }
+
+    busted(data){
+        this.socket.clean = true;
+        this.info.busted(data.place);
+        this.in_loop = false;
+    }
+
+    win(){
+        this.socket.clean = true;
+        this.info.win();
+        this.in_loop = false;
+    }
+
+    place(data){
+        if(!this.reconnect_mode) {
+            worker.inner_html([{
+                id: 'place_short_info',
+                str: data.place + ' / ' + this.seats.players_left
+            }]);
+        }
+    }
+
+    kick(){
+        this.socket.clean = true;
+        this.info.kick();
+        worker.inner_html([{id: 'decisions', str: ''}]);
+        this.in_loop = false;
+    }
+
     set_decision(data){
+        // if it in reconnect mode then player was autofolded
         if(this.reconnect_mode){
             return;
         }
 
-        if(premove_first){
-
+        // all premoves checking flags stays in 'this.made_decision' method
+        if(this.premoves.first){
             if(data.decisions[1].type === 'check'){
-                set_decision('2');
-                made_controlled_player(false);
+                set_decision('2'); // if 'check/fold' then autoclick 'check'
+                // but 'check/fold' flag stays so if someone raises then autoclick 'fold'
                 return;
             }
             else{
+                // autoclick 'fold'
                 set_decision('1');
-                made_controlled_player(true);
                 return;
             }
-
         }
-        else if(premove_second){
+        else if(this.premoves.second){
+            // autoclick 'call'
             set_decision('2');
-            made_controlled_player(false);
             return;
         }
-        else if(premove_third){
-            set_decision('2'); // because third is call any
-            made_controlled_player(false);
+        else if(this.premoves.third){
+            // because third is 'call any' so autoclick 'call'
+            set_decision('2');
             return;
         }
 
-        worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+        this.premoves.hide();
 
         worker.play_sound('attention');
 
@@ -900,7 +899,7 @@ class Handler{
             else if(data.decisions[i].type === 'call'){
                 decisions += `<div class='button call_button' onclick='post_set_decision("${i+1}")'>
                     Call ${shortcut_number_for_decision(data.decisions[i].money)}</div>`;
-                to_call = data.decisions[i].money;
+                this.seats.to_call = data.decisions[i].money;
             }
             else if(data.decisions[i].type === 'raise'){
                 decisions += `<div id=raise class='button raise_button' onclick=
@@ -929,22 +928,10 @@ class Handler{
             }
 
         }
-
         worker.inner_html([{id: 'decisions', str: decisions}]);
     }
 
-}
 
-class GameHandler extends Handler{
-    constructor(name, socket){
-        super(socket);
-        this.name = name;
-        this.game_mode = true;
-    }
-
-    open(){
-        this.socket.send('js ' + this.name);
-    }
 }
 
 class SpectatorHandler extends Handler{
@@ -963,6 +950,20 @@ class SpectatorHandler extends Handler{
         this.socket.send('sp ' + this.table_to_spectate);
         this.socket.send(JSON.stringify({type: 'nick', nick: this.nick}));
     }
+
+    init_hand(data){
+
+        if(this.wait_for_init){
+            this.info.watching_table(data.table_number, data.is_final);
+            worker.inner_html([
+                {id: 'place_short_info', str: shortcut_number_for_player(data.players_left)}
+            ]);
+            worker.class_rem([{id: 'message', class: 'hidden'}]);
+        }
+        
+        super.init_hand(data);
+
+    }
 }
 
 class ReplayHandler extends Handler{
@@ -970,6 +971,7 @@ class ReplayHandler extends Handler{
         super(socket);
         this.replay_id = id;
         this.replay_mode = true;
+        this.in_pause = false;
     }
 
     open(){
@@ -981,6 +983,19 @@ class ReplayHandler extends Handler{
         worker.bigger_chat();
 
         this.socket.send('rp ' + this.replay_id);
+    }
+
+    init_hand(data){
+
+        if(this.wait_for_init){
+            this.info.watching_table(data.table_number, data.is_final);
+            worker.inner_html([
+                {id: 'place_short_info', str: shortcut_number_for_player(data.players_left)}
+            ]);
+        }
+
+        super.init_hand(data);
+
     }
 }
 
@@ -1010,13 +1025,17 @@ class Player{
         this.card2 = 'c' + local_seat + '2';
     }
 
+    all_money(){
+        return this.stack + this.chipstack.money;
+    }
+
     delete_cards(){
         worker.src([{id: this.card1, src: get_src('ZZ')}, {id: this.card2, src: get_src('ZZ')}]);
     }
 }
 
 class Seats{
-    constructor(data, need_to_shift) {
+    constructor(data, game_mode) {
 
         let inner_html = [];
 
@@ -1026,12 +1045,18 @@ class Seats{
 
         this.total_seats = data.seats;
 
+        this.bb = data.bb;
+        this.sb = data.sb;
+        this.ante = data.ante;
+
+        this.to_call = 0;
+
         let players = data.players;
         this.table_number = data.table_number;
 
         this.is_final = data.is_final;
 
-        if (need_to_shift) {
+        if (game_mode) {
 
             while (players[0].controlled === undefined || players[0].controlled === false) {
                 players.push(players.shift());
@@ -1085,7 +1110,13 @@ class Seats{
                 doc_players += `<div id=p${to_place[i]} class='player${players[i].disconnected ? ' is_disconnected' : ''}'>
                     ${players[i].name}<br>${shortcut_number_for_player(players[i].stack)}</div>`;
 
-                this.seats.set(to_place[i], new Player(players[i], to_place[i]));
+                let player = new Player(players[i], to_place[i]);
+
+                this.seats.set(to_place[i], player);
+
+                if (game_mode && player.id === this.my_id){
+                    this.me = player;
+                }
 
                 this.id_to_local_seat[players[i].id] = to_place[i];
 
@@ -1146,6 +1177,231 @@ class Seats{
         return this.seats.get(this.id_to_local_seat[id]);
     }
 
+    clear_decisions(){
+        for(let seat of worker.socket.handler.seats.all()){
+            update_info(seat.id, '');
+        }
+    }
+
+    clear_decision_states(){
+        let to_place;
+        let total_seats = worker.socket.handler.seats.total_seats;
+
+        if(total_seats === 2){
+            to_place = [1, 6];
+        }
+        else if(total_seats === 3){
+            to_place = [1, 4, 7];
+        }
+        else if(total_seats === 4){
+            to_place = [1, 3, 6, 8];
+        }
+        else if(total_seats === 5){
+            to_place = [1, 3, 5, 6, 8];
+        }
+        else if(total_seats === 6){
+            to_place = [1, 2, 4, 6, 7, 9];
+        }
+        else if(total_seats === 7){
+            to_place = [1, 2, 4, 5, 6, 7, 9];
+        }
+        else if(total_seats === 8){
+            to_place = [1, 2, 3, 4, 6, 7, 8, 9];
+        }
+        else if(total_seats === 9){
+            to_place = [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        }
+
+        let all_rem = [];
+
+        for(let i = 0; i < to_place.length; i++){
+
+            all_rem.push({id: 'p' + to_place[i], class: 'in_decision'});
+
+        }
+
+        worker.class_rem(all_rem);
+    }
+
+}
+
+class Premoves{
+    constructor(){
+        this.first = false;
+        this.second = false;
+        this.third = false;
+        this.is_visible = false;
+        this.in_two_choices = false;
+    }
+
+    hide(){
+        if(this.is_visible){
+            this.is_visible = false;
+            this.reset();
+            worker.class_add('premoves', 'hidden');
+        }
+    }
+
+    show(){
+        if(!this.is_visible){
+            this.is_visible = true;
+            this.reset();
+            worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+        }
+    }
+
+    check_fold(){
+        this.show();
+        worker.inner_html([
+            {id: 'textpremove1', str: 'Check/Fold'},
+            {id: 'textpremove2', str: 'Check'},
+            {id: 'textpremove3', str: 'Call any'}
+        ]);
+    }
+
+    call_fold(money){
+        this.show();
+        worker.inner_html([
+            {id: 'textpremove1', str: 'Fold'},
+            {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(money)},
+            {id: 'textpremove3', str: 'Call any'}
+        ]);
+    }
+
+    all_in_fold(money){
+        this.show();
+        worker.inner_html([
+            {id: 'textpremove1', str: 'Fold'},
+            {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(money)},
+            {id: 'textpremove3', str: ''}
+        ]);
+    }
+
+    two_choices_mode(){
+        if(!this.in_two_choices){
+            this.in_two_choices = true;
+            if(this.third){
+                // so 'call any' stays at 'all in'
+                this.set('2', true);
+            }
+            else if(this.second){
+                // so 'call' deletes
+                this.set('2', false);
+            }
+            worker.class_add('premove3', 'hidden');
+        }
+    }
+
+    three_choices_mode(){
+        if(this.in_two_choices){
+            this.in_two_choices = false;
+            worker.class_rem([{id: 'premove3', class: 'hidden'}]);
+        }
+    }
+
+    reset(){
+        this.three_choices_mode();
+        this.set(undefined, false);
+    }
+
+    set(answer, checked){
+
+        let all_premoves = [
+            {id: 'premove1', checked: false},
+            {id: 'premove2', checked: false},
+            {id: 'premove3', checked: false}
+        ];
+
+        this.first = false;
+        this.second = false;
+        this.third = false;
+
+        if(checked){
+
+            if(answer === '1'){
+                all_premoves.push({id: 'premove1', checked: true});
+                this.first = true;
+            }
+            else if(answer === '2'){
+                all_premoves.push({id: 'premove2', checked: true});
+                this.second = true;
+            }
+            else if(answer === '3'){
+                all_premoves.push({id: 'premove3', checked: true});
+                this.third = true;
+            }
+
+        }
+        worker.set_premove(all_premoves);
+    }
+
+}
+
+class InfoCreator{
+
+    basic(info, append=[['Ok', '']]){
+
+        for(let i = 0; i < append.length; i++){
+            info += `<div class='button in_general g${i}' 
+                onclick='document.getElementById("general_info").classList.add("hidden");
+                ${append[i][1]}'>${append[i][0]}</div>`;
+        }
+
+        worker.inner_html([{id: 'general_info', str: info}]);
+        worker.class_rem([{id: 'general_info', class: 'hidden'}]);
+    }
+
+    watching_table(table_number, is_final){
+        if(is_final){
+            this.basic('You are watching table #' + table_number);
+        }
+        else{
+            this.basic('You are watching final table');
+        }
+    }
+
+    blinds_increasing(text_bb, text_sb, text_ante){
+
+        let info = `Blinds now ${text_sb} / ${text_bb}`;
+
+        if(text_ante !== '0'){
+            info += ` ante ${text_ante}`;
+        }
+
+        this.basic(info);
+    }
+
+    resit(table_num, is_final){
+        if (is_final){
+            this.basic('You was resit on final table.');
+        }
+        else{
+            this.basic('You was resit on table # ' + table_num);
+        }
+    }
+
+    busted(place){
+        let info = `You are busted! You finished ${place}.`;
+        this.basic(info, [
+            ['Watch', 'post_socket_stay()'],
+            ['Quit', 'post_socket_close()']
+        ]);
+    }
+
+    win(){
+        let info = 'Congratulations! You are winner!';
+        this.basic(info, [
+            ['Ok', 'post_socket_close()']
+        ]);
+    }
+
+    kick(){
+        let info = 'You was kicked. You have 20 seconds to think now.';
+        this.basic(info, [
+            ['Refresh', 'window.location=window.location']
+        ]);
+    }
+
 }
 
 class Socket{
@@ -1178,7 +1434,7 @@ class Socket{
             this.socket = undefined;
             this.handler.loop = false;
 
-            this.create_connection([table_number, this.handler.name], SpectatorHandler);
+            this.create_connection([this.handler.seats.table_number, this.handler.name], SpectatorHandler);
 
         } else {
 
@@ -1296,7 +1552,7 @@ class WorkerConnection{
             break;
 
         case 'premove':
-            premove(data.answer, data.checked);
+            worker.socket.handler.premove(data.answer, data.checked);
             break;
 
         default:
@@ -1350,7 +1606,7 @@ class WorkerConnection{
     }
 
     play_sound(file){
-        if(!replay_in_pause){
+        if(!this.socket.handler.in_pause){
             this.send({type: 'sound', file: get_sound(file)});
         }
     }
@@ -1392,17 +1648,8 @@ const available_chips = [
     [1, '1']
 ];
 
-let to_call;
 let is_t_info_active = false;
 let is_lh_info_active = false;
-let table_number;
-let first_card;
-let players_left;
-let second_card;
-let premove_first = false;
-let premove_second = false;
-let premove_third = false;
-let replay_in_pause = false;
 let save_positions_chipstacks;
 let frames_moving = 50;
 let frames_last;
@@ -1602,9 +1849,9 @@ function get_margin_top(i){
 
 function replay_pause_play(){
 
-    if(replay_in_pause){
+    if(worker.socket.handler.in_pause){
 
-        replay_in_pause = false;
+        worker.socket.handler.in_pause = false;
 
         worker.class_add('replay_next_step', 'hidden');
         worker.inner_html([{id: 'replay_pause_play', str: 'Pause'}]);
@@ -1614,7 +1861,7 @@ function replay_pause_play(){
     }
     else{
 
-        replay_in_pause = true;
+        worker.socket.handler.in_pause = true;
 
         worker.class_rem([{id: 'replay_next_step', class: 'hidden'}]);
         worker.inner_html([{id: 'replay_pause_play', str: 'Play'}]);
@@ -1669,7 +1916,7 @@ function update_info(id, reason, count=0){
 
 function set_empty_seat_info(seat){
 // TODO : handle 'is_disconnected' attribute when setting empty
-    if(table_number === 0){
+    if(worker.socket.handler.seats.is_final){
         worker.class_add('p' + seat, 'hidden');
     }
     else{
@@ -1690,7 +1937,7 @@ function clear_table(){
         {id: 'river', src: zz_src}
     ];
 
-    clear_decision();
+    worker.socket.handler.seats.clear_decision_states();
 
     for(let seat of worker.socket.handler.seats.all()){
 
@@ -1805,7 +2052,7 @@ function raise_pot(max_value){
         in_pot += seat.chipstack.money;
     }
 
-    let raise_amount = in_pot + 2 * to_call;
+    let raise_amount = in_pot + 2 * worker.socket.handler.seats.to_call;
 
     if(raise_amount > max_value){
         raise_amount = max_value;
@@ -1859,109 +2106,9 @@ function lh_info_click(){
 
 }
 
-function premove(answer, checked){
-
-    let all_premoves = [
-        {id: 'premove1', checked: false},
-        {id: 'premove2', checked: false},
-        {id: 'premove3', checked: false}
-    ];
-
-    premove_first = false;
-    premove_second = false;
-    premove_third = false;
-
-    if(checked){
-
-        if(answer === '1'){
-            all_premoves.push({id: 'premove1', checked: true});
-            premove_first = true;
-        }
-        else if(answer === '2'){
-            all_premoves.push({id: 'premove2', checked: true});
-            premove_second = true;
-        }
-        else if(answer === '3'){
-            all_premoves.push({id: 'premove3', checked: true});
-            premove_third = true;
-        }
-
-    }
-
-    worker.set_premove(all_premoves);
-
-}
-
-function clear_decision(){
-
-    let to_place;
-    let total_seats = worker.socket.handler.seats.total_seats;
-
-    if(total_seats === 2){
-        to_place = [1, 6];
-    }
-    else if(total_seats === 3){
-        to_place = [1, 4, 7];
-    }
-    else if(total_seats === 4){
-        to_place = [1, 3, 6, 8];
-    }
-    else if(total_seats === 5){
-        to_place = [1, 3, 5, 6, 8];
-    }
-    else if(total_seats === 6){
-        to_place = [1, 2, 4, 6, 7, 9];
-    }
-    else if(total_seats === 7){
-        to_place = [1, 2, 4, 5, 6, 7, 9];
-    }
-    else if(total_seats === 8){
-        to_place = [1, 2, 3, 4, 6, 7, 8, 9];
-    }
-    else if(total_seats === 9){
-        to_place = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-    }
-
-    let all_rem = [];
-
-    for(let i = 0; i < to_place.length; i++){
-
-        all_rem.push({id: 'p' + to_place[i], class: 'in_decision'});
-
-    }
-
-    worker.class_rem(all_rem);
-}
-
 function set_decision(to_send){
-
     worker.inner_html([{id: 'decisions', str: ''}]);
     worker.socket.send(JSON.stringify({type: 'decision', text: to_send}));
-
-}
-
-function made_controlled_player(is_fold){
-
-    if(worker.socket.handler.game_mode){
-
-        premove('1', false);
-
-        if(is_fold){
-            worker.socket.handler.in_game = false;
-            worker.class_add('premoves', 'hidden');
-        }
-        else{
-            worker.inner_html([
-                {id: 'textpremove1', str: 'Check/Fold'},
-                {id: 'textpremove2', str: 'Check'},
-                {id: 'textpremove3', str: 'Call any'}
-            ]);
-        }
-
-    }
-
-    
-
 }
 
 function set_bet(id, count, reason=''){
@@ -2187,8 +2334,6 @@ function collect_money(){
         return;
     }
 
-    clear_decision();
-
     save_positions_chipstacks = [];
 
     let main_stack_margin_left = get_margin_left(0);
@@ -2219,7 +2364,7 @@ function collect_money(){
                 main_stack_margin_top
             ]);
 
-            if(replay_in_pause || worker.socket.handler.reconnect_mode){
+            if(worker.socket.handler.in_pause || worker.socket.handler.reconnect_mode){
                 set_bet(seat.id, 0);
             }
 
@@ -2231,7 +2376,7 @@ function collect_money(){
 
     if(save_positions_chipstacks.length > 0){
 
-        if(!replay_in_pause && !worker.socket.handler.reconnect_mode){
+        if(!worker.socket.handler.in_pause && !worker.socket.handler.reconnect_mode){
 
             frames_last = frames_moving;
             cannot_move_chips = true;
