@@ -2310,9 +2310,6 @@ class Board:
 
         self.open_flop()
 
-        for player in table.players.controlled:
-            player.network.flop(self.flop1, self.flop2, self.flop3)
-
         if table.online:
             table.network.flop(self.flop1, self.flop2, self.flop3)
             sleep(Table.Delay.Flop)
@@ -2335,9 +2332,6 @@ class Board:
 
         self.open_turn()
 
-        for player in table.players.controlled:
-            player.network.turn(self.turn)
-
         if table.online:
             table.network.turn(self.turn)
             sleep(Table.Delay.Turn)
@@ -2359,9 +2353,6 @@ class Board:
     def open_river_with_network(self, table) -> None:
 
         self.open_river()
-
-        for player in table.players.controlled:
-            player.network.river(self.river)
 
         if table.online:
             table.network.river(self.river)
@@ -4268,6 +4259,7 @@ class Network:
         to_send['type'] = 'resit'
         to_send['table_number'] = players.id
         to_send['is_final'] = players.is_final
+        to_send['seats'] = players.total_seats
 
         players_send = list()
 
