@@ -4673,6 +4673,7 @@ class PokerGame:
             self.table_id: int = 0
             self.button_seat: int = 0
             self.players_left: int = 0
+            self.is_final: bool = False
             self.goes_to_showdown: bool = False
             self.board: Board = Board(Deck())
             self.curr_step: BasePlay.StepType = BasePlay.Step.Preflop
@@ -4891,6 +4892,7 @@ class PokerGame:
 
             game = Game(self.seats, self.seats, 0)
             table = game.final_table
+            table.is_final = hand.is_final
 
             table.id = hand.table_id
             table.players.total_seats = self.seats
@@ -4900,7 +4902,7 @@ class PokerGame:
             table.blinds.big_blind = hand.big_blind
 
             game.average_stack = int(mean(player.money for player in hand.players))
-            game.players_left = len(hand.players)
+            game.players_left = hand.players_left
 
             players: List[Player] = []
             find: Dict[int, Player] = dict()
@@ -5200,6 +5202,11 @@ class PokerGame:
             for count, hand_index in enumerate(range(from_index + 1, to_index)):
                 self.hands[hand_index].players_left = from_hand.players_left - int((count + 1) * players_per_hand) - 1
 
+    def add_final_table_marks(self):
+        for hand in self.hands:
+            if hand.players_left == len(hand.players) + len(hand.sit_during_game):
+                hand.is_final = True
+
     def __str__(self) -> str:
         ret = [f'Poker game of {len(self.hands)} hands']
         i: int = 1
@@ -5364,6 +5371,7 @@ class GameParser:
                 GameParser.process_summary(game, steps[6])
 
         game.approximate_players_left()
+        game.add_final_table_marks()
         return game
 
     @staticmethod
