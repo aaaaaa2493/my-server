@@ -262,12 +262,8 @@ function post_replay_next_hand(){
     w.postMessage({type: 'next hand'});
 }
 
-function post_tournament_info(){
-    w.postMessage({type: 'tournament info'});
-}
-
-function post_last_hand_info(){
-    w.postMessage({type: 'last hand info'});
+function open_tab(name) {
+    w.postMessage({type: 'open tab', name: name});
 }
 
 function post_input_chat(event, text){

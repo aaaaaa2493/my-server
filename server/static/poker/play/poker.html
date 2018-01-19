@@ -48,41 +48,43 @@
         <div class="button in_general g1" onclick='document.getElementById("general_info").classList.add("hidden");'>Ok</div>
     </div>
 
-    <div id=tournament_info class="info hidden">
-          <span>You </span><span id=sit_on>sit on </span><span id=table_num_info>table #?</span><br>
-          <span>Current hand is #</span><span id=hand_num_info>?</span><br><br>
+    <div id=tabs class=hidden>
 
-          <span>Big blind: </span><span id=bb_info>?</span><br>
-          <span>Small blind: </span><span id=sb_info>?</span><br>
-          <span>Ante: </span><span id=ante_info>?</span><br><br>
-          
-          <span>Players left: </span><span id=players_left_info>?</span><br>
-          <span id=you_are_on><span>You are on </span><span id=place_info>?</span><span> place</span></span><br>
-          <span>Average stack: </span><span id=average_stack_info>?</span><br><br>
-          
-          Top players:<br><br>
-          <table id=top_players_info></table>
-    </div>
+        <div id=tournament_info class='info hidden'>
+              <span>You </span><span id=sit_on>sit on </span><span id=table_num_info>table #?</span><br>
+              <span>Current hand is #</span><span id=hand_num_info>?</span><br><br>
 
-    <div id=last_hand_info class="info hidden">
-              Board: 
+              <span>Big blind: </span><span id=bb_info>?</span><br>
+              <span>Small blind: </span><span id=sb_info>?</span><br>
+              <span>Ante: </span><span id=ante_info>?</span><br><br>
+
+              <span>Players left: </span><span id=players_left_info>?</span><br>
+              <span id=you_are_on><span>You are on </span><span id=place_info>?</span><span> place</span></span><br>
+              <span>Average stack: </span><span id=average_stack_info>?</span><br><br>
+
+              Top players:<br><br>
+              <table id=top_players_info></table>
+        </div>
+
+        <div id=last_hand_info class="info hidden">
+              Board:
               <img id=flop1_info class=small_card src="/img/poker/cards/UP.png">
               <img id=flop2_info class=small_card src="/img/poker/cards/UP.png">
               <img id=flop3_info class=small_card src="/img/poker/cards/UP.png">
               <img id=turn_info class=small_card src="/img/poker/cards/UP.png">
               <img id=river_info class=small_card src="/img/poker/cards/UP.png">
               <span id=your_cards>
-                  Your: 
+                  Your:
                   <img id=your_first_info class=small_card src="/img/poker/cards/UP.png">
                   <img id=your_second_info class=small_card src="/img/poker/cards/UP.png">
               </span>
-              
+
               <table id=cards_reveal></table>
-      
+        </div>
     </div>
 
-    <div id=tournament_info_button class='button tournament_info_button hidden' onclick="post_tournament_info()">Tournament info</div>
-    <div id=last_hand_info_button class='button last_hand_info_button hidden' onclick="post_last_hand_info()">Last hand info</div>
+    <div id=tournament_info_button class='button tournament_info_button hidden' onclick="open_tab('info')">Tournament info</div>
+    <div id=last_hand_info_button class='button last_hand_info_button hidden' onclick="open_tab('last hand')">Last hand info</div>
 
     <div id=exit class='button exit_button' onclick='post_socket_clean()'>Quit</div>
 

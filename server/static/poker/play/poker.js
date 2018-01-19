@@ -1713,13 +1713,15 @@ class InfoCreator{
 
 class TabController{
     constructor(){
-        this.info = new InfoTab();
-        this.last_hand = new LastHandTab();
+        this.empty = new EmptyTab(this, 'tabs');
+        this.info = new InfoTab(this, 'tournament_info');
+        this.last_hand = new LastHandTab(this, 'last_hand_info');
 
-        this.current = this.info;
-        this.is_visible = true;
+        this.current = this.empty;
+        this.is_visible = false;
 
         this.find_tab = {
+            'empty': this.empty,
             'info': this.info,
             'last hand': this.last_hand
         };
@@ -1728,21 +1730,26 @@ class TabController{
     hide(){
         if(this.is_visible){
             this.is_visible = false;
+            worker.class_add('tabs', 'hidden');
         }
     }
 
     show(){
         if(!this.is_visible){
             this.is_visible = true;
+            worker.class_rem([{id: 'tabs', class: 'hidden'}]);
         }
     }
 
     open(tab){
-        this.show();
-
         let new_tab = this.find_tab[tab];
 
-        if(new_tab !== undefined && new_tab !== this.current){
+        if(new_tab === this.current){
+            this.hide();
+            this.current.deactivate();
+            this.current = this.empty;
+        }
+        else if(new_tab){
             this.current.deactivate();
             this.current = new_tab;
             this.current.activate();
@@ -1755,16 +1762,17 @@ class TabController{
 }
 
 class BaseTab{
-    constructor(){
-        this.is_active = false;
+    constructor(controller, id_tab_element){
+        this.tabs = controller;
+        this.id = id_tab_element;
     }
 
     activate(){
-        this.is_active = true;
+        worker.class_rem([{id: this.id, class: 'hidden'}]);
     }
 
     deactivate(){
-        this.is_active = false;
+        worker.class_add(this.id, 'hidden');
     }
 
     message(){
@@ -1772,19 +1780,30 @@ class BaseTab{
     }
 }
 
+class EmptyTab extends BaseTab{
+
+    activate(){
+        this.tabs.hide();
+    }
+
+    deactivate(){
+        this.tabs.show();
+    }
+
+    message(){
+        super.message();
+    }
+}
+
 class InfoTab extends BaseTab{
     message(){
-        if(this.is_active){
-            print('InfoTab.message()');
-        }
+        print('InfoTab.message()');
     }
 }
 
 class LastHandTab extends BaseTab{
     message(){
-        if(this.is_active){
-            print('LastHandTab.message()');
-        }
+        print('LastHandTab.message()');
     }
 }
 
@@ -1923,20 +1942,16 @@ class WorkerConnection{
             this.socket.handler.next_hand();
             break;
 
-        case 'tournament info':
-            t_info_click();
-            break;
-
-        case 'last hand info':
-            lh_info_click();
-            break;
-
         case 'chat message':
             this.socket.handler.chat_message(data.key, data.text);
             break;
 
         case 'premove':
             this.socket.handler.premove(data.answer, data.checked);
+            break;
+
+        case 'open tab':
+            this.socket.handler.tabs.open(data.name);
             break;
 
         default:
@@ -2032,8 +2047,6 @@ const available_chips = [
     [1, '1']
 ];
 
-let is_t_info_active = false;
-let is_lh_info_active = false;
 let save_positions_chipstacks;
 let frames_moving = 50;
 let frames_last;
@@ -2280,47 +2293,6 @@ function text_change(text, max_value, min_value){
             }]);
         }
     }
-}
-
-function t_info_click(){
-
-    if(is_t_info_active === false){
-
-        if(is_lh_info_active){
-            lh_info_click();
-        }
-
-        is_t_info_active = true;
-        worker.class_rem([{id: 'tournament_info', class: 'hidden'}]);
-    }
-    else{
-
-        is_t_info_active = false;
-        worker.class_add('tournament_info', 'hidden');
-
-    }
-
-}
-
-function lh_info_click(){
-
-    if(is_lh_info_active === false){
-
-        if(is_t_info_active){
-            t_info_click();
-        }
-
-        is_lh_info_active = true;
-        worker.class_rem([{id: 'last_hand_info', class: 'hidden'}]);
-
-    }
-    else{
-
-        is_lh_info_active = false;
-        worker.class_add('last_hand_info', 'hidden');
-
-    }
-
 }
 
 function move_stacks_to_main(){
