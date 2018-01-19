@@ -8,20 +8,18 @@
     <script src="/static/poker/play/worker.js" charset="utf-8"></script>
 
     <script type="text/javascript">
-        var player_name = '{{name}}';
-        var table_to_spectate = '{{table}}';
-        var replay_id = '{{replay}}';
-        var back_addr = '{{back_addr}}';
-        var ip = '{{ip}}';
-        var port = '{{port}}';
-        var nick = readCookie('nick');
+        const player_name = '{{name}}';
+        const table_to_spectate = '{{table}}';
+        const replay_id = '{{replay}}';
+        const back_addr = '{{back_addr}}';
+        const ip = '{{ip}}';
+        const port = '{{port}}';
+        const nick = readCookie('nick');
 
         function playSound(soundfile_mp) {
-
-            var a = new Audio();
+            let a = new Audio();
             a.src = soundfile_mp;
             a.autoplay = true;
-
         }
 
     </script>
