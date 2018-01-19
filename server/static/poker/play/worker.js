@@ -225,11 +225,6 @@ function post_raise_pot(){
     w.postMessage({type: 'raise pot', value: raise.value, max_value: raise.max});
 }
 
-function post_textchange(text){
-    raise = document.getElementById('range');
-    w.postMessage({type: 'textraise', text: text, max_value: raise.max, min_value: raise.min});
-}
-
 function post_socket_close(){
     w.postMessage({type: 'socket close'});
 }
@@ -272,4 +267,58 @@ function post_input_chat(event, text){
 
 function post_premove(obj, answer){
     w.postMessage({type: 'premove', answer: answer, checked: obj.checked});
+}
+
+function text_change(text){
+
+    let raise = document.getElementById('range');
+    let max_value = raise.max;
+    let min_value = raise.min;
+
+    if(text.length > 0) {
+        if (text.length === 1 && text === '0') {
+            document.getElementById('textraise').value = '';
+        }
+        else {
+
+            let new_text = '';
+            let at_least_one_num = false;
+
+            for (let i = 0; i < text.length; i++) {
+                let curr = text.charCodeAt(i);
+
+                if (curr > 47 && curr < 58) {
+
+                    if (at_least_one_num === false && curr === 48) {
+                        continue;
+                    }
+
+                    new_text += text.charAt(i);
+
+                    at_least_one_num = true;
+                }
+
+            }
+
+            document.getElementById('textraise').value = new_text;
+
+            if (new_text === '') {
+                new_text = min_value;
+            }
+
+            let new_value = parseInt(new_text);
+
+            if (new_value > max_value) {
+                new_value = max_value;
+            }
+            else if (new_value < min_value) {
+                new_value = min_value;
+            }
+
+            document.getElementById('range').value = new_value;
+
+            let action = new_value === max_value ? 'All in' : 'Raise';
+            document.getElementById('raise').innerHTML = `${action} ${shortcut(new_value)}`;
+        }
+    }
 }

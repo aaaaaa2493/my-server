@@ -929,7 +929,7 @@ class GameHandler extends Handler{
                                 value=${data.decisions[i].from}>`;
 
                 decisions += `<input id=textraise type=text class=input_button placeholder='input amount' 
-                                onkeyup='post_textchange(this.value)'>`;
+                                onkeyup='text_change(this.value)'>`;
 
                 decisions += `<div class='button small_button minus_button' onclick='post_raise_minus()'>-</div>
                               <div class='button small_button plus_button' onclick='post_raise_plus()'>+</div>
@@ -1904,10 +1904,6 @@ class WorkerConnection{
             this.socket.handler.raises.pot(data.max_value);
             break;
 
-        case 'textraise':
-            text_change(data.text, data.max_value, data.min_value);
-            break;
-
         case 'socket close':
             this.socket.socket.close();
             break;
@@ -2242,57 +2238,6 @@ function get_margin_top(i){
     }
     return 0;
 
-}
-
-function text_change(text, max_value, min_value){
-
-    if(text.length > 0) {
-        if (text.length === 1 && text === '0') {
-            worker.change_value('textraise', '');
-        }
-        else {
-
-            let new_text = '';
-            let at_least_one_num = false;
-
-            for (let i = 0; i < text.length; i++) {
-                let curr = text.charCodeAt(i);
-
-                if (curr > 47 && curr < 58) {
-
-                    if (at_least_one_num === false && curr === 48) {
-                        continue;
-                    }
-
-                    new_text += text.charAt(i);
-
-                    at_least_one_num = true;
-                }
-
-            }
-
-            worker.change_value('textraise', new_text);
-
-            if (new_text === '') {
-                new_text = min_value;
-            }
-
-            let new_value = parseInt(new_text);
-
-            if (new_value > max_value) {
-                new_value = max_value;
-            }
-            else if (new_value < min_value) {
-                new_value = min_value;
-            }
-
-            worker.change_value('range', new_value);
-            worker.inner_html([{
-                id: 'raise',
-                str: (new_value === max_value ? 'All in ' : 'Raise ') + shortcut_number_for_decision(new_value)
-            }]);
-        }
-    }
 }
 
 function move_stacks_to_main(){
