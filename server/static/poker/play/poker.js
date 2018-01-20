@@ -30,34 +30,29 @@ class Handler{
 
             let data = this.queue.shift();
 
-            if(data.type === 'broken'){
-                this.socket.close();
-                return;
-            }
+            switch(data.type){
+            case 'broken':
+                this.broken();
+                break;
 
-            if(data.type === 'finish'){
-                this.socket.clean = true;
-                this.info.finish(data.msg);
-                return;
-            }
+            case 'finish':
+                this.finish(data);
+                break;
 
-            if(data.type === 'info'){
-                this.info.basic(data.msg);
-                continue;
-            }
+            case 'info':
+                this.info_message(data);
+                break;
 
-            if(data.type === 'reconnect start'){
-                this.reconnect_mode = true;
-                continue;
-            }
+            case 'reconnect start':
+                this.reconnect_start();
+                break;
 
-            if(data.type === 'reconnect end'){
-                this.reconnect_mode = false;
-                if(this.game_mode && !this.resit_mode){
-                    this.info.success_reconnection();
-                }
-                this.resit_mode = false;
-                continue;
+            case 'reconnect end':
+                this.reconnect_end();
+                break;
+
+            default:
+                break;
             }
 
             if(!this.reconnect_mode && this.wait_for_init && data.type !== 'init hand'){
@@ -201,6 +196,29 @@ class Handler{
                 worker.socket.send(JSON.stringify({type: 'chat', text: text}));
             }
         }
+    }
+
+    broken(){
+        this.socket.close();
+        this.in_loop = false;
+    }
+
+    finish(data){
+        this.socket.clean = true;
+        this.info.finish(data.msg);
+        this.in_loop = false;
+    }
+
+    info_message(data){
+        this.info.basic(data.msg);
+    }
+
+    reconnect_start(){
+        this.reconnect_mode = true;
+    }
+
+    reconnect_end(){
+        this.reconnect_mode = false;
     }
 
     init_hand(data){
@@ -622,6 +640,16 @@ class GameHandler extends Handler{
     send_decision(to_send){
         worker.inner_html([{id: 'decisions', str: ''}]);
         this.socket.send(JSON.stringify({type: 'decision', text: to_send}));
+    }
+
+    reconnect_end(){
+
+        if(!this.resit_mode){
+            this.info.success_reconnection();
+        }
+        this.resit_mode = false;
+
+        super.reconnect_end();
     }
 
     init_hand(data){
