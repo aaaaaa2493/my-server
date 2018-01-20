@@ -199,7 +199,61 @@ class Handler{
     }
 
     collect_money(){
-        collect_money();
+
+        save_positions_chipstacks = [];
+
+        let main_stack_margin_left = get_margin_left(0);
+        let main_stack_margin_top = get_margin_top(0);
+
+        let all_chips = [];
+
+        for(let seat of worker.socket.handler.seats.all()){
+
+            if(seat.chipstack.money > 0){
+
+                worker.socket.handler.seats.main_stack.money += seat.chipstack.money;
+                seat.stack -= seat.chipstack.money;
+
+                chipstack = 'ch' + seat.local_seat;
+
+                all_chips.push({id: chipstack});
+
+                let chipstack_margin_left = get_margin_left(seat.local_seat);
+                let chipstack_margin_top = get_margin_top(seat.local_seat);
+
+                save_positions_chipstacks.push([
+                    seat.local_seat,
+                    chipstack,
+                    chipstack_margin_left,
+                    chipstack_margin_top,
+                    main_stack_margin_left,
+                    main_stack_margin_top
+                ]);
+
+                if(worker.socket.handler.in_pause || worker.socket.handler.reconnect_mode){
+                    worker.socket.handler.seats.set_bet(seat.id, 0);
+                }
+
+            }
+
+        }
+
+        worker.remove_style(all_chips);
+
+        if(save_positions_chipstacks.length > 0){
+
+            if(!worker.socket.handler.in_pause && !worker.socket.handler.reconnect_mode){
+
+                frames_last = frames_moving;
+                cannot_move_chips = true;
+
+                setTimeout(move_stacks_to_main, 10);
+            }
+            else{
+                worker.socket.handler.seats.set_bet(-1, worker.socket.handler.seats.main_stack.money);
+            }
+
+        }
 
         this.seats.clear_decision_states();
 
@@ -2228,69 +2282,6 @@ function move_stack_from_main(){
         cannot_move_chips = false;
 
         worker.margin([{id: chipstack[1], left: chipstack[2] + 'px', top: chipstack[3] + 'px'}]);
-
-    }
-
-}
-
-function collect_money(){
-
-    if(cannot_move_chips){
-        return;
-    }
-
-    save_positions_chipstacks = [];
-
-    let main_stack_margin_left = get_margin_left(0);
-    let main_stack_margin_top = get_margin_top(0);
-
-    let all_chips = [];
-
-    for(let seat of worker.socket.handler.seats.all()){
-
-        if(seat.chipstack.money > 0){
-
-            worker.socket.handler.seats.main_stack.money += seat.chipstack.money;
-            seat.stack -= seat.chipstack.money;
-
-            chipstack = 'ch' + seat.local_seat;
-
-            all_chips.push({id: chipstack});
-
-            let chipstack_margin_left = get_margin_left(seat.local_seat);
-            let chipstack_margin_top = get_margin_top(seat.local_seat);
-
-            save_positions_chipstacks.push([
-                seat.local_seat,
-                chipstack,
-                chipstack_margin_left,
-                chipstack_margin_top,
-                main_stack_margin_left,
-                main_stack_margin_top
-            ]);
-
-            if(worker.socket.handler.in_pause || worker.socket.handler.reconnect_mode){
-                worker.socket.handler.seats.set_bet(seat.id, 0);
-            }
-
-        }
-
-    }
-
-    worker.remove_style(all_chips);
-
-    if(save_positions_chipstacks.length > 0){
-
-        if(!worker.socket.handler.in_pause && !worker.socket.handler.reconnect_mode){
-
-            frames_last = frames_moving;
-            cannot_move_chips = true;
-
-            setTimeout(move_stacks_to_main, 10);
-        }
-        else{
-            worker.socket.handler.seats.set_bet(-1, worker.socket.handler.seats.main_stack.money);
-        }
 
     }
 
