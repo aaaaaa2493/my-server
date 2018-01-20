@@ -13,6 +13,47 @@ class Handler{
         this.info = new InfoCreator();
         this.raises = new Raises(this);
         this.tabs = new TabController();
+
+        this.system_handle = {
+            'broken': d => this.broken(d),
+            'finish': d => this.finish(d),
+            'info': d => this.info_message(d),
+            'reconnect start': d => this.reconnect_start(d),
+            'reconnect end': d => this.reconnect_end(d),
+        };
+
+        this.game_handle = {
+            'init hand': d => this.init_hand(d),
+            'ante': d => this.ante(d),
+            'collect money': d => this.collect_money(d),
+            'blinds': d => this.blinds(d),
+            'blinds increased': d => this.blinds_increased(d),
+            'give cards': d => this.give_cards(d),
+            'deal cards': d => this.deal_cards(d),
+            'delete player': d => this.delete_player(d),
+            'add player': d => this.delete_player(d),
+            'resit': d => this.resit(d),
+            'switch decision': d => this.switch_decision(d),
+            'made decision': d => this.made_decision(d),
+            'excess money': d => this.excess_money(d),
+            'flop': d => this.flop(d),
+            'turn': d => this.turn(d),
+            'river': d => this.river(d),
+            'open cards': d => this.open_cards(d),
+            'give money': d => this.give_money(d),
+            'money results': d => this.money_results(d),
+            'hand results': d => this.hand_results(d),
+            'busted': d => this.busted(d),
+            'clear': d => this.clear(d),
+            'win': d => this.win(d),
+            'place': d => this.place(d),
+            'chat': d => this.chat(d),
+            'disconnected': d => this.disconnected(d),
+            'connected': d => this.connected(d),
+            'kick': d => this.kick(d),
+            'back counting': d => this.back_counting(d),
+            'set decision': d => this.set_decision(d),
+        };
     }
 
     async handle(){
@@ -30,29 +71,8 @@ class Handler{
 
             let data = this.queue.shift();
 
-            switch(data.type){
-            case 'broken':
-                this.broken();
-                break;
-
-            case 'finish':
-                this.finish(data);
-                break;
-
-            case 'info':
-                this.info_message(data);
-                break;
-
-            case 'reconnect start':
-                this.reconnect_start();
-                break;
-
-            case 'reconnect end':
-                this.reconnect_end();
-                break;
-
-            default:
-                break;
+            if(data.type in this.system_handle){
+                this.system_handle[data.type](data);
             }
 
             if(!this.reconnect_mode && this.wait_for_init && data.type !== 'init hand'){
@@ -61,131 +81,9 @@ class Handler{
 
             console.log(data);
 
-            switch(data.type){
-            case 'init hand':
-                this.init_hand(data);
-                break;
-
-            case 'ante':
-                this.ante(data);
-                break;
-
-            case 'collect money':
-                this.collect_money();
-                break;
-
-            case 'blinds':
-                this.blinds(data);
-                break;
-
-            case 'blinds increased':
-                this.blinds_increased(data);
-                break;
-
-            case 'give cards':
-                this.give_cards(data);
-                break;
-
-            case 'deal cards':
-                this.deal_cards(data);
-                break;
-
-            case 'delete player':
-                this.delete_player(data);
-                break;
-
-            case 'add player':
-                this.add_player(data);
-                break;
-
-            case 'resit':
-                this.resit(data);
-                break;
-
-            case 'switch decision':
-                this.switch_decision(data);
-                break;
-
-            case 'made decision':
-                this.made_decision(data);
-                break;
-
-            case 'excess money':
-                this.excess_money(data);
-                break;
-
-            case 'flop':
-                this.flop(data);
-                break;
-
-            case 'turn':
-                this.turn(data);
-                break;
-
-            case 'river':
-                this.river(data);
-                break;
-
-            case 'open cards':
-                this.open_cards(data);
-                break;
-
-            case 'give money':
-                this.give_money(data);
-                break;
-
-            case 'money results':
-                this.money_results(data);
-                break;
-
-            case 'hand results':
-                this.hand_results(data);
-                break;
-
-            case 'busted':
-                this.busted(data);
-                break;
-
-            case 'clear':
-                this.clear();
-                break;
-
-            case 'win':
-                this.win();
-                break;
-
-            case 'place':
-                this.place(data);
-                break;
-
-            case 'chat':
-                this.chat(data);
-                break;
-
-            case 'disconnected':
-                this.disconnected(data);
-                break;
-
-            case 'connected':
-                this.connected(data);
-                break;
-
-            case 'kick':
-                this.kick();
-                break;
-
-            case 'back counting':
-                this.back_counting(data);
-                break;
-
-            case 'set decision':
-                this.set_decision(data);
-                break;
-
-            default:
-                break;
+            if(data.type in this.game_handle){
+                this.game_handle[data.type](data);
             }
-
         }
     }
 
