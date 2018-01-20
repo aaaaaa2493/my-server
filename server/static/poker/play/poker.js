@@ -599,12 +599,9 @@ class Handler{
     }
 
     disconnected(data){
-        // TODO - нужна ли проверка на undefined?
-        if(this.seats.id_to_local_seat[data.id] !== undefined){
-            let seat = this.seats.get_by_id(data.id);
-            worker.class_add('p' + seat.local_seat, 'is_disconnected');
-            seat.disconnected = true;
-        }
+        let seat = this.seats.get_by_id(data.id);
+        worker.class_add('p' + seat.local_seat, 'is_disconnected');
+        seat.disconnected = true;
     }
 
     connected(data){
