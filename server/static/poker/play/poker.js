@@ -36,27 +36,13 @@ class Handler{
             }
 
             if(data.type === 'finish'){
-
                 this.socket.clean = true;
-
-                let to_general_info = data.msg;
-                to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");' +
-                                   'post_socket_close();\'>Ok</div>';
-
-                worker.inner_html([{id: 'general_info', str: to_general_info}]);
-                worker.class_rem([{id: 'general_info', class: 'hidden'}]);
-
+                this.info.finish(data.msg);
                 return;
             }
 
             if(data.type === 'info'){
-
-                let to_general_info = data.msg;
-                to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
-
-                worker.inner_html([{id: 'general_info', str: to_general_info}]);
-                worker.class_rem([{id: 'general_info', class: 'hidden'}]);
-
+                this.info.basic(data.msg);
                 continue;
             }
 
@@ -67,19 +53,10 @@ class Handler{
 
             if(data.type === 'reconnect end'){
                 this.reconnect_mode = false;
-
-                if(!this.spectate_mode && !this.resit_mode && !this.replay_mode){
-
-                    let to_general_info = 'Reconnection was successful.';
-                    to_general_info += '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
-
-                    worker.inner_html([{id: 'general_info', str: to_general_info}]);
-                    worker.class_rem([{id: 'general_info', class: 'hidden'}]);
-
+                if(this.game_mode && !this.resit_mode){
+                    this.info.success_reconnection();
                 }
-
                 this.resit_mode = false;
-
                 continue;
             }
 
@@ -650,7 +627,7 @@ class GameHandler extends Handler{
     init_hand(data){
 
         if(this.wait_for_init){
-            this.info.basic('Game started. Good luck!');
+            this.info.started_game();
             worker.class_rem([{id: 'message', class: 'hidden'}]);
         }
 
@@ -660,40 +637,42 @@ class GameHandler extends Handler{
 
     blinds(data){
 
-        // TODO - проверить, надо ли проверять на пересадку
+        if(!this.resit_mode){
+            this.in_game = true;
 
-        this.in_game = true;
+            let curr_bb;
+            let curr_bb_id;
 
-        let curr_bb;
-        let curr_bb_id;
-
-        if(data.info.length === 1){
-            curr_bb = data.info[0].paid;
-            curr_bb_id = data.info[0].id;
-        }
-        else{
-            curr_bb = data.info[1].paid;
-            curr_bb_id = data.info[1].id;
-        }
-
-        if(curr_bb_id === this.seats.my_id){
-            if (curr_bb < this.seats.me.stack){
-                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-                this.premoves.check_fold();
+            if(data.info.length === 1){
+                curr_bb = data.info[0].paid;
+                curr_bb_id = data.info[0].id;
             }
             else{
-                // TODO - если нахожусь в олл-ин - то скрыть превув
+                curr_bb = data.info[1].paid;
+                curr_bb_id = data.info[1].id;
             }
 
-        }
-        else{
-            if (this.seats.bb < this.seats.me.stack){
-                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-                this.premoves.call_fold(this.seats.bb);
+            if(curr_bb_id === this.seats.my_id){
+                if (curr_bb < this.seats.me.stack){
+                    worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                    this.premoves.check_fold();
+                }
+                else{
+                    // so I am in all-in and premoves should be hidden
+                    this.premoves.hide();
+                }
+
             }
             else{
-                worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-                // TODO - показать возможность олл-ина
+                if (this.seats.bb < this.seats.me.stack){
+                    worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                    this.premoves.call_fold(this.seats.bb);
+                }
+                else{
+                    worker.class_rem([{id: 'premoves', class: 'hidden'}]);
+                    // big blind amount bigger than my stack so either fold or all-in
+                    this.premoves.all_in_fold(this.seats.me.stack);
+                }
             }
         }
 
@@ -1457,7 +1436,11 @@ class Seats{
     }
 
     set_empty_seat(local_seat){
-    // TODO : handle 'is_disconnected' attribute when setting empty
+
+        if(this.seats.get(local_seat).disconnected){
+            worker.class_rem([{id: 'p' + local_seat, class: 'is_disconnected'}]);
+        }
+
         if(this.is_final){
             worker.class_add('p' + local_seat, 'hidden');
         }
@@ -1655,6 +1638,10 @@ class InfoCreator{
         worker.class_rem([{id: 'general_info', class: 'hidden'}]);
     }
 
+    started_game(){
+        this.basic('Game started. Good luck!');
+    }
+
     watching_table(table_number, is_final){
         if(is_final){
             this.basic('You are watching table #' + table_number);
@@ -1704,6 +1691,16 @@ class InfoCreator{
         this.basic(info, [
             ['Refresh', 'window.location=window.location']
         ]);
+    }
+
+    finish(msg){
+        this.basic(msg, [
+            ['Ok', 'post_socket_close()']
+        ]);
+    }
+
+    success_reconnection(){
+        this.basic('Reconnection was successful.');
     }
 
 }
