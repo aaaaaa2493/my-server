@@ -31,7 +31,7 @@ class Handler{
             'give cards': d => this.give_cards(d),
             'deal cards': d => this.deal_cards(d),
             'delete player': d => this.delete_player(d),
-            'add player': d => this.delete_player(d),
+            'add player': d => this.add_player(d),
             'resit': d => this.resit(d),
             'switch decision': d => this.switch_decision(d),
             'made decision': d => this.made_decision(d),
@@ -1216,7 +1216,7 @@ class Seats{
 
         for(let i = 0; i < available_chips.length; i++){
             if(count >= available_chips[i][0]){
-                let int_amount = parseInt(count / available_chips[i][0]);
+                let int_amount = Math.floor(count / available_chips[i][0]);
                 amounts.push([available_chips[i][1], int_amount]);
                 count -= int_amount * available_chips[i][0];
             }
@@ -2030,35 +2030,35 @@ function shortcut_number_for_decision(num){
     }
     else if(num < 100000){
         // 46776 -> 46.7k
-        return (parseInt(num/100)/10) + 'k';
+        return (Math.floor(num/100)/10) + 'k';
     }
     else if(num < 1000000){
         // 123231 -> 123k
-        return parseInt(num/1000) + 'k';
+        return Math.floor(num/1000) + 'k';
     }
     else if(num < 10000000){
         // 3 123 345 -> 3.12m
-        return (parseInt(num/10000)/100) + 'm';
+        return (Math.floor(num/10000)/100) + 'm';
     }
     else if(num < 100000000){
         // 12 345 678 -> 12.3m
-        return ((parseInt(num/100000))/10) + 'm';
+        return ((Math.floor(num/100000))/10) + 'm';
     }
     else if(num < 1000000000){
         // 123 345 678 -> 123m
-        return parseInt(num/1000000) + 'm';
+        return Math.floor(num/1000000) + 'm';
     }
     else if(num < 10000000000){
         // 1 123 345 678 -> 1.12b
-        return (parseInt(num/10000000)/100) + 'b';
+        return (Math.floor(num/10000000)/100) + 'b';
     }
     else if(num < 100000000000){
         // 12 123 345 678 -> 12.1b
-        return (parseInt(num/100000000)/10) + 'b';
+        return (Math.floor(num/100000000)/10) + 'b';
     }
     else {
         // 122 223 345 678 -> 123b
-        return parseInt(num/1000000000) + 'b';
+        return Math.floor(num/1000000000) + 'b';
     }
 
 }
@@ -2066,7 +2066,7 @@ function shortcut_number_for_decision(num){
 function get_sound(file){
 
     if(file === 'chips'){
-        let type_sound = parseInt(Math.random()*5);
+        let type_sound = Math.floor(Math.random()*5);
 
         return '/music/poker/chips/chip' + (type_sound+1) + '.mp3';
     }
@@ -2176,8 +2176,8 @@ function move_stacks_to_main(){
 
             all_margin.push({
                 id: curr_chipstack[1],
-                left: (curr_chipstack[2] + parseInt((curr_chipstack[4] - curr_chipstack[2]) * percent_done)) + 'px',
-                top: (curr_chipstack[3] + parseInt((curr_chipstack[5] - curr_chipstack[3]) * percent_done)) + 'px'
+                left: (curr_chipstack[2] + Math.floor((curr_chipstack[4] - curr_chipstack[2]) * percent_done)) + 'px',
+                top: (curr_chipstack[3] + Math.floor((curr_chipstack[5] - curr_chipstack[3]) * percent_done)) + 'px'
             });
 
         }
@@ -2218,8 +2218,8 @@ function move_stack_from_main(){
 
         worker.margin([{
             id: chipstack[1],
-            left: (chipstack[2] + parseInt((chipstack[4] - chipstack[2]) * percent_done)) + 'px',
-            top: (chipstack[3] + parseInt((chipstack[5] - chipstack[3]) * percent_done)) + 'px'
+            left: (chipstack[2] + Math.floor((chipstack[4] - chipstack[2]) * percent_done)) + 'px',
+            top: (chipstack[3] + Math.floor((chipstack[5] - chipstack[3]) * percent_done)) + 'px'
         }]);
 
         setTimeout(move_stack_from_main, 10);
