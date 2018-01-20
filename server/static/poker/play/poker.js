@@ -615,7 +615,7 @@ class GameHandler extends Handler{
         this.socket.send('js ' + this.name);
     }
 
-    premove(num_answer, is_checked){
+    set_premove(num_answer, is_checked){
         this.premoves.set(num_answer, is_checked);
     }
 
@@ -1937,7 +1937,7 @@ class WorkerConnection{
             break;
 
         case 'premove':
-            this.socket.handler.premove(data.answer, data.checked);
+            this.socket.handler.set_premove(data.answer, data.checked);
             break;
 
         case 'open tab':
