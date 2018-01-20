@@ -4,8 +4,6 @@ class Handler{
         this.in_pause = false; // TODO - for Replay, need to delete
         this.reconnect_mode = false;
         this.wait_for_init = true;
-        this.spectate_mode = false;
-        this.replay_mode = false;
         this.game_mode = false;
         this.queue = [];
         this.socket = socket;
@@ -90,9 +88,7 @@ class Handler{
     chat_message(key, text){
         if(key === 13 && text.length > 0){ // enter key is 13
             worker.change_value('message', '');
-            if(!this.replay_mode){
-                worker.socket.send(JSON.stringify({type: 'chat', text: text}));
-            }
+            worker.socket.send(JSON.stringify({type: 'chat', text: text}));
         }
     }
 
@@ -856,7 +852,6 @@ class SpectatorHandler extends Handler{
         super(socket);
         this.table_to_spectate = table_and_nick[0];
         this.nick = table_and_nick[1];
-        this.spectate_mode = true;
     }
 
     open(){
@@ -888,7 +883,6 @@ class ReplayHandler extends Handler{
     constructor(id, socket){
         super(socket);
         this.replay_id = id;
-        this.replay_mode = true;
         this.in_pause = false;
     }
 
@@ -901,6 +895,11 @@ class ReplayHandler extends Handler{
         worker.bigger_chat();
 
         this.socket.send('rp ' + this.replay_id);
+    }
+
+    chat_message(){
+        // Need to rewrite chat_message method for replay to do nothing
+        print('Replay.chat_message()');
     }
 
     pause_play(){
