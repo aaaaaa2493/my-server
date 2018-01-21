@@ -202,9 +202,7 @@ class Handler{
 
         }
 
-        if(!this.reconnect_mode){
-            worker.play_sound('chips');
-        }
+        worker.play_sound('chips');
     }
 
     collect_money(){
@@ -266,9 +264,7 @@ class Handler{
 
         this.seats.clear_decision_states();
 
-        if(!this.reconnect_mode){
-            worker.play_sound('collect');
-        }
+        worker.play_sound('collect');
     }
 
     blinds(data){
@@ -296,9 +292,7 @@ class Handler{
             this.seats.set_bet(data.info[1].id, data.info[1].paid, 'BB');
         }
 
-        if(!this.reconnect_mode){
-            worker.play_sound('chips');
-        }
+        worker.play_sound('chips');
     }
 
     blinds_increased(data){
@@ -361,38 +355,31 @@ class Handler{
         case 'fold':
             worker.src_hide(seat.card1, seat.card2);
             this.seats.update_info(this.seats.id_in_decision, 'Fold');
+            worker.play_sound('fold');
             break;
 
         case 'check':
             this.seats.update_info(this.seats.id_in_decision, 'Check');
+            worker.play_sound('check');
             break;
 
         case 'call':
             this.seats.set_bet(this.seats.id_in_decision, data.money, 'Call');
+            worker.play_sound('chips');
             break;
 
         case 'raise':
             this.seats.set_bet(this.seats.id_in_decision, data.money, 'Raise');
+            worker.play_sound('chips');
             break;
 
         case 'all in':
             this.seats.set_bet(this.seats.id_in_decision, data.money, 'All in');
+            worker.play_sound('chips');
             break;
 
         default:
             break;
-        }
-
-        if(!this.reconnect_mode){
-            if(data.result === 'all in' || data.result === 'raise' || data.result === 'call'){
-                worker.play_sound('chips');
-            }
-            else if(data.result === 'fold'){
-                worker.play_sound('fold');
-            }
-            else if(data.result === 'check'){
-                worker.play_sound('check');
-            }
         }
     }
 
@@ -410,9 +397,7 @@ class Handler{
             {id: 'flop3', src: get_src(data.card3)}
         ]);
 
-        if(!this.reconnect_mode){
-            worker.play_sound('fold');
-        }
+        worker.play_sound('fold');
     }
 
     turn(data){
@@ -421,9 +406,7 @@ class Handler{
 
         worker.src([{id: 'turn', src: get_src(data.card)}]);
 
-        if(!this.reconnect_mode){
-            worker.play_sound('fold');
-        }
+        worker.play_sound('fold');
     }
 
     river(data){
@@ -432,9 +415,7 @@ class Handler{
 
         worker.src([{id: 'river', src: get_src(data.card)}]);
 
-        if(!this.reconnect_mode){
-            worker.play_sound('fold');
-        }
+        worker.play_sound('fold');
     }
 
     open_cards(data){
@@ -1983,7 +1964,7 @@ class WorkerConnection{
     }
 
     play_sound(file){
-        if(!this.socket.handler.in_pause){
+        if(!this.socket.handler.in_pause && !this.socket.handler.reconnect_mode){
             this.send({type: 'sound', file: get_sound(file)});
         }
     }
