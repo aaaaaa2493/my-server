@@ -9,7 +9,6 @@ class Handler{
         this.socket = socket;
         this.seats = undefined;
         this.info = new InfoCreator();
-        this.raises = new Raises(this);
         this.tabs = new TabController();
 
         this.system_handle = {
@@ -214,11 +213,11 @@ class Handler{
 
         let all_chips = [];
 
-        for(let seat of worker.socket.handler.seats.all()){
+        for(let seat of this.seats.all()){
 
             if(seat.chipstack.money > 0){
 
-                worker.socket.handler.seats.main_stack.money += seat.chipstack.money;
+                this.seats.main_stack.money += seat.chipstack.money;
                 seat.stack -= seat.chipstack.money;
 
                 chipstack = 'ch' + seat.local_seat;
@@ -237,7 +236,7 @@ class Handler{
                     main_stack_margin_top
                 ]);
 
-                if(worker.socket.handler.in_pause || worker.socket.handler.reconnect_mode){
+                if(this.in_pause || this.reconnect_mode){
                     worker.socket.handler.seats.set_bet(seat.id, 0);
                 }
 
@@ -249,7 +248,7 @@ class Handler{
 
         if(save_positions_chipstacks.length > 0){
 
-            if(!worker.socket.handler.in_pause && !worker.socket.handler.reconnect_mode){
+            if(!this.in_pause && !this.reconnect_mode){
 
                 frames_last = frames_moving;
                 cannot_move_chips = true;
@@ -257,7 +256,7 @@ class Handler{
                 setTimeout(move_stacks_to_main, 10);
             }
             else{
-                worker.socket.handler.seats.set_bet(-1, worker.socket.handler.seats.main_stack.money);
+                this.seats.set_bet(-1, this.seats.main_stack.money);
             }
 
         }
@@ -565,6 +564,7 @@ class GameHandler extends Handler{
         this.resit_mode = false;
         this.in_game = false;
         this.premoves = new Premoves();
+        this.raises = new Raises(this);
     }
 
     open(){
