@@ -137,25 +137,34 @@ class Handler{
 
         }
 
+        let table_number = shortcut_number_for_player(data.table_number);
+
         if(data.is_final){
             all_inner_html.push({id: 'table_num_info', str: 'final table'});
             all_inner_html.push({id: 'table_num', str: 'Final table'});
         }
         else{
-            all_inner_html.push({id: 'table_num_info', str: 'table #' + shortcut_number_for_player(data.table_number)});
-            all_inner_html.push({id: 'table_num', str: 'Table #' + shortcut_number_for_player(data.table_number)});
+            all_inner_html.push({id: 'table_num_info', str: 'table #' + table_number});
+            all_inner_html.push({id: 'table_num', str: 'Table #' + table_number});
         }
 
-        all_inner_html.push({id: 'hand_num_info', str: shortcut_number_for_player(data.hand_number)});
-        all_inner_html.push({id: 'hand_num', str: shortcut_number_for_player(data.hand_number)});
-        all_inner_html.push({id: 'ante_info', str: shortcut_number_for_decision(data.ante)});
-        all_inner_html.push({id: 'ante_shortcut', str: shortcut_number_for_decision(data.ante)});
-        all_inner_html.push({id: 'sb_info', str: shortcut_number_for_decision(data.sb)});
-        all_inner_html.push({id: 'small_blind_shortcut', str: shortcut_number_for_decision(data.sb)});
-        all_inner_html.push({id: 'bb_info', str: shortcut_number_for_decision(data.bb)});
-        all_inner_html.push({id: 'big_blind_shortcut', str: shortcut_number_for_decision(data.bb)});
-        all_inner_html.push({id: 'average_stack_info', str: shortcut_number_for_player(data.avg_stack)});
-        all_inner_html.push({id: 'players_left_info', str: shortcut_number_for_player(data.players_left)});
+        let hand_number = shortcut_number_for_player(data.hand_number);
+        let ante = shortcut_number_for_decision(data.ante);
+        let sb = shortcut_number_for_decision(data.sb);
+        let bb = shortcut_number_for_decision(data.bb);
+        let avg_stack = shortcut_number_for_player(data.avg_stack);
+        let players_left = shortcut_number_for_player(data.players_left);
+
+        all_inner_html.push({id: 'hand_num_info', str: hand_number});
+        all_inner_html.push({id: 'hand_num', str: hand_number});
+        all_inner_html.push({id: 'ante_info', str: ante});
+        all_inner_html.push({id: 'ante_shortcut', str: ante});
+        all_inner_html.push({id: 'sb_info', str: sb});
+        all_inner_html.push({id: 'small_blind_shortcut', str: sb});
+        all_inner_html.push({id: 'bb_info', str: bb});
+        all_inner_html.push({id: 'big_blind_shortcut', str: bb});
+        all_inner_html.push({id: 'average_stack_info', str: avg_stack});
+        all_inner_html.push({id: 'players_left_info', str: players_left});
 
         worker.remove_style([
             {id: 'ch0'}, {id: 'ch1'},
