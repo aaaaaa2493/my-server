@@ -1,29 +1,33 @@
 function createCookie(name,value,days) {
-    var expires = "";
+    let expires = '';
     if (days) {
-        var date = new Date();
+        let date = new Date();
         date.setTime(date.getTime() + (days*24*60*60*1000));
-        expires = "; expires=" + date.toUTCString();
+        expires = '; expires='+ date.toUTCString();
     }
-    document.cookie = name + "=" + value + expires + "; path=/";
+    document.cookie = name + '=' + value + expires + '; path=/';
 }
 
 function readCookie(name) {
-    var nameEQ = name + "=";
-    var ca = document.cookie.split(';');
-    for(var i=0;i < ca.length;i++) {
-        var c = ca[i];
-        while (c.charAt(0)==' ') c = c.substring(1,c.length);
-        if (c.indexOf(nameEQ) == 0) return c.substring(nameEQ.length,c.length);
+    let nameEQ = name + '=';
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0)=== ' '){
+            c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) === 0) {
+            return c.substring(nameEQ.length, c.length);
+        }
     }
     return null;
 }
 
 function eraseCookie(name) {
-    createCookie(name,"",-1);
+    createCookie(name, '', -1);
 }
 
-var w;
+let w;
 
 window.onload = function(){
 
@@ -39,63 +43,64 @@ window.onload = function(){
     }
 
     document.getElementById('general_info').innerHTML = 'Wait while all players register' +
-                '<div class="button in_general g1" onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
+                '<div class="button in_general g1" ' +
+        'onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
 
     document.getElementById('general_info').classList.remove('hidden');
     
-    w = new Worker("/static/poker/play/poker.js");
+    w = new Worker('/static/poker/play/poker.js');
 
     w.onmessage = function(event) {
         console.log('from worker: ', event.data);
 
-        data = event.data;
+        let data = event.data;
 
-        if(data.type == 'inner html'){
+        if(data.type === 'inner html'){
 
-            obj = data.obj;
+            let obj = data.obj;
 
-            for(i = 0; i < obj.length; i++){
+            for(let i = 0; i < obj.length; i++){
                 document.getElementById(obj[i].id).innerHTML = obj[i].str;
             }
 
         }
-        else if(data.type == 'change value'){
+        else if(data.type === 'change value'){
             document.getElementById(data.id).value = data.value;
         }
-        else if(data.type == 'remove attr'){
+        else if(data.type === 'remove attr'){
 
-            obj = data.obj;
+            let obj = data.obj;
 
-            for(i = 0; i < obj.length; i++){
+            for(let i = 0; i < obj.length; i++){
                 document.getElementById(obj[i].id).removeAttribute('style');
             }
             
         }
-        else if(data.type == 'class add'){
+        else if(data.type === 'class add'){
             document.getElementById(data.id).classList.add(data.class);
         }
-        else if(data.type == 'class rem'){
+        else if(data.type === 'class rem'){
 
-            obj = data.obj;
+            let obj = data.obj;
 
-            for(i = 0; i < obj.length; i++){
+            for(let i = 0; i < obj.length; i++){
                 document.getElementById(obj[i].id).classList.remove(obj[i].class);
             }
             
         }
-        else if(data.type == 'src'){
+        else if(data.type === 'src'){
 
-            obj = data.obj;
+            let obj = data.obj;
 
-            for(i = 0; i < obj.length; i++){
+            for(let i = 0; i < obj.length; i++){
                 document.getElementById(obj[i].id).src = obj[i].src;
             }
             
         }
-        else if(data.type == 'src hide'){
+        else if(data.type === 'src hide'){
 
-            card1 = document.getElementById(data.id1);
-            card2 = document.getElementById(data.id2);
+            let card1 = document.getElementById(data.id1);
+            let card2 = document.getElementById(data.id2);
 
             if(!card1.src.endsWith('UP.png')){
                 card1.src = card1.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
@@ -112,13 +117,13 @@ window.onload = function(){
             }
 
         }
-        else if(data.type == 'margin'){
+        else if(data.type === 'margin'){
 
-            obj = data.obj;
+            let obj = data.obj;
 
-            for(i = 0; i < obj.length; i++){
+            for(let i = 0; i < obj.length; i++){
 
-                chipstack = document.getElementById(obj[i].id);
+                let chipstack = document.getElementById(obj[i].id);
 
                 chipstack.style.marginLeft = obj[i].left;
                 chipstack.style.marginTop = obj[i].top;
@@ -127,28 +132,28 @@ window.onload = function(){
 
             
         }
-        else if(data.type == 'alert'){
+        else if(data.type === 'alert'){
             alert(data.msg);
         }
-        else if(data.type == 'location'){
+        else if(data.type === 'location'){
             window.location = data.to;
         }
-        else if(data.type == 'sound'){
+        else if(data.type === 'sound'){
             playSound(data.file);
         }
-        else if(data.type == 'add to chat'){
-            chat = document.getElementById('chat');
+        else if(data.type === 'add to chat'){
+            let chat = document.getElementById('chat');
             chat.innerHTML += '\n' + data.text;
             document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
         }
-        else if(data.type == 'bigger chat'){
+        else if(data.type === 'bigger chat'){
             document.getElementById('chat').classList.add('bigger_chat');
         }
-        else if(data.type == 'premove'){
+        else if(data.type === 'premove'){
 
-            obj = data.obj;
+            let obj = data.obj;
 
-            for(i = 0; i < obj.length; i++){
+            for(let i = 0; i < obj.length; i++){
                 document.getElementById(obj[i].id).checked = obj[i].checked;
             }
 
@@ -156,9 +161,16 @@ window.onload = function(){
 
     };
 
-    w.postMessage({'type': 'start', 'player_name': player_name, 'table_to_spectate': table_to_spectate, 
-                   'replay_id': replay_id, 'back_addr': back_addr, 'ip': ip, 'port': port, 'nick': nick});
-
+    w.postMessage({
+        'type': 'start',
+        'player_name': player_name,
+        'table_to_spectate': table_to_spectate,
+        'replay_id': replay_id,
+        'back_addr': back_addr,
+        'ip': ip,
+        'port': port,
+        'nick': nick
+    });
 }
 
 function shortcut(num){
@@ -172,56 +184,56 @@ function shortcut(num){
     }
     else if(num < 100000){
         // 46776 -> 46.7k
-        return (((num/100)|0)/10) + 'k' ;
+        return (Math.floor(num/100)/10) + 'k';
     }
     else if(num < 1000000){
         // 123231 -> 123k
-        return ((num/1000)|0) + 'k';
+        return Math.floor(num/1000) + 'k';
     }
     else if(num < 10000000){
         // 3 123 345 -> 3.12m
-        return (((num/10000)|0)/100) + 'm';
+        return (Math.floor(num/10000)/100) + 'm';
     }
     else if(num < 100000000){
         // 12 345 678 -> 12.3m
-        return (((num/100000)|0)/10) + 'm';
+        return ((Math.floor(num/100000))/10) + 'm';
     }
     else if(num < 1000000000){
         // 123 345 678 -> 123m
-        return ((num/1000000)|0) + 'm';
+        return Math.floor(num/1000000) + 'm';
     }
     else if(num < 10000000000){
         // 1 123 345 678 -> 1.12b
-        return (((num/10000000)|0)/100) + 'b';
+        return (Math.floor(num/10000000)/100) + 'b';
     }
     else if(num < 100000000000){
         // 12 123 345 678 -> 12.1b
-        return (((num/100000000)|0)/10) + 'b';
+        return (Math.floor(num/100000000)/10) + 'b';
     }
     else {
         // 122 223 345 678 -> 123b
-        return ((num/1000000000)|0) + 'b';
+        return Math.floor(num/1000000000) + 'b';
     }
 
 }
 
 function post_raise_minus(){
-    raise = document.getElementById('range');
+    let raise = document.getElementById('range');
     w.postMessage({type: 'raise minus', value: raise.value, min_value: raise.min, max_value: raise.max});
 }
 
 function post_raise_plus(){
-    raise = document.getElementById('range');
+    let raise = document.getElementById('range');
     w.postMessage({type: 'raise plus', value: raise.value, min_value: raise.min, max_value: raise.max});
 }
 
 function post_raise_all(){
-    raise = document.getElementById('range');
+    let raise = document.getElementById('range');
     w.postMessage({type: 'raise all', max_value: raise.max});
 }
 
 function post_raise_pot(){
-    raise = document.getElementById('range');
+    let raise = document.getElementById('range');
     w.postMessage({type: 'raise pot', value: raise.value, max_value: raise.max});
 }
 
