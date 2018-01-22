@@ -334,3 +334,16 @@ function text_change(text){
         }
     }
 }
+
+let cached_sounds = {};
+
+function playSound(file) {
+    if(file in cached_sounds){
+        cached_sounds[file].play();
+    }
+    else{
+        let a = new Audio(file);
+        a.play();
+        cached_sounds[file] = a;
+    }
+}
