@@ -171,7 +171,7 @@ window.onload = function(){
         'port': port,
         'nick': nick
     });
-}
+};
 
 function shortcut(num){
 
