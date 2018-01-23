@@ -731,10 +731,10 @@ class GameHandler extends Handler{
 
                 if(this.seats.me.all_money() <= data.money){
                     this.premoves.two_choices_mode();
-                    this.premoves.all_in_fold(this.seats.me.all_money());
+                    this.premoves.all_in_fold(this.seats.me.stack);
                 }
                 else{
-                    this.premoves.call_fold(data.money);
+                    this.premoves.call_fold(data.money - this.seats.me.chipstack.money);
                 }
                 break;
 
