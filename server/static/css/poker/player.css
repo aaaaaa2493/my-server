@@ -24,6 +24,10 @@
     background: darkgrey;
 }
 
+.player:hover{
+    background: #ffc7a1;
+}
+
 /* player 1 offsets */
 #p1{
     margin-left: 230px;
