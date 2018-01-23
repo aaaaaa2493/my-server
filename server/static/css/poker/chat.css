@@ -1,0 +1,22 @@
+/* chat in bottom left */
+.chat{
+    margin: 0px;
+    width: 210px;
+    height: 100px;
+    position: absolute;
+    margin-left: -160px;
+    margin-top: -51px;
+    border-width: 2px;
+    border-color: #ece260;
+    background: #ffffff;
+    color: #000000;
+    resize: none;
+    cursor: default;
+    font-family: "Trebuchet MS", Helvetica, sans-serif;
+    font-size: 12px;
+}
+
+/* Bigger chat needs to be in Replay mode because there is no input any text */
+.bigger_chat{
+    height: 125px;
+}

@@ -1,0 +1,165 @@
+/* chipstack represents one of 8 slots for ships */
+.chipstack{
+    width: 0px;
+    height: 0px;
+    position: absolute;
+}
+
+/* chipstack column 1 */
+.cc1{
+    margin-left: 0px;
+}
+
+/* chipstack column 2 */
+.cc2{
+    margin-left: 40px;
+}
+
+/* chipstack column 3 */
+.cc3{
+    margin-left: 80px;
+}
+
+/* chipstack column 4 */
+.cc4{
+    margin-left: 120px;
+}
+
+/* chipstack row 1 */
+.cr1{
+    position: absolute;
+    margin-top: 0px;
+}
+
+/* chipstack row 2 */
+.cr2{
+    position: absolute;
+    margin-top: 30px;
+}
+
+/* chips are inside chipstacks */
+.chip{
+    width: 40px;
+    float: left;
+    position: absolute;
+}
+
+/* chips represents all 8 chipstacks */
+.chips{
+    position: absolute;
+}
+
+
+/* dealer chip on player 1 offsets */
+.d1{
+    margin-left: 260px;
+    margin-top: -50px;
+}
+
+/* dealer chip on player 2 offsets */
+.d2{
+    margin-left: 60px;
+    margin-top: -100px;
+}
+
+/* dealer chip on player 3 offsets */
+.d3{
+    margin-left: 20px;
+    margin-top: -175px;
+}
+
+/* dealer chip on player 4 offsets */
+.d4{
+    margin-left: 30px;
+    margin-top: -290px;
+}
+
+/* dealer chip on player 5 offsets */
+.d5{
+    margin-left: 95px;
+    margin-top: -365px;
+}
+
+/* dealer chip on player 6 offsets */
+.d6{
+    margin-left: 425px;
+    margin-top: -385px;
+}
+
+/* dealer chip on player 7 offsets */
+.d7{
+    margin-left: 710px;
+    margin-top: -295px;
+}
+
+/* dealer chip on player 8 offsets */
+.d8{
+    margin-left: 725px;
+    margin-top: -175px;
+}
+
+/* dealer chip on player 9 offsets */
+.d9{
+    margin-left: 685px;
+    margin-top: -100px;
+}
+
+/* pot chips offset */
+#ch0{
+    margin-left: 310px;
+    margin-top: -180px;
+}
+
+/* chips of player 1 offset */
+#ch1{
+    margin-left: 310px;
+    margin-top: -80px;
+}
+
+/* chips of player 2 offset */
+#ch2{
+    margin-left: 110px;
+    margin-top: -110px;
+}
+
+/* chips of player 3 offset */
+#ch3{
+    margin-left: 70px;
+    margin-top: -200px;
+}
+
+/* chips of player 4 offset */
+#ch4{
+    margin-left: 75px;
+    margin-top: -290px;
+}
+
+/* chips of player 5 offset */
+#ch5{
+    margin-left: 140px;
+    margin-top: -380px;
+}
+
+/* chips of player 6 offset */
+#ch6{
+    margin-left: 480px;
+    margin-top: -380px;
+}
+
+/* chips of player 7 offset */
+#ch7{
+    margin-left: 545px;
+    margin-top: -290px;
+}
+
+/* chips of player 8 offset */
+#ch8{
+    margin-left: 550px;
+    margin-top: -200px;
+}
+
+/* chips of player 9 offset */
+#ch9{
+    margin-left: 510px;
+    margin-top: -100px;
+}

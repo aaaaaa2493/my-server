@@ -1,0 +1,79 @@
+/* represents player info in 3 rows of text */
+.player{
+    width: 100px;
+    height: 52px;
+    border-style: solid;
+    border-color: #000000;
+    background: white;
+    border-width: 2px;
+    text-align: center;
+    overflow: hidden;
+    position: absolute;
+    cursor: default;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+}
+
+/* means player in decision now */
+.in_decision{
+    background: #ece260;
+}
+
+/* means player is disconnected*/
+.is_disconnected{
+    background: darkgrey;
+}
+
+/* player 1 offsets */
+#p1{
+    margin-left: 230px;
+    margin-top: 2px;
+}
+
+/* player 2 offsets */
+#p2{
+    margin-left: -50px;
+    margin-top: -116px;
+}
+
+/* player 3 offsets */
+#p3{
+    margin-left: -50px;
+    margin-top: -236px;
+}
+
+/* player 4 offsets */
+#p4{
+    margin-left: -50px;
+    margin-top: -356px;
+}
+
+/* player 5 offsets */
+#p5{
+    margin-left: 50px;
+    margin-top: -466px;
+}
+
+/* player 6 offsets */
+#p6{
+    margin-left: 400px;
+    margin-top: -466px;
+}
+
+/* player 7 offsets */
+#p7{
+    margin-left: 730px;
+    margin-top: -356px;
+}
+
+/* player 8 offsets */
+#p8{
+    margin-left: 730px;
+    margin-top: -236px;
+}
+
+/* player 9 offsets */
+#p9{
+    margin-left: 730px;
+    margin-top: -116px;
+}

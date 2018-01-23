@@ -1,0 +1,24 @@
+/* represent one replay tournament in /poker/replay page */
+.replay_info{
+    width: 170px;
+    height: 70px;
+    border-style: solid;
+    border-color: #000000;
+    background: white;
+    border-width: 2px;
+    text-align: center;
+    overflow: hidden;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+    float: left;
+    margin: 10px;
+}
+
+.replay_info:hover{
+    background: #ece260;
+}
+
+/* represent one table in /poker/replay/#tournament page */
+.replay_table_info{
+    height: 40px;
+}

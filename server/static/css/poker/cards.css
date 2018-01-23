@@ -1,0 +1,148 @@
+/* represents one card of any player */
+.card{
+    height: 80px;
+    position: absolute;
+}
+
+/* small cards used in last hand info tab */
+.small_card{
+    width: 23.5px;
+}
+
+/* card 1 of player 1 offsets */
+#c11{
+    margin-left: 337px;
+    margin-top: 2px;
+}
+
+/* card 2 of player 1 offsets */
+#c12{
+    margin-left: 397px;
+    margin-top: 2px;
+}
+
+/* card 1 of player 2 offsets */
+#c21{
+    margin-left: -170px;
+    margin-top: -140px;
+}
+
+/* card 2 of player 2 offsets */
+#c22{
+    margin-left: -110px;
+    margin-top: -140px;
+}
+
+/* card 1 of player 3 offsets */
+#c31{
+    margin-left: -170px;
+    margin-top: -260px;
+}
+
+/* card 2 of player 3 offsets */
+#c32{
+    margin-left: -110px;
+    margin-top: -260px;
+}
+
+/* card 1 of player 4 offsets */
+#c41{
+    margin-left: -170px;
+    margin-top: -380px;
+}
+
+/* card 2 of player 4 offsets */
+#c42{
+    margin-left: -110px;
+    margin-top: -380px;
+}
+
+/* card 1 of player 5 offsets */
+#c51{
+    margin-left: 157px;
+    margin-top: -490px;
+}
+
+/* card 2 of player 5 offsets */
+#c52{
+    margin-left: 217px;
+    margin-top: -490px;
+}
+
+/* card 1 of player 6 offsets */
+#c61{
+    margin-left: 507px;
+    margin-top: -490px;
+}
+
+/* card 2 of player 6 offsets */
+#c62{
+    margin-left: 567px;
+    margin-top: -490px;
+}
+
+/* card 1 of player 7 offsets */
+#c71{
+    margin-left: 837px;
+    margin-top: -380px;
+}
+
+/* card 2 of player 7 offsets */
+#c72{
+    margin-left: 897px;
+    margin-top: -380px;
+}
+
+/* card 1 of player 8 offsets */
+#c81{
+    margin-left: 837px;
+    margin-top: -260px;
+}
+
+/* card 2 of player 28 offsets */
+#c82{
+    margin-left: 897px;
+    margin-top: -260px;
+}
+
+/* card 1 of player 28 offsets */
+#c91{
+    margin-left: 837px;
+    margin-top: -140px;
+}
+
+/* card 2 of player 9 offsets */
+#c92{
+    margin-left: 897px;
+    margin-top: -140px;
+}
+
+/* first flop card offsets */
+#flop1{
+    margin-left: 240px;
+    margin-top: -300px;
+}
+
+/* second flop card offsets */
+#flop2{
+    margin-left: 300px;
+    margin-top: -300px;
+}
+
+/* third flop card offsets */
+#flop3{
+    margin-left: 360px;
+    margin-top: -300px;
+}
+
+/* turn card offsets */
+#turn{
+    margin-left: 420px;
+    margin-top: -300px;
+}
+
+/* river card offsets */
+#river{
+    margin-left: 480px;
+    margin-top: -300px;
+}

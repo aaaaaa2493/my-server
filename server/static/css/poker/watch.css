@@ -1,0 +1,19 @@
+/* represent one table to watch in tournament in /poker/watch page */
+.watch_info{
+    width: 170px;
+    height: 20px;
+    border-style: solid;
+    border-color: #000000;
+    background: white;
+    border-width: 2px;
+    text-align: center;
+    overflow: hidden;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+    float: left;
+    margin: 10px;
+}
+
+.watch_info:hover{
+    background: #ece260;
+}
