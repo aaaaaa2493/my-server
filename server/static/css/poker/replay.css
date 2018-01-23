@@ -1,3 +1,5 @@
+@import "main.css";
+
 /* represent one replay tournament in /poker/replay page */
 .replay_info{
     width: 170px;

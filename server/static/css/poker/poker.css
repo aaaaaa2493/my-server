@@ -8,33 +8,4 @@
 @import "premoves.css";
 @import "inputs.css";
 @import "tabs.css";
-
-body{
-    background: url(/img/bg.png);
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-
-    margin: auto;
-    width: 1125px;
-    height: 400px;
-}
-
-.main{
-    margin: auto;
-    margin-top: 100px;
-    width: 784px;
-    height: 400px;
-}
-
-/* table picture background */
-.table{
-    background: url(/img/poker/poker_table.png);
-    width: 784px;
-    height: 400px;
-}
-
-.hidden{
-    display: none;
-}
+@import "main.css";
