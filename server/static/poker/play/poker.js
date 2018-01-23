@@ -1613,10 +1613,10 @@ class InfoCreator{
 
     watching_table(table_number, is_final){
         if(is_final){
-            this.basic('You are watching table #' + table_number);
+            this.basic('You are watching final table');
         }
         else{
-            this.basic('You are watching final table');
+            this.basic('You are watching table #' + table_number);
         }
     }
 
