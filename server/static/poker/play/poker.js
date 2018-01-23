@@ -630,9 +630,9 @@ class GameHandler extends Handler{
 
             }
             else{
-                if (this.seats.bb < this.seats.me.stack){
+                if (this.seats.bb < this.seats.me.all_money()){
                     worker.class_rem([{id: 'premoves', class: 'hidden'}]);
-                    this.premoves.call_fold(this.seats.bb);
+                    this.premoves.call_fold(this.seats.bb - this.seats.me.chipstack.money);
                 }
                 else{
                     worker.class_rem([{id: 'premoves', class: 'hidden'}]);
@@ -730,7 +730,6 @@ class GameHandler extends Handler{
                 }
 
                 if(this.seats.me.all_money() <= data.money){
-                    this.premoves.two_choices_mode();
                     this.premoves.all_in_fold(this.seats.me.stack);
                 }
                 else{
@@ -1527,6 +1526,7 @@ class Premoves{
 
     all_in_fold(money){
         this.show();
+        this.two_choices_mode();
         worker.inner_html([
             {id: 'textpremove1', str: 'Fold'},
             {id: 'textpremove2', str: 'Call ' + shortcut_number_for_decision(money)},
