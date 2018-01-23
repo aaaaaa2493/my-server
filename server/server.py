@@ -11,7 +11,6 @@ from os.path import exists
 from base64 import b64encode
 from typing import List, Dict, Tuple
 
-# TODO - сделать не колл 600 а колл 300
 # TODO - сделать в повторе нормальный чат
 # TODO - сделать нормальную картинку стола
 # TODO - сделать увеличенную форму выбора турнира чтобы было видно и дату и название

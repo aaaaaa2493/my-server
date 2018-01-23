@@ -1238,10 +1238,11 @@ class Seats{
 
             let seat = this.get_by_id(id);
 
-            seat.stack -= count - seat.chipstack.money;
+            let money_spent = count - seat.chipstack.money;
+            seat.stack -= money_spent;
             seat.chipstack.money = count;
 
-            this.update_info(id, reason, count);
+            this.update_info(id, reason, money_spent);
 
         }
 
