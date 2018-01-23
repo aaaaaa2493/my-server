@@ -853,8 +853,9 @@ class GameHandler extends Handler{
                 decisions += `<div class='button call_button' onclick='post_set_decision("${i+1}")'>Check</div>`;
             }
             else if(data.decisions[i].type === 'call'){
+                let text_call = data.decisions[i].money - this.seats.me.chipstack.money;
                 decisions += `<div class='button call_button' onclick='post_set_decision("${i+1}")'>
-                    Call ${shortcut_number_for_decision(data.decisions[i].money)}</div>`;
+                    Call ${shortcut_number_for_decision(text_call)}</div>`;
                 this.seats.to_call = data.decisions[i].money;
             }
             else if(data.decisions[i].type === 'raise'){
@@ -878,9 +879,10 @@ class GameHandler extends Handler{
                               <div class='button small_button all_in_button' onclick='post_raise_all()'>All</div>`;
             }
             else if(data.decisions[i].type === 'all in'){
+                let text_all_in = data.decisions[i].money - this.seats.me.chipstack.money;
                 decisions += `<div class='button ${i === 2? 'raise_button': 'call_button'}' 
                                 onclick='post_set_decision("${i+1}")'>
-                                All in ${shortcut_number_for_decision(data.decisions[i].money)}</div>`;
+                                All in ${shortcut_number_for_decision(text_all_in)}</div>`;
             }
 
         }
