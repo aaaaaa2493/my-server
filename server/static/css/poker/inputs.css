@@ -1,0 +1,29 @@
+input[type=range]{
+    -webkit-appearance: none;
+    width: 150px;
+    border-radius: 8px;
+    height: 7px;
+    border: 1px solid #bdc3c7;
+    background-color: #fff;
+    position: absolute;
+    margin-left: 780px;
+    margin-top: 15px;
+}
+
+input[type=range]:focus{
+    outline: none;
+}
+
+/* player can input number of raise in this input */
+.input_button{
+    background: white;
+    border-style: solid;
+    border-color: #ece260;
+    border-width: 2px;
+    width: 150px;
+    text-align: center;
+    cursor: pointer;
+    position: absolute;
+    margin-left: 780px;
+    margin-top: -15px;
+}

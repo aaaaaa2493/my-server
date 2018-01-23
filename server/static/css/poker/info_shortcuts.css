@@ -1,0 +1,76 @@
+.shortcut{
+    width: 100px;
+    height: 52px;
+    border-style: solid;
+    border-color: #000000;
+    background: white;
+    border-width: 2px;
+    text-align: center;
+    overflow: hidden;
+    position: absolute;
+    cursor: default;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+}
+
+/* represents current table number on the top left of the screen */
+.table_num{
+    margin-top: -486px;
+    margin-left: -150px;
+    height: 20px;
+    border-color: #ece260;
+    width: 180px;
+}
+
+/* represents current hand number on the top left of the screen */
+.hand_num{
+    margin-top: -456px;
+    margin-left: -150px;
+    height: 20px;
+    border-color: #ece260;
+    width: 180px;
+}
+
+/* represents current place of player or total players left on the top left of the screen */
+.place_num{
+    margin-top: -426px;
+    margin-left: -150px;
+    height: 20px;
+    border-color: #ece260;
+    width: 180px;
+}
+
+/* big blind info on the top right of the screen */
+.big_blind_shortcut{
+    margin-top: -486px;
+    height: 20px;
+    border-color: #ece260;
+    margin-left: 700px;
+    width: 180px;
+}
+
+/* small blind info on the top right of the screen */
+.small_blind_shortcut{
+    margin-top: -456px;
+    height: 20px;
+    border-color: #ece260;
+    margin-left: 700px;
+    width: 180px;
+}
+
+/* ante info on the top right of the screen */
+.ante_shortcut{
+    margin-top: -426px;
+    height: 20px;
+    border-color: #ece260;
+    margin-left: 700px;
+    width: 180px;
+}
+
+/* small info about money in pot */
+.pot_info{
+    margin-top: -348px;
+    margin-left: 335px;
+    height: 40px;
+    border-color: #ece260;
+}

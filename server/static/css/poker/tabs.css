@@ -1,0 +1,38 @@
+table{
+    border-collapse: collapse;
+}
+
+td{
+    padding-right: 8px;
+}
+
+/* info tab */
+.info{
+    width: 650px;
+    height: 390px;
+    position: absolute;
+    margin-top: -404px;
+    margin-left: 60px;
+    background: #ffffa8;
+    border-style: solid;
+    border-color: #ece260;
+    border-width: 2px;
+    z-index: 1;
+    font-family: Verdana, Arial, Helvetica, sans-serif;
+    font-size: 86%;
+    text-align: center;
+    overflow: hidden;
+    padding: 5px;
+}
+
+/* table with top players */
+#top_players_info{
+    text-align: left;
+    margin: auto;
+}
+
+/* all opened cards with best 5 cards in last hand info */
+#cards_reveal{
+    margin: auto;
+    margin-top: 10px;
+}

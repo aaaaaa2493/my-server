@@ -20,3 +20,10 @@
 .bigger_chat{
     height: 125px;
 }
+
+/* for text input in chat */
+.chat_input{
+    margin-left: -160px;
+    margin-top: 60px;
+    width: 214px;
+}

@@ -1,0 +1,23 @@
+/* represents premove checkbox */
+.premove{
+    position: absolute;
+    z-index: -1;
+}
+
+/* first premove checkbox on bottom right. Usually Fold or Check/Fold */
+.premove1{
+    margin-top: 45px;
+    margin-left: 470px;
+}
+
+/* second premove checkbox on bottom right. Usually Check or Call */
+.premove2{
+    margin-top: 45px;
+    margin-left: 630px;
+}
+
+/* second premove checkbox on bottom right. Usually Call any*/
+.premove3{
+    margin-top: 45px;
+    margin-left: 790px;
+}
