@@ -1238,9 +1238,16 @@ class Seats{
         if(id !== -1){
 
             let seat = this.get_by_id(id);
+            let money_spent;
 
-            let money_spent = count - seat.chipstack.money;
-            seat.stack -= money_spent;
+            if(reason === 'Win'){
+                money_spent = count;
+            }
+            else{
+                money_spent = count - seat.chipstack.money;
+                seat.stack -= money_spent;
+            }
+
             seat.chipstack.money = count;
 
             this.update_info(id, reason, money_spent);
