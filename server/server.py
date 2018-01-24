@@ -12,7 +12,6 @@ from base64 import b64encode
 from typing import List, Dict, Tuple
 
 # TODO - сделать в повторе нормальный чат
-# TODO - сделать так, что если турнир с одним столом то перекидывло сразу на игру и возвращало тоже в выбор турнира
 
 
 class Debug:
@@ -1378,10 +1377,19 @@ if __name__ == '__main__':
 
             info = []
 
-            for client in server.tb_clients.values():
-                info += [client.name]
+            tables: List[TableClient] = list(server.tb_clients.values())
 
-            return template('static/poker/watch/watch.html', info=info)
+            if len(tables) == 1:
+                return template('static/poker/play/poker.html',
+                                name='', table=tables[0].name,
+                                replay='', back_addr='/poker',
+                                ip=Server.ip, port=Server.port)
+
+            else:
+                for client in server.tb_clients.values():
+                    info += [client.name]
+
+                return template('static/poker/watch/watch.html', info=info)
 
     @route('/poker/replay')
     def poker_replays():
@@ -1414,13 +1422,19 @@ if __name__ == '__main__':
 
         replay_info = listdir('files/replay/poker/' + replays[num])
 
-        info = []
-        for rep in replay_info:
+        if len(replay_info) == 1:
+            return template('static/poker/play/poker.html',
+                            name='', table='', replay='%s:%s' % (num, replay_info[0].split()[0]),
+                            back_addr='/poker/replay', ip=Server.ip, port=Server.port)
 
-            _id, hands = rep.split()
-            info += [(_id, hands)]
+        else:
+            info = []
+            for rep in replay_info:
 
-        return template('static/poker/replay/tables.html', info=sorted(info, key=lambda x: int(x[0])))
+                _id, hands = rep.split()
+                info += [(_id, hands)]
+
+            return template('static/poker/replay/tables.html', info=sorted(info, key=lambda x: int(x[0])))
 
     @route('/poker/replay/<num:int>/<table:int>')
     def replay_mode(num, table):
