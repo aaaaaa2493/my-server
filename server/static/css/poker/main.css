@@ -17,13 +17,6 @@ body{
     height: 400px;
 }
 
-/* table picture background */
-.table{
-    background: url(/img/poker/poker_table.png);
-    width: 784px;
-    height: 400px;
-}
-
 .hidden{
     display: none;
 }
