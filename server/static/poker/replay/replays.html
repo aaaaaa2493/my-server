@@ -21,7 +21,8 @@
         % id, date, tables, players, hands, name = replay
 
         <div class=replay_info onclick='window.location="/poker/replay/{{id}}"'>
-            {{name.replace('_', ' ').replace('-', '.', 2).replace('-', ':')}}<br>
+            {{name if name else 'No name'}}<br>
+            {{date.replace('_', ' ').replace('-', '.', 2).replace('-', ':')}}<br>
             Столов: {{tables}}<br>
             Игроков: {{players}}<br>
             Сыграно рук: {{hands}}<br>

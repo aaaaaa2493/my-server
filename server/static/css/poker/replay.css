@@ -3,7 +3,7 @@
 /* represent one replay tournament in /poker/replay page */
 .replay_info{
     width: 170px;
-    height: 70px;
+    height: 90px;
     border-style: solid;
     border-color: #000000;
     background: white;

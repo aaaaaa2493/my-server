@@ -12,7 +12,6 @@ from base64 import b64encode
 from typing import List, Dict, Tuple
 
 # TODO - сделать в повторе нормальный чат
-# TODO - сделать увеличенную форму выбора турнира чтобы было видно и дату и название
 # TODO - сделать так, что если турнир с одним столом то перекидывло сразу на игру и возвращало тоже в выбор турнира
 
 
@@ -1397,7 +1396,7 @@ if __name__ == '__main__':
 
             if len(rep_split) == 4:
                 date, tables, players, hands = rep_split
-                name = date
+                name = ''
 
             else:
                 date, tables, players, hands = rep_split[:4]
