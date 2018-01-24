@@ -52,56 +52,56 @@
 
 /* dealer chip on player 1 offsets */
 .d1{
-    margin-left: 260px;
-    margin-top: -50px;
+    margin-left: 265px;
+    margin-top: -55px;
 }
 
 /* dealer chip on player 2 offsets */
 .d2{
-    margin-left: 60px;
-    margin-top: -100px;
+    margin-left: 65px;
+    margin-top: -105px;
 }
 
 /* dealer chip on player 3 offsets */
 .d3{
-    margin-left: 20px;
+    margin-left: 25px;
     margin-top: -175px;
 }
 
 /* dealer chip on player 4 offsets */
 .d4{
-    margin-left: 30px;
-    margin-top: -290px;
+    margin-left: 33px;
+    margin-top: -292px;
 }
 
 /* dealer chip on player 5 offsets */
 .d5{
-    margin-left: 95px;
-    margin-top: -365px;
+    margin-left: 97px;
+    margin-top: -363px;
 }
 
 /* dealer chip on player 6 offsets */
 .d6{
-    margin-left: 425px;
-    margin-top: -385px;
+    margin-left: 435px;
+    margin-top: -387px;
 }
 
 /* dealer chip on player 7 offsets */
 .d7{
-    margin-left: 710px;
+    margin-left: 709px;
     margin-top: -295px;
 }
 
 /* dealer chip on player 8 offsets */
 .d8{
-    margin-left: 725px;
+    margin-left: 717px;
     margin-top: -175px;
 }
 
 /* dealer chip on player 9 offsets */
 .d9{
-    margin-left: 685px;
-    margin-top: -100px;
+    margin-left: 683px;
+    margin-top: -110px;
 }
 
 /* pot chips offset */
@@ -113,7 +113,7 @@
 /* chips of player 1 offset */
 #ch1{
     margin-left: 310px;
-    margin-top: -80px;
+    margin-top: -85px;
 }
 
 /* chips of player 2 offset */

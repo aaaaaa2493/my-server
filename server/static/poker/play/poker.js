@@ -2176,7 +2176,7 @@ function get_margin_top(i){
         return -180;
     }
     else if(i === 1){
-        return -80;
+        return -85;
     }
     else if(i === 2){
         return -110;
