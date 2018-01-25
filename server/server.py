@@ -868,8 +868,6 @@ class ReplayClient(AbstractClient):
             hand_info = ReplayClient.load_replay(open(table_info + '/0', 'r').read())
 
             chat_info = 'files/replay/poker/chat/' + table_path
-            print('CHAT INFO PATH: ' + chat_info)
-            print('IS EXISTS: ' + str(exists(chat_info)))
 
             if exists(chat_info):
                 chat_info = ReplayClient.load_replay(open(chat_info).read())
