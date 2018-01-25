@@ -980,8 +980,8 @@ class ReplayHandler extends Handler{
             await sleep(10);
         }
 
-        this.socket.send('prev hand');
         worker.inner_html([{id: 'chat', str: 'Chat:'}]);
+        this.socket.send('prev hand');
     }
 
     async next_hand(){
@@ -990,8 +990,8 @@ class ReplayHandler extends Handler{
             await sleep(10);
         }
 
-        this.socket.send('next hand');
         worker.inner_html([{id: 'chat', str: 'Chat:'}]);
+        this.socket.send('next hand');
     }
 
     init_hand(data){
@@ -1242,6 +1242,7 @@ class Seats{
 
             if(reason === 'Win'){
                 money_spent = count;
+                seat.stack += money_spent;
             }
             else{
                 money_spent = count - seat.chipstack.money;

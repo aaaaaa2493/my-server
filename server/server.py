@@ -11,8 +11,6 @@ from os.path import exists
 from base64 import b64encode
 from typing import List, Dict, Tuple
 
-# TODO - сделать в повторе нормальный чат
-
 
 class Debug:
     Debug = 1
@@ -221,22 +219,29 @@ class GameEngineClient(AbstractClient):
             total_hands = sum(rep[1] for rep in srv.replays)
 
             if name == '':
-                tournament_path = ('files/replay/poker/' + str(srv.started_time)[:-7]
-                                   .replace(' ', '_').replace(':', '-') +
-                                   ' %s %s %s' % (total_tables, total_players, total_hands))
+                game_path = (str(srv.started_time)[:-7].replace(' ', '_').replace(':', '-') +
+                             ' %s %s %s' % (total_tables, total_players, total_hands))
 
             else:
-                tournament_path = ('files/replay/poker/' + str(srv.started_time)[:-7]
-                                   .replace(' ', '_').replace(':', '-') +
-                                   ' %s %s %s %s' % (total_tables, total_players, total_hands, name))
+                game_path = (str(srv.started_time)[:-7].replace(' ', '_').replace(':', '-') +
+                             ' %s %s %s %s' % (total_tables, total_players, total_hands, name))
+
+            tournament_path = 'files/replay/poker/games/' + game_path
+            chat_messages_path = 'files/replay/poker/chat/' + game_path
 
             mkdir(tournament_path)
+            mkdir(chat_messages_path)
 
-            for table_num, hands, hands_history in srv.replays:
+            for table_num, hands, hands_history, chat_history in srv.replays:
 
-                table_path = tournament_path + '/%s %s' % (table_num, hands)
+                table_folder = '/%s %s' % (table_num, hands)
+
+                table_path = tournament_path + table_folder
+                chat_path = chat_messages_path + table_folder
 
                 mkdir(table_path)
+
+                open(chat_path, 'w').write(ReplayClient.dump_replay(chat_history))
 
                 for num, hand in enumerate(hands_history):
                     open(table_path + '/%s' % (num,), 'w').write(ReplayClient.dump_replay(hand))
@@ -499,7 +504,7 @@ class PythonClient(AbstractClient):
                 js_client.send_raw(msg)
                 Debug.js_restore(f'Restore js client {js_client.name} {msg}')
 
-            for chat_msg in self.connected_table.chat_history:
+            for chat_msg in self.connected_table.get_last_chat_messages():
                 js_client.send_raw(chat_msg)
                 Debug.js_restore(f'Restore chat js client {js_client.name} {msg}')
 
@@ -685,7 +690,7 @@ class TableClient(AbstractClient):
                 spectator.send_raw(msg)
                 Debug.spectator_init(f'Start spectate {spectator.name} {msg}')
 
-            for chat_msg in self.chat_history:
+            for chat_msg in self.get_last_chat_messages():
                 spectator.send_raw(chat_msg)
                 Debug.spectator_init(f'Restore chat {spectator.name} {chat_msg}')
 
@@ -717,11 +722,10 @@ class TableClient(AbstractClient):
 
     def chat_message(self, message: str):
         self.chat_history += [message]
-
-        if len(self.chat_history) > Server.MAX_CHAT_LENGTH:
-            _, *self.chat_history = self.chat_history
-
         self.cast(message, True)
+
+    def get_last_chat_messages(self) -> List[str]:
+        return self.chat_history[-Server.MAX_CHAT_LENGTH:]
 
     def inject_disconnections(self, message: str) -> str:
         with self.lock:
@@ -800,7 +804,7 @@ class TableClient(AbstractClient):
         if self.replay:
             self.hands_history += [self.replay]
 
-        srv.replays += [(self.name, self.hands, self.hands_history)]
+        srv.replays += [(self.name, self.hands, self.hands_history, self.chat_history)]
 
         for curr_client in self.spectators:
             curr_client.send({'type': 'finish', 'msg': 'Table is closed.'})
@@ -853,14 +857,24 @@ class ReplayClient(AbstractClient):
         hand = 0
 
         try:
-            replays = sorted(listdir('files/replay/poker'))
+            replays = sorted(listdir('files/replay/poker/games'))
 
-            replay_info = listdir('files/replay/poker/' + replays[int(num)])
+            replay_info = listdir('files/replay/poker/games/' + replays[int(num)])
 
-            table_info = 'files/replay/poker/' + replays[int(num)] + '/' + \
-                         sorted(replay_info, key=lambda x: int(x.split()[0]))[int(table)]
+            table_path = replays[int(num)] + '/' + sorted(replay_info, key=lambda x: int(x.split()[0]))[int(table)]
+
+            table_info = 'files/replay/poker/games/' + table_path
 
             hand_info = ReplayClient.load_replay(open(table_info + '/0', 'r').read())
+
+            chat_info = 'files/replay/poker/chat/' + table_path
+            print('CHAT INFO PATH: ' + chat_info)
+            print('IS EXISTS: ' + str(exists(chat_info)))
+
+            if exists(chat_info):
+                chat_info = ReplayClient.load_replay(open(chat_info).read())
+            else:
+                chat_info = []
 
             curr_time = datetime.now()
             start_time = hand_info[0][0]
@@ -949,8 +963,22 @@ class ReplayClient(AbstractClient):
                                             open(table_info + '/' + str(hand), 'r').read())
 
                                         self.send({'type': 'clear'})
-                                        _, message = hand_info[curr_action]
+                                        time_hand_started, message = hand_info[curr_action]
                                         self.send_raw(message)
+
+                                        chat_start_time = time_hand_started
+                                        chat_messages_before_hand = []
+                                        for curr_time_chat, curr_chat_msg in chat_info:
+                                            if curr_time_chat < chat_start_time:
+                                                chat_messages_before_hand += [curr_chat_msg]
+                                                if len(chat_messages_before_hand) > 10:
+                                                    _, *chat_messages_before_hand = chat_messages_before_hand
+                                            else:
+                                                break
+
+                                        for chat_message in chat_messages_before_hand:
+                                            self.send_raw(chat_message)
+
                                         curr_action += 1
 
                                     else:
@@ -967,8 +995,22 @@ class ReplayClient(AbstractClient):
                                             open(table_info + '/' + str(hand), 'r').read())
 
                                         self.send({'type': 'clear'})
-                                        _, message = hand_info[curr_action]
+                                        time_hand_started, message = hand_info[curr_action]
                                         self.send_raw(message)
+
+                                        chat_start_time = time_hand_started
+                                        chat_messages_before_hand = []
+                                        for curr_time_chat, curr_chat_msg in chat_info:
+                                            if curr_time_chat < chat_start_time:
+                                                chat_messages_before_hand += [curr_chat_msg]
+                                                if len(chat_messages_before_hand) > 10:
+                                                    _, *chat_messages_before_hand = chat_messages_before_hand
+                                            else:
+                                                break
+
+                                        for chat_message in chat_messages_before_hand:
+                                            self.send_raw(chat_message)
+
                                         curr_action += 1
 
                                     else:
@@ -1009,6 +1051,19 @@ class ReplayClient(AbstractClient):
                                 start_time = hand_info[curr_action][0]
                                 curr_time = datetime.now()
 
+                                chat_start_time = start_time
+                                chat_messages_before_hand = []
+                                for curr_time_chat, curr_chat_msg in chat_info:
+                                    if curr_time_chat < chat_start_time:
+                                        chat_messages_before_hand += [curr_chat_msg]
+                                        if len(chat_messages_before_hand) > 10:
+                                            _, *chat_messages_before_hand = chat_messages_before_hand
+                                    else:
+                                        break
+
+                                for chat_message in chat_messages_before_hand:
+                                    self.send_raw(chat_message)
+
                             else:
                                 hand += 1
                                 self.send({'type': 'info', 'msg': 'It was first hand.'})
@@ -1034,6 +1089,20 @@ class ReplayClient(AbstractClient):
 
                                 hand -= 1
                                 self.send({'type': 'info', 'msg': 'It was last hand.'})
+
+                            chat_start_time = hand_info[curr_action][0]
+                            chat_messages_before_hand = []
+                            for curr_time_chat, curr_chat_msg in chat_info:
+                                if curr_time_chat < chat_start_time:
+                                    chat_messages_before_hand += [curr_chat_msg]
+                                    if len(chat_messages_before_hand) > 10:
+                                        _, *chat_messages_before_hand = chat_messages_before_hand
+                                else:
+                                    break
+
+                            for chat_message in chat_messages_before_hand:
+                                self.send_raw(chat_message)
+
                     else:
                         hand += 1
                         curr_action = 0
@@ -1394,7 +1463,7 @@ if __name__ == '__main__':
     @route('/poker/replay')
     def poker_replays():
 
-        replays = sorted(listdir('files/replay/poker'))
+        replays = sorted(listdir('files/replay/poker/games'))
 
         info = []
 
@@ -1418,9 +1487,9 @@ if __name__ == '__main__':
     @route('/poker/replay/<num:int>')
     def replay_chose_table(num):
 
-        replays = sorted(listdir('files/replay/poker'))
+        replays = sorted(listdir('files/replay/poker/games'))
 
-        replay_info = listdir('files/replay/poker/' + replays[num])
+        replay_info = listdir('files/replay/poker/games/' + replays[num])
 
         if len(replay_info) == 1:
             return template('static/poker/play/poker.html',

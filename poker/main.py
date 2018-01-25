@@ -4872,17 +4872,25 @@ class PokerGame:
 
         folder_name = f'{year}-{month}-{day}_{hour}-{minute}-{second} 1 {self.seats} {len(self.hands)} {self.name}'
 
-        path = PokerGame.path_to_converted_games + folder_name
+        path = PokerGame.path_to_converted_games + 'games/' + folder_name
+        chat_path = PokerGame.path_to_converted_games + 'chat/' + folder_name
 
         if exists(path):
             rmtree(path)
 
-        path += f'/0 {len(self.hands)}'
+        if exists(chat_path):
+            rmtree(chat_path)
+
+        table_folder = f'/0 {len(self.hands)}'
+
+        path += table_folder
 
         makedirs(path)
+        makedirs(chat_path)
 
         time = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), 0)
         network = Network('', '', True, False)
+        chat_messages: List[Tuple[datetime, str]] = []
 
         for num, hand in enumerate(self.hands):
 
@@ -5075,44 +5083,62 @@ class PokerGame:
 
                     elif event.event == PokerGame.Event.ChatMessage:
 
-                        converted += [(time, network.send({'type': 'chat',
-                                                           'text': f'{event.player.name}: {event.message}'}))]
+                        chat_message = network.send({'type': 'chat', 'text': f'{event.player.name}: {event.message}'})
+
+                        converted += [(time, chat_message)]
+                        chat_messages += [(time, chat_message)]
+
                         time = time + timedelta(seconds=0)
 
                     elif event.event == PokerGame.Event.ObserverChatMessage:
 
-                        converted += [(time, network.send({'type': 'chat',
-                                                           'text': f'{event.player.name} [observer]: '
-                                                                   f'{event.message}'}))]
+                        chat_message = network.send({'type': 'chat',
+                                                     'text': f'{event.player.name} [observer]: {event.message}'})
+
+                        converted += [(time, chat_message)]
+                        chat_messages += [(time, chat_message)]
+
                         time = time + timedelta(seconds=0)
 
                     elif event.event == PokerGame.Event.Disconnected:
 
                         converted += [(time, network.send({'type': 'disconnected', 'id': event.player.seat}))]
                         time = time + timedelta(seconds=0)
-                        converted += [(time, network.send({'type': 'chat',
-                                                           'text': f'{event.player.name} disconnected'}))]
+
+                        chat_message = network.send({'type': 'chat', 'text': f'{event.player.name} disconnected'})
+
+                        converted += [(time, chat_message)]
+                        chat_messages += [(time, chat_message)]
+
                         time = time + timedelta(seconds=0)
 
                     elif event.event == PokerGame.Event.Connected:
 
                         converted += [(time, network.send({'type': 'connected', 'id': event.player.seat}))]
                         time = time + timedelta(seconds=0)
-                        converted += [(time, network.send({'type': 'chat',
-                                                           'text': f'{event.player.name} connected'}))]
+
+                        chat_message = network.send({'type': 'chat', 'text': f'{event.player.name} connected'})
+
+                        converted += [(time, chat_message)]
+                        chat_messages += [(time, chat_message)]
+
                         time = time + timedelta(seconds=0)
 
                     elif event.event == PokerGame.Event.FinishGame:
 
                         if event.money == 0:
-                            converted += [(time, network.send({'type': 'chat',
-                                                               'text': f'{event.player.name} '
-                                                                       f'finished {event.message}'}))]
+                            chat_message = network.send({'type': 'chat',
+                                                         'text': f'{event.player.name} finished {event.message}'})
+
                         else:
-                            converted += [(time, network.send({'type': 'chat',
-                                                               'text': f'{event.player.name} '
-                                                                       f'finished {event.message} and get '
-                                                                       f'${event.money // 100}.{event.money % 100}'}))]
+                            chat_message = network.send({'type': 'chat',
+                                                         'text': f'{event.player.name} '
+                                                                 f'finished {event.message} and get '
+                                                                 f'${event.money // 100}.{event.money % 100}'})
+
+                        converted += [(time, chat_message)]
+                        chat_messages += [(time, chat_message)]
+
                         time = time + timedelta(seconds=0)
 
                         if event.message != '1st':
@@ -5183,6 +5209,16 @@ class PokerGame:
                 output += '\n'
 
             open(path + '/%s' % (num,), 'w').write(output)
+
+        chat_output = ''
+
+        for d, s in chat_messages:
+            chat_output += '%s %s %s %s %s %s %s' % (d.year, d.month, d.day, d.hour, d.minute, d.second, d.microsecond)
+            chat_output += '\n'
+            chat_output += s
+            chat_output += '\n'
+
+        open(chat_path + table_folder, 'w').write(chat_output)
 
     def approximate_players_left(self):
 
