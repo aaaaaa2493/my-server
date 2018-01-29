@@ -458,11 +458,20 @@ class Handler{
             main_stack_margin_top
         ];
 
+        if(!this.in_pause && !this.reconnect_mode){
+            // Firstly change position of chipstack to main and only then set bet
+            worker.margin([{
+                id: chipstack[1],
+                left: main_stack_margin_left + 'px',
+                top: main_stack_margin_top + 'px'
+            }]);
+        }
+
         seat.chipstack.money += data.money;
         this.seats.set_bet(data.id, data.money, 'Win');
 
         this.seats.main_stack.money -= data.money;
-        this.seats.set_bet(-1, this.seats.main_stack.money);
+        this.seats.set_bet(-1, this.seats.main_stack.money, 'Win');
 
         if(!this.in_pause && !this.reconnect_mode){
 
@@ -1249,8 +1258,9 @@ class Seats{
                 seat.stack -= money_spent;
             }
 
+            seat.chipstack.money = count;
+
             if(reason !== 'Clear'){
-                seat.chipstack.money = count;
                 this.update_info(id, reason, money_spent);
             }
 
@@ -1258,13 +1268,20 @@ class Seats{
 
         let pot_count = this.main_stack.money;
 
-        for(let seat of this.all()){
-            pot_count += seat.chipstack.money;
+        if(reason !== 'Win'){
+            for(let seat of this.all()){
+                pot_count += seat.chipstack.money;
+            }
+        }
+        else if(id !== -1){
+            pot_count -= count;
         }
 
-        worker.inner_html([
-            {id: 'pot_count', str: shortcut_number_for_player(pot_count)}
-        ]);
+        if(reason !== 'Clear'){
+            worker.inner_html([
+                {id: 'pot_count', str: shortcut_number_for_player(pot_count)}
+            ]);
+        }
 
         let amounts = [];
 
