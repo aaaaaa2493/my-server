@@ -721,11 +721,11 @@ class TableClient(AbstractClient):
         self.cast_to_javascript(message)
 
     def chat_message(self, message: str):
-        self.chat_history += [message]
+        self.chat_history += [(datetime.now(), message)]
         self.cast(message, True)
 
     def get_last_chat_messages(self) -> List[str]:
-        return self.chat_history[-Server.MAX_CHAT_LENGTH:]
+        return [i[1] for i in self.chat_history[-Server.MAX_CHAT_LENGTH:]]
 
     def inject_disconnections(self, message: str) -> str:
         with self.lock:
