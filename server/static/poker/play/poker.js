@@ -1244,14 +1244,15 @@ class Seats{
                 money_spent = count;
                 seat.stack += money_spent;
             }
-            else{
+            else if(reason !== 'Clear'){
                 money_spent = count - seat.chipstack.money;
                 seat.stack -= money_spent;
             }
 
-            seat.chipstack.money = count;
-
-            this.update_info(id, reason, money_spent);
+            if(reason !== 'Clear'){
+                seat.chipstack.money = count;
+                this.update_info(id, reason, money_spent);
+            }
 
         }
 
@@ -1405,7 +1406,7 @@ class Seats{
             all_src.push({id: seat.card1, src: zz_src});
             all_src.push({id: seat.card2, src: zz_src});
 
-            this.set_bet(seat.id, 0);
+            this.set_bet(seat.id, 0, 'Clear');
 
         }
 
