@@ -3,43 +3,43 @@
     position: absolute;
 }
 
-#chipstack_full0{
+#ch0{
     margin: -180px 0 0 310px;
 }
 
-#chipstack_full1{
+#ch1{
     margin: -85px 0 0 310px;
 }
 
-#chipstack_full2{
+#ch2{
     margin: -110px 0 0 110px;
 }
 
-#chipstack_full3{
+#ch3{
     margin: -200px 0 0 70px;
 }
 
-#chipstack_full4{
+#ch4{
     margin: -290px 0 0 75px;
 }
 
-#chipstack_full5{
+#ch5{
     margin: -380px 0 0 140px;
 }
 
-#chipstack_full6{
+#ch6{
     margin: -380px 0 0 480px;
 }
 
-#chipstack_full7{
+#ch7{
     margin: -290px 0 0 545px;
 }
 
-#chipstack_full8{
+#ch8{
     margin: -200px 0 0 550px;
 }
 
-#chipstack_full9{
+#ch9{
     margin: -100px 0 0 510px;
 }
 
@@ -109,7 +109,10 @@
     margin: -110px 0 0 683px;
 }
 
-.trans{
-    margin: -180px 0 0 310px;
-    transition: margin 1s cubic-bezier(.8, 0, .2, 1);
+.move_to_main{
+    margin: -180px 0 0 310px !important;
+}
+
+.move_to_main, .move_from_main{
+    transition: margin 500ms cubic-bezier(.8, 0, .2, 1);
 }

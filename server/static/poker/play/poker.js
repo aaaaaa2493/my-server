@@ -1009,7 +1009,7 @@ class ReplayHandler extends Handler{
 class Chipstack{
     constructor(local_seat, money){
         this.money = money;
-        this.id = 'chipstack_full' + local_seat;
+        this.id = 'ch' + local_seat;
         this.ch11 = 'p' + local_seat + 'r1c1';
         this.ch12 = 'p' + local_seat + 'r1c2';
         this.ch13 = 'p' + local_seat + 'r1c3';
