@@ -161,6 +161,18 @@ window.onload = function(){
         else if(data.type === 'dealer pos'){
             document.getElementById('dealer').setAttribute('data-pos', data.pos);
         }
+        else if(data.type === 'chips to main'){
+            for(let curr_id of data.ids){
+                document.getElementById(curr_id).classList.add('move_to_main');
+            }
+        }
+        else if(data.type === 'clear chips'){
+            for(let curr_id of data.ids){
+                let obj = document.getElementById(curr_id);
+                obj.classList.remove('move_to_main');
+                obj.classList.remove('move_to_main');
+            }
+        }
 
     };
 

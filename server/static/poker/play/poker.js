@@ -206,12 +206,7 @@ class Handler{
 
     collect_money(){
 
-        save_positions_chipstacks = [];
-
-        let main_stack_margin_left = get_margin_left(0);
-        let main_stack_margin_top = get_margin_top(0);
-
-        let all_chips = [];
+        let move_ids = [];
 
         for(let seat of this.seats.all()){
 
@@ -220,21 +215,7 @@ class Handler{
                 this.seats.main_stack.money += seat.chipstack.money;
                 seat.stack -= seat.chipstack.money;
 
-                chipstack = seat.chipstack.id;
-
-                all_chips.push({id: chipstack});
-
-                let chipstack_margin_left = get_margin_left(seat.local_seat);
-                let chipstack_margin_top = get_margin_top(seat.local_seat);
-
-                save_positions_chipstacks.push([
-                    seat.local_seat,
-                    chipstack,
-                    chipstack_margin_left,
-                    chipstack_margin_top,
-                    main_stack_margin_left,
-                    main_stack_margin_top
-                ]);
+                move_ids.push(seat.chipstack.id);
 
                 if(this.in_pause || this.reconnect_mode){
                     worker.socket.handler.seats.set_bet(seat.id, 0);
@@ -244,16 +225,12 @@ class Handler{
 
         }
 
-        worker.remove_style(all_chips);
 
-        if(save_positions_chipstacks.length > 0){
+        if(move_ids.length > 0){
 
             if(!this.in_pause && !this.reconnect_mode){
-
-                frames_last = frames_moving;
-                cannot_move_chips = true;
-
-                setTimeout(move_stacks_to_main, 10);
+                this.seats.chipstack_timeout = setTimeout(() => this.seats.clear_bets(), 500);
+                worker.chips_to_main(move_ids);
             }
             else{
                 this.seats.set_bet(-1, this.seats.main_stack.money);
@@ -971,21 +948,17 @@ class ReplayHandler extends Handler{
         this.socket.send('next step');
     }
 
-    async prev_hand(){
-
-        while(cannot_move_chips){
-            await sleep(10);
-        }
+    prev_hand(){
+        clearTimeout(this.seats.chipstack_timeout);
+        this.seats.clear_bets();
 
         worker.inner_html([{id: 'chat', str: 'Chat:'}]);
         this.socket.send('prev hand');
     }
 
-    async next_hand(){
-
-        while(cannot_move_chips){
-            await sleep(10);
-        }
+    next_hand(){
+        clearTimeout(this.seats.chipstack_timeout);
+        this.seats.clear_bets();
 
         worker.inner_html([{id: 'chat', str: 'Chat:'}]);
         this.socket.send('next hand');
@@ -1146,6 +1119,8 @@ class Seats{
         this.main_stack = new Chipstack('0', 0);
 
         worker.inner_html(inner_html);
+
+        this.chipstack_timeout = null;
     }
 
     add_player(data){
@@ -1392,6 +1367,19 @@ class Seats{
 
         worker.inner_html(all_chips);
 
+    }
+
+    clear_bets(){
+        this.chipstack_timeout = null;
+        let chipstack_ids = [];
+        for(let seat of this.all()){
+            if(seat.chipstack.money > 0){
+                chipstack_ids.push(seat.chipstack.id);
+                this.set_bet(seat.id, 0);
+            }
+        }
+        this.set_bet(-1, this.main_stack.money);
+        worker.clear_chips(chipstack_ids);
     }
 
     clear(){
@@ -2003,6 +1991,14 @@ class WorkerConnection{
         this.send({type: 'dealer pos', pos: pos});
     }
 
+    chips_to_main(ids){
+        this.send({type: 'chips to main', ids: ids});
+    }
+
+    clear_chips(ids){
+        this.send({type: 'clear chips', ids: ids});
+    }
+
 }
 
 let worker = new WorkerConnection();
@@ -2028,10 +2024,8 @@ const available_chips = [
     [1, '1']
 ];
 
-let save_positions_chipstacks;
 let frames_moving = 50;
 let frames_last;
-let cannot_move_chips = false;
 let chipstack;
 
 const gauss = [
@@ -2222,54 +2216,6 @@ function get_margin_top(i){
         return -100;
     }
     return 0;
-
-}
-
-function move_stacks_to_main(){
-
-    frames_last -= 1;
-
-    let all_margin = [];
-
-    if(frames_last !== 0){
-
-        let percent_done = gauss[frames_moving - frames_last - 1];
-
-        for(let i = 0; i < save_positions_chipstacks.length; i++){
-
-            let curr_chipstack = save_positions_chipstacks[i];
-
-            all_margin.push({
-                id: curr_chipstack[1],
-                left: (curr_chipstack[2] + Math.floor((curr_chipstack[4] - curr_chipstack[2]) * percent_done)) + 'px',
-                top: (curr_chipstack[3] + Math.floor((curr_chipstack[5] - curr_chipstack[3]) * percent_done)) + 'px'
-            });
-
-        }
-
-        worker.margin(all_margin);
-
-        setTimeout(move_stacks_to_main, 10);
-    }
-    else{
-
-        cannot_move_chips = false;
-
-        for(let i = 0; i < save_positions_chipstacks.length; i++){
-
-            let curr_chipstack = save_positions_chipstacks[i];
-
-            all_margin.push({id: curr_chipstack[1], left: curr_chipstack[2] + 'px', top: curr_chipstack[3] + 'px'});
-
-            worker.socket.handler.seats.set_bet(worker.socket.handler.seats.seats.get(curr_chipstack[0]).id, 0);
-
-        }
-
-        worker.socket.handler.seats.set_bet(-1, worker.socket.handler.seats.main_stack.money);
-
-        worker.margin(all_margin);
-
-    }
 
 }
 
