@@ -1,8 +1,5 @@
 body{
     background: url(/img/bg.png);
-    -webkit-user-select: none;
-    -moz-user-select: none;
-    -ms-user-select: none;
     user-select: none;
 
     margin: auto;

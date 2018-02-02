@@ -158,6 +158,9 @@ window.onload = function(){
             }
 
         }
+        else if(data.type === 'dealer pos'){
+            document.getElementById('dealer').setAttribute('data-pos', data.pos);
+        }
 
     };
 

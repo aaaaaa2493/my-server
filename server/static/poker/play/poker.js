@@ -220,7 +220,7 @@ class Handler{
                 this.seats.main_stack.money += seat.chipstack.money;
                 seat.stack -= seat.chipstack.money;
 
-                chipstack = 'ch' + seat.local_seat;
+                chipstack = seat.chipstack.id;
 
                 all_chips.push({id: chipstack});
 
@@ -269,19 +269,7 @@ class Handler{
     blinds(data){
         let button_id = data.button;
 
-        worker.class_rem([
-            {id: 'dealer', class: 'd1'},
-            {id: 'dealer', class: 'd2'},
-            {id: 'dealer', class: 'd3'},
-            {id: 'dealer', class: 'd4'},
-            {id: 'dealer', class: 'd5'},
-            {id: 'dealer', class: 'd6'},
-            {id: 'dealer', class: 'd7'},
-            {id: 'dealer', class: 'd8'},
-            {id: 'dealer', class: 'd9'}
-        ]);
-
-        worker.class_add('dealer', 'd' + this.seats.id_to_local_seat[button_id]);
+        worker.dealer_pos(this.seats.id_to_local_seat[button_id]);
 
         if(data.info.length === 1){
             this.seats.set_bet(data.info[0].id, data.info[0].paid, 'BB');
@@ -441,7 +429,7 @@ class Handler{
 
         let seat = this.seats.get_by_id(data.id);
 
-        let _chipstack = 'ch' + seat.local_seat;
+        let _chipstack = seat.chipstack.id;
 
         let main_stack_margin_left = get_margin_left(0);
         let main_stack_margin_top = get_margin_top(0);
@@ -1021,6 +1009,7 @@ class ReplayHandler extends Handler{
 class Chipstack{
     constructor(local_seat, money){
         this.money = money;
+        this.id = 'chipstack_full' + local_seat;
         this.ch11 = 'p' + local_seat + 'r1c1';
         this.ch12 = 'p' + local_seat + 'r1c2';
         this.ch13 = 'p' + local_seat + 'r1c3';
@@ -2008,6 +1997,10 @@ class WorkerConnection{
 
     set_premove(obj){
         this.send({type: 'premove', obj: obj});
+    }
+
+    dealer_pos(pos){
+        this.send({type: 'dealer pos', pos: pos});
     }
 
 }
