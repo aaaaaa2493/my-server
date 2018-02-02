@@ -6,23 +6,21 @@ td{
     padding-right: 8px;
 }
 
-/* info tab */
-.info{
-    width: 650px;
-    height: 390px;
+/* general tabs style */
+#tabs{
+    width: 660px;
+    height: 400px;
     position: absolute;
     margin-top: -404px;
     margin-left: 60px;
-    background: #ffffa8;
-    border-style: solid;
-    border-color: #ece260;
-    border-width: 2px;
     z-index: 1;
+    border: 2px solid #f1e6ba;
+    background: #fff5cc;
+
     font-family: Verdana, Arial, Helvetica, sans-serif;
     font-size: 86%;
     text-align: center;
     overflow: hidden;
-    padding: 5px;
 }
 
 /* table with top players */

@@ -179,7 +179,7 @@ class AbstractClient:
 
 class GameEngineClient(AbstractClient):
 
-    OnlyClient = None
+    OnlyClient: 'GameEngineClient' = None
 
     def __init__(self, _id: int, handler: WebSocketHandler):
         super().__init__(_id, AbstractClient.ID.GameEngine, handler)
@@ -670,7 +670,7 @@ class TableClient(AbstractClient):
         self.players: List[PythonClient] = []
 
         self.history: List[str] = []
-        self.chat_history: List[str] = []
+        self.chat_history: List[Tuple[datetime, str]] = []
         self.replay: List[Tuple[datetime, str]] = []
         self.hands_history: List[List[Tuple[datetime, str]]] = []
 
@@ -725,7 +725,7 @@ class TableClient(AbstractClient):
         self.cast(message, True)
 
     def get_last_chat_messages(self) -> List[str]:
-        return [i[1] for i in self.chat_history[-Server.MAX_CHAT_LENGTH:]]
+        return [message[1] for message in self.chat_history[-Server.MAX_CHAT_LENGTH:]]
 
     def inject_disconnections(self, message: str) -> str:
         with self.lock:
