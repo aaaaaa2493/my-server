@@ -1,7 +1,6 @@
 class Handler{
     constructor(socket){
         this.in_loop = false;
-        this.in_pause = false; // TODO - for Replay, need to delete
         this.reconnect_mode = false;
         this.wait_for_init = true;
         this.game_mode = false;
@@ -86,6 +85,10 @@ class Handler{
 
     sleep(ms) {
         return new Promise(resolve => setTimeout(resolve, ms));
+    }
+
+    can_move_chips(){
+        return !this.reconnect_mode;
     }
 
     chat_message(key, text){
@@ -215,7 +218,7 @@ class Handler{
 
                 move_ids.push(seat.chipstack.id);
 
-                if(this.in_pause || this.reconnect_mode){
+                if(!this.can_move_chips()){
                     worker.socket.handler.seats.set_bet(seat.id, 0);
                 }
 
@@ -226,7 +229,7 @@ class Handler{
 
         if(move_ids.length > 0){
 
-            if(this.in_pause || this.reconnect_mode){
+            if(!this.can_move_chips()){
                 this.seats.set_bet(-1, this.seats.main_stack.money);
             }
             else{
@@ -401,7 +404,7 @@ class Handler{
 
         let seat = this.seats.get_by_id(data.id);
 
-        if(!this.in_pause && !this.reconnect_mode){
+        if(this.can_move_chips()){
             // Firstly change position of chipstack to main and only then set bet
             worker.class_add(seat.chipstack.id, 'main_chips');
         }
@@ -412,7 +415,7 @@ class Handler{
         this.seats.main_stack.money -= data.money;
         this.seats.set_bet(-1, this.seats.main_stack.money, 'Win');
 
-        if(!this.in_pause && !this.reconnect_mode){
+        if(this.can_move_chips()){
             worker.chips_from_main(seat.chipstack.id);
             worker.play_sound('grab');
         }
@@ -890,6 +893,10 @@ class ReplayHandler extends Handler{
     chat_message(){
         // Need to rewrite chat_message method for replay to do nothing
         console.log('Replay.chat_message()');
+    }
+
+    can_move_chips(){
+        return !this.in_pause;
     }
 
     pause_play(){
