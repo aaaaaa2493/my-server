@@ -166,11 +166,16 @@ window.onload = function(){
                 document.getElementById(curr_id).classList.add('move_to_main');
             }
         }
+        else if(data.type === 'chips from main'){
+            let obj = document.getElementById(data.id);
+            setTimeout(() => obj.classList.add('move_from_main'), 100);
+            setTimeout(() => obj.classList.remove('main_chips'), 200);
+        }
         else if(data.type === 'clear chips'){
             for(let curr_id of data.ids){
                 let obj = document.getElementById(curr_id);
                 obj.classList.remove('move_to_main');
-                obj.classList.remove('move_to_main');
+                obj.classList.remove('move_from_main');
             }
         }
 

@@ -406,30 +406,9 @@ class Handler{
 
         let seat = this.seats.get_by_id(data.id);
 
-        let _chipstack = seat.chipstack.id;
-
-        let main_stack_margin_left = get_margin_left(0);
-        let main_stack_margin_top = get_margin_top(0);
-
-        let chipstack_margin_left = get_margin_left(seat.local_seat);
-        let chipstack_margin_top = get_margin_top(seat.local_seat);
-
-        chipstack = [
-            data.id,
-            _chipstack,
-            chipstack_margin_left,
-            chipstack_margin_top,
-            main_stack_margin_left,
-            main_stack_margin_top
-        ];
-
         if(!this.in_pause && !this.reconnect_mode){
             // Firstly change position of chipstack to main and only then set bet
-            worker.margin([{
-                id: chipstack[1],
-                left: main_stack_margin_left + 'px',
-                top: main_stack_margin_top + 'px'
-            }]);
+            worker.class_add(seat.chipstack.id, 'main_chips');
         }
 
         seat.chipstack.money += data.money;
@@ -439,13 +418,10 @@ class Handler{
         this.seats.set_bet(-1, this.seats.main_stack.money, 'Win');
 
         if(!this.in_pause && !this.reconnect_mode){
-
-            frames_last = frames_moving;
-            cannot_move_chips = true;
-
-            move_stack_from_main();
+            worker.chips_from_main(seat.chipstack.id);
             worker.play_sound('grab');
         }
+
     }
 
     money_results(){
@@ -1995,6 +1971,10 @@ class WorkerConnection{
         this.send({type: 'chips to main', ids: ids});
     }
 
+    chips_from_main(id){
+        this.send({type: 'chips from main', id: id});
+    }
+
     clear_chips(ids){
         this.send({type: 'clear chips', ids: ids});
     }
@@ -2022,18 +2002,6 @@ const available_chips = [
     [25, '3'],
     [5, '2'],
     [1, '1']
-];
-
-let frames_moving = 50;
-let frames_last;
-let chipstack;
-
-const gauss = [
-    0, 0.001, 0.002, 0.003, 0.004, 0.006, 0.009, 0.013, 0.018, 0.024,
-    0.032, 0.042, 0.054, 0.068, 0.085, 0.105, 0.128, 0.155, 0.185, 0.219,
-    0.256, 0.296, 0.339, 0.384, 0.430, 0.477, 0.524, 0.571, 0.617, 0.662,
-    0.705, 0.745, 0.782, 0.816, 0.846, 0.873, 0.896, 0.916, 0.933, 0.947,
-    0.959, 0.969, 0.977, 0.983, 0.988, 0.992, 0.995, 0.997, 0.999, 1
 ];
 
 Array.prototype.remove = function(from, to) {
@@ -2145,102 +2113,4 @@ function get_sound(file){
         return '/music/poker/chips/grab.mp3';
     }
     return 'sound file not found';
-}
-
-function get_margin_left(i){
-
-    if(i === 0){
-        return 310;
-    }
-    else if(i === 1){
-        return 310;
-    }
-    else if(i === 2){
-        return 110;
-    }
-    else if(i === 3){
-        return 70;
-    }
-    else if(i === 4){
-        return 75;
-    }
-    else if(i === 5){
-        return 140;
-    }
-    else if(i === 6){
-        return 480;
-    }
-    else if(i === 7){
-        return 545;
-    }
-    else if(i === 8){
-        return 550;
-    }
-    else if(i === 9){
-        return 510;
-    }
-    return 0;
-
-}
-
-function get_margin_top(i){
-
-    if(i === 0){
-        return -180;
-    }
-    else if(i === 1){
-        return -85;
-    }
-    else if(i === 2){
-        return -110;
-    }
-    else if(i === 3){
-        return -200;
-    }
-    else if(i === 4){
-        return -290;
-    }
-    else if(i === 5){
-        return -380;
-    }
-    else if(i === 6){
-        return -380;
-    }
-    else if(i === 7){
-        return -290;
-    }
-    else if(i === 8){
-        return -200;
-    }
-    else if(i === 9){
-        return -100;
-    }
-    return 0;
-
-}
-
-function move_stack_from_main(){
-
-    frames_last -= 1;
-
-    if(frames_last !== 0){
-
-        let percent_done = gauss[frames_last];
-
-        worker.margin([{
-            id: chipstack[1],
-            left: (chipstack[2] + Math.floor((chipstack[4] - chipstack[2]) * percent_done)) + 'px',
-            top: (chipstack[3] + Math.floor((chipstack[5] - chipstack[3]) * percent_done)) + 'px'
-        }]);
-
-        setTimeout(move_stack_from_main, 10);
-    }
-    else{
-
-        cannot_move_chips = false;
-
-        worker.margin([{id: chipstack[1], left: chipstack[2] + 'px', top: chipstack[3] + 'px'}]);
-
-    }
-
 }
