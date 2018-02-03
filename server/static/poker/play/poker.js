@@ -956,6 +956,7 @@ class ReplayHandler extends Handler{
 class Chipstack{
     constructor(local_seat, money){
         this.money = money;
+        this.local_seat = local_seat;
         this.id = 'ch' + local_seat;
         this.ch11 = 'p' + local_seat + 'r1c1';
         this.ch12 = 'p' + local_seat + 'r1c2';
@@ -965,6 +966,284 @@ class Chipstack{
         this.ch22 = 'p' + local_seat + 'r2c2';
         this.ch23 = 'p' + local_seat + 'r2c3';
         this.ch24 = 'p' + local_seat + 'r2c4';
+
+        let int_seat = parseInt(local_seat);
+
+        this.order8 = this.get_order_8(int_seat);
+        this.order7 = this.get_order_7(int_seat);
+        this.order6 = this.get_order_6(int_seat);
+        this.order5 = this.get_order_5(int_seat);
+        this.order4 = this.get_order_4(int_seat);
+        this.order3 = this.get_order_3(int_seat);
+        this.order2 = this.get_order_2(int_seat);
+        this.order1 = this.get_order_1(int_seat);
+    }
+
+    convert_order(order){
+        let new_order = [];
+        for(let one of order){
+            new_order.push(one[0] + this.local_seat + one.substring(2));
+        }
+        return new_order;
+    }
+
+    get_order(count){
+        switch(count){
+        case 1:
+            return this.order1;
+        case 2:
+            return this.order2;
+        case 3:
+            return this.order3;
+        case 4:
+            return this.order4;
+        case 5:
+            return this.order5;
+        case 6:
+            return this.order6;
+        case 7:
+            return this.order7;
+        case 8:
+            return this.order8;
+        default:
+            return [];
+        }
+    }
+
+    get_order_8(seat){
+        switch(seat){
+        case 0:
+        case 1:
+        case 6:
+        case 7:
+        case 8:
+        case 9:
+            return [
+                this.ch21, this.ch22, this.ch23, this.ch24,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 2:
+        case 3:
+        case 4:
+        case 5:
+            return [
+                this.ch24, this.ch23, this.ch22, this.ch21,
+                this.ch14, this.ch13, this.ch12, this.ch11
+            ];
+        default:
+            return [];
+        }
+    }
+
+    get_order_7(seat){
+        switch(seat){
+        case 0:
+            return [
+                this.ch22, this.ch23, this.ch24,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 1:
+            return [
+                this.ch21, this.ch22, this.ch23, this.ch24,
+                this.ch12, this.ch13, this.ch14
+            ];
+        case 6:
+            return [
+                this.ch23, this.ch22, this.ch21,
+                this.ch14, this.ch13, this.ch12, this.ch11
+            ];
+        case 5:
+            return [
+                this.ch22, this.ch23, this.ch24,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 7:
+        case 8:
+        case 9:
+            return [
+                this.ch22, this.ch23, this.ch24,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 2:
+        case 3:
+        case 4:
+            return [
+                this.ch23, this.ch22, this.ch21,
+                this.ch14, this.ch13, this.ch12, this.ch11
+            ];
+        default:
+            return [];
+        }
+    }
+
+    get_order_6(seat){
+        switch(seat){
+        case 0:
+            return [
+                this.ch22, this.ch23,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 1:
+            return [
+                this.ch21, this.ch22, this.ch23, this.ch24,
+                this.ch12, this.ch13
+            ];
+        case 6:
+            return [
+                this.ch23, this.ch22,
+                this.ch14, this.ch13, this.ch12, this.ch11
+            ];
+        case 5:
+            return [
+                this.ch22, this.ch23,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 7:
+        case 8:
+        case 9:
+            return [
+                this.ch23, this.ch24,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 2:
+        case 3:
+        case 4:
+            return [
+                this.ch22, this.ch21,
+                this.ch14, this.ch13, this.ch12, this.ch11
+            ];
+        default:
+            return [];
+        }
+    }
+
+    get_order_5(seat){
+        switch(seat){
+        case 0:
+            return [
+                this.ch24,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 1:
+            return [
+                this.ch21, this.ch22, this.ch23, this.ch24,
+                this.ch14
+            ];
+        case 6:
+            return [
+                this.ch21,
+                this.ch14, this.ch13, this.ch12, this.ch11
+            ];
+        case 5:
+            return [
+                this.ch21,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 7:
+        case 8:
+        case 9:
+            return [
+                this.ch24,
+                this.ch11, this.ch12, this.ch13, this.ch14
+            ];
+        case 2:
+        case 3:
+        case 4:
+            return [
+                this.ch21,
+                this.ch14, this.ch13, this.ch12, this.ch11
+            ];
+        default:
+            return [];
+        }
+    }
+
+    get_order_4(seat){
+        switch(seat){
+        case 1:
+            return [this.ch21, this.ch22, this.ch23, this.ch24];
+        case 6:
+            return [this.ch14, this.ch13, this.ch12, this.ch11];
+        case 0:
+        case 5:
+            return [this.ch11, this.ch12, this.ch13, this.ch14];
+        case 7:
+        case 8:
+        case 9:
+            return [this.ch11, this.ch12, this.ch13, this.ch14];
+        case 2:
+        case 3:
+        case 4:
+            return [this.ch14, this.ch13, this.ch12, this.ch11];
+        default:
+            return [];
+        }
+    }
+
+    get_order_3(seat){
+        switch(seat){
+        case 1:
+            return [this.ch22, this.ch23, this.ch24];
+        case 6:
+            return [this.ch13, this.ch12, this.ch11];
+        case 0:
+        case 5:
+            return [this.ch12, this.ch13, this.ch14];
+        case 7:
+        case 8:
+        case 9:
+            return [this.ch12, this.ch13, this.ch14];
+        case 2:
+        case 3:
+        case 4:
+            return [this.ch13, this.ch12, this.ch11];
+        default:
+            return [];
+        }
+    }
+
+    get_order_2(seat){
+        switch(seat){
+        case 1:
+            return [this.ch22, this.ch23];
+        case 6:
+            return [this.ch13, this.ch12];
+        case 0:
+        case 5:
+            return [this.ch12, this.ch13];
+        case 7:
+        case 8:
+        case 9:
+            return [this.ch13, this.ch14];
+        case 2:
+        case 3:
+        case 4:
+            return [this.ch12, this.ch11];
+        default:
+            return [];
+        }
+    }
+
+    get_order_1(seat){
+        switch(seat){
+        case 1:
+            return [this.ch23];
+        case 6:
+            return [this.ch12];
+        case 0:
+        case 5:
+            return [this.ch13];
+        case 7:
+        case 8:
+        case 9:
+            return [this.ch14];
+        case 2:
+        case 3:
+        case 4:
+            return [this.ch11];
+        default:
+            return [];
+        }
     }
 }
 
@@ -998,8 +1277,6 @@ class Seats{
 
         this.players_left = data.players_left;
 
-        this.total_seats = data.seats;
-
         this.bb = data.bb;
         this.sb = data.sb;
         this.ante = data.ante;
@@ -1021,32 +1298,7 @@ class Seats{
             this.my_id = players[0].id;
         }
 
-        let to_place;
-
-        if (data.seats === 2) {
-            to_place = [1, 6];
-        }
-        else if (data.seats === 3) {
-            to_place = [1, 4, 7];
-        }
-        else if (data.seats === 4) {
-            to_place = [1, 3, 6, 8];
-        }
-        else if (data.seats === 5) {
-            to_place = [1, 3, 5, 6, 8];
-        }
-        else if (data.seats === 6) {
-            to_place = [1, 2, 4, 6, 7, 9];
-        }
-        else if (data.seats === 7) {
-            to_place = [1, 2, 4, 5, 6, 7, 9];
-        }
-        else if (data.seats === 8) {
-            to_place = [1, 2, 3, 4, 6, 7, 8, 9];
-        }
-        else if (data.seats === 9) {
-            to_place = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-        }
+        this.places = this.get_places(data.seats);
 
         this.seats = new Map();
         this.id_to_local_seat = {};
@@ -1056,33 +1308,34 @@ class Seats{
 
         let doc_players = '';
 
-        for (let i = 0; i < to_place.length; i++) {
+        for (let i = 0; i < this.places.length; i++) {
 
-            this.real_seat_to_local_seat[(seats_shift + i) % data.seats] = to_place[i];
+            this.real_seat_to_local_seat[(seats_shift + i) % data.seats] = this.places[i];
 
             if (players[i].id !== null) {
 
-                doc_players += `<div id=p${to_place[i]} class='player${players[i].disconnected ? ' is_disconnected' : ''}'>
+                doc_players += `<div id=p${this.places[i]} 
+                    class='player${players[i].disconnected ? ' is_disconnected' : ''}'>
                     ${players[i].name}<br>${shortcut_number_for_player(players[i].stack)}</div>`;
 
-                let player = new Player(players[i], to_place[i]);
+                let player = new Player(players[i], this.places[i]);
 
-                this.seats.set(to_place[i], player);
+                this.seats.set(this.places[i], player);
 
                 if (game_mode && player.id === this.my_id){
                     this.me = player;
                 }
 
-                this.id_to_local_seat[players[i].id] = to_place[i];
+                this.id_to_local_seat[players[i].id] = this.places[i];
 
             }
             else {
 
                 if (!data.is_final) {
-                    doc_players += '<div id="p' + to_place[i] + '" class="player"><br>Empty seat</div>';
+                    doc_players += '<div id="p' + this.places[i] + '" class="player"><br>Empty seat</div>';
                 }
                 else {
-                    doc_players += '<div id="p' + to_place[i] + '" class="player hidden"><br>Empty seat</div>';
+                    doc_players += '<div id="p' + this.places[i] + '" class="player hidden"><br>Empty seat</div>';
                 }
 
             }
@@ -1095,6 +1348,29 @@ class Seats{
         worker.inner_html(inner_html);
 
         this.chipstack_timeout = null;
+    }
+
+    get_places(seats){
+        switch(seats){
+        case 2:
+            return [1, 6];
+        case 3:
+            return [1, 4, 7];
+        case 4:
+            return [1, 3, 6, 8];
+        case 5:
+            return [1, 3, 5, 6, 8];
+        case 6:
+            return [1, 2, 4, 6, 7, 9];
+        case 7:
+            return [1, 2, 4, 5, 6, 7, 9];
+        case 8:
+            return [1, 2, 3, 4, 6, 7, 8, 9];
+        case 9:
+            return [1, 2, 3, 4, 5, 6, 7, 8, 9];
+        default:
+            return [];
+        }
     }
 
     add_player(data){
@@ -1141,40 +1417,10 @@ class Seats{
     }
 
     clear_decision_states(){
-        let to_place;
-        let total_seats = worker.socket.handler.seats.total_seats;
-
-        if(total_seats === 2){
-            to_place = [1, 6];
-        }
-        else if(total_seats === 3){
-            to_place = [1, 4, 7];
-        }
-        else if(total_seats === 4){
-            to_place = [1, 3, 6, 8];
-        }
-        else if(total_seats === 5){
-            to_place = [1, 3, 5, 6, 8];
-        }
-        else if(total_seats === 6){
-            to_place = [1, 2, 4, 6, 7, 9];
-        }
-        else if(total_seats === 7){
-            to_place = [1, 2, 4, 5, 6, 7, 9];
-        }
-        else if(total_seats === 8){
-            to_place = [1, 2, 3, 4, 6, 7, 8, 9];
-        }
-        else if(total_seats === 9){
-            to_place = [1, 2, 3, 4, 5, 6, 7, 8, 9];
-        }
-
         let all_rem = [];
 
-        for(let i = 0; i < to_place.length; i++){
-
-            all_rem.push({id: 'p' + to_place[i], class: 'in_decision'});
-
+        for(let place of this.places){
+            all_rem.push({id: 'p' + place, class: 'in_decision'});
         }
 
         worker.class_rem(all_rem);
@@ -1243,13 +1489,12 @@ class Seats{
         }
 
         let amounts = [];
-        let available_chips = this.available_chips;
 
-        for(let i = 0; i < available_chips.length; i++){
-            if(count >= available_chips[i][0]){
-                let int_amount = Math.floor(count / available_chips[i][0]);
-                amounts.push([available_chips[i][1], int_amount]);
-                count -= int_amount * available_chips[i][0];
+        for(let chip of this.available_chips){
+            if(count >= chip[0]){
+                let int_amount = Math.floor(count / chip[0]);
+                amounts.push([chip[1], int_amount]);
+                count -= int_amount * chip[0];
             }
         }
 
@@ -1315,30 +1560,14 @@ class Seats{
 
         let chip_order;
 
-        if(amounts.length === 8){
-            chip_order = [chip21, chip22, chip23, chip24, chip11, chip12, chip13, chip14];
+        if(reason === 'Win'){
+            let main_order = this.main_stack.get_order(amounts.length);
+            chip_order = chipstack_to_set_bet.convert_order(main_order);
         }
-        else if(amounts.length === 7){
-            chip_order = [chip21, chip22, chip23, chip11, chip12, chip13, chip14];
+        else{
+            chip_order = chipstack_to_set_bet.get_order(amounts.length);
         }
-        else if(amounts.length === 6){
-            chip_order = [chip21, chip22, chip11, chip12, chip13, chip14];
-        }
-        else if(amounts.length === 5){
-            chip_order = [chip21, chip11, chip12, chip13, chip14];
-        }
-        else if(amounts.length === 4){
-            chip_order = [chip11, chip12, chip13, chip14];
-        }
-        else if(amounts.length === 3){
-            chip_order = [chip12, chip13, chip14];
-        }
-        else if(amounts.length === 2){
-            chip_order = [chip12, chip13];
-        }
-        else if(amounts.length === 1){
-            chip_order = [chip12];
-        }
+
 
         for(let i = 0; i < amounts.length; i++){
             let curr_chips = chip_order[i];
