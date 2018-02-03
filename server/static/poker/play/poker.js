@@ -226,12 +226,12 @@ class Handler{
 
         if(move_ids.length > 0){
 
-            if(!this.in_pause && !this.reconnect_mode){
-                this.seats.chipstack_timeout = setTimeout(() => this.seats.clear_bets(), 500);
-                worker.chips_to_main(move_ids);
+            if(this.in_pause || this.reconnect_mode){
+                this.seats.set_bet(-1, this.seats.main_stack.money);
             }
             else{
-                this.seats.set_bet(-1, this.seats.main_stack.money);
+                this.seats.chipstack_timeout = setTimeout(() => this.seats.clear_bets(), 500);
+                worker.chips_to_main(move_ids);
             }
 
         }
