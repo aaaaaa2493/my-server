@@ -2006,10 +2006,6 @@ class WorkerConnection{
 
 }
 
-let worker = new WorkerConnection();
-
-onmessage = e => worker.message(e);
-
 function get_src(card){
     return '/img/poker/cards/' + card + '.png';
 }
@@ -2106,3 +2102,7 @@ function get_sound(file){
     }
     return 'sound file not found';
 }
+
+let worker = new WorkerConnection();
+
+onmessage = e => worker.message(e);
