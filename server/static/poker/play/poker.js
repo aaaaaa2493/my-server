@@ -1019,24 +1019,10 @@ class Chipstack{
 
     get_order_8(seat){
         switch(seat){
-        case 0:
-        case 1:
-        case 6:
-        case 7:
-        case 8:
-        case 9:
-            return [
-                this.ch21, this.ch22, this.ch23, this.ch24,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 2:
-        case 3:
-        case 4:
-        case 5:
-            return [
-                this.ch24, this.ch23, this.ch22, this.ch21,
-                this.ch14, this.ch13, this.ch12, this.ch11
-            ];
+        case 0: case 1: case 6: case 7: case 8: case 9:
+            return [this.ch21, this.ch22, this.ch23, this.ch24, this.ch11, this.ch12, this.ch13, this.ch14];
+        case 2: case 3: case 4: case 5:
+            return [this.ch24, this.ch23, this.ch22, this.ch21, this.ch14, this.ch13, this.ch12, this.ch11];
         default:
             return [];
         }
@@ -1044,40 +1030,10 @@ class Chipstack{
 
     get_order_7(seat){
         switch(seat){
-        case 0:
-            return [
-                this.ch22, this.ch23, this.ch24,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 1:
-            return [
-                this.ch21, this.ch22, this.ch23, this.ch24,
-                this.ch12, this.ch13, this.ch14
-            ];
-        case 6:
-            return [
-                this.ch23, this.ch22, this.ch21,
-                this.ch14, this.ch13, this.ch12, this.ch11
-            ];
-        case 5:
-            return [
-                this.ch22, this.ch23, this.ch24,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 7:
-        case 8:
-        case 9:
-            return [
-                this.ch22, this.ch23, this.ch24,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 2:
-        case 3:
-        case 4:
-            return [
-                this.ch23, this.ch22, this.ch21,
-                this.ch14, this.ch13, this.ch12, this.ch11
-            ];
+        case 0: case 1: case 6: case 7: case 8: case 9:
+            return [this.ch22, this.ch23, this.ch24, this.ch11, this.ch12, this.ch13, this.ch14];
+        case 2: case 3: case 4: case 5:
+            return [this.ch23, this.ch22, this.ch21, this.ch14, this.ch13, this.ch12, this.ch11];
         default:
             return [];
         }
@@ -1085,40 +1041,10 @@ class Chipstack{
 
     get_order_6(seat){
         switch(seat){
-        case 0:
-            return [
-                this.ch22, this.ch23,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 1:
-            return [
-                this.ch21, this.ch22, this.ch23, this.ch24,
-                this.ch12, this.ch13
-            ];
-        case 6:
-            return [
-                this.ch23, this.ch22,
-                this.ch14, this.ch13, this.ch12, this.ch11
-            ];
-        case 5:
-            return [
-                this.ch22, this.ch23,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 7:
-        case 8:
-        case 9:
-            return [
-                this.ch23, this.ch24,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 2:
-        case 3:
-        case 4:
-            return [
-                this.ch22, this.ch21,
-                this.ch14, this.ch13, this.ch12, this.ch11
-            ];
+        case 0: case 1: case 6: case 7: case 8: case 9:
+            return [this.ch23, this.ch24, this.ch11, this.ch12, this.ch13, this.ch14];
+        case 2: case 3: case 4: case 5:
+            return [this.ch22, this.ch21, this.ch14, this.ch13, this.ch12, this.ch11];
         default:
             return [];
         }
@@ -1126,40 +1052,10 @@ class Chipstack{
 
     get_order_5(seat){
         switch(seat){
-        case 0:
-            return [
-                this.ch24,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 1:
-            return [
-                this.ch21, this.ch22, this.ch23, this.ch24,
-                this.ch14
-            ];
-        case 6:
-            return [
-                this.ch21,
-                this.ch14, this.ch13, this.ch12, this.ch11
-            ];
-        case 5:
-            return [
-                this.ch21,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 7:
-        case 8:
-        case 9:
-            return [
-                this.ch24,
-                this.ch11, this.ch12, this.ch13, this.ch14
-            ];
-        case 2:
-        case 3:
-        case 4:
-            return [
-                this.ch21,
-                this.ch14, this.ch13, this.ch12, this.ch11
-            ];
+        case 0: case 1: case 6: case 7: case 8: case 9:
+            return [this.ch24, this.ch11, this.ch12, this.ch13, this.ch14];
+        case 2: case 3: case 4: case 5:
+            return [this.ch21, this.ch14, this.ch13, this.ch12, this.ch11];
         default:
             return [];
         }
@@ -1167,20 +1063,9 @@ class Chipstack{
 
     get_order_4(seat){
         switch(seat){
-        case 1:
-            return [this.ch21, this.ch22, this.ch23, this.ch24];
-        case 6:
-            return [this.ch14, this.ch13, this.ch12, this.ch11];
-        case 0:
-        case 5:
+        case 0: case 1: case 6: case 7: case 8: case 9:
             return [this.ch11, this.ch12, this.ch13, this.ch14];
-        case 7:
-        case 8:
-        case 9:
-            return [this.ch11, this.ch12, this.ch13, this.ch14];
-        case 2:
-        case 3:
-        case 4:
+        case 2: case 3: case 4: case 5:
             return [this.ch14, this.ch13, this.ch12, this.ch11];
         default:
             return [];
@@ -1189,20 +1074,9 @@ class Chipstack{
 
     get_order_3(seat){
         switch(seat){
-        case 1:
-            return [this.ch22, this.ch23, this.ch24];
-        case 6:
-            return [this.ch13, this.ch12, this.ch11];
-        case 0:
-        case 5:
+        case 0: case 1: case 6: case 7: case 8: case 9:
             return [this.ch12, this.ch13, this.ch14];
-        case 7:
-        case 8:
-        case 9:
-            return [this.ch12, this.ch13, this.ch14];
-        case 2:
-        case 3:
-        case 4:
+        case 2: case 3: case 4: case 5:
             return [this.ch13, this.ch12, this.ch11];
         default:
             return [];
@@ -1211,20 +1085,9 @@ class Chipstack{
 
     get_order_2(seat){
         switch(seat){
-        case 1:
-            return [this.ch22, this.ch23];
-        case 6:
-            return [this.ch13, this.ch12];
-        case 0:
-        case 5:
-            return [this.ch12, this.ch13];
-        case 7:
-        case 8:
-        case 9:
+        case 0: case 1: case 6: case 7: case 8: case 9:
             return [this.ch13, this.ch14];
-        case 2:
-        case 3:
-        case 4:
+        case 2: case 3: case 4: case 5:
             return [this.ch12, this.ch11];
         default:
             return [];
@@ -1233,20 +1096,9 @@ class Chipstack{
 
     get_order_1(seat){
         switch(seat){
-        case 1:
-            return [this.ch23];
-        case 6:
-            return [this.ch12];
-        case 0:
-        case 5:
-            return [this.ch13];
-        case 7:
-        case 8:
-        case 9:
+        case 0: case 1: case 6: case 7: case 8: case 9:
             return [this.ch14];
-        case 2:
-        case 3:
-        case 4:
+        case 2: case 3: case 4: case 5:
             return [this.ch11];
         default:
             return [];
