@@ -59,7 +59,7 @@ class Handler{
         while(this.in_loop) {
 
             if(!this.reconnect_mode){
-                await sleep(10);
+                await this.sleep(10);
             }
 
             if(this.queue.length === 0){
@@ -82,6 +82,10 @@ class Handler{
                 this.game_handle[data.type](data);
             }
         }
+    }
+
+    sleep(ms) {
+        return new Promise(resolve => setTimeout(resolve, ms));
     }
 
     chat_message(key, text){
@@ -275,7 +279,7 @@ class Handler{
     }
 
     give_cards(){
-        print('Handler.give_cards()');
+        console.log('Handler.give_cards()');
     }
 
     deal_cards(){
@@ -300,7 +304,7 @@ class Handler{
     }
 
     resit(){
-        print('Handler.resit()');
+        console.log('Handler.resit()');
     }
 
     switch_decision(data){
@@ -425,7 +429,7 @@ class Handler{
     }
 
     money_results(){
-        print('Handler.money_results()');
+        console.log('Handler.money_results()');
     }
 
     hand_results(data){
@@ -458,7 +462,7 @@ class Handler{
     }
 
     busted(){
-        print('Handler.busted()');
+        console.log('Handler.busted()');
     }
 
     clear(){
@@ -466,7 +470,7 @@ class Handler{
     }
 
     win(){
-        print('Handler.win()');
+        console.log('Handler.win()');
     }
 
     place(data){
@@ -493,7 +497,7 @@ class Handler{
     }
 
     kick(){
-        print('Handler.kick()');
+        console.log('Handler.kick()');
     }
 
     back_counting(data){
@@ -501,7 +505,7 @@ class Handler{
     }
 
     set_decision(){
-        print('Handler.set_decision()');
+        console.log('Handler.set_decision()');
     }
 
 }
@@ -894,7 +898,7 @@ class ReplayHandler extends Handler{
 
     chat_message(){
         // Need to rewrite chat_message method for replay to do nothing
-        print('Replay.chat_message()');
+        console.log('Replay.chat_message()');
     }
 
     pause_play(){
@@ -1182,6 +1186,27 @@ class Seats{
         worker.class_rem(all_rem);
     }
 
+    get available_chips(){
+        return [
+            [1000000000, '16'],
+            [250000000, '15'],
+            [100000000, '14'],
+            [25000000, '13'],
+            [5000000, '12'],
+            [1000000, '11'],
+            [500000, '10'],
+            [100000, '9'],
+            [25000, '8'],
+            [5000, '7'],
+            [1000, '6'],
+            [500, '5'],
+            [100, '4'],
+            [25, '3'],
+            [5, '2'],
+            [1, '1']
+        ];
+    }
+
     set_bet(id, count, reason=''){
 
         if(id !== -1){
@@ -1224,6 +1249,7 @@ class Seats{
         }
 
         let amounts = [];
+        let available_chips = this.available_chips;
 
         for(let i = 0; i < available_chips.length; i++){
             if(count >= available_chips[i][0]){
@@ -1261,8 +1287,7 @@ class Seats{
                 amounts[index_betweens].push(amounts[index_betweens + 1][i]);
             }
 
-            amounts.remove(index_betweens + 1);
-
+            amounts.splice(index_betweens + 1, 1);
         }
 
         let chipstack_to_set_bet;
@@ -1721,7 +1746,7 @@ class BaseTab{
     }
 
     message(){
-        print('BaseTab.message()');
+        console.log('BaseTab.message()');
     }
 }
 
@@ -1742,13 +1767,13 @@ class EmptyTab extends BaseTab{
 
 class InfoTab extends BaseTab{
     message(){
-        print('InfoTab.message()');
+        console.log('InfoTab.message()');
     }
 }
 
 class LastHandTab extends BaseTab{
     message(){
-        print('LastHandTab.message()');
+        console.log('LastHandTab.message()');
     }
 }
 
@@ -1984,39 +2009,6 @@ class WorkerConnection{
 let worker = new WorkerConnection();
 
 onmessage = e => worker.message(e);
-
-const available_chips = [
-    [1000000000, '16'],
-    [250000000, '15'],
-    [100000000, '14'],
-    [25000000, '13'],
-    [5000000, '12'],
-    [1000000, '11'],
-    [500000, '10'],
-    [100000, '9'],
-    [25000, '8'],
-    [5000, '7'],
-    [1000, '6'],
-    [500, '5'],
-    [100, '4'],
-    [25, '3'],
-    [5, '2'],
-    [1, '1']
-];
-
-Array.prototype.remove = function(from, to) {
-    let rest = this.slice((to || from) + 1 || this.length);
-    this.length = from < 0 ? this.length + from : from;
-    return this.push.apply(this, rest);
-};
-
-function sleep(ms) {
-    return new Promise(resolve => setTimeout(resolve, ms));
-}
-
-function print(str){
-    console.log(str);
-}
 
 function get_src(card){
     return '/img/poker/cards/' + card + '.png';
