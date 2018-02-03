@@ -27,139 +27,171 @@ function eraseCookie(name) {
     createCookie(name, '', -1);
 }
 
+class Receive{
+    constructor(){
+        this.handle = {
+            'inner html': d => this.inner_html(d),
+            'change value': d => this.change_value(d),
+            'class add': d => this.class_add(d),
+            'class rem': d => this.class_rem(d),
+            'src': d => this.src(d),
+            'src hide': d => this.src_hide(d),
+            'alert': d => this.alert(d),
+            'location': d => this.location(d),
+            'sound': d => this.sound(d),
+            'add to chat': d => this.add_to_chat(d),
+            'bigger chat': d => this.bigger_chat(d),
+            'premove': d => this.premove(d),
+            'dealer pos': d => this.dealer_pos(d),
+            'chips to main': d => this.chips_to_main(d),
+            'chips from main': d => this.chips_from_main(d),
+            'clear chips': d => this.clear_chips(d),
+            'thinking pos': d => this.thinking_pos(d),
+            'final table': d => this.final_table(d),
+            'set empty': d => this.set_empty(d),
+            'set disconnected': d => this.set_disconnected(d),
+        };
+    }
+
+    event(data){
+        console.log('from worker: ', data);
+        this.handle[data.type](data);
+    }
+
+    inner_html(data){
+        let obj = data.obj;
+        for(let i = 0; i < obj.length; i++){
+            document.getElementById(obj[i].id).innerHTML = obj[i].str;
+        }
+    }
+
+    change_value(data){
+        document.getElementById(data.id).value = data.value;
+    }
+
+    class_add(data){
+        document.getElementById(data.id).classList.add(data.class);
+    }
+
+    class_rem(data){
+        let obj = data.obj;
+        for(let i = 0; i < obj.length; i++){
+            document.getElementById(obj[i].id).classList.remove(obj[i].class);
+        }
+    }
+
+    src(data){
+        let obj = data.obj;
+        for(let i = 0; i < obj.length; i++){
+            document.getElementById(obj[i].id).src = obj[i].src;
+        }
+    }
+
+    src_hide(data){
+        let card1 = document.getElementById(data.id1);
+        let card2 = document.getElementById(data.id2);
+
+        if(!card1.src.endsWith('UP.png')){
+            card1.src = card1.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
+        }
+        else{
+            card1.src = '/img/poker/cards/ZZ.png';
+        }
+
+        if(!card2.src.endsWith('UP.png')){
+            card2.src = card2.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
+        }
+        else{
+            card2.src = '/img/poker/cards/ZZ.png';
+        }
+    }
+
+    alert(data){
+        alert(data.msg);
+    }
+
+    location(data){
+        window.location = data.to;
+    }
+
+    sound(data){
+        playSound(data.file);
+    }
+
+    add_to_chat(data){
+        let chat = document.getElementById('chat');
+        chat.innerHTML += '\n' + data.text;
+        document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
+    }
+
+    bigger_chat(){
+        document.getElementById('chat').classList.add('bigger_chat');
+    }
+
+    premove(data){
+        let obj = data.obj;
+        for(let i = 0; i < obj.length; i++){
+            document.getElementById(obj[i].id).checked = obj[i].checked;
+        }
+    }
+
+    dealer_pos(data){
+        document.getElementById('dealer').setAttribute('data-pos', data.pos);
+    }
+
+    chips_to_main(data){
+        for(let curr_id of data.ids){
+            document.getElementById(curr_id).classList.add('move_to_main');
+        }
+    }
+
+    chips_from_main(data){
+        let obj = document.getElementById(data.id);
+        setTimeout(() => obj.classList.add('move_from_main'), 100);
+        setTimeout(() => obj.classList.remove('main_chips'), 200);
+    }
+
+    clear_chips(data){
+        for(let curr_id of data.ids){
+            let obj = document.getElementById(curr_id);
+            obj.classList.remove('move_to_main');
+            obj.classList.remove('move_from_main');
+        }
+    }
+
+    thinking_pos(data){
+        document.getElementById('players').setAttribute('data-think', data.pos);
+    }
+
+    final_table(data){
+        document.getElementById('players').setAttribute('data-final', data.is_final);
+    }
+
+    set_empty(data){
+        document.getElementById(data.id).setAttribute('data-empty', data.is_empty);
+    }
+
+    set_disconnected(data){
+        document.getElementById(data.id).setAttribute('data-disconnected', data.is_disconnected);
+    }
+}
+
 let w;
+let r;
 
 window.onload = function(){
 
     if(!WebSocket || !Worker){
-
         document.getElementById('general_info').innerHTML = 'Your browser is unsupported' +
-                '<div class="button in_general g1" onclick=\'socket.clean=true;socket.close();\'>Ok</div>';
-
+                '<div class="button in_general g1" onclick=\'location=back_addr\'>Ok</div>';
         document.getElementById('general_info').classList.remove('hidden');
-
         return;
-
     }
-
-    document.getElementById('general_info').innerHTML = 'Wait while all players register' +
-                '<div class="button in_general g1" ' +
-        'onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
-
-    document.getElementById('general_info').classList.remove('hidden');
     
     w = new Worker('/static/poker/play/poker.js');
+    r = new Receive();
 
-    w.onmessage = function(event) {
-        console.log('from worker: ', event.data);
-
-        let data = event.data;
-
-        if(data.type === 'inner html'){
-
-            let obj = data.obj;
-
-            for(let i = 0; i < obj.length; i++){
-                document.getElementById(obj[i].id).innerHTML = obj[i].str;
-            }
-
-        }
-        else if(data.type === 'change value'){
-            document.getElementById(data.id).value = data.value;
-        }
-        else if(data.type === 'remove attr'){
-
-            let obj = data.obj;
-
-            for(let i = 0; i < obj.length; i++){
-                document.getElementById(obj[i].id).removeAttribute('style');
-            }
-            
-        }
-        else if(data.type === 'class add'){
-            document.getElementById(data.id).classList.add(data.class);
-        }
-        else if(data.type === 'class rem'){
-
-            let obj = data.obj;
-
-            for(let i = 0; i < obj.length; i++){
-                document.getElementById(obj[i].id).classList.remove(obj[i].class);
-            }
-            
-        }
-        else if(data.type === 'src'){
-
-            let obj = data.obj;
-
-            for(let i = 0; i < obj.length; i++){
-                document.getElementById(obj[i].id).src = obj[i].src;
-            }
-            
-        }
-        else if(data.type === 'src hide'){
-
-            let card1 = document.getElementById(data.id1);
-            let card2 = document.getElementById(data.id2);
-
-            if(!card1.src.endsWith('UP.png')){
-                card1.src = card1.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
-            }
-            else{
-                card1.src = '/img/poker/cards/ZZ.png';
-            }
-
-            if(!card2.src.endsWith('UP.png')){
-                card2.src = card2.src.replace('/img/poker/cards/', '/img/poker/cards_hidden/');
-            }
-            else{
-                card2.src = '/img/poker/cards/ZZ.png';
-            }
-
-        }
-        else if(data.type === 'margin'){
-
-            let obj = data.obj;
-
-            for(let i = 0; i < obj.length; i++){
-
-                let chipstack = document.getElementById(obj[i].id);
-
-                chipstack.style.marginLeft = obj[i].left;
-                chipstack.style.marginTop = obj[i].top;
-
-            }
-
-            
-        }
-        else if(data.type === 'alert'){
-            alert(data.msg);
-        }
-        else if(data.type === 'location'){
-            window.location = data.to;
-        }
-        else if(data.type === 'sound'){
-            playSound(data.file);
-        }
-        else if(data.type === 'add to chat'){
-            let chat = document.getElementById('chat');
-            chat.innerHTML += '\n' + data.text;
-            document.getElementById('chat').scrollTop = document.getElementById('chat').scrollHeight;
-        }
-        else if(data.type === 'bigger chat'){
-            document.getElementById('chat').classList.add('bigger_chat');
-        }
-        else if(data.type === 'premove'){
-
-            let obj = data.obj;
-
-            for(let i = 0; i < obj.length; i++){
-                document.getElementById(obj[i].id).checked = obj[i].checked;
-            }
-
-        }
-
-    };
+    w.onmessage = e => r.event(e.data);
 
     w.postMessage({
         'type': 'start',

@@ -1,165 +1,118 @@
-/* chipstack represents one of 8 slots for ships */
-.chipstack{
-    width: 0px;
-    height: 0px;
+/* chipstacks represents all 8 chipstacks */
+#chipstacks * , #dealer{
     position: absolute;
 }
 
-/* chipstack column 1 */
-.cc1{
-    margin-left: 0px;
+#ch0{
+    margin: -180px 0 0 310px;
 }
 
-/* chipstack column 2 */
-.cc2{
+#ch1{
+    margin: -85px 0 0 310px;
+}
+
+#ch2{
+    margin: -110px 0 0 110px;
+}
+
+#ch3{
+    margin: -200px 0 0 70px;
+}
+
+#ch4{
+    margin: -290px 0 0 75px;
+}
+
+#ch5{
+    margin: -380px 0 0 140px;
+}
+
+#ch6{
+    margin: -380px 0 0 480px;
+}
+
+#ch7{
+    margin: -290px 0 0 545px;
+}
+
+#ch8{
+    margin: -200px 0 0 550px;
+}
+
+#ch9{
+    margin: -100px 0 0 510px;
+}
+
+#chipstacks > * > :nth-child(1){ /* for row 1 of chipstacks */
+    margin-top: 0;
+}
+
+#chipstacks > * > :nth-child(2){ /* for row 2 of chipstacks */
+    margin-top: 30px;
+}
+
+#chipstacks > * > * > :nth-child(1){ /* for column 1 of chipstacks */
+    margin-left: 0;
+}
+
+#chipstacks > * > * > :nth-child(2){ /* for column 2 of chipstacks */
     margin-left: 40px;
 }
 
-/* chipstack column 3 */
-.cc3{
+#chipstacks > * > * > :nth-child(3){ /* for column 3 of chipstacks */
     margin-left: 80px;
 }
 
-/* chipstack column 4 */
-.cc4{
+#chipstacks > * > * > :nth-child(4){ /* for column 4 of chipstacks */
     margin-left: 120px;
-}
-
-/* chipstack row 1 */
-.cr1{
-    position: absolute;
-    margin-top: 0px;
-}
-
-/* chipstack row 2 */
-.cr2{
-    position: absolute;
-    margin-top: 30px;
 }
 
 /* chips are inside chipstacks */
 .chip{
     width: 40px;
     float: left;
-    position: absolute;
 }
 
-/* chips represents all 8 chipstacks */
-.chips{
-    position: absolute;
+#dealer[data-pos='1']{
+    margin: -55px 0 0 265px;
 }
 
-
-/* dealer chip on player 1 offsets */
-.d1{
-    margin-left: 265px;
-    margin-top: -55px;
+#dealer[data-pos='2']{
+    margin: -105px 0 0 65px;
 }
 
-/* dealer chip on player 2 offsets */
-.d2{
-    margin-left: 65px;
-    margin-top: -105px;
+#dealer[data-pos='3']{
+    margin: -175px 0 0 25px;
 }
 
-/* dealer chip on player 3 offsets */
-.d3{
-    margin-left: 25px;
-    margin-top: -175px;
+#dealer[data-pos='4']{
+    margin: -292px 0 0 33px;
 }
 
-/* dealer chip on player 4 offsets */
-.d4{
-    margin-left: 33px;
-    margin-top: -292px;
+#dealer[data-pos='5']{
+    margin: -363px 0 0 97px;
 }
 
-/* dealer chip on player 5 offsets */
-.d5{
-    margin-left: 97px;
-    margin-top: -363px;
+#dealer[data-pos='6']{
+    margin: -387px 0 0 435px;
 }
 
-/* dealer chip on player 6 offsets */
-.d6{
-    margin-left: 435px;
-    margin-top: -387px;
+#dealer[data-pos='7']{
+    margin: -295px 0 0 700px;
 }
 
-/* dealer chip on player 7 offsets */
-.d7{
-    margin-left: 709px;
-    margin-top: -295px;
+#dealer[data-pos='8']{
+    margin: -175px 0 0 717px;
 }
 
-/* dealer chip on player 8 offsets */
-.d8{
-    margin-left: 717px;
-    margin-top: -175px;
+#dealer[data-pos='9']{
+    margin: -110px 0 0 683px;
 }
 
-/* dealer chip on player 9 offsets */
-.d9{
-    margin-left: 683px;
-    margin-top: -110px;
+.move_to_main, .main_chips{
+    margin: -180px 0 0 310px !important;
 }
 
-/* pot chips offset */
-#ch0{
-    margin-left: 310px;
-    margin-top: -180px;
-}
-
-/* chips of player 1 offset */
-#ch1{
-    margin-left: 310px;
-    margin-top: -85px;
-}
-
-/* chips of player 2 offset */
-#ch2{
-    margin-left: 110px;
-    margin-top: -110px;
-}
-
-/* chips of player 3 offset */
-#ch3{
-    margin-left: 70px;
-    margin-top: -200px;
-}
-
-/* chips of player 4 offset */
-#ch4{
-    margin-left: 75px;
-    margin-top: -290px;
-}
-
-/* chips of player 5 offset */
-#ch5{
-    margin-left: 140px;
-    margin-top: -380px;
-}
-
-/* chips of player 6 offset */
-#ch6{
-    margin-left: 480px;
-    margin-top: -380px;
-}
-
-/* chips of player 7 offset */
-#ch7{
-    margin-left: 545px;
-    margin-top: -290px;
-}
-
-/* chips of player 8 offset */
-#ch8{
-    margin-left: 550px;
-    margin-top: -200px;
-}
-
-/* chips of player 9 offset */
-#ch9{
-    margin-left: 510px;
-    margin-top: -100px;
+.move_to_main, .move_from_main{
+    transition: margin 500ms cubic-bezier(.8, 0, .2, 1);
 }
