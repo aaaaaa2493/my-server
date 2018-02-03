@@ -36,7 +36,6 @@ class Receive{
             'class rem': d => this.class_rem(d),
             'src': d => this.src(d),
             'src hide': d => this.src_hide(d),
-            'margin': d => this.margin(d),
             'alert': d => this.alert(d),
             'location': d => this.location(d),
             'sound': d => this.sound(d),
@@ -104,15 +103,6 @@ class Receive{
         }
         else{
             card2.src = '/img/poker/cards/ZZ.png';
-        }
-    }
-
-    margin(data){
-        let obj = data.obj;
-        for(let i = 0; i < obj.length; i++){
-            let chipstack = document.getElementById(obj[i].id);
-            chipstack.style.marginLeft = obj[i].left;
-            chipstack.style.marginTop = obj[i].top;
         }
     }
 

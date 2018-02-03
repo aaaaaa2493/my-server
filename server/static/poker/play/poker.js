@@ -2019,10 +2019,6 @@ class WorkerConnection{
         this.send({type: 'src hide', id1: id1, id2: id2});
     }
 
-    margin(obj){
-        this.send({type: 'margin', obj: obj});
-    }
-
     alert(msg){
         this.send({type: 'alert', msg: msg});
     }
@@ -2032,7 +2028,7 @@ class WorkerConnection{
     }
 
     play_sound(file){
-        if(!this.socket.handler.in_pause && !this.socket.handler.reconnect_mode){
+        if(this.socket.handler.can_move_chips()){
             this.send({type: 'sound', file: get_sound(file)});
         }
     }
