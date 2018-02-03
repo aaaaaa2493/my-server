@@ -67,15 +67,6 @@ window.onload = function(){
         else if(data.type === 'change value'){
             document.getElementById(data.id).value = data.value;
         }
-        else if(data.type === 'remove attr'){
-
-            let obj = data.obj;
-
-            for(let i = 0; i < obj.length; i++){
-                document.getElementById(obj[i].id).removeAttribute('style');
-            }
-            
-        }
         else if(data.type === 'class add'){
             document.getElementById(data.id).classList.add(data.class);
         }
@@ -180,18 +171,6 @@ window.onload = function(){
         }
 
     };
-
-    for(let i = 1; i <= 9; i++){
-        let elem = document.getElementById('ch' + i);
-        elem.addEventListener('transitionend', event => {
-            // this fires twice for margin-left and margin-top
-            if(event.propertyName === 'margin-left' && 0){
-                elem.classList.remove('move_to_main');
-                elem.classList.remove('move_from_main');
-                console.log(event);
-            }
-        });
-    }
 
     w.postMessage({
         'type': 'start',

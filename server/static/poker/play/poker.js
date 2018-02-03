@@ -169,13 +169,7 @@ class Handler{
         all_inner_html.push({id: 'average_stack_info', str: avg_stack});
         all_inner_html.push({id: 'players_left_info', str: players_left});
 
-        worker.remove_style([
-            {id: 'ch0'}, {id: 'ch1'},
-            {id: 'ch2'}, {id: 'ch3'},
-            {id: 'ch4'}, {id: 'ch5'},
-            {id: 'ch6'}, {id: 'ch7'},
-            {id: 'ch8'}, {id: 'ch9'}
-        ]);
+
 
         this.seats = new Seats(data, this.game_mode);
 
@@ -1936,10 +1930,6 @@ class WorkerConnection{
 
     change_value(id, value){
         this.send({type: 'change value', id: id, value: value});
-    }
-
-    remove_style(obj){
-        this.send({type: 'remove style', obj: obj});
     }
 
     class_add(id, cls){
