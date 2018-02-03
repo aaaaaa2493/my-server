@@ -169,6 +169,9 @@ window.onload = function(){
                 obj.classList.remove('move_from_main');
             }
         }
+        else if(data.type === 'thinking pos'){
+            document.getElementById('players').setAttribute('data-think', data.pos);
+        }
 
     };
 

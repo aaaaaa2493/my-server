@@ -302,10 +302,7 @@ class Handler{
     }
 
     switch_decision(data){
-        this.seats.clear_decision_states();
-
-        worker.class_add('p' + this.seats.id_to_local_seat[data.id], 'in_decision');
-
+        worker.thinking_pos(this.seats.id_to_local_seat[data.id]);
         this.seats.id_in_decision = data.id;
     }
 
@@ -987,6 +984,16 @@ class Chipstack{
         return new_order;
     }
 
+    get_empty(order){
+        let empty_order = [];
+        for(let curr of this.order8){
+            if(!order.includes(curr)){
+                empty_order.push(curr);
+            }
+        }
+        return empty_order;
+    }
+
     get_order(count){
         switch(count){
         case 1:
@@ -1314,8 +1321,7 @@ class Seats{
 
             if (players[i].id !== null) {
 
-                doc_players += `<div id=p${this.places[i]} 
-                    class='player${players[i].disconnected ? ' is_disconnected' : ''}'>
+                doc_players += `<div id=p${this.places[i]} '${players[i].disconnected ? 'class=is_disconnected' : ''}'>
                     ${players[i].name}<br>${shortcut_number_for_player(players[i].stack)}</div>`;
 
                 let player = new Player(players[i], this.places[i]);
@@ -1332,10 +1338,10 @@ class Seats{
             else {
 
                 if (!data.is_final) {
-                    doc_players += '<div id="p' + this.places[i] + '" class="player"><br>Empty seat</div>';
+                    doc_players += '<div id="p' + this.places[i] + '"><br>Empty seat</div>';
                 }
                 else {
-                    doc_players += '<div id="p' + this.places[i] + '" class="player hidden"><br>Empty seat</div>';
+                    doc_players += '<div id="p' + this.places[i] + '" class=hidden><br>Empty seat</div>';
                 }
 
             }
@@ -1417,13 +1423,7 @@ class Seats{
     }
 
     clear_decision_states(){
-        let all_rem = [];
-
-        for(let place of this.places){
-            all_rem.push({id: 'p' + place, class: 'in_decision'});
-        }
-
-        worker.class_rem(all_rem);
+        worker.thinking_pos(0);
     }
 
     get available_chips(){
@@ -1538,26 +1538,6 @@ class Seats{
             chipstack_to_set_bet = this.get_by_id(id).chipstack;
         }
 
-        let chip11 = chipstack_to_set_bet.ch11;
-        let chip12 = chipstack_to_set_bet.ch12;
-        let chip13 = chipstack_to_set_bet.ch13;
-        let chip14 = chipstack_to_set_bet.ch14;
-        let chip21 = chipstack_to_set_bet.ch21;
-        let chip22 = chipstack_to_set_bet.ch22;
-        let chip23 = chipstack_to_set_bet.ch23;
-        let chip24 = chipstack_to_set_bet.ch24;
-
-        let all_chips = [
-            {id: chip11, str: ''},
-            {id: chip12, str: ''},
-            {id: chip13, str: ''},
-            {id: chip14, str: ''},
-            {id: chip21, str: ''},
-            {id: chip22, str: ''},
-            {id: chip23, str: ''},
-            {id: chip24, str: ''}
-        ];
-
         let chip_order;
 
         if(reason === 'Win'){
@@ -1568,6 +1548,11 @@ class Seats{
             chip_order = chipstack_to_set_bet.get_order(amounts.length);
         }
 
+        let all_chips = [];
+
+        for(let empty of chipstack_to_set_bet.get_empty(chip_order)){
+            all_chips.push({id: empty, str: ''});
+        }
 
         for(let i = 0; i < amounts.length; i++){
             let curr_chips = chip_order[i];
@@ -2221,6 +2206,10 @@ class WorkerConnection{
 
     clear_chips(ids){
         this.send({type: 'clear chips', ids: ids});
+    }
+
+    thinking_pos(pos){
+        this.send({type: 'thinking pos', pos: pos});
     }
 
 }

@@ -1,11 +1,9 @@
 /* represents player info in 3 rows of text */
-.player{
+#players > *{
     width: 100px;
     height: 52px;
-    border-style: solid;
-    border-color: #000000;
     background: white;
-    border-width: 2px;
+    border: 2px solid #000000;
     text-align: center;
     overflow: hidden;
     position: absolute;
@@ -15,7 +13,15 @@
 }
 
 /* means player in decision now */
-.in_decision{
+#players[data-think='1'] > #p1,
+#players[data-think='2'] > #p2,
+#players[data-think='3'] > #p3,
+#players[data-think='4'] > #p4,
+#players[data-think='5'] > #p5,
+#players[data-think='6'] > #p6,
+#players[data-think='7'] > #p7,
+#players[data-think='8'] > #p8,
+#players[data-think='9'] > #p9 {
     background: #ece260;
 }
 
@@ -30,54 +36,45 @@
 
 /* player 1 offsets */
 #p1{
-    margin-left: 230px;
-    margin-top: 2px;
+    margin: 2px 0 0 230px;
 }
 
 /* player 2 offsets */
 #p2{
-    margin-left: -50px;
-    margin-top: -116px;
+    margin: -116px 0 0 -50px;
 }
 
 /* player 3 offsets */
 #p3{
-    margin-left: -50px;
-    margin-top: -236px;
+    margin: -236px 0 0 -50px;
 }
 
 /* player 4 offsets */
 #p4{
-    margin-left: -50px;
-    margin-top: -356px;
+    margin: -356px 0 0 -50px;
 }
 
 /* player 5 offsets */
 #p5{
-    margin-left: 50px;
-    margin-top: -466px;
+    margin: -466px 0 0 50px;
 }
 
 /* player 6 offsets */
 #p6{
-    margin-left: 400px;
-    margin-top: -466px;
+    margin: -466px 0 0 400px;
 }
 
 /* player 7 offsets */
 #p7{
-    margin-left: 730px;
-    margin-top: -356px;
+    margin: -356px 0 0 730px;
 }
 
 /* player 8 offsets */
 #p8{
-    margin-left: 730px;
-    margin-top: -236px;
+    margin: -236px 0 0 730px;
 }
 
 /* player 9 offsets */
 #p9{
-    margin-left: 730px;
-    margin-top: -116px;
+    margin: -116px 0 0 730px;
 }
