@@ -517,6 +517,7 @@ class GameHandler extends Handler{
 
     open(){
         this.socket.send('js ' + this.name);
+        this.info.wait_while_all_players_register();
     }
 
     set_premove(num_answer, is_checked){
@@ -1737,6 +1738,10 @@ class InfoCreator{
 
     success_reconnection(){
         this.basic('Reconnection was successful.');
+    }
+
+    wait_while_all_players_register(){
+        this.basic('Wait while all players register.');
     }
 
 }

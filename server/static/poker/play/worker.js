@@ -32,21 +32,11 @@ let w;
 window.onload = function(){
 
     if(!WebSocket || !Worker){
-
         document.getElementById('general_info').innerHTML = 'Your browser is unsupported' +
-                '<div class="button in_general g1" onclick=\'socket.clean=true;socket.close();\'>Ok</div>';
-
+                '<div class="button in_general g1" onclick=\'location=back_addr\'>Ok</div>';
         document.getElementById('general_info').classList.remove('hidden');
-
         return;
-
     }
-
-    document.getElementById('general_info').innerHTML = 'Wait while all players register' +
-                '<div class="button in_general g1" ' +
-        'onclick=\'document.getElementById("general_info").classList.add("hidden");\'>Ok</div>';
-
-    document.getElementById('general_info').classList.remove('hidden');
     
     w = new Worker('/static/poker/play/poker.js');
 
