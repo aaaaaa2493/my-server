@@ -172,6 +172,15 @@ window.onload = function(){
         else if(data.type === 'thinking pos'){
             document.getElementById('players').setAttribute('data-think', data.pos);
         }
+        else if(data.type === 'final table'){
+            document.getElementById('players').setAttribute('data-final', data.is_final);
+        }
+        else if(data.type === 'set empty'){
+            document.getElementById(data.id).setAttribute('data-empty', data.is_empty);
+        }
+        else if(data.type === 'set disconnected'){
+            document.getElementById(data.id).setAttribute('data-disconnected', data.is_disconnected);
+        }
 
     };
 

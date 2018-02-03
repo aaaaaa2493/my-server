@@ -477,13 +477,13 @@ class Handler{
 
     disconnected(data){
         let seat = this.seats.get_by_id(data.id);
-        worker.class_add('p' + seat.local_seat, 'is_disconnected');
+        worker.set_disconnected(seat.html_id, 1);
         seat.disconnected = true;
     }
 
     connected(data){
         let seat = this.seats.get_by_id(data.id);
-        worker.class_rem([{id: 'p' + seat.local_seat, class: 'is_disconnected'}]);
+        worker.set_disconnected(seat.html_id, 0);
         seat.disconnected = false;
     }
 
@@ -1113,6 +1113,7 @@ class Player{
         this.disconnected = data.disconnected;
         this.stack = data.stack;
         this.local_seat = local_seat;
+        this.html_id = 'p' + local_seat;
         this.chipstack = new Chipstack(local_seat, 0);
         this.card1 = 'c' + local_seat + '1';
         this.card2 = 'c' + local_seat + '2';
@@ -1173,7 +1174,8 @@ class Seats{
 
             if (players[i].id !== null) {
 
-                doc_players += `<div id=p${this.places[i]} '${players[i].disconnected ? 'class=is_disconnected' : ''}'>
+                doc_players += `<div id=p${this.places[i]} 
+                    data-empty=0 data-disconnected=${players[i].disconnected ? 1 : 0}>
                     ${players[i].name}<br>${shortcut_number_for_player(players[i].stack)}</div>`;
 
                 let player = new Player(players[i], this.places[i]);
@@ -1188,14 +1190,7 @@ class Seats{
 
             }
             else {
-
-                if (!data.is_final) {
-                    doc_players += '<div id="p' + this.places[i] + '"><br>Empty seat</div>';
-                }
-                else {
-                    doc_players += '<div id="p' + this.places[i] + '" class=hidden><br>Empty seat</div>';
-                }
-
+                doc_players += `<div id=p${this.places[i]} data-empty=1><br>Empty seat</div>`;
             }
         }
 
@@ -1203,6 +1198,7 @@ class Seats{
 
         this.main_stack = new Chipstack('0', 0);
 
+        worker.final_table(data.is_final? 1: 0);
         worker.inner_html(inner_html);
 
         this.chipstack_timeout = null;
@@ -1234,12 +1230,15 @@ class Seats{
     add_player(data){
         let local_seat = this.real_seat_to_local_seat[data.seat];
 
-        this.seats.set(local_seat, new Player(data, local_seat));
+        let player = new Player(data, local_seat);
+
+        this.seats.set(local_seat, player);
 
         this.id_to_local_seat[data.id] = local_seat;
+        worker.set_empty(player.html_id, 0);
+        worker.set_disconnected(player.html_id, player.disconnected? 1: 0);
 
         if(this.is_final){
-            worker.class_rem([{id: 'p' + local_seat, class: 'hidden'}]);
             this.update_info(data.id, '');
         }
         else{
@@ -1471,20 +1470,14 @@ class Seats{
     }
 
     set_empty_seat(local_seat){
+        let player = this.seats.get(local_seat);
 
-        if(this.seats.get(local_seat).disconnected){
-            worker.class_rem([{id: 'p' + local_seat, class: 'is_disconnected'}]);
+        worker.set_empty(player.html_id, 1);
+        if(player.disconnected){
+            worker.set_disconnected(player.html_id, 0);
         }
 
-        if(this.is_final){
-            worker.class_add('p' + local_seat, 'hidden');
-        }
-        else{
-            worker.inner_html([
-                {id: 'p' + local_seat, str: '<br>Empty seat'}
-            ]);
-        }
-
+        worker.inner_html([{id: player.html_id, str: '<br>Empty seat'}]);
     }
 
     update_info(id, reason, count=0){
@@ -1495,7 +1488,7 @@ class Seats{
         let seat = worker.socket.handler.seats.get_by_id(id);
         worker.inner_html([
             {
-                id: 'p' + seat.local_seat,
+                id: seat.html_id,
                 str: seat.name + '<br>' + shortcut_number_for_player(seat.stack) + '<br>' + reason
             }
         ]);
@@ -2062,6 +2055,18 @@ class WorkerConnection{
 
     thinking_pos(pos){
         this.send({type: 'thinking pos', pos: pos});
+    }
+
+    final_table(is_final){
+        this.send({type: 'final table', is_final: is_final});
+    }
+
+    set_empty(id, is_empty){
+        this.send({type: 'set empty', id: id, is_empty: is_empty});
+    }
+
+    set_disconnected(id, is_disconnected){
+        this.send({type: 'set disconnected', id: id, is_disconnected: is_disconnected});
     }
 
 }

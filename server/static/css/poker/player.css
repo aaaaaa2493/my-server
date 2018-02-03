@@ -13,24 +13,29 @@
 }
 
 /* means player in decision now */
-#players[data-think='1'] > #p1,
-#players[data-think='2'] > #p2,
-#players[data-think='3'] > #p3,
-#players[data-think='4'] > #p4,
-#players[data-think='5'] > #p5,
-#players[data-think='6'] > #p6,
-#players[data-think='7'] > #p7,
-#players[data-think='8'] > #p8,
-#players[data-think='9'] > #p9 {
+[data-think='1'] > #p1[data-empty='0'],
+[data-think='2'] > #p2[data-empty='0'],
+[data-think='3'] > #p3[data-empty='0'],
+[data-think='4'] > #p4[data-empty='0'],
+[data-think='5'] > #p5[data-empty='0'],
+[data-think='6'] > #p6[data-empty='0'],
+[data-think='7'] > #p7[data-empty='0'],
+[data-think='8'] > #p8[data-empty='0'],
+[data-think='9'] > #p9[data-empty='0'] {
     background: #ece260;
 }
 
+[data-final='1'] > [data-empty='1']{
+    visibility: hidden;
+}
+
 /* means player is disconnected*/
-.is_disconnected{
+#players > [data-disconnected='1'][data-empty='0'] {
     background: darkgrey;
 }
 
-.player:hover{
+/* hover on non-empty player */
+#players > [data-empty='0']:hover {
     background: #ffc7a1;
 }
 
