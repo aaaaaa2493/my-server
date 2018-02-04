@@ -32,7 +32,7 @@ td{
     width: 25%;
     height: 100%;
     float: left;
-    line-height: 300px;
+    line-height: 35px;
     vertical-align: middle;
 }
 
@@ -54,4 +54,11 @@ td{
 #cards_reveal{
     margin: auto;
     margin-top: 10px;
+}
+
+[data-active=tournament_info] #menu_info,
+[data-active=last_hand_info] #menu_last,
+[data-active=players_info] #menu_players,
+[data-active=settings] #menu_settings {
+    background: #ea7d7d;
 }

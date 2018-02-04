@@ -50,6 +50,7 @@ class Receive{
             'final table': d => this.final_table(d),
             'set empty': d => this.set_empty(d),
             'set disconnected': d => this.set_disconnected(d),
+            'set active tab': d => this.set_active_tab(d),
         };
     }
 
@@ -173,6 +174,10 @@ class Receive{
 
     set_disconnected(data){
         document.getElementById(data.id).setAttribute('data-disconnected', data.is_disconnected);
+    }
+
+    set_active_tab(data){
+        document.getElementById('tabs').setAttribute('data-active', data.id);
     }
 }
 

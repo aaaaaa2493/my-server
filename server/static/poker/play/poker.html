@@ -41,12 +41,12 @@
         <div class="button in_general g1" onclick='document.getElementById("general_info").classList.add("hidden");'>Ok</div>
     </div>
 
-    <div id=tabs class=hidden>
+    <div id=tabs class=hidden data-active="">
         <div id=menu>
-            <div class=menu_item>Info</div>
-            <div class=menu_item>Last hand</div>
-            <div class=menu_item>Players</div>
-            <div class=menu_item>Settings</div>
+            <div id=menu_info class=menu_item onclick="open_tab('info')">Info</div>
+            <div id=menu_last class=menu_item onclick="open_tab('last hand')">Last hand</div>
+            <div id=menu_players class=menu_item onclick="open_tab('players')">Players</div>
+            <div id=menu_settings class=menu_item onclick="open_tab('settings')">Settings</div>
         </div>
 
         <div id=tournament_info class=hidden>
@@ -80,11 +80,18 @@
 
               <table id=cards_reveal></table>
         </div>
+
+        <div id=players_info class=hidden>Players info tab</div>
+
+        <div id=settings class=hidden>Settings tab</div>
+
     </div>
 
+    <div id=menu_button class='button hidden' onclick="open_tab('empty')">Menu</div>
+    <!--
     <div id=tournament_info_button class='button tournament_info_button hidden' onclick="open_tab('info')">Tournament info</div>
     <div id=last_hand_info_button class='button last_hand_info_button hidden' onclick="open_tab('last hand')">Last hand info</div>
-
+    -->
     <div id=exit class='button exit_button' onclick='post_socket_clean()'>Quit</div>
 
     <div id=players data-think=0></div>

@@ -114,16 +114,10 @@
     padding-bottom: 10px;
 }
 
-/* tournament info button on bottom left */
-.tournament_info_button{
+/* menu button on bottom left */
+#menu_button{
     margin-left: 65px;
     margin-top: 10px;
-}
-
-/* last hand info button on bottom left */
-.last_hand_info_button{
-    margin-left: 65px;
-    margin-top: 35px;
 }
 
 /* exit button on bottom left */

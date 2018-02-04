@@ -130,8 +130,7 @@ class Handler{
 
             worker.class_rem([
                 {id: 'general_info', class: 'hidden'},
-                {id: 'tournament_info_button', class: 'hidden'},
-                {id: 'last_hand_info_button', class: 'hidden'},
+                {id: 'menu_button', class: 'hidden'},
                 {id: 'table_num', class: 'hidden'},
                 {id: 'hand_num_short_info', class: 'hidden'},
                 {id: 'place_short_info', class: 'hidden'},
@@ -1749,8 +1748,12 @@ class InfoCreator{
 class TabController{
     constructor(){
         this.empty = new EmptyTab(this, 'tabs');
-        this.info = new InfoTab(this, 'tournament_info');
-        this.last_hand = new LastHandTab(this, 'last_hand_info');
+        this.info = new InfoTab('tournament_info');
+        this.last_hand = new LastHandTab('last_hand_info');
+        this.players = new PlayersTab('players_info');
+        this.settings = new SettingsTab('settings');
+
+        this.last_tab = this.info;
 
         this.current = this.empty;
         this.is_visible = false;
@@ -1758,7 +1761,9 @@ class TabController{
         this.find_tab = {
             'empty': this.empty,
             'info': this.info,
-            'last hand': this.last_hand
+            'last hand': this.last_hand,
+            'players': this.players,
+            'settings': this.settings
         };
     }
 
@@ -1779,16 +1784,14 @@ class TabController{
     open(tab){
         let new_tab = this.find_tab[tab];
 
-        if(new_tab === this.current){
-            this.hide();
-            this.current.deactivate();
-            this.current = this.empty;
+        if(new_tab === this.empty && this.current === this.empty){
+            new_tab = this.last_tab;
         }
-        else if(new_tab){
-            this.current.deactivate();
-            this.current = new_tab;
-            this.current.activate();
-        }
+
+        this.current.deactivate();
+        this.last_tab = this.current;
+        this.current = new_tab;
+        this.current.activate();
     }
 
     message(message){
@@ -1797,12 +1800,12 @@ class TabController{
 }
 
 class BaseTab{
-    constructor(controller, id_tab_element){
-        this.tabs = controller;
+    constructor(id_tab_element){
         this.id = id_tab_element;
     }
 
     activate(){
+        worker.set_active_tab(this.id);
         worker.class_rem([{id: this.id, class: 'hidden'}]);
     }
 
@@ -1816,6 +1819,10 @@ class BaseTab{
 }
 
 class EmptyTab extends BaseTab{
+    constructor(controller, id_tab_element){
+        super(id_tab_element);
+        this.tabs = controller;
+    }
 
     activate(){
         this.tabs.hide();
@@ -1839,6 +1846,18 @@ class InfoTab extends BaseTab{
 class LastHandTab extends BaseTab{
     message(){
         console.log('LastHandTab.message()');
+    }
+}
+
+class PlayersTab extends BaseTab{
+    message(){
+        console.log('PlayersTab.message()');
+    }
+}
+
+class SettingsTab extends BaseTab{
+    message(){
+        console.log('SettingsTab.message()');
     }
 }
 
@@ -2075,6 +2094,10 @@ class WorkerConnection{
 
     set_disconnected(id, is_disconnected){
         this.send({type: 'set disconnected', id: id, is_disconnected: is_disconnected});
+    }
+
+    set_active_tab(id){
+        this.send({type: 'set active tab', id: id});
     }
 
 }
