@@ -23,6 +23,27 @@ td{
     overflow: hidden;
 }
 
+#menu{
+    height: 40px;
+    border-bottom: #ea7d7d solid 2px;
+}
+
+.menu_item{
+    width: 25%;
+    height: 100%;
+    float: left;
+    line-height: 300px;
+    vertical-align: middle;
+}
+
+.menu_item:hover{
+    background: #ea7d7d;
+}
+
+.menu_item + .menu_item {
+    box-shadow: inset 2px 0 0 0 #e17d7d;
+}
+
 /* table with top players */
 #top_players_info{
     text-align: left;
