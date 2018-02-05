@@ -33,6 +33,7 @@ class Debug:
     Evolution = 1
     PlayManager = 1
     GameManager = 1
+    Parser = 1
     Error = 1
 
     if Table:
@@ -114,6 +115,15 @@ class Debug:
     else:
         @staticmethod
         def play_manager(*args, **kwargs):
+            pass
+
+    if Parser:
+        @staticmethod
+        def parser(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def parser(*args, **kwargs):
             pass
 
     if Error:
@@ -4573,6 +4583,7 @@ class PokerGame:
             self.money: int = money
             self.seat: int = seat
             self.is_active = is_active
+            self.is_all_in: bool = False
             self.is_winner: bool = False
             self.is_loser: bool = False
             self.cards: CardsPair = None
@@ -4704,6 +4715,9 @@ class PokerGame:
             player = self.get_player(name)
             if player.cards is None:
                 player.cards = cards
+            elif player.cards.second is not None and cards.second is None and cards.first in player.cards.get():
+                # means that player cards is already known but he show only one card to everyone else
+                return
             elif player.cards != cards:
                 raise ValueError(f'Player {name} firstly has {player.cards} '
                                  f'then {cards} in one hand')
@@ -4718,6 +4732,12 @@ class PokerGame:
                 player = self.get_player(name)
                 self.curr_events += [PokerGame.PokerEvent(player, event, money, msg)]
                 player.add_decision(self.curr_step, event, money)
+
+        def set_all_in(self, name: str) -> None:
+            self.get_player(name).is_all_in = True
+
+        def get_only_all_in(self) -> str:
+            return max(player for player in self.players if player.is_all_in).name
 
         def switch_to_step(self, step: BasePlay.StepType) -> None:
 
@@ -5224,6 +5244,15 @@ class PokerGame:
 
         good_hands = [(self.hands.index(hand), hand) for hand in self.hands if hand.players_left > 0]
 
+        if len(good_hands) == 0:
+            return
+
+        if len(good_hands) == 1:
+            only_info = good_hands[0][1].players_left
+            for hand in self.hands:
+                hand.players_left = only_info
+            return
+
         if self.hands[0].players_left == 0:
             players_difference = good_hands[0][1].players_left - good_hands[1][1].players_left
             hands_difference = good_hands[1][0] - good_hands[0][0]
@@ -5308,18 +5337,24 @@ class NeuralNetwork:
 class GameParser:
 
     class RegEx:
-        name = '[a-zA-Z0-9_\-@\' ]+'
+        name = '[a-zA-Z0-9_\-@\'.,$*`áàåäãçéèêíîóöôõšüúžÄÁÃÅÉÍÖÔÓÜØø´<^>+&\\\/()Ð€£¼ñ®™~#!%\[\]|°¿?:"=ß{}æ©«»¯²¡; ]+'
 
         hand_border = compile(r'[*]{11} # [0-9]+ [*]{14}')
+        hand_border_2 = compile('\n\n\n\n')
         step_border = compile(r'[*]{3} [A-Z ]+ [*]{3}')
-        hand_and_game_id = compile(r'Hand #([0-9]+): Tournament #([0-9]+)')
-        name_tournament = compile(r'Tournament #[0-9]+, ([^-]*) - Level')
+        hand_and_game_id = compile(r'Hand #([0-9]+): [Zom ]{0,5}Tournament #([0-9]+)')
+        name_tournament = compile(r'Tournament #[0-9]+, ([^-]*) - ')
         date_tournament = compile(r'- ([0-9]{4}/[0-9]{2}/[0-9]{2}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})')
-        table_number_and_seats = compile(r"^Table '[0-9]+ ([0-9]+)' ([2-9])-max Seat #([0-9]) is the button$")
+        table_number_and_seats = compile(r"^Table '[0-9]+ ([0-9]+)' ([0-9]+)-max Seat #([0-9]+) is the button$")
         small_and_big_blind = compile(r'\(([0-9]+)/([0-9]+)\)')
         player_init = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\)$')
         player_init_sitting_out = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) is sitting out$')
         player_init_out_of_hand = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) out of hand \(')
+        player_init_bounty = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, \$[0-9.]+ bounty\)$')
+        player_init_bounty_out_of_hand = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, '
+                                                                               r'\$[0-9.]+ bounty\) out of hand \(')
+        player_init_bounty_sitting_out = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, '
+                                                                               r'\$[0-9.]+ bounty\) is sitting out$')
         find_ante = compile('^(' + name + r'): posts the ante ([0-9]+)$')
         find_ante_all_in = compile('^(' + name + r'): posts the ante ([0-9]+) and is all-in$')
         find_small_blind = compile('^(' + name + r'): posts small blind ([0-9]+)$')
@@ -5333,7 +5368,7 @@ class GameParser:
         find_river = compile(r'\[.. .. .. ..] \[(..)]$')
         find_shows_in_show_down = compile(r'^(' + name + r'): shows \[(..) (..)] \([a-zA-Z0-9, +-]+\)$')
         find_total_pot = compile(r'^Total pot ([0-9]+) \| Rake [0-9]+$')
-        find_total_pot_with_main_pot = compile(r'^Total pot ([0-9]+) Main pot [0-9a-zA-Z. ]+ \| Rake [0-9]+$')
+        find_total_pot_with_main_pot = compile(r'^Total pot ([0-9]+) Main pot [0-9a-zA-Z.\- ]+ \| Rake [0-9]+$')
         find_collected_pot_summary = compile(r'^Seat [0-9]+: (' + name + r') collected \([0-9]+\)$')
         find_lost = compile(r'^Seat [0-9]+: (' + name + r') showed \[(..) (..)] and lost with')
         find_won = compile(r'^Seat [0-9]+: (' + name + r') showed \[(..) (..)] and won \([0-9]+\) with')
@@ -5344,39 +5379,87 @@ class GameParser:
         find_uncalled_bet = compile(r'^Uncalled bet \(([0-9]+)\) returned to (' + name + r')$')
         find_collect_pot = compile(r'^(' + name + r') collected ([0-9]+) from pot$')
         find_collect_side_pot = compile(r'^(' + name + r') collected ([0-9]+) from side pot$')
+        find_collect_side_pot_n = compile(r'^(' + name + r') collected ([0-9]+) from side pot-[0-9]+$')
         find_collect_main_pot = compile(r'^(' + name + r') collected ([0-9]+) from main pot$')
         find_show_cards = compile(r'^(' + name + r'): shows \[([2-9AKQJT hdcs]+)]$')
         find_is_connected = compile(r'^(' + name + r') is connected$')
         find_is_disconnected = compile(r'^(' + name + r') is disconnected$')
         find_is_sitting_out = compile(r'^(' + name + r') is sitting out$')
-        find_said = compile(r'^(' + name + ') said, "([^\n]+)"$')
+        find_said = compile(r'^(' + name + ') said, "([^\n]*)"$')
         find_observer_said = compile(r'^(' + name + ') \[observer] said, "([^\n]+)"$')
         find_finished = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place$')
         find_received = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place '
                                                r'and received \$([0-9]+\.[0-9]{2})\.$')
+        find_received_fpp = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place '
+                                                   r'and received ([0-9]+) FPP.$')
         find_winner = compile(r'^(' + name + r') wins the tournament and receives '
                                              r'\$([0-9]+\.[0-9]{2}) - congratulations!$')
         find_does_not_show = compile(r'^(' + name + '): doesn\'t show hand$')
         find_has_returned = compile(r'^(' + name + r') has returned$')
         find_has_timed_out = compile(r'^(' + name + r') has timed out$')
         find_timed_disconnected = compile(r'^(' + name + r') has timed out while disconnected$')
+        find_timed_being_disconnected = compile(r'^(' + name + r') has timed out while being disconnected$')
         find_mucks_hand = compile(r'^' + name + r': mucks hand$')
         find_fold_showing_cards = compile(r'^(' + name + r'): folds \[([2-9AKQJT hdcs]+)]$')
+        find_finished_the_tournament = compile(r'^(' + name + ') finished the tournament$')
+        find_eliminated_and_bounty_first = compile(r'^(' + name + r') wins the \$[0-9.]+ bounty for'
+                                                                  r' eliminating (' + name + r')$')
+        find_eliminated_and_bounty = compile(r'^(' + name + ') wins \$[0-9.]+ for eliminating (' + name + r') and'
+                                             r' their own bounty increases by \$[0-9.]+ to \$[0-9.]+$')
+        find_eliminated_and_bounty_split = compile(r'^(' + name + r') wins \$[0-9.]+ for splitting the '
+                                                   r'elimination of (' + name + r') and their own bounty '
+                                                   r'increases by \$[0-9.]+ to \$[0-9.]+$')
+        find_rebuy_and_receive_chips = compile(r'^(' + name + r') re-buys and receives ([0-9]+) chips for \$[0-9.]+$')
+        find_rebuy_for_starcoins = compile(r'^(' + name + r') re-buys and receives ([0-9]+) '
+                                                          r'chips for ([0-9]+) StarsCoin$')
+        find_addon_and_receive_chips = compile(r'^(' + name + r') takes the add-on '
+                                                              r'and receives ([0-9]+) chips for \$[0-9.]+$')
+        find_addon_for_starcoins = compile(r'^(' + name + r') takes the add-on and receives ([0-9]+) '
+                                                          r'chips for ([0-9]+) StarsCoin$')
+        find_skip_break_and_resuming = compile(r'^All players have agreed to skip the break. Game resuming.$')
+        find_wins_entry_to_tournament = compile(r'^(' + name + r') wins an entry to tournament #([0-9]+)$')
+        find_add_chips = compile(r'^(' + name + r') adds [0-9]+ chips \([0-9]+ stack\(s\) of [0-9]+ chips\). '
+                                 r'(' + name + r') has [0-9]+ stack\(s\) remaining.$')
+        # TODO : add rebuy, addon, skip break, wins entry to my messages system
 
     @staticmethod
-    def parse_game(path: str) -> PokerGame:
+    def parse_dir(path: str) -> None:
+        games = listdir(PokerGame.path_to_raw_games + path)
+        if not exists(PokerGame.path_to_parsed_games + path):
+            makedirs(PokerGame.path_to_parsed_games + path)
+        for game_path in games:
+            game = GameParser.parse_game(f'{path}/{game_path}')
+            if game is not None:
+                game.save()
+                game.convert()
+                remove(PokerGame.path_to_raw_games + path + '/' + game_path)
+
+    @staticmethod
+    def parse_game(path: str) -> Optional[PokerGame]:
         game = PokerGame()
-        text_game = open(PokerGame.path_to_raw_games + path, 'r').read()
+        text_game = open(PokerGame.path_to_raw_games + path, 'r', encoding='utf-8').read().strip()
         game.source = path
-        every_hand = GameParser.RegEx.hand_border.split(text_game)
+
+        Debug.parser('\nStarting to analyse ' + path)
 
         # first hand always empty because of separator in start of text
-        for hand in every_hand[1:]:
+        every_hand = GameParser.RegEx.hand_border.split(text_game)[1:]
+        Debug.parser(f'Found hands with hand border 1: {len(every_hand)}')
+
+        if len(every_hand) == 0:
+            every_hand = GameParser.RegEx.hand_border_2.split(text_game)
+            Debug.parser(f'Found hands with hand border 2: {len(every_hand)}')
+            if len(every_hand) < 2:
+                Debug.parser('Bad game: ' + path)
+                return None
+
+        for hand in every_hand:
 
             steps = GameParser.RegEx.step_border.split(hand)
 
             if len(steps) < 3 or len(steps) > 7:
-                raise ValueError(f'Invalid count of steps: {len(steps)} at hand # {every_hand.index(hand)}')
+                Debug.parser(f'Found invalid count of steps: {len(steps)} at hand # {every_hand.index(hand)}')
+                return None
 
             GameParser.process_initial(game, steps[0])
             GameParser.process_hole_cards(game, steps[1])
@@ -5450,7 +5533,7 @@ class GameParser:
         while True:
 
             try:
-                line = next(lines)
+                line = next(lines).strip()
             except StopIteration:
                 return
 
@@ -5471,6 +5554,14 @@ class GameParser:
                 continue
 
             match = GameParser.RegEx.find_collect_side_pot.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                money = int(match.group(2))
+                game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                continue
+
+            match = GameParser.RegEx.find_collect_side_pot_n.search(line)
 
             if match is not None:
                 name = match.group(1)
@@ -5517,7 +5608,10 @@ class GameParser:
 
             if match is not None:
                 name = match.group(1)
-                game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                try:
+                    game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                except ValueError:
+                    pass
                 continue
 
             match = GameParser.RegEx.find_is_sitting_out.search(line)
@@ -5535,7 +5629,10 @@ class GameParser:
             if match is not None:
                 name = match.group(1)
                 msg = match.group(2)
-                game.curr_hand.add_decision(name, PokerGame.Event.ChatMessage, 0, msg)
+                try:
+                    game.curr_hand.add_decision(name, PokerGame.Event.ChatMessage, 0, msg)
+                except ValueError:
+                    game.curr_hand.add_decision(name, PokerGame.Event.ObserverChatMessage, 0, msg)
                 continue
 
             match = GameParser.RegEx.find_observer_said.search(line)
@@ -5562,6 +5659,17 @@ class GameParser:
                 name = match.group(1)
                 place = match.group(2)
                 earn = int(match.group(3).replace('.', ''))
+                game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, earn, place)
+                match = GameParser.RegEx.find_place.search(place)
+                game.curr_hand.players_left = int(match.group(1))
+                continue
+
+            match = GameParser.RegEx.find_received_fpp.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                place = match.group(2)
+                earn = int(match.group(3))
                 game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, earn, place)
                 match = GameParser.RegEx.find_place.search(place)
                 game.curr_hand.players_left = int(match.group(1))
@@ -5596,6 +5704,73 @@ class GameParser:
                 continue
 
             match = GameParser.RegEx.find_timed_disconnected.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                continue
+
+            match = GameParser.RegEx.find_timed_being_disconnected.search(line)
+
+            if match is not None:
+                name = match.group(1)
+                game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                continue
+
+            match = GameParser.RegEx.find_finished_the_tournament.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_eliminated_and_bounty.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_eliminated_and_bounty_first.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_eliminated_and_bounty_split.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_rebuy_and_receive_chips.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_rebuy_for_starcoins.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_addon_and_receive_chips.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_addon_for_starcoins.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_skip_break_and_resuming.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_wins_entry_to_tournament.search(line)
+
+            if match is not None:
+                continue
+
+            match = GameParser.RegEx.find_add_chips.search(line)
+
+            if match is not None:
+                continue
 
             if match is not None:
                 name = match.group(1)
@@ -5659,13 +5834,22 @@ class GameParser:
             raise ValueError('It is not initial step: ' + text)
 
         match = GameParser.RegEx.hand_and_game_id.search(first_line)
-        hand_id = int(match.group(1))
+
+        try:
+            hand_id = int(match.group(1))
+        except AttributeError:
+            raise ValueError('Bad hand id: ' + first_line)
 
         if game.curr_hand is None:
             game.id = int(match.group(2))
 
             match = GameParser.RegEx.name_tournament.search(first_line)
-            name = match.group(1)
+
+            try:
+                name = match.group(1)
+            except AttributeError:
+                raise ValueError('Bad first line: ' + first_line)
+
             name = name.replace(' USD ', ' ').replace('No Limit', 'NL')
             game.name = name
 
@@ -5684,35 +5868,87 @@ class GameParser:
 
         match = GameParser.RegEx.table_number_and_seats.search(line)
 
-        table_number = int(match.group(1))
+        try:
+            table_number = int(match.group(1))
+        except AttributeError:
+            raise ValueError('Bad table number: ' + line)
+
         number_of_seats = int(match.group(2))
         button_seat = int(match.group(3))
 
         if game.seats == 0:
             game.seats = number_of_seats
 
-        line = next(every_line)
+        line = next(every_line).strip()
         players: List[PokerGame.MockPlayer] = []
         out_of_hand: List[PokerGame.MockPlayer] = []
 
+        match = GameParser.RegEx.find_rebuy_and_receive_chips.search(line)
+        while match is not None:
+            line = next(every_line).strip()
+            match = GameParser.RegEx.find_rebuy_and_receive_chips.search(line)
+
+        match = GameParser.RegEx.find_rebuy_for_starcoins.search(line)
+        while match is not None:
+            line = next(every_line).strip()
+            match = GameParser.RegEx.find_rebuy_for_starcoins.search(line)
+
+        match = GameParser.RegEx.find_addon_and_receive_chips.search(line)
+        while match is not None:
+            line = next(every_line).strip()
+            match = GameParser.RegEx.find_addon_and_receive_chips.search(line)
+
+        match = GameParser.RegEx.find_addon_for_starcoins.search(line)
+        while match is not None:
+            line = next(every_line).strip()
+            match = GameParser.RegEx.find_addon_for_starcoins.search(line)
+
+        # TODO: bad check
         while line.startswith('Seat') and '(' in line:
 
-            if line.endswith('is sitting out'):
+            is_active = False
+            is_out_of_hand = False
+
+            match = GameParser.RegEx.player_init.search(line)
+            if match is not None:
+                is_active = True
+                is_out_of_hand = False
+
+            if match is None:
                 match = GameParser.RegEx.player_init_sitting_out.search(line)
-                is_active = False
-                is_out_of_hand = False
+                if match is not None:
+                    is_active = False
+                    is_out_of_hand = False
 
-            elif ') out of hand (' in line:
+            if match is None:
                 match = GameParser.RegEx.player_init_out_of_hand.search(line)
-                is_active = True
-                is_out_of_hand = True
+                if match is not None:
+                    is_active = True
+                    is_out_of_hand = True
 
-            else:
-                match = GameParser.RegEx.player_init.search(line)
-                is_active = True
-                is_out_of_hand = False
+            if match is None:
+                match = GameParser.RegEx.player_init_bounty.search(line)
+                if match is not None:
+                    is_active = True
+                    is_out_of_hand = False
 
-            seat = int(match.group(1))
+            if match is None:
+                match = GameParser.RegEx.player_init_bounty_out_of_hand.search(line)
+                if match is not None:
+                    is_active = True
+                    is_out_of_hand = True
+
+            if match is None:
+                match = GameParser.RegEx.player_init_bounty_sitting_out.search(line)
+                if match is not None:
+                    is_active = False
+                    is_out_of_hand = False
+
+            try:
+                seat = int(match.group(1))
+            except AttributeError:
+                print('Found bad seat number:', line)
+                raise
 
             try:
                 name = match.group(2)
@@ -5721,7 +5957,7 @@ class GameParser:
                 raise
 
             money = int(match.group(3))
-            line = next(every_line)
+            line = next(every_line).strip()
 
             if is_out_of_hand:
                 out_of_hand += [PokerGame.MockPlayer(name, money, seat, is_active)]
@@ -5736,10 +5972,17 @@ class GameParser:
         game.curr_hand.table_id = table_number
         game.curr_hand.button_seat = button_seat
 
+        match = GameParser.RegEx.find_skip_break_and_resuming.search(line)
+        if match is not None:
+            line = next(every_line)
+
         while ': posts the ante ' in line:
+
+            is_all_in = False
 
             if line.endswith('all-in'):
                 match = GameParser.RegEx.find_ante_all_in.search(line)
+                is_all_in = True
             else:
                 match = GameParser.RegEx.find_ante.search(line)
 
@@ -5750,12 +5993,19 @@ class GameParser:
                 game.curr_hand.ante = ante
 
             game.curr_hand.add_decision(name, PokerGame.Event.Ante, ante)
+
+            if is_all_in:
+                game.curr_hand.set_all_in(name)
+
             line = next(every_line)
 
         if ': posts small blind' in line:
 
+            is_all_in = False
+
             if line.endswith('all-in'):
                 match = GameParser.RegEx.find_small_blind_all_in.search(line)
+                is_all_in = True
             else:
                 match = GameParser.RegEx.find_small_blind.search(line)
 
@@ -5763,12 +6013,23 @@ class GameParser:
             small_blind = int(match.group(2))
 
             game.curr_hand.add_decision(name, PokerGame.Event.SmallBlind, small_blind)
-            line = next(every_line)
+
+            try:
+                line = next(every_line)
+            except StopIteration:
+                all_in_name = game.curr_hand.get_only_all_in()
+                game.curr_hand.add_decision(all_in_name, PokerGame.Event.BigBlind, 0)
+
+            if is_all_in:
+                game.curr_hand.set_all_in(name)
 
         if ': posts big blind' in line:
 
+            is_all_in = False
+
             if line.endswith('all-in'):
                 match = GameParser.RegEx.find_big_blind_all_in.search(line)
+                is_all_in = True
             else:
                 match = GameParser.RegEx.find_big_blind.search(line)
 
@@ -5776,6 +6037,9 @@ class GameParser:
             big_blind = int(match.group(2))
 
             game.curr_hand.add_decision(name, PokerGame.Event.BigBlind, big_blind)
+
+            if is_all_in:
+                game.curr_hand.set_all_in(name)
 
         GameParser.process_actions(game, every_line)
 
@@ -5864,7 +6128,7 @@ class GameParser:
     def process_summary(game: PokerGame, text: str) -> None:
 
         every_line = iter(text.strip().split('\n'))
-        line = next(every_line)
+        line = next(every_line).strip()
 
         if not line.startswith('Total pot'):
             raise ValueError(f'Bad first line of summary: {text}')
@@ -5874,7 +6138,11 @@ class GameParser:
         else:
             match = GameParser.RegEx.find_total_pot.search(line)
 
-        total_pot = int(match.group(1))
+        try:
+            total_pot = int(match.group(1))
+        except AttributeError:
+            raise ValueError(f'Bad total pot: {line}')
+
         game.curr_hand.total_pot = total_pot
 
         line = next(every_line)
@@ -6431,10 +6699,10 @@ class Run:
             GameManager().run()
 
         elif mode == BasePlay.Mode.Parse:
-            game = GameParser.parse_game('hh.txt')
-            game.save()
-            game.convert()
-            print(game)
+            GameParser.parse_dir('pack1')
+            # game.save()
+            # game.convert()
+            # print(game)
 
         elif mode == BasePlay.Mode.Evolution:
             PlayManager.standings()
@@ -6445,4 +6713,4 @@ class Run:
 
 
 if __name__ == '__main__':
-    Run(BasePlay.Mode.GameEngine)
+    Run(BasePlay.Mode.Parse)
