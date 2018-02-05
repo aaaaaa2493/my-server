@@ -5478,6 +5478,56 @@ class GameParser:
             return self.parser.step_border.split(text)
 
         def process_hand(self, hand):
+
+            steps = self.split_into_steps(hand)
+
+            self.process_initial(steps[0])
+            self.process_hole_cards(steps[1])
+
+            if len(steps) == 3:
+                self.process_summary(steps[2])
+
+            elif len(steps) == 4:
+                self.process_flop(steps[2])
+                self.process_summary(steps[3])
+
+            elif len(steps) == 5:
+                self.process_flop(steps[2])
+                self.process_turn(steps[3])
+                self.process_summary(steps[4])
+
+            elif len(steps) == 6:
+                self.process_flop(steps[2])
+                self.process_turn(steps[3])
+                self.process_river(steps[4])
+                self.process_summary(steps[5])
+
+            elif len(steps) == 7:
+                self.process_flop(steps[2])
+                self.process_turn(steps[3])
+                self.process_river(steps[4])
+                self.process_show_down(steps[5])
+                self.process_summary(steps[6])
+
+        def process_initial(self, text):
+            pass
+
+        def process_hole_cards(self, text):
+            pass
+
+        def process_flop(self, text):
+            pass
+
+        def process_turn(self, text):
+            pass
+
+        def process_river(self, text):
+            pass
+
+        def process_show_down(self, text):
+            pass
+
+        def process_summary(self, text):
             pass
 
     class PokerStarsParsing(BaseParsing):
