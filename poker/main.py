@@ -5337,90 +5337,166 @@ class NeuralNetwork:
 class GameParser:
 
     class RegEx:
-        name = '[a-zA-Z0-9_\-@\'.,$*`áàåäãçéèêíîóöôõšüúžÄÁÃÅÉÍÖÔÓÜØø´<^>+&\\\/()Ð€£¼ñ®™~#!%\[\]|°¿?:"=ß{}æ©«»¯²¡; ]+'
 
-        hand_border = compile(r'[*]{11} # [0-9]+ [*]{14}')
-        hand_border_2 = compile('\n\n\n\n')
-        step_border = compile(r'[*]{3} [A-Z ]+ [*]{3}')
-        hand_and_game_id = compile(r'Hand #([0-9]+): [Zom ]{0,5}Tournament #([0-9]+)')
-        name_tournament = compile(r'Tournament #[0-9]+, ([^-]*) - ')
-        date_tournament = compile(r'- ([0-9]{4}/[0-9]{2}/[0-9]{2}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})')
-        table_number_and_seats = compile(r"^Table '[0-9]+ ([0-9]+)' ([0-9]+)-max Seat #([0-9]+) is the button$")
-        small_and_big_blind = compile(r'\(([0-9]+)/([0-9]+)\)')
-        player_init = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\)$')
-        player_init_sitting_out = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) is sitting out$')
-        player_init_out_of_hand = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) out of hand \(')
-        player_init_bounty = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, \$[0-9.]+ bounty\)$')
-        player_init_bounty_out_of_hand = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, '
-                                                                               r'\$[0-9.]+ bounty\) out of hand \(')
-        player_init_bounty_sitting_out = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, '
-                                                                               r'\$[0-9.]+ bounty\) is sitting out$')
-        find_ante = compile('^(' + name + r'): posts the ante ([0-9]+)$')
-        find_ante_all_in = compile('^(' + name + r'): posts the ante ([0-9]+) and is all-in$')
-        find_small_blind = compile('^(' + name + r'): posts small blind ([0-9]+)$')
-        find_small_blind_all_in = compile('^(' + name + r'): posts small blind ([0-9]+) and is all-in$')
-        find_big_blind = compile('^(' + name + r'): posts big blind ([0-9]+)$')
-        find_big_blind_all_in = compile('^(' + name + r'): posts big blind ([0-9]+) and is all-in$')
-        find_dealt_cards = compile(r'^Dealt to (' + name + r') \[(..) (..)]$')
-        find_action = compile('^(' + name + r'): ([a-z0-9 -]+)$')
-        find_flop = compile(r'\[(..) (..) (..)]$')
-        find_turn = compile(r'\[.. .. ..] \[(..)]$')
-        find_river = compile(r'\[.. .. .. ..] \[(..)]$')
-        find_shows_in_show_down = compile(r'^(' + name + r'): shows \[(..) (..)] \([a-zA-Z0-9, +-]+\)$')
-        find_total_pot = compile(r'^Total pot ([0-9]+) \| Rake [0-9]+$')
-        find_total_pot_with_main_pot = compile(r'^Total pot ([0-9]+) Main pot [0-9a-zA-Z.\- ]+ \| Rake [0-9]+$')
-        find_collected_pot_summary = compile(r'^Seat [0-9]+: (' + name + r') collected \([0-9]+\)$')
-        find_lost = compile(r'^Seat [0-9]+: (' + name + r') showed \[(..) (..)] and lost with')
-        find_won = compile(r'^Seat [0-9]+: (' + name + r') showed \[(..) (..)] and won \([0-9]+\) with')
-        find_mucked_cards = compile(r'^Seat [0-9]+: (' + name + r') mucked \[(..) (..)]$')
-        find_place = compile(r'^([0-9]+)(th|nd|rd|st)$')
+        class PokerStars:
+            name = '[a-zA-Z0-9_\-@\'.,$*`áàåäãçéèêíîóöôõšüúžÄÁÃÅÉÍÖÔÓÜØø´<^>+&' \
+                   '\\\/()Ð€£¼ñ®™~#!%\[\]|°¿?:"=ß{}æ©«»¯²¡; ]+'
 
-        # for processing actions
-        find_uncalled_bet = compile(r'^Uncalled bet \(([0-9]+)\) returned to (' + name + r')$')
-        find_collect_pot = compile(r'^(' + name + r') collected ([0-9]+) from pot$')
-        find_collect_side_pot = compile(r'^(' + name + r') collected ([0-9]+) from side pot$')
-        find_collect_side_pot_n = compile(r'^(' + name + r') collected ([0-9]+) from side pot-[0-9]+$')
-        find_collect_main_pot = compile(r'^(' + name + r') collected ([0-9]+) from main pot$')
-        find_show_cards = compile(r'^(' + name + r'): shows \[([2-9AKQJT hdcs]+)]$')
-        find_is_connected = compile(r'^(' + name + r') is connected$')
-        find_is_disconnected = compile(r'^(' + name + r') is disconnected$')
-        find_is_sitting_out = compile(r'^(' + name + r') is sitting out$')
-        find_said = compile(r'^(' + name + ') said, "([^\n]*)"$')
-        find_observer_said = compile(r'^(' + name + ') \[observer] said, "([^\n]+)"$')
-        find_finished = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place$')
-        find_received = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place '
-                                               r'and received \$([0-9]+\.[0-9]{2})\.$')
-        find_received_fpp = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place '
-                                                   r'and received ([0-9]+) FPP.$')
-        find_winner = compile(r'^(' + name + r') wins the tournament and receives '
-                                             r'\$([0-9]+\.[0-9]{2}) - congratulations!$')
-        find_does_not_show = compile(r'^(' + name + '): doesn\'t show hand$')
-        find_has_returned = compile(r'^(' + name + r') has returned$')
-        find_has_timed_out = compile(r'^(' + name + r') has timed out$')
-        find_timed_disconnected = compile(r'^(' + name + r') has timed out while disconnected$')
-        find_timed_being_disconnected = compile(r'^(' + name + r') has timed out while being disconnected$')
-        find_mucks_hand = compile(r'^' + name + r': mucks hand$')
-        find_fold_showing_cards = compile(r'^(' + name + r'): folds \[([2-9AKQJT hdcs]+)]$')
-        find_finished_the_tournament = compile(r'^(' + name + ') finished the tournament$')
-        find_eliminated_and_bounty_first = compile(r'^(' + name + r') wins the \$[0-9.]+ bounty for'
-                                                                  r' eliminating (' + name + r')$')
-        find_eliminated_and_bounty = compile(r'^(' + name + ') wins \$[0-9.]+ for eliminating (' + name + r') and'
-                                             r' their own bounty increases by \$[0-9.]+ to \$[0-9.]+$')
-        find_eliminated_and_bounty_split = compile(r'^(' + name + r') wins \$[0-9.]+ for splitting the '
-                                                   r'elimination of (' + name + r') and their own bounty '
-                                                   r'increases by \$[0-9.]+ to \$[0-9.]+$')
-        find_rebuy_and_receive_chips = compile(r'^(' + name + r') re-buys and receives ([0-9]+) chips for \$[0-9.]+$')
-        find_rebuy_for_starcoins = compile(r'^(' + name + r') re-buys and receives ([0-9]+) '
-                                                          r'chips for ([0-9]+) StarsCoin$')
-        find_addon_and_receive_chips = compile(r'^(' + name + r') takes the add-on '
-                                                              r'and receives ([0-9]+) chips for \$[0-9.]+$')
-        find_addon_for_starcoins = compile(r'^(' + name + r') takes the add-on and receives ([0-9]+) '
-                                                          r'chips for ([0-9]+) StarsCoin$')
-        find_skip_break_and_resuming = compile(r'^All players have agreed to skip the break. Game resuming.$')
-        find_wins_entry_to_tournament = compile(r'^(' + name + r') wins an entry to tournament #([0-9]+)$')
-        find_add_chips = compile(r'^(' + name + r') adds [0-9]+ chips \([0-9]+ stack\(s\) of [0-9]+ chips\). '
-                                 r'(' + name + r') has [0-9]+ stack\(s\) remaining.$')
-        # TODO : add rebuy, addon, skip break, wins entry to my messages system
+            identifier = compile(r'^[*\n#1 ]*PokerStars Hand #')
+
+            hand_border = compile(r'[*]{11} # [0-9]+ [*]{14}')
+            hand_border_2 = compile('\n\n\n\n')
+            step_border = compile(r'[*]{3} [A-Z ]+ [*]{3}')
+            hand_and_game_id = compile(r'Hand #([0-9]+): [Zom ]{0,5}Tournament #([0-9]+)')
+            name_tournament = compile(r'Tournament #[0-9]+, ([^-]*) - ')
+            date_tournament = compile(r'- ([0-9]{4}/[0-9]{2}/[0-9]{2}) ([0-9]{1,2}:[0-9]{2}:[0-9]{2})')
+            table_number_and_seats = compile(r"^Table '[0-9]+ ([0-9]+)' ([0-9]+)-max Seat #([0-9]+) is the button$")
+            small_and_big_blind = compile(r'\(([0-9]+)/([0-9]+)\)')
+            player_init = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\)$')
+            player_init_sitting_out = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) is sitting out$')
+            player_init_out_of_hand = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips\) out of hand \(')
+            player_init_bounty = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, \$[0-9.]+ bounty\)$')
+            player_init_bounty_out_of_hand = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, '
+                                                     r'\$[0-9.]+ bounty\) out of hand \(')
+            player_init_bounty_sitting_out = compile(r'^Seat ([0-9]+): (' + name + r') \(([0-9]+) in chips, '
+                                                     r'\$[0-9.]+ bounty\) is sitting out$')
+            find_ante = compile('^(' + name + r'): posts the ante ([0-9]+)$')
+            find_ante_all_in = compile('^(' + name + r'): posts the ante ([0-9]+) and is all-in$')
+            find_small_blind = compile('^(' + name + r'): posts small blind ([0-9]+)$')
+            find_small_blind_all_in = compile('^(' + name + r'): posts small blind ([0-9]+) and is all-in$')
+            find_big_blind = compile('^(' + name + r'): posts big blind ([0-9]+)$')
+            find_big_blind_all_in = compile('^(' + name + r'): posts big blind ([0-9]+) and is all-in$')
+            find_dealt_cards = compile(r'^Dealt to (' + name + r') \[(..) (..)]$')
+            find_action = compile('^(' + name + r'): ([a-z0-9 -]+)$')
+            find_flop = compile(r'\[(..) (..) (..)]$')
+            find_turn = compile(r'\[.. .. ..] \[(..)]$')
+            find_river = compile(r'\[.. .. .. ..] \[(..)]$')
+            find_shows_in_show_down = compile(r'^(' + name + r'): shows \[(..) (..)] \([a-zA-Z0-9, +-]+\)$')
+            find_total_pot = compile(r'^Total pot ([0-9]+) \| Rake [0-9]+$')
+            find_total_pot_with_main_pot = compile(r'^Total pot ([0-9]+) Main pot [0-9a-zA-Z.\- ]+ \| Rake [0-9]+$')
+            find_collected_pot_summary = compile(r'^Seat [0-9]+: (' + name + r') collected \([0-9]+\)$')
+            find_lost = compile(r'^Seat [0-9]+: (' + name + r') showed \[(..) (..)] and lost with')
+            find_won = compile(r'^Seat [0-9]+: (' + name + r') showed \[(..) (..)] and won \([0-9]+\) with')
+            find_mucked_cards = compile(r'^Seat [0-9]+: (' + name + r') mucked \[(..) (..)]$')
+            find_place = compile(r'^([0-9]+)(th|nd|rd|st)$')
+
+            # for processing actions
+            find_uncalled_bet = compile(r'^Uncalled bet \(([0-9]+)\) returned to (' + name + r')$')
+            find_collect_pot = compile(r'^(' + name + r') collected ([0-9]+) from pot$')
+            find_collect_side_pot = compile(r'^(' + name + r') collected ([0-9]+) from side pot$')
+            find_collect_side_pot_n = compile(r'^(' + name + r') collected ([0-9]+) from side pot-[0-9]+$')
+            find_collect_main_pot = compile(r'^(' + name + r') collected ([0-9]+) from main pot$')
+            find_show_cards = compile(r'^(' + name + r'): shows \[([2-9AKQJT hdcs]+)]$')
+            find_is_connected = compile(r'^(' + name + r') is connected$')
+            find_is_disconnected = compile(r'^(' + name + r') is disconnected$')
+            find_is_sitting_out = compile(r'^(' + name + r') is sitting out$')
+            find_said = compile(r'^(' + name + ') said, "([^\n]*)"$')
+            find_observer_said = compile(r'^(' + name + ') \[observer] said, "([^\n]+)"$')
+            find_finished = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place$')
+            find_received = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place '
+                                                   r'and received \$([0-9]+\.[0-9]{2})\.$')
+            find_received_fpp = compile(r'^(' + name + r') finished the tournament in ([0-9]+..) place '
+                                                       r'and received ([0-9]+) FPP.$')
+            find_winner = compile(r'^(' + name + r') wins the tournament and receives '
+                                                 r'\$([0-9]+\.[0-9]{2}) - congratulations!$')
+            find_does_not_show = compile(r'^(' + name + '): doesn\'t show hand$')
+            find_has_returned = compile(r'^(' + name + r') has returned$')
+            find_has_timed_out = compile(r'^(' + name + r') has timed out$')
+            find_timed_disconnected = compile(r'^(' + name + r') has timed out while disconnected$')
+            find_timed_being_disconnected = compile(r'^(' + name + r') has timed out while being disconnected$')
+            find_mucks_hand = compile(r'^' + name + r': mucks hand$')
+            find_fold_showing_cards = compile(r'^(' + name + r'): folds \[([2-9AKQJT hdcs]+)]$')
+            find_finished_the_tournament = compile(r'^(' + name + ') finished the tournament$')
+            find_eliminated_and_bounty_first = compile(r'^(' + name + r') wins the \$[0-9.]+ bounty for'
+                                                                      r' eliminating (' + name + r')$')
+            find_eliminated_and_bounty = compile(r'^(' + name + ') wins \$[0-9.]+ for eliminating (' + name + r') and'
+                                                 r' their own bounty increases by \$[0-9.]+ to \$[0-9.]+$')
+            find_eliminated_and_bounty_split = compile(r'^(' + name + r') wins \$[0-9.]+ for splitting the '
+                                                       r'elimination of (' + name + r') and their own bounty '
+                                                       r'increases by \$[0-9.]+ to \$[0-9.]+$')
+            find_rebuy_and_receive_chips = compile(r'^(' + name + r') re-buys and receives '
+                                                                  r'([0-9]+) chips for \$[0-9.]+$')
+            find_rebuy_for_starcoins = compile(r'^(' + name + r') re-buys and receives ([0-9]+) '
+                                                              r'chips for ([0-9]+) StarsCoin$')
+            find_addon_and_receive_chips = compile(r'^(' + name + r') takes the add-on '
+                                                                  r'and receives ([0-9]+) chips for \$[0-9.]+$')
+            find_addon_for_starcoins = compile(r'^(' + name + r') takes the add-on and receives ([0-9]+) '
+                                                              r'chips for ([0-9]+) StarsCoin$')
+            find_skip_break_and_resuming = compile(r'^All players have agreed to skip the break. Game resuming.$')
+            find_wins_entry_to_tournament = compile(r'^(' + name + r') wins an entry to tournament #([0-9]+)$')
+            find_add_chips = compile(r'^(' + name + r') adds [0-9]+ chips \([0-9]+ stack\(s\) of [0-9]+ chips\). '
+                                     r'(' + name + r') has [0-9]+ stack\(s\) remaining.$')
+            # TODO : add rebuy, addon, skip break, wins entry to my messages system
+
+        class Poker888:
+            identifier = compile('^\*\*\*\*\* 888poker Hand History')
+
+            hand_border = compile(r'\*\*\*\*\* 888poker Hand History for Game [0-9]+ \*\*\*\*\*')
+            step_border = compile(r'\*\* [DSa-z ]+ \*\*')
+
+        class UnnamedPoker:
+            identifier = compile('^\*\*\*\*\* Hand History')
+
+            hand_border = compile(r'\*\*\*\*\* Hand History for Game [0-9]+ \*\*\*\*\*')
+            step_border = compile(r'\*\* [DSa-z ]+ \*\*')
+
+    class BaseParsing:
+
+        @staticmethod
+        def get_parser(text, game):
+            match = GameParser.RegEx.PokerStars.identifier.search(text)
+            if match is not None:
+                Debug.parser('Found PokerStars game')
+                return GameParser.PokerStarsParsing(game)
+
+            match = GameParser.RegEx.Poker888.identifier.search(text)
+            if match is not None:
+                Debug.parser('Found Poker888 game')
+                return GameParser.Poker888Parsing(game)
+
+            match = GameParser.RegEx.UnnamedPoker.identifier.search(text)
+            if match is not None:
+                Debug.parser('Found UnnamedPoker game')
+                return GameParser.UnnamedPokerParsing(game)
+
+            return None
+
+        def __init__(self, parser, game):
+            self.parser = parser
+            self.game = game
+
+        def process_game(self, text):
+            every_hand = self.parser.split_into_hands(text)
+            for hand in every_hand:
+                self.process_hand(hand)
+
+        def split_into_hands(self, text):
+            # first hand always empty because of separator in start of text
+            return self.parser.hand_border.split(text)[1:]
+
+        def split_into_steps(self, text):
+            return self.parser.step_border.split(text)
+
+        def process_hand(self, hand):
+            pass
+
+    class PokerStarsParsing(BaseParsing):
+        def __init__(self, game):
+            super().__init__(GameParser.RegEx.PokerStars, game)
+
+        def split_into_hands(self, text):
+            every_hand = self.parser.hand_border.split(text)[1:]
+            if len(every_hand) == 0:
+                every_hand = self.parser.hand_border_2.split(text)
+            return every_hand
+
+    class Poker888Parsing(BaseParsing):
+        def __init__(self, game):
+            super().__init__(GameParser.RegEx.Poker888, game)
+
+    class UnnamedPokerParsing(BaseParsing):
+        def __init__(self, game):
+            super().__init__(GameParser.RegEx.UnnamedPoker, game)
 
     @staticmethod
     def parse_dir(path: str) -> None:
@@ -5442,52 +5518,13 @@ class GameParser:
 
         Debug.parser('\nStarting to analyse ' + path)
 
-        # first hand always empty because of separator in start of text
-        every_hand = GameParser.RegEx.hand_border.split(text_game)[1:]
-        Debug.parser(f'Found hands with hand border 1: {len(every_hand)}')
+        parser = GameParser.BaseParsing.get_parser(text_game, game)
 
-        if len(every_hand) == 0:
-            every_hand = GameParser.RegEx.hand_border_2.split(text_game)
-            Debug.parser(f'Found hands with hand border 2: {len(every_hand)}')
-            if len(every_hand) < 2:
-                Debug.parser('Bad game: ' + path)
-                return None
+        if parser is None:
+            Debug.parser('Cannot parse game - can not identify')
+            return None
 
-        for hand in every_hand:
-
-            steps = GameParser.RegEx.step_border.split(hand)
-
-            if len(steps) < 3 or len(steps) > 7:
-                Debug.parser(f'Found invalid count of steps: {len(steps)} at hand # {every_hand.index(hand)}')
-                return None
-
-            GameParser.process_initial(game, steps[0])
-            GameParser.process_hole_cards(game, steps[1])
-
-            if len(steps) == 3:
-                GameParser.process_summary(game, steps[2])
-
-            elif len(steps) == 4:
-                GameParser.process_flop(game, steps[2])
-                GameParser.process_summary(game, steps[3])
-
-            elif len(steps) == 5:
-                GameParser.process_flop(game, steps[2])
-                GameParser.process_turn(game, steps[3])
-                GameParser.process_summary(game, steps[4])
-
-            elif len(steps) == 6:
-                GameParser.process_flop(game, steps[2])
-                GameParser.process_turn(game, steps[3])
-                GameParser.process_river(game, steps[4])
-                GameParser.process_summary(game, steps[5])
-
-            elif len(steps) == 7:
-                GameParser.process_flop(game, steps[2])
-                GameParser.process_turn(game, steps[3])
-                GameParser.process_river(game, steps[4])
-                GameParser.process_show_down(game, steps[5])
-                GameParser.process_summary(game, steps[6])
+        parser.process_game(text_game)
 
         game.approximate_players_left()
         game.add_final_table_marks()
