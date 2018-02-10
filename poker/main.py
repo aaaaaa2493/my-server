@@ -5444,8 +5444,8 @@ class GameParser:
             # TODO : add rebuy, addon, skip break, wins entry to my messages system
 
         class Poker888:
-
-            name = '[A-Za-z0-9 ]+'
+            name = '[a-zA-Z0-9_\-@\'.,$*`áàåäãçéèêíîóöôõšüúžÄÁÃÅÉÍÖÔÓÜØø´<^>+&' \
+                   '\\\/()Ð€£¼ñ®™~#!%\[\]|°¿?:"=ß{}æ©«»¯²¡; ]+'
 
             identifier = compile('^\*\*\*\*\* 888poker Hand History')
 
@@ -5453,18 +5453,57 @@ class GameParser:
             find_hand_id = compile(r'^Game ([0-9]+) \*\*\*\*\*$')
             step_border = compile(r'\*\* [DSa-z ]+ \*\*')
 
-            blinds_and_date = compile(r'^\$([0-9]+)/\$([0-9]+) Blinds No Limit Holdem - \*\*\* '
+            blinds_and_date = compile(r'^\$([0-9,]+)/\$([0-9,]+) Blinds No Limit Holdem - \*\*\* '
                                       r'(.. .. ....) ([0-9:]+)$')
 
-            game_info = compile(r'^Tournament #([0-9]+) (\$[0-9]+\.[0-9]{2} + \$[0-9]+\.[0-9]{2}) - '
+            blinds_and_ante_2 = compile(r'^([0-9 ]+) \$/([0-9 ]+) \$ Blinds No Limit Holdem - \*\*\* '
+                                        r'(.. .. ....) ([0-9:]+)$')
+
+            game_info = compile(r'^Tournament #([0-9]+) (\$[0-9.]+ \+ \$[0-9.]+) - '
                                 r'Table #([0-9]+) ([0-9]+) Max \(Real Money\)$')
 
-            find_button_seat = compile(r'^Seat ([0-9]+) is the button$')
-            player_init = compile(r'^Seat ([0-9]+): ' + name + r' \( \$([0-9,]+) \)$')
+            game_info_2 = compile(r'^Tournament #([0-9]+) ([0-9,]+ \$ \+ [0-9,]+ \$) - '
+                                  r'Table #([0-9]+) ([0-9]+) Max \(Real Money\)$')
 
-            find_ante = compile(r'^(' + name + r') posts ante \[\$([0-9]+)\]$')
-            find_small_blind = compile(r'(' + name + ') posts small blind \[\$([0-9]+)\]$')
-            find_big_blind = compile(r'(' + name + ') posts big blind \[\$([0-9]+)\]$')
+            game_info_3 = compile(r'^Tournament #([0-9]+) (\$[0-9.]+) - '
+                                  r'Table #([0-9]+) ([0-9]+) Max \(Real Money\)$')
+
+            game_info_4 = compile(r'^Tournament #([0-9]+) ([0-9,]+ \$) - '
+                                  r'Table #([0-9]+) ([0-9]+) Max \(Real Money\)$')
+
+            game_info_5 = compile(r'^Tournament #([0-9]+) (Бесплатно) - '
+                                  r'Table #([0-9]+) ([0-9]+) Max \(Real Money\)$')
+
+            find_button_seat = compile(r'^Seat ([0-9]+) is the button$')
+            player_init = compile(r'^Seat ([0-9]+): (' + name + r') \( \$([0-9,]+) \)$')
+            player_init_2 = compile(r'^Seat ([0-9]+): (' + name + r') \( ([0-9 ]+) \$ \)$')
+            empty_init = compile(r'^Seat ([0-9]+):[ ]{2}\( ([0-9,$ ]+) \)$')
+
+            find_ante = compile(r'^(' + name + r') posts ante \[\$([0-9,]+)\]$')
+            find_ante_2 = compile(r'^(' + name + r') posts ante \[([0-9 ]+) \$\]$')
+            find_small_blind = compile(r'^(' + name + ') posts small blind \[\$([0-9,]+)\]$')
+            find_small_blind_2 = compile(r'^(' + name + r') posts small blind \[([0-9 ]+) \$\]$')
+            find_big_blind = compile(r'^(' + name + ') posts big blind \[\$([0-9,]+)\]$')
+            find_big_blind_2 = compile(r'^(' + name + r') posts big blind \[([0-9 ]+) \$\]$')
+            find_flop = compile(r'^\[ (..), (..), (..) \]$')
+            find_turn = compile(r'^\[ (..) \]$')
+            find_river = compile(r'^\[ (..) \]$')
+
+            # actions
+            find_dealt_cards = compile(r'^Dealt to (' + name + ') \[ (..), (..) \]$')
+            find_fold = compile(r'^(' + name + ') folds$')
+            find_call = compile(r'^(' + name + ') calls \[\$([0-9,]+)\]$')
+            find_call_2 = compile(r'^(' + name + r') calls \[([0-9 ]+) \$\]$')
+            find_check = compile(r'^(' + name + ') checks$')
+            find_bet = compile(r'^(' + name + ') bets \[\$([0-9,]+)\]$')
+            find_bet_2 = compile(r'^(' + name + r') bets \[([0-9 ]+) \$\]$')
+            find_raise = compile(r'^(' + name + ') raises \[\$([0-9,]+)\]$')
+            find_raise_2 = compile(r'^(' + name + ') raises \[([0-9 ]+) \$\]$')
+            find_did_not_show = compile(r'^(' + name + r') did not show his hand$')
+            find_win_money = compile(r'^(' + name + ') collected \[ \$([0-9,]+) \]$')
+            find_win_money_2 = compile(r'^(' + name + r') collected \[ ([0-9 ]+) \$ \]$')
+            find_show_cards = compile(r'^(' + name + ') shows \[ (..), (..) \]$')
+            find_muck_cards = compile(r'^(' + name + ') mucks \[ (..), (..) \]$')
 
         class UnnamedPoker:
             identifier = compile('^\*\*\*\*\* Hand History')
@@ -5489,6 +5528,7 @@ class GameParser:
             match = GameParser.RegEx.UnnamedPoker.identifier.search(text)
             if match is not None:
                 Debug.parser('Found UnnamedPoker game')
+                return None
                 return GameParser.UnnamedPokerParsing(game)
 
             return None
@@ -5496,9 +5536,10 @@ class GameParser:
         def __init__(self, parser, game):
             self.parser = parser
             self.game: PokerGame = game
+            self.is_broken_hand = True
 
         def process_game(self, text):
-            every_hand = self.parser.split_into_hands(text)
+            every_hand = self.split_into_hands(text)
             for hand in every_hand:
                 self.process_hand(hand)
 
@@ -5542,7 +5583,7 @@ class GameParser:
                 self.process_summary(steps[6])
 
         def process_initial(self, text):
-            raise NotImplementedError()
+            pass
 
         def process_hole_cards(self, text):
             pass
@@ -5572,7 +5613,8 @@ class GameParser:
                 every_hand = self.parser.hand_border_2.split(text)
             return every_hand
 
-        def parse_action(self, player: PokerGame.MockPlayer, step: BasePlay.StepType, text: str) \
+        @staticmethod
+        def parse_action(player: PokerGame.MockPlayer, step: BasePlay.StepType, text: str) \
                 -> Tuple[PokerGame.EventType, int]:
 
             if text == 'folds':
@@ -5906,8 +5948,12 @@ class GameParser:
                     print('Cannot parse line:', line)
                     raise
 
-                result, money = self.parse_action(self.game.curr_hand.get_player(name),
-                                                  self.game.curr_hand.curr_step, action)
+                try:
+                    result, money = self.parse_action(self.game.curr_hand.get_player(name),
+                                                      self.game.curr_hand.curr_step, action)
+                except ValueError:
+                    print('Bad action: ' + line)
+                    raise
 
                 self.game.curr_hand.add_decision(name, result, money)
 
@@ -6074,7 +6120,7 @@ class GameParser:
                 if match is None:
                     match = self.parser.find_ante.search(line)
 
-                if match is not None:
+                if match is None:
                     break
 
                 name = match.group(1)
@@ -6143,6 +6189,8 @@ class GameParser:
 
                 if is_all_in:
                     self.game.curr_hand.set_all_in(name)
+
+                break
 
             self.process_actions(every_line)
 
@@ -6310,19 +6358,179 @@ class GameParser:
     class Poker888Parsing(BaseParsing):
         def __init__(self, game):
             super().__init__(GameParser.RegEx.Poker888, game)
+            self.call_amount = 0
+            self.total_pot = 0
+
+        def process_actions(self, lines):
+            while True:
+
+                try:
+                    line = next(lines).strip()
+                except StopIteration:
+                    return
+                
+                if len(line) == 0:
+                    return
+
+                match = self.parser.find_dealt_cards.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    first_card = Card(match.group(2).upper())
+                    second_card = Card(match.group(3).upper())
+                    pair = CardsPair(first_card, second_card)
+                    self.game.curr_hand.set_cards(name, pair)
+                    continue
+
+                match = self.parser.find_fold.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    self.game.curr_hand.add_decision(name, PokerGame.Event.Fold, 0)
+                    continue
+
+                match = self.parser.find_call.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    money = int(match.group(2).replace(',', ''))
+                    self.total_pot += money
+                    self.game.curr_hand.add_decision(name, PokerGame.Event.Call, self.call_amount)
+                    continue
+
+                match = self.parser.find_call_2.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    money = int(match.group(2).replace('\xa0', ''))
+                    self.total_pot += money
+                    self.game.curr_hand.add_decision(name, PokerGame.Event.Call, self.call_amount)
+                    continue
+
+                match = self.parser.find_check.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    self.game.curr_hand.add_decision(name, PokerGame.Event.Check, 0)
+                    continue
+
+                match = self.parser.find_bet.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    money = int(match.group(2).replace(',', ''))
+                    self.call_amount = money
+                    self.total_pot += money
+                    self.game.curr_hand.add_decision(name, PokerGame.Event.Raise, money)
+                    continue
+
+                match = self.parser.find_bet_2.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    money = int(match.group(2).replace('\xa0', ''))
+                    self.call_amount = money
+                    self.total_pot += money
+                    self.game.curr_hand.add_decision(name, PokerGame.Event.Raise, money)
+                    continue
+
+                match = self.parser.find_raise.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    money = int(match.group(2).replace(',', ''))
+                    self.total_pot += money
+                    self.call_amount += money
+                    try:
+                        self.game.curr_hand.add_decision(name, PokerGame.Event.Raise, self.call_amount)
+                    except ValueError:
+                        print('Can not add decision: ' + line)
+                        raise
+                    continue
+
+                match = self.parser.find_raise_2.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    money = int(match.group(2).replace('\xa0', ''))
+                    self.total_pot += money
+                    self.call_amount += money
+                    try:
+                        self.game.curr_hand.add_decision(name, PokerGame.Event.Raise, self.call_amount)
+                    except ValueError:
+                        print('Can not add decision: ' + line)
+                        raise
+                    continue
+
+                match = self.parser.find_did_not_show.search(line)
+
+                if match is not None:
+                    continue
+
+                match = self.parser.find_win_money.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    money = int(match.group(2).replace(',', ''))
+                    self.game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                    self.game.curr_hand.add_winner(name)
+                    continue
+
+                match = self.parser.find_win_money_2.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    money = int(match.group(2).replace('\xa0', ''))
+                    self.game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                    self.game.curr_hand.add_winner(name)
+                    continue
+
+                match = self.parser.find_show_cards.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    card1 = Card(match.group(2).upper())
+                    card2 = Card(match.group(3).upper())
+                    pair = CardsPair(card1, card2)
+                    self.game.curr_hand.set_cards(name, pair)
+                    self.game.curr_hand.goes_to_showdown = True
+                    continue
+
+                match = self.parser.find_muck_cards.search(line)
+
+                if match is not None:
+                    name = match.group(1)
+                    card1 = Card(match.group(2).upper())
+                    card2 = Card(match.group(3).upper())
+                    pair = CardsPair(card1, card2)
+                    self.game.curr_hand.set_cards(name, pair)
+                    self.game.curr_hand.add_loser(name)
+                    continue
+
+                raise ValueError('Undefined action: ' + line)
 
         def process_initial(self, text: str):
             lines = iter(text.strip().split('\n'))
             line = next(lines)
+            self.is_broken_hand = False
 
             match = self.parser.find_hand_id.search(line)
             hand_id = int(match.group(1))
 
-            line = next(lines)
+            line = next(lines).strip()
 
             match = self.parser.blinds_and_date.search(line)
-            small_blind = int(match.group(1))
-            big_blind = int(match.group(2))
+
+            if match is None:
+                match = self.parser.blinds_and_ante_2.search(line)
+
+            try:
+                small_blind = int(match.group(1).replace(',', '').replace('\xa0', ''))
+            except AttributeError:
+                print('Bad blinds: ' + line)
+                raise
+            big_blind = int(match.group(2).replace(',', '').replace('\xa0', ''))
+            self.call_amount = big_blind
             date = '/'.join(match.group(3).split()[::-1])
             time = match.group(4)
 
@@ -6330,13 +6538,28 @@ class GameParser:
 
             match = self.parser.game_info.search(line)
 
+            if match is None:
+                match = self.parser.game_info_2.search(line)
+
+            if match is None:
+                match = self.parser.game_info_3.search(line)
+
+            if match is None:
+                match = self.parser.game_info_4.search(line)
+
+            if match is None:
+                match = self.parser.game_info_5.search(line)
+
             if self.game.curr_hand is None:
-                self.game.init(
-                    int(match.group(1)),
-                    'NL ' + match.group(2),
-                    int(match.group(4)),
-                    date, time
-                )
+                try:
+                    self.game.init(
+                        int(match.group(1)),
+                        'NL ' + match.group(2),
+                        int(match.group(4)),
+                        date, time
+                    )
+                except AttributeError:
+                    raise ValueError('Bad game init line: ' + line)
 
             table_number = match.group(3)
 
@@ -6349,32 +6572,41 @@ class GameParser:
             _ = next(lines)
             # skip "Total number of players : [0-9]+"
 
-            line = next(lines)
+            line = next(lines).strip()
 
             players: List[PokerGame.MockPlayer] = []
             out_of_hand: List[PokerGame.MockPlayer] = []
 
             while True:
-                is_active = False
+                is_active = True
                 is_out_of_hand = False
 
                 match = self.parser.player_init.search(line)
 
-                if match is not None:
-                    is_active = True
-                    is_out_of_hand = False
+                if match is None:
+                    match = self.parser.player_init_2.search(line)
 
                 if match is None:
                     break
 
                 seat = int(match.group(1))
                 name = match.group(2)
-                money = int(match.group(3).replace(',', ''))
+                money = int(match.group(3).replace(',', '').replace('\xa0', ''))
 
                 if is_out_of_hand:
                     out_of_hand += [PokerGame.MockPlayer(name, money, seat, is_active)]
                 else:
                     players += [PokerGame.MockPlayer(name, money, seat, is_active)]
+
+                line = next(lines).strip()
+
+            if len(players) == 0:
+
+                if not self.parser.empty_init.search(line):
+                    raise ValueError('Can not parse player: ' + line)
+
+                self.is_broken_hand = True
+                return
 
             self.game.add_hand(players)
             self.game.curr_hand.init(hand_id, small_blind, big_blind, out_of_hand, table_number, button_seat)
@@ -6383,10 +6615,15 @@ class GameParser:
                 match = self.parser.find_ante.search(line)
 
                 if match is None:
+                    match = self.parser.find_ante_2.search(line)
+
+                if match is None:
                     break
 
                 name = match.group(1)
-                ante = int(match.group(2))
+                ante = int(match.group(2).replace(',', '').replace('\xa0', ''))
+
+                self.total_pot += ante
 
                 if self.game.curr_hand.ante == 0:
                     self.game.curr_hand.ante = ante
@@ -6399,10 +6636,15 @@ class GameParser:
                 match = self.parser.find_small_blind.search(line)
 
                 if match is None:
+                    match = self.parser.find_small_blind_2.search(line)
+                    
+                if match is None:
                     break
 
                 name = match.group(1)
-                small_blind = int(match.group(2))
+                small_blind = int(match.group(2).replace(',', '').replace('\xa0', ''))
+
+                self.total_pot += small_blind
 
                 self.game.curr_hand.add_decision(name, PokerGame.Event.SmallBlind, small_blind)
 
@@ -6418,14 +6660,94 @@ class GameParser:
                 match = self.parser.find_big_blind.search(line)
 
                 if match is None:
+                    match = self.parser.find_big_blind_2.search(line)
+                    
+                if match is None:
                     break
 
                 name = match.group(1)
-                big_blind = int(match.group(2))
+                big_blind = int(match.group(2).replace(',', '').replace('\xa0', ''))
+
+                self.total_pot += big_blind
 
                 self.game.curr_hand.add_decision(name, PokerGame.Event.BigBlind, big_blind)
 
                 break
+
+            self.process_actions(lines)
+
+        def process_hole_cards(self, text: str) -> None:
+            if self.is_broken_hand:
+                return
+            every_line = iter(text.strip().split('\n'))
+            self.process_actions(every_line)
+
+        def process_flop(self, text: str):
+            if self.is_broken_hand:
+                return
+            self.game.curr_hand.switch_to_step(BasePlay.Step.Flop)
+            self.call_amount = 0
+
+            lines = iter(text.strip().split('\n'))
+            line = next(lines)
+
+            match = self.parser.find_flop.search(line)
+
+            if match is None:
+                raise ValueError(f'Bad first line in process flop: {text}')
+
+            flop1 = Card(match.group(1).upper())
+            flop2 = Card(match.group(2).upper())
+            flop3 = Card(match.group(3).upper())
+
+            self.game.curr_hand.set_flop_cards(flop1, flop2, flop3)
+
+            self.process_actions(lines)
+
+        def process_turn(self, text: str) -> None:
+            if self.is_broken_hand:
+                return
+            self.game.curr_hand.switch_to_step(BasePlay.Step.Turn)
+            self.call_amount = 0
+
+            every_line = iter(text.strip().split('\n'))
+            first_line = next(every_line)
+
+            match = self.parser.find_turn.search(first_line)
+
+            if match is None:
+                raise ValueError(f'Bad first line in process turn: {text}')
+
+            turn_card = Card(match.group(1).upper())
+            self.game.curr_hand.set_turn_card(turn_card)
+
+            self.process_actions(every_line)
+
+        def process_river(self, text: str) -> None:
+            if self.is_broken_hand:
+                return
+            self.game.curr_hand.switch_to_step(BasePlay.Step.River)
+            self.call_amount = 0
+
+            every_line = iter(text.strip().split('\n'))
+            first_line = next(every_line)
+
+            match = self.parser.find_river.search(first_line)
+
+            if match is None:
+                raise ValueError(f'Bad first line in process river: {text}')
+
+            river_card = Card(match.group(1).upper())
+            self.game.curr_hand.set_river_card(river_card)
+
+            self.process_actions(every_line)
+
+        def process_summary(self, text: str) -> None:
+            if self.is_broken_hand:
+                return
+            every_line = iter(text.strip().split('\n'))
+            self.game.curr_hand.total_pot = self.total_pot
+            self.process_actions(every_line)
 
     class UnnamedPokerParsing(BaseParsing):
         def __init__(self, game):
