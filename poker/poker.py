@@ -355,10 +355,10 @@ class Poker:
                     c4.rank.to_int() + 3 ==
                     c5.rank.to_int() + 4) or (
             c1.rank == Card.Rank.Ace and
-            c2.Rank == Card.Rank.Five and
+            c2.rank == Card.Rank.Five and
             c3.rank == Card.Rank.Four and
             c4.rank == Card.Rank.Three and
-            c5.Rank == Card.Rank.Two)
+            c5.rank == Card.Rank.Two)
 
         if straight and flush:
 
