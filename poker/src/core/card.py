@@ -1,5 +1,29 @@
 from typing import List, Dict
-from .special.ordered_enum import OrderedEnum
+from special.ordered_enum import OrderedEnum
+
+
+class Rank(OrderedEnum):
+    Ace = 14
+    King = 13
+    Queen = 12
+    Jack = 11
+    Ten = 10
+    Nine = 9
+    Eight = 8
+    Seven = 7
+    Six = 6
+    Five = 5
+    Four = 4
+    Three = 3
+    Two = 2
+    Invalid = 1
+
+
+class Suit(OrderedEnum):
+    Hearts = 1
+    Diamonds = 2
+    Clubs = 3
+    Spades = 4
 
 
 class Card:
@@ -8,22 +32,6 @@ class Card:
 
     UndefinedCard: str = 'UP'
     EmptyCard: str = 'ZZ'
-
-    class Rank(OrderedEnum):
-        Ace = 14
-        King = 13
-        Queen = 12
-        Jack = 11
-        Ten = 10
-        Nine = 9
-        Eight = 8
-        Seven = 7
-        Six = 6
-        Five = 5
-        Four = 4
-        Three = 3
-        Two = 2
-        Invalid = 1
 
     Ranks: str = '23456789TJQKA'
 
@@ -43,7 +51,7 @@ class Card:
 
     FromRank: Dict[str, Rank] = {'2': Rank.Two,
                                  '3': Rank.Three,
-                                 '4': Rank.our,
+                                 '4': Rank.Four,
                                  '5': Rank.Five,
                                  '6': Rank.Six,
                                  '7': Rank.Seven,
@@ -54,12 +62,6 @@ class Card:
                                  'Q': Rank.Queen,
                                  'K': Rank.King,
                                  'A': Rank.Ace}
-
-    class Suit(OrderedEnum):
-        Hearts = 1
-        Diamonds = 2
-        Clubs = 3
-        Spades = 4
 
     Suits: str = 'HDCS'
 
@@ -84,14 +86,14 @@ class Card:
     def __init__(self, card: str):
 
         self.card: str = card
-        self.rank: Card.Rank = Card.FromRank[card[0]]
-        self.suit: Card.Suit = Card.FromSuit[card[1]]
+        self.rank: Rank = Card.FromRank[card[0]]
+        self.suit: Suit = Card.FromSuit[card[1]]
 
     def get_rank(self) -> str:
-        return Card.Rank.ToStr[self.rank]
+        return Rank.ToStr[self.rank]
 
     def get_suit(self) -> str:
-        return Card.Suit.ToStr[self.suit]
+        return Suit.ToStr[self.suit]
 
     def r(self) -> str:
         return self.card[0]

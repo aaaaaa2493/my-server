@@ -1,6 +1,11 @@
 from enum import Enum
-from typing import Dict, Tuple
-from .card import Card
+from typing import Dict
+from core.card import Card
+
+
+class Suitability(Enum):
+    Suited = True
+    Offsuited = False
 
 
 class CardsPair:
@@ -18,10 +23,6 @@ class CardsPair:
            'K6o', 'K7s', 'K7o', 'K8s', 'K8o', 'K9s', 'K9o', 'KTs', 'KTo', 'KJs', 'KJo', 'KQs', 'KQo',
            'KKo', 'A2s', 'A2o', 'A3s', 'A3o', 'A4s', 'A4o', 'A5s', 'A5o', 'A6s', 'A6o', 'A7s', 'A7o',
            'A8s', 'A8o', 'A9s', 'A9o', 'ATs', 'ATo', 'AJs', 'AJo', 'AQs', 'AQo', 'AKs', 'AKo', 'AAo')
-
-    class Suitability(Enum):
-        Suited = True
-        Offsuited = False
 
     Suitabilities: str = 'so'
 
@@ -62,7 +63,7 @@ class CardsPair:
         elif ssv < osv:
             return False
 
-        if ss == CardsPair.Suitability.Suited and os == CardsPair.Suitability.Offsuited:
+        if ss == Suitability.Suited and os == Suitability.Offsuited:
             return True
 
         return False
@@ -89,12 +90,15 @@ class CardsPair:
     def initialized(self) -> bool:
         return self.second is not None
 
+    def half_initialized(self) -> bool:
+        return self.first is not None and self.second is None
+
     def suitability(self) -> Suitability:
 
         if self.first.suit == self.second.suit:
-            return CardsPair.Suitability.Suited
+            return Suitability.Suited
 
-        return CardsPair.Suitability.Offsuited
+        return Suitability.Offsuited
 
     def get(self) -> Card.Cards:
         return [self.first, self.second]
@@ -168,7 +172,7 @@ class CardsPair:
 
         if self.initialized():
             return f'{self.first.card} {self.second.card}'
-        elif self.first is not None:
+        elif self.half_initialized():
             return f'{self.first.card} ??'
         else:
             return '?? ??'

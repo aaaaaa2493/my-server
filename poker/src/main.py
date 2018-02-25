@@ -19,11 +19,10 @@ from websocket import create_connection
 from json import loads, dumps
 from copy import deepcopy
 
-
-from .src.debug import Debug
-from .src.card import Card
-from .src.cards_pair import CardsPair
-from .src.holdem_poker import HoldemPoker as Poker
+from special.debug import Debug
+from core.card import Card
+from holdem.cards_pair import CardsPair
+from holdem.holdem_poker import HoldemPoker as Poker, Hand
 
 
 class Deck:
@@ -1019,7 +1018,7 @@ class Player:
         self.re_seat: Players = None
         self.cards: CardsPair = CardsPair()
         self.history: Player.History = Player.History()
-        self.hand: Poker.Hand = None
+        self.hand: Hand = None
         self.controlled: bool = controlled
         self.lose_time: int = None
 
@@ -3702,7 +3701,7 @@ class Network:
 
         return self.send(to_send)
 
-    def hand_results(self, board: Board, results: List[Tuple[Poker.Hand, Player, str]]) -> Optional[str]:
+    def hand_results(self, board: Board, results: List[Tuple[Hand, Player, str]]) -> Optional[str]:
 
         to_send = dict()
 
@@ -4471,7 +4470,7 @@ class PokerGame:
 
                         break
 
-            results: List[Tuple[Poker.Hand, Player, str]] = []
+            results: List[Tuple[Hand, Player, str]] = []
 
             for player in hand.players:
                 if player.cards is not None:
