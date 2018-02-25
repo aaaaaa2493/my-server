@@ -2794,6 +2794,8 @@ class Blinds:
                         (400000, 800000, 120000), (600000, 1200000, 160000),
                         (800000, 1600000, 220000), (1000000, 2000000, 300000)]
 
+            Static = [(50, 100, 10)]
+
         TimeType = int
 
         class Time:
@@ -2813,6 +2815,10 @@ class Blinds:
         Standard = {'order': Order.Standard,
                     'time': Time.Standard,
                     'hands': Hands.Standard}
+
+        Static = {'order': Order.Static,
+                  'time': Time.Standard,
+                  'hands': Hands.Standard}
 
         Fast = {'order': Order.Standard,
                 'time': Time.Fast,
@@ -7765,4 +7771,4 @@ class Run:
 
 
 if __name__ == '__main__':
-    Run(BasePlay.Mode.Parse)
+    Run(BasePlay.Mode.GameEngine)
