@@ -28,15 +28,6 @@ from holdem.base_play import BasePlay
 from special.settings import Settings, Mode
 
 
-class Pot:
-
-    def __init__(self):
-
-        self.money: int = 0
-
-    def __str__(self):
-
-        return str(self.money)
 
 
 class Table:
