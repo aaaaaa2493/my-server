@@ -22,247 +22,8 @@ from copy import deepcopy
 from pokereval.card import Card as _Card
 from pokereval.hand_evaluator import HandEvaluator
 
-
-class Debug:
-    Debug = 1
-    Table = 0
-    Decision = 0
-    InputDecision = 0
-    Resitting = 0
-    Standings = 0
-    GameProgress = 0
-    Evolution = 1
-    PlayManager = 1
-    GameManager = 1
-    Parser = 1
-    Error = 1
-
-    if Table:
-        @staticmethod
-        def table(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def table(*args, **kwargs):
-            pass
-
-    if Decision:
-        @staticmethod
-        def decision(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def decision(*args, **kwargs):
-            pass
-
-    if InputDecision:
-        @staticmethod
-        def input_decision(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def input_decision(*args, **kwargs):
-            pass
-
-    if Resitting:
-        @staticmethod
-        def resitting(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def resitting(*args, **kwargs):
-            pass
-
-    if Standings:
-        @staticmethod
-        def standings(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def standings(*args, **kwargs):
-            pass
-
-    if GameProgress:
-        @staticmethod
-        def game_progress(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def game_progress(*args, **kwargs):
-            pass
-
-    if GameManager:
-        @staticmethod
-        def game_manager(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def game_manager(*args, **kwargs):
-            pass
-
-    if Evolution:
-        @staticmethod
-        def evolution(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def evolution(*args, **kwargs):
-            pass
-
-    if PlayManager:
-        @staticmethod
-        def play_manager(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def play_manager(*args, **kwargs):
-            pass
-
-    if Parser:
-        @staticmethod
-        def parser(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def parser(*args, **kwargs):
-            pass
-
-    if Error:
-        @staticmethod
-        def error(*args, **kwargs):
-            print(*args, **kwargs)
-    else:
-        @staticmethod
-        def error(*args, **kwargs):
-            pass
-
-
-class Card:
-
-    Cards = List['Card']
-
-    RankType = int
-
-    UndefinedCard = 'UP'
-    EmptyCard = 'ZZ'
-
-    class Rank:
-        Ace = 14
-        King = 13
-        Queen = 12
-        Jack = 11
-        Ten = 10
-        Nine = 9
-        Eight = 8
-        Seven = 7
-        Six = 6
-        Five = 5
-        Four = 4
-        Three = 3
-        Two = 2
-        Invalid = 1
-
-        All = '23456789TJQKA'
-
-        ToStr = {Two: 'two',
-                 Three: 'three',
-                 Four: 'four',
-                 Five: 'five',
-                 Six: 'six',
-                 Seven: 'seven',
-                 Eight: 'eight',
-                 Nine: 'nine',
-                 Ten: 'ten',
-                 Jack: 'jack',
-                 Queen: 'queen',
-                 King: 'king',
-                 Ace: 'ace'}
-
-        FromStr = {'2': Two,
-                   '3': Three,
-                   '4': Four,
-                   '5': Five,
-                   '6': Six,
-                   '7': Seven,
-                   '8': Eight,
-                   '9': Nine,
-                   'T': Ten,
-                   'J': Jack,
-                   'Q': Queen,
-                   'K': King,
-                   'A': Ace}
-
-    SuitType = int
-
-    class Suit:
-        Hearts = 1
-        Diamonds = 2
-        Clubs = 3
-        Spades = 4
-
-        All = 'HDCS'
-
-        ToStr = {Hearts: 'hearts',
-                 Diamonds: 'diamonds',
-                 Clubs: 'clubs',
-                 Spades: 'spades'}
-
-        FromStr = {'H': Hearts,
-                   'D': Diamonds,
-                   'C': Clubs,
-                   'S': Spades}
-
-    @staticmethod
-    def cards_52() -> Cards:
-        return [Card(value + suit) for value in Card.Rank.All for suit in Card.Suit.All]
-
-    @staticmethod
-    def str(cards: Cards) -> str:
-        return ' '.join(card.card for card in cards)
-
-    def __init__(self, card: str):
-
-        self.card: str = card
-        self.rank: Card.RankType = Card.Rank.FromStr[card[0]]
-        self.suit: Card.SuitType = Card.Suit.FromStr[card[1]]
-
-    def get_rank(self) -> str:
-
-        return Card.Rank.ToStr[self.rank]
-
-    def get_suit(self) -> str:
-
-        return Card.Suit.ToStr[self.suit]
-
-    def r(self) -> str:
-
-        return self.card[0]
-
-    def s(self) -> str:
-
-        return self.card[1]
-
-    def __str__(self) -> str:
-
-        return f'{self.get_rank()} of {self.get_suit()}'
-
-    def __lt__(self, other: 'Card') -> bool:
-        return (self.rank, self.suit) < (other.rank, other.suit)
-
-    def __le__(self, other: 'Card') -> bool:
-        return (self.rank, self.suit) <= (other.rank, other.suit)
-
-    def __gt__(self, other: 'Card') -> bool:
-        return (self.rank, self.suit) > (other.rank, other.suit)
-
-    def __ge__(self, other: 'Card') -> bool:
-        return (self.rank, self.suit) >= (other.rank, other.suit)
-
-    def __eq__(self, other: 'Card') -> bool:
-        return (self.rank, self.suit) == (other.rank, other.suit)
-
-    def __ne__(self, other: 'Card') -> bool:
-        return (self.rank, self.suit) != (other.rank, other.suit)
+from .src.debug import Debug
+from .src.card import Card
 
 
 class CardsPair:
@@ -468,17 +229,17 @@ class Poker:
 
     class Hand:
 
-        def __init__(self, cards: Card.Cards, strength: 'Poker.StrengthType', kicker1: Card.RankType = None,
-                     kicker2: Card.RankType = None, kicker3: Card.RankType = None,
-                     kicker4: Card.RankType = None, kicker5: Card.RankType = None):
+        def __init__(self, cards: Card.Cards, strength: 'Poker.StrengthType', kicker1: Card.Rank = None,
+                     kicker2: Card.Rank = None, kicker3: Card.Rank = None,
+                     kicker4: Card.Rank = None, kicker5: Card.Rank = None):
 
             self.strength: Poker.StrengthType = strength
 
-            self.kicker1: Card.RankType = kicker1
-            self.kicker2: Card.RankType = kicker2
-            self.kicker3: Card.RankType = kicker3
-            self.kicker4: Card.RankType = kicker4
-            self.kicker5: Card.RankType = kicker5
+            self.kicker1: Card.Rank = kicker1
+            self.kicker2: Card.Rank = kicker2
+            self.kicker3: Card.Rank = kicker3
+            self.kicker4: Card.Rank = kicker4
+            self.kicker5: Card.Rank = kicker5
 
             if self.kicker1 is None:
                 self.kicker1 = Card.Rank.Invalid
@@ -493,7 +254,7 @@ class Poker:
 
             self.cards = cards
 
-        def kickers(self) -> Iterator[Card.RankType]:
+        def kickers(self) -> Iterator[Card.Rank]:
 
             if self.kicker1 is None:
                 return
@@ -588,10 +349,16 @@ class Poker:
         c1, c2, c3, c4, c5 = sorted([c1, c2, c3, c4, c5], reverse=True)  # type: Card
 
         flush = c1.suit == c2.suit == c3.suit == c4.suit == c5.suit
-        straight = c1.rank == c2.rank + 1 == c3.rank + 2 == c4.rank + 3 == c5.rank + 4 or (
-            c1.rank == Card.Rank.Ace and c2.Rank == Card.Rank.Five and c3.rank == Card.Rank.Four and
-            c4.rank == Card.Rank.Three and c5.Rank == Card.Rank.Two
-        )
+        straight = (c1.rank.to_int() ==
+                    c2.rank.to_int() + 1 ==
+                    c3.rank.to_int() + 2 ==
+                    c4.rank.to_int() + 3 ==
+                    c5.rank.to_int() + 4) or (
+            c1.rank == Card.Rank.Ace and
+            c2.Rank == Card.Rank.Five and
+            c3.rank == Card.Rank.Four and
+            c4.rank == Card.Rank.Three and
+            c5.Rank == Card.Rank.Two)
 
         if straight and flush:
 
