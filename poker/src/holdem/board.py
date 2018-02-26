@@ -1,6 +1,7 @@
 from time import sleep
 from core.deck import Card, Deck
 from holdem.base_play import Step
+from holdem.table import Delay
 
 
 class Board:
@@ -55,7 +56,7 @@ class Board:
 
         if table.online:
             table.network.flop(self.flop1, self.flop2, self.flop3)
-            sleep(Table.Delay.Flop)
+            sleep(Delay.Flop)
 
     def set_turn_card(self, card: Card) -> None:
 
@@ -77,7 +78,7 @@ class Board:
 
         if table.online:
             table.network.turn(self.turn)
-            sleep(Table.Delay.Turn)
+            sleep(Delay.Turn)
 
     def set_river_card(self, card: Card) -> None:
 
@@ -99,7 +100,7 @@ class Board:
 
         if table.online:
             table.network.river(self.river)
-            sleep(Table.Delay.River)
+            sleep(Delay.River)
 
     def open(self) -> None:
 

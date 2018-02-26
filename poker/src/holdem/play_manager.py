@@ -4,6 +4,7 @@ from os.path import exists
 from pickle import load, dump
 from random import randint
 from holdem.play import Play
+from holdem.name_manager import NameManager
 from special.debug import Debug
 from special.settings import Settings, Mode
 
@@ -14,7 +15,7 @@ class PlayManager:
 
     _initialized = False
     _bank_of_plays: Plays = None
-    _zero_gen_count: int = 50000
+    _zero_gen_count: int = 10000
 
     @staticmethod
     def init():

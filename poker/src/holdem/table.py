@@ -8,6 +8,7 @@ from holdem.players import Players
 from holdem.blinds import Blinds
 from holdem.board import Board
 from holdem.holdem_poker import HoldemPoker as Poker
+from holdem.network import Network
 from special.debug import Debug
 from core.card import Card
 from core.deck import Deck
@@ -214,9 +215,9 @@ class Table:
 
             if self.online:
                 self.network.ante(all_paid)
-                sleep(Table.Delay.Ante)
+                sleep(Delay.Ante)
                 self.network.collect_money()
-                sleep(Table.Delay.CollectMoney)
+                sleep(Delay.CollectMoney)
 
     def collect_blinds(self, sb: int, bb: int) -> None:
 
@@ -235,7 +236,7 @@ class Table:
 
             if self.online:
                 self.network.blinds(player1, [(player1, paid1), (player2, paid2)])
-                sleep(Table.Delay.Blinds)
+                sleep(Delay.Blinds)
 
         elif self.players.game_without_small_blind and self.players.next_seat() is None:
             player1 = self.players.to_button()
@@ -247,7 +248,7 @@ class Table:
 
             if self.online:
                 self.network.blinds(player1, [(player2, paid2)])
-                sleep(Table.Delay.Blinds)
+                sleep(Delay.Blinds)
 
         else:
             player1 = self.players.to_button()
@@ -263,7 +264,7 @@ class Table:
 
             if self.online:
                 self.network.blinds(player1, [(player2, paid2), (player3, paid3)])
-                sleep(Table.Delay.Blinds)
+                sleep(Delay.Blinds)
 
     def collect_pot(self) -> None:
 
@@ -280,7 +281,7 @@ class Table:
 
             if self.online:
                 self.network.collect_money()
-                sleep(Table.Delay.CollectMoney)
+                sleep(Delay.CollectMoney)
 
     def give_cards(self) -> None:
 
@@ -304,7 +305,7 @@ class Table:
 
         if self.online:
             self.network.open_cards(self, True)
-            sleep(Table.Delay.DealCards)
+            sleep(Delay.DealCards)
 
     def start_game(self) -> None:
 
@@ -323,7 +324,7 @@ class Table:
 
         if self.online:
             self.network.init_hand(None, self, self.game)
-            sleep(Table.Delay.InitHand)
+            sleep(Delay.InitHand)
 
         if not self.first_hand:
             self.players.move_button()
@@ -370,13 +371,13 @@ class Table:
 
                     if self.online:
                         self.network.switch_decision(player)
-                        sleep(Table.Delay.SwitchDecision)
+                        sleep(Delay.SwitchDecision)
 
                     result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
 
                     if self.online:
                         self.network.made_decision(player, result)
-                        sleep(Table.Delay.MadeDecision)
+                        sleep(Delay.MadeDecision)
 
                     player.history.set(step, result, self.raise_counter, player.in_all_in())
                     self.history.add(player, result, player.gived)
@@ -405,7 +406,7 @@ class Table:
                     break
 
             if self.online:
-                sleep(Table.Delay.EndOfRound)
+                sleep(Delay.EndOfRound)
 
             if self.players.count_in_game_players() == 1:
 
@@ -417,7 +418,7 @@ class Table:
 
                 if self.online:
                     self.network.back_excess_money(player_max_pot, difference)
-                    sleep(Table.Delay.ExcessMoney)
+                    sleep(Delay.ExcessMoney)
 
                 self.history.add(player_max_pot, Result.ReturnMoney, difference)
                 Debug.table(f'Table {self.id} hand {self.board.hand}: '
@@ -448,7 +449,7 @@ class Table:
 
                     if self.online:
                         self.network.back_excess_money(player_max_pot, difference)
-                        sleep(Table.Delay.ExcessMoney)
+                        sleep(Delay.ExcessMoney)
 
                     self.history.add(player, Result.ReturnMoney, difference)
                     Debug.table(f'Table {self.id} hand {self.board.hand}: {difference} money back to {player.name}')
@@ -457,7 +458,7 @@ class Table:
 
                 if self.online:
                     self.network.open_cards(self)
-                    sleep(Table.Delay.OpenCards)
+                    sleep(Delay.OpenCards)
 
                 self.board.open_all_with_network(self)
                 self.end_game()
@@ -476,7 +477,7 @@ class Table:
 
                 if self.online:
                     self.network.open_cards(self)
-                    sleep(Table.Delay.OpenCards)
+                    sleep(Delay.OpenCards)
 
                 self.end_game()
                 return
@@ -497,7 +498,7 @@ class Table:
 
         if self.online:
             self.network.give_money(winner, winner.wins)
-            sleep(Table.Delay.GiveMoney)
+            sleep(Delay.GiveMoney)
 
         winner.wins = 0
         winner.in_game = False
@@ -526,7 +527,7 @@ class Table:
 
         if self.online:
             self.network.money_results(results)
-            sleep(Table.Delay.MoneyResults)
+            sleep(Delay.MoneyResults)
 
     def take_cards(self) -> None:
 
@@ -535,7 +536,7 @@ class Table:
 
         if self.online:
             self.network.clear()
-            sleep(Table.Delay.Clear)
+            sleep(Delay.Clear)
 
         self.board.clear()
 
@@ -547,7 +548,7 @@ class Table:
 
             if self.online:
                 self.network.hand_results(self.board, [])
-                sleep(Table.Delay.HandResults)
+                sleep(Delay.HandResults)
 
             winner = max(p for p in self.players.in_game_players())
             winner.wins += winner.in_pot
@@ -584,7 +585,7 @@ class Table:
 
             if self.online:
                 self.network.hand_results(self.board, hand_results)
-                sleep(Table.Delay.HandResults)
+                sleep(Delay.HandResults)
 
             while self.players.count_in_game_players() > 0:
 

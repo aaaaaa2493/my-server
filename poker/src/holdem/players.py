@@ -2,6 +2,8 @@ from typing import List, Optional, Iterator
 from threading import Lock
 from time import sleep
 from holdem.player import Player
+from holdem.table import Delay
+from holdem.network import Network
 
 
 class Players:
@@ -209,7 +211,7 @@ class Players:
 
         if self.online:
             self.network.add_player(player, self.curr_seat)
-            sleep(Table.Delay.AddPlayer)
+            sleep(Delay.AddPlayer)
 
         if player.controlled:
             self.controlled += [player]
@@ -284,7 +286,7 @@ class Players:
 
         if self.online:
             self.network.delete_player(player)
-            sleep(Table.Delay.DeletePlayer)
+            sleep(Delay.DeletePlayer)
 
     def resit_all_needed_players(self) -> None:
 

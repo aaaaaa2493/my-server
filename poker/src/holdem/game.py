@@ -4,9 +4,10 @@ from time import sleep
 from statistics import mean
 from holdem.blinds import Blinds
 from holdem.players import Players
-from holdem.table import Table
+from holdem.table import Table, Delay
 from holdem.player import Player
 from holdem.play import Play
+from holdem.network import Network
 from special.debug import Debug
 
 
@@ -129,7 +130,7 @@ class Game:
         for table in self.tables:
             if table.online:
                 table.network.blinds_increased(sb, bb, ante)
-                sleep(Table.Delay.BlindsIncreased)
+                sleep(Delay.BlindsIncreased)
 
     @staticmethod
     def get_first_free_table(tables: Table.Tables) -> Table:
