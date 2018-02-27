@@ -1,7 +1,6 @@
 from typing import List, Tuple
 from threading import Thread
 from time import sleep
-from holdem.game import Game
 
 
 class Blinds:

@@ -1,6 +1,6 @@
 from threading import Thread
-from holdem.network import Network
 from holdem.game import Game
+from holdem.network import Network
 from holdem.blinds import Blinds
 from special.debug import Debug
 

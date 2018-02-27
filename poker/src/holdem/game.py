@@ -2,9 +2,10 @@ from threading import Thread
 from random import shuffle, choice
 from time import sleep
 from statistics import mean
+from typing import List
 from holdem.blinds import Blinds
-from holdem.players import Players
-from holdem.table import Table, Delay
+from holdem.delay import Delay
+from holdem.table import Table
 from holdem.player import Player
 from holdem.play import Play
 from holdem.network import Network
@@ -31,7 +32,7 @@ class Game:
         self.total_seats: int = seats
         self.total_tables: int = (players - 1) // seats + 1
         self.players_count: int = 0
-        self.players: Players.TablePlayers = []
+        self.players: List[Player] = []
         self.blinds: Blinds = Blinds(blinds, self)
 
         if self.total_tables == 1:
@@ -45,7 +46,7 @@ class Game:
 
         self.average_stack: int = None
         self.players_left: int = None
-        self.top_9: Players.TablePlayers = None
+        self.top_9: List[Player] = None
 
     def add_player(self, name: str = '') -> bool:
 

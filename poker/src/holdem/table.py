@@ -1,7 +1,6 @@
 from typing import List, Tuple
 from threading import Thread, Lock
 from time import sleep
-from holdem.player import Player
 from holdem.base_play import Result, Step
 from holdem.cards_pair import CardsPair
 from holdem.players import Players
@@ -9,34 +8,11 @@ from holdem.blinds import Blinds
 from holdem.board import Board
 from holdem.holdem_poker import HoldemPoker as Poker
 from holdem.network import Network
+from holdem.delay import Delay
 from special.debug import Debug
 from core.card import Card
 from core.deck import Deck
 from core.pot import Pot
-
-
-class Delay:
-    InitHand = 0
-    Ante = 0.5
-    CollectMoney = 1
-    Blinds = 0.5
-    BlindsIncreased = 0
-    DealCards = 0.5
-    DeletePlayer = 0
-    AddPlayer = 0
-    SwitchDecision = 0
-    DummyMove = 1
-    MadeDecision = 0.1
-    ExcessMoney = 0.5
-    Flop = 1
-    Turn = 1
-    River = 1
-    OpenCards = 2
-    GiveMoney = 2
-    MoneyResults = 0
-    HandResults = 0
-    Clear = 0
-    EndOfRound = 1
 
 
 class Table:
@@ -49,7 +25,7 @@ class Table:
 
         class Decision:
 
-            def __init__(self, player: Player, decision: Result, money: int):
+            def __init__(self, player: 'Player', decision: Result, money: int):
 
                 self.player: Player = player
                 self.decision: Result = decision
@@ -67,7 +43,7 @@ class Table:
 
                 self.decisions: Table.History.Decisions = []
 
-            def add(self, player: Player, decision: Result, money: int) -> None:
+            def add(self, player: 'Player', decision: Result, money: int) -> None:
 
                 self.decisions += [Table.History.Decision(player, decision, money)]
 
@@ -87,7 +63,7 @@ class Table:
                 self.turn: Table.History.Step = None
                 self.river: Table.History.Step = None
 
-            def add(self, player: Player, result: Result, money: int) -> None:
+            def add(self, player: 'Player', result: Result, money: int) -> None:
 
                 if self.last_step == Step.River:
                     self.river.add(player, result, money)
@@ -150,7 +126,7 @@ class Table:
 
             self.curr.give_cards(players)
 
-        def add(self, player: Player, result: Result, money: int) -> None:
+        def add(self, player: 'Player', result: Result, money: int) -> None:
 
             self.curr.add(player, result, money)
 
@@ -339,7 +315,7 @@ class Table:
 
         self.collect_ante(ante)
 
-        for step in Step.GameSteps:
+        for step in Step:
 
             if step == Step.Preflop:
 
@@ -488,7 +464,7 @@ class Table:
             self.history.next_step()
             Debug.table(f'Table {self.id} hand {self.board.hand}: board {self.board}')
 
-    def give_money(self, winner: Player) -> None:
+    def give_money(self, winner: 'Player') -> None:
 
         winner.in_pot = 0
         winner.money += winner.wins

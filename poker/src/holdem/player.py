@@ -1,6 +1,8 @@
 from typing import List
+from datetime import datetime
+from random import random, uniform
+from time import sleep
 from holdem.base_play import Decision, Step, Result
-from holdem.players import Players
 from special.debug import Debug
 from holdem.holdem_poker import HoldemPoker as Poker, Hand
 from holdem.cards_pair import CardsPair
@@ -8,9 +10,6 @@ from holdem.play_manager import Play, PlayManager
 from holdem.base_play import BasePlay
 from holdem.network import Network
 from core.card import Card
-from datetime import datetime
-from random import random, uniform
-from time import sleep
 
 
 class Player:
@@ -348,7 +347,7 @@ class Player:
 
         self.play.total_hands += 1
 
-        for step in Step.GameSteps:
+        for step in Step:
 
             if step == Step.Preflop:
                 curr = self.history.preflop

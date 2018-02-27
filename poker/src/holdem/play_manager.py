@@ -62,6 +62,8 @@ class PlayManager:
 
         dump(PlayManager._bank_of_plays, open('play/all', 'wb'))
 
+        PlayManager.fill_zero_gens()
+
         Debug.play_manager('End initialization')
 
     @staticmethod

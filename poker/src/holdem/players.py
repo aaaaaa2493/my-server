@@ -2,7 +2,7 @@ from typing import List, Optional, Iterator
 from threading import Lock
 from time import sleep
 from holdem.player import Player
-from holdem.table import Delay
+from holdem.delay import Delay
 from holdem.network import Network
 
 

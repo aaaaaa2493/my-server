@@ -2,7 +2,6 @@ from typing import List, Tuple
 from functools import lru_cache
 from copy import deepcopy
 from holdem.base_play import BasePlay
-from holdem.play_manager import PlayManager
 from special.settings import Settings, Mode
 
 
@@ -79,6 +78,9 @@ class Play:
         return mutated
 
     def set_place(self, place: int, out_of: int) -> None:
+
+        # TODO move to top
+        from holdem.play_manager import PlayManager
 
         if Settings.game_mode == Mode.Evolution:
 

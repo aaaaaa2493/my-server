@@ -1,7 +1,7 @@
 from time import sleep
 from core.deck import Card, Deck
 from holdem.base_play import Step
-from holdem.table import Delay
+from holdem.delay import Delay
 
 
 class Board:
