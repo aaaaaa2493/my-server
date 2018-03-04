@@ -569,7 +569,6 @@ class GameHandler extends Handler{
 
             if(curr_bb_id === this.seats.my_id){
                 if (curr_bb < this.seats.me.stack){
-                    worker.class_rem([{id: 'premoves', class: 'hidden'}]);
                     this.premoves.check_fold();
                 }
                 else{
@@ -580,11 +579,9 @@ class GameHandler extends Handler{
             }
             else{
                 if (this.seats.bb < this.seats.me.all_money()){
-                    worker.class_rem([{id: 'premoves', class: 'hidden'}]);
                     this.premoves.call_fold(this.seats.bb - this.seats.me.chipstack.money);
                 }
                 else{
-                    worker.class_rem([{id: 'premoves', class: 'hidden'}]);
                     // big blind amount bigger than my stack so either fold or all-in
                     this.premoves.all_in_fold(this.seats.me.stack);
                 }
@@ -837,7 +834,6 @@ class GameHandler extends Handler{
         }
         worker.inner_html([{id: 'decisions', str: decisions}]);
     }
-
 
 }
 
