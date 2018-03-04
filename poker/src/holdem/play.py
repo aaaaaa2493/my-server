@@ -41,7 +41,8 @@ class Play:
             return f'<Gen{self.generation} e{self.exemplar:<6} ' \
                    f'f{self.previous} p{int(self.average_places * 1000):<3} g{self.total_plays:<6} ' \
                    f'{len(self.plays_history):<4} {round(self.value(), 2)}' \
-                   f'{(" " + self.wins * "*" + " ") if self.wins else ""}>'
+                   f'{(" " + self.wins * "*" + " ") if self.wins else ""}>   ' \
+                   f'[ {", ".join(str(i[0]) for i in self.plays_history[-10:])} ]'
 
         else:
             return self.name
