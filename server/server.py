@@ -156,6 +156,7 @@ class AbstractClient:
         Replay = 'rp'
         Table = 'tb'
         Spectator = 'sp'
+        GameHandler = 'gh'
         GameEngine = 'ge'
 
     def __init__(self, _id: int, name: str, handler: WebSocketHandler):
@@ -190,18 +191,40 @@ class AbstractClient:
 
 class GameEngineClient(AbstractClient):
 
-    OnlyClient: 'GameEngineClient' = None
+    OnlyClient = None
 
     def __init__(self, _id: int, handler: WebSocketHandler):
         super().__init__(_id, AbstractClient.ID.GameEngine, handler)
 
         if GameEngineClient.OnlyClient is not None:
-            raise OverflowError('Can not create more than one instance of GameEngineClient!')
+            raise ValueError("Game engine already exists")
 
         GameEngineClient.OnlyClient = self
 
-    def __del__(self):
+    def receive(self, srv: 'Server', message: str, client: dict):
+        pass
+
+    def left(self, srv: 'Server') -> None:
+        del srv.game_engine
+        srv.game_engine = None
+
         GameEngineClient.OnlyClient = None
+
+        Debug.client_left('DEL GAME ENGINE')
+
+
+class GameHandlerClient(AbstractClient):
+
+    def __init__(self, _id: int, game_id: int, handler: WebSocketHandler):
+        super().__init__(_id, AbstractClient.ID.GameHandler, handler)
+        self.game_id = game_id
+        self.is_registration_started: bool = False
+        self.is_game_started: bool = False
+        self.started_time: datetime = datetime.now()
+        self.replays = []
+        self.players_in_game = 0
+        self.game_name = None
+        self.tb_clients: Dict[str, TableClient] = dict()
 
     def receive(self, srv: 'Server', message: str, client: dict) -> None:
 
@@ -213,28 +236,29 @@ class GameEngineClient(AbstractClient):
             raise ValueError('Bas start message in server receive')
 
         if message == 'start_registration':
-            srv.is_registration_started = True
+            self.is_registration_started = True
 
         elif message == 'start':
-            srv.is_game_started = True
-            srv.is_registration_started = False
-            srv.started_time = datetime.now()
+            self.is_game_started = True
+            self.is_registration_started = False
+            self.started_time = datetime.now()
+            self.players_in_game = None
 
         elif message == 'end':
-            srv.is_game_started = False
-            srv.is_registration_started = False
+            self.is_game_started = False
+            self.is_registration_started = False
 
-            total_tables = len(srv.replays)
-            total_players = srv.players_in_game
-            name = srv.game_name
-            total_hands = sum(rep[1] for rep in srv.replays)
+            total_tables = len(self.replays)
+            total_players = self.players_in_game
+            name = self.game_name
+            total_hands = sum(rep[1] for rep in self.replays)
 
             if name == '':
-                game_path = (str(srv.started_time)[:-7].replace(' ', '_').replace(':', '-') +
+                game_path = (str(self.started_time)[:-7].replace(' ', '_').replace(':', '-') +
                              ' %s %s %s' % (total_tables, total_players, total_hands))
 
             else:
-                game_path = (str(srv.started_time)[:-7].replace(' ', '_').replace(':', '-') +
+                game_path = (str(self.started_time)[:-7].replace(' ', '_').replace(':', '-') +
                              ' %s %s %s %s' % (total_tables, total_players, total_hands, name))
 
             tournament_path = 'files/replay/poker/games/' + game_path
@@ -243,7 +267,7 @@ class GameEngineClient(AbstractClient):
             mkdir(tournament_path)
             mkdir(chat_messages_path)
 
-            for table_num, hands, hands_history, chat_history in srv.replays:
+            for table_num, hands, hands_history, chat_history in self.replays:
 
                 table_folder = '/%s %s' % (table_num, hands)
 
@@ -257,51 +281,40 @@ class GameEngineClient(AbstractClient):
                 for num, hand in enumerate(hands_history):
                     open(table_path + '/%s' % (num,), 'w').write(ReplayClient.dump_replay(hand))
 
-            srv.replays = []
-            srv.players_in_game = None
-            srv.game_name = None
+            self.replays = []
+            self.players_in_game = None
+            self.game_name = None
 
         elif message.startswith('players'):
 
-            srv.players_in_game = int(message.split(':')[-1])
+            self.players_in_game = int(message.split(':')[-1])
 
         elif message.startswith('name'):
 
-            srv.game_name = message.split(':')[-1]
+            self.game_name = message.split(':')[-1]
 
         elif message == 'broken':
-            srv.is_game_started = False
-            srv.is_registration_started = False
-            srv.replays = []
-            srv.players_in_game = None
-            srv.game_name = None
+            self.is_game_started = False
+            self.is_registration_started = False
+            self.replays = []
+            self.players_in_game = None
+            self.game_name = None
+            self.finish_all_clients()
 
-            for curr in list(srv.js_clients.values()):
-                curr.finish()
-
-            for curr in list(srv.py_clients.values()):
-                curr.finish()
-
-            for curr in list(srv.sp_clients):
-                curr.finish()
+    def finish_all_clients(self):
+        for curr in list(self.tb_clients.values()):
+            for curr_sp in curr.spectators:
+                curr_sp.finish()
+            for curr_py in curr.players:
+                if curr_py.connected_js is not None:
+                    curr_py.connected_js.finish()
+                curr_py.finish()
+            curr.finish()
+        self.tb_clients = dict()
 
     def left(self, srv: 'Server') -> None:
-        del srv.game_engine
-        srv.game_engine = None
-
-        Debug.client_left('DEL GAME ENGINE')
-
-        for curr in list(srv.js_clients.values()):
-            curr.finish()
-
-        for curr in list(srv.py_clients.values()):
-            curr.finish()
-
-        for curr in list(srv.sp_clients):
-            curr.finish()
-
-        for curr in list(srv.tb_clients.values()):
-            curr.finish()
+        Debug.client_left('DEL GAME HANDLER')
+        self.finish_all_clients()
 
 
 class UnregisteredClient(AbstractClient):
@@ -313,8 +326,21 @@ class UnregisteredClient(AbstractClient):
 
         Debug.login(f'Unregistered client {self.id} said: {message}')
 
-        client_id, *info = message.split()
-        name = info[0]
+        try:
+            json_message = loads(message)
+            client_id = json_message['id']
+            name = json_message['name']
+            game_id = ''
+
+            if (client_id == AbstractClient.ID.Python or
+                    client_id == AbstractClient.ID.JavaScript or
+                    client_id == AbstractClient.ID.Table or
+                    client_id == AbstractClient.ID.Spectator):
+                game_id = json_message['game']
+
+        except JSONDecodeError:
+            self.send(dumps({'type': 'bad login'}))
+            return
 
         if client_id == AbstractClient.ID.Replay:
             del srv.unregistered_clients[self.id]
@@ -323,17 +349,17 @@ class UnregisteredClient(AbstractClient):
             client['client'] = rp_client
             srv.rp_clients += [rp_client]
 
-        elif client_id != AbstractClient.ID.GameEngine and srv.game_engine is None:
-            Debug.login(f'Unregistered client {self.id} classified not as game engine client')
-            self.send({'type': 'finish', 'msg': 'Game server is offline.'})
-            self.finish()
-
         elif client_id == AbstractClient.ID.Kotlin:
             del srv.unregistered_clients[self.id]
             Debug.login(f'Unregistered client {self.id} classified as kotlin client')
             kt_client = KotlinClient(self.id, name, self.handler)
             client['client'] = kt_client
             srv.kt_clients += [kt_client]
+
+        elif client_id != AbstractClient.ID.GameEngine and srv.game_engine is None:
+            Debug.login(f'Unregistered client {self.id} classified not as game engine client')
+            self.send({'type': 'finish', 'msg': 'Game server is offline.'})
+            self.finish()
 
         elif client_id == AbstractClient.ID.JavaScript and name in srv.js_clients:
             Debug.login(f'Unregistered client {self.id} classified as already exist javascript client')
@@ -344,24 +370,24 @@ class UnregisteredClient(AbstractClient):
             del srv.unregistered_clients[self.id]
             Debug.login(f'Unregistered client {self.id} classified as python client')
             js_client = srv.js_clients[name]
-            py_client = PythonClient(self.id, int(info[1]), js_client, self.handler)
+            py_client = PythonClient(self.id, int(name), js_client, self.handler)
             client['client'] = py_client
             srv.py_clients[name] = py_client
 
         elif client_id == AbstractClient.ID.Table:
             del srv.unregistered_clients[self.id]
             Debug.login(f'Unregistered client {self.id} classified as table client')
-            tb_client = TableClient(self.id, name, self.handler)
+            tb_client = TableClient(self.id, name, srv.games_clients[game_id], self.handler)
             client['client'] = tb_client
             srv.tb_clients[name] = tb_client
 
-        elif client_id == AbstractClient.ID.Spectator and name in srv.tb_clients:
+        elif client_id == AbstractClient.ID.Spectator and name in srv.games_clients[game_id].tb_clients:
             del srv.unregistered_clients[self.id]
             Debug.login(f'Unregistered client {self.id} classified as spectator client')
             sp_client = SpectatorClient(self.id, name, self.handler)
             client['client'] = sp_client
             srv.sp_clients += [sp_client]
-            srv.tb_clients[name].connect_spectator(sp_client)
+            srv.games_clients[game_id].tb_clients[name].connect_spectator(sp_client)
 
         elif client_id == AbstractClient.ID.Spectator:
             Debug.login(f'Unregistered client {self.id} classified as spectator client trying to watch wrong table')
@@ -369,15 +395,15 @@ class UnregisteredClient(AbstractClient):
             self.finish()
 
         elif client_id == AbstractClient.ID.JavaScript and \
-                not srv.is_game_started and srv.is_registration_started:
+                not srv.games_clients[game_id].is_game_started and srv.games_clients[game_id].is_registration_started:
             del srv.unregistered_clients[self.id]
             Debug.login(f'Unregistered client {self.id} classified as javascript client')
             js_client = JavaScriptClient(self.id, name, self.handler)
             client['client'] = js_client
             srv.js_clients[name] = js_client
-            srv.send_http('add ' + name)
+            srv.games_clients[game_id].send_raw('add ' + name)
 
-        elif client_id == AbstractClient.ID.JavaScript and srv.is_game_started and \
+        elif client_id == AbstractClient.ID.JavaScript and srv.games_clients[game_id].is_game_started and \
                 name in srv.py_clients and srv.py_clients[name].is_disconnected:
             del srv.unregistered_clients[self.id]
             Debug.login(f'Unregistered client {self.id} classified as reconnected javascript client')
@@ -392,12 +418,6 @@ class UnregisteredClient(AbstractClient):
             game_client = GameEngineClient(self.id, self.handler)
             client['client'] = game_client
             srv.game_engine = game_client
-
-        elif client_id != AbstractClient.ID.GameEngine and \
-                not srv.is_registration_started and not srv.is_game_started:
-            Debug.login(f'Unregistered client {self.id} classified as something wrong before start of the game')
-            self.send({'type': 'finish', 'msg': 'Registration is not started yet.'})
-            self.finish()
 
         else:
             Debug.login(f'Unregistered client {self.id} classified as something wrong')
@@ -445,7 +465,7 @@ class JavaScriptClient(AbstractClient):
     def left(self, srv: 'Server') -> None:
         del srv.js_clients[self.name]
 
-        if srv.is_game_started:
+        if self.connected_python.connected_table.connected_game.is_game_started:
             self.connected_python.connected_js = None
 
             if not self.connected_python.is_busted:
@@ -681,11 +701,14 @@ class SpectatorClient(AbstractClient):
 
 class TableClient(AbstractClient):
 
-    def __init__(self, _id: int, name: str, handler: WebSocketHandler):
+    def __init__(self, _id: int, name: str, game: GameHandlerClient, handler: WebSocketHandler):
         super().__init__(_id, name, handler)
 
         self.spectators: List[SpectatorClient] = []
         self.players: List[PythonClient] = []
+
+        self.connected_game: GameHandlerClient = game
+        game.tb_clients[name] = self
 
         self.history: List[str] = []
         self.chat_history: List[Tuple[datetime, str]] = []
@@ -822,7 +845,7 @@ class TableClient(AbstractClient):
         if self.replay:
             self.hands_history += [self.replay]
 
-        srv.replays += [(self.name, self.hands, self.hands_history, self.chat_history)]
+        self.connected_game.replays += [(self.name, self.hands, self.hands_history, self.chat_history)]
 
         for curr_client in self.spectators:
             curr_client.send({'type': 'finish', 'msg': 'Table is closed.'})
@@ -1240,6 +1263,7 @@ class Server:
         self.server.set_fn_message_received(self.message_received)
 
         self.unregistered_clients: Dict[int, UnregisteredClient] = dict()
+
         self.js_clients: Dict[str, JavaScriptClient] = dict()
         self.py_clients: Dict[str, PythonClient] = dict()
         self.sp_clients: List[SpectatorClient] = []
@@ -1247,14 +1271,9 @@ class Server:
         self.rp_clients: List[ReplayClient] = []
         self.kt_clients: List[KotlinClient] = []
 
-        self.game_engine: GameEngineClient = None
-        self.started_time = None
-        self.is_game_started = False
-        self.is_registration_started = False
+        self.games_clients: List[GameHandlerClient] = []
 
-        self.replays = []
-        self.players_in_game = None
-        self.game_name = None
+        self.game_engine = None
 
     def run(self):
         self.server.run_forever()
@@ -1458,7 +1477,7 @@ if __name__ == '__main__':
 
         key = request.query.key if 'key' in request.query else 'no key'
 
-        if server.game_engine is None or server.is_game_started:
+        if server.game_engine is None:
             redirect('/poker')
 
         elif key not in Key.UsedKeys:
@@ -1472,7 +1491,7 @@ if __name__ == '__main__':
 
         key = request.query.key if 'key' in request.query else 'no key'
 
-        if server.game_engine is None or server.is_game_started:
+        if server.game_engine is None:
             redirect('/poker')
 
         elif key not in Key.UsedKeys:
