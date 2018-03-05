@@ -1192,6 +1192,7 @@ class KotlinClient(AbstractClient):
 
         except JSONDecodeError:
             Debug.from_kt(f'JSON decode error msg from kotlin {self.name} {message}')
+            self.send({'type': 'error', 'message': 'not a valid json'})
 
         else:
             if json_message['type'] == 'get replays':
@@ -1227,9 +1228,48 @@ class KotlinClient(AbstractClient):
 
                 self.send({'type': 'replay tables', 'info': info})
 
-            elif json_message['type'] == 'create tournament':
-                # TODO
-                ...
+            elif json_message['type'] == 'create tournament' and ('name' in json_message and
+                                                                  'total count' in json_message and
+                                                                  'bot count' in json_message and
+                                                                  'chip count' in json_message and
+                                                                  'players' in json_message and
+                                                                  'blinds speed' in json_message and
+                                                                  'start blinds' in json_message and
+                                                                  'password' in json_message):
+                srv.game_engine.send(json_message)
+
+            elif json_message['type'] == 'check name' and 'name' in json_message:
+                if json_message['name'] in srv.NAMES:
+                    answer = 'busy'
+                else:
+                    answer = 'free'
+                self.send({'type': 'check name', 'answer': answer})
+
+            elif json_message['type'] == 'register name' and 'name' in json_message:
+                if json_message['name'] in srv.NAMES:
+                    self.send({'type': 'register', 'answer': 'fail'})
+                else:
+                    token = Key.generate_key()
+                    srv.NAMES[json_message['name']] = token
+                    open('files/names').write('\n'.join(dumps({'name': name, 'token': srv.NAMES[name]})
+                                                        for name in srv.NAMES))
+                    self.send({'type': 'register', 'answer': 'success', 'token': token})
+
+            elif json_message['type'] == 'change name' and ('token' in json_message and
+                                                            'old name' in json_message and
+                                                            'new name' in json_message):
+                if json_message['old name'] not in srv.NAMES:
+                    self.send({'type': 'change name', 'answer': 'fail'})
+                elif srv.NAMES[json_message['old name']] != json_message['token']:
+                    self.send({'type': 'change name', 'answer': 'fail'})
+                else:
+                    del srv.NAMES[json_message['name']]
+                    new_token = Key.generate_key()
+                    srv.NAMES['new name'] = new_token
+                    self.send({'type': 'change name', 'answer': 'success', 'token': new_token})
+
+            else:
+                self.send({'type': 'error', 'message': 'bad request'})
 
     def left(self, srv: 'Server') -> None:
         del srv.kt_clients[srv.kt_clients.index(self)]
@@ -1255,6 +1295,11 @@ class Server:
     MAX_NICK_LENGTH = 14  # Максимально допустимая длина
     DEFAULT_NICK = 'Anon'  # Если удалось отдать на сервер невалидный ник
 
+    NAMES = dict()
+    for name in open('files/names').readlines():
+        json_ = loads(name)
+        NAMES[json_['name']] = json_['token']
+
     def __init__(self):
 
         self.server = WebsocketServer(Server.port, Server.local_ip)
@@ -1277,9 +1322,6 @@ class Server:
 
     def run(self):
         self.server.run_forever()
-
-    def send_http(self, message):
-        self.game_engine.send_raw(message)
 
     # Called for every client connecting (after handshake)
     def new_client(self, client, _):
@@ -1321,7 +1363,7 @@ class Key:
     def get_random_key():
 
         while True:
-            key = b64encode(urandom(48)).decode().replace('+', '0').replace('/', '1')
+            key = Key.generate_key()
 
             if key not in Key.UsedKeys:
                 break
@@ -1330,6 +1372,10 @@ class Key:
         Key.save_keys()
 
         return key
+
+    @staticmethod
+    def generate_key():
+        return b64encode(urandom(48)).decode().replace('+', '0').replace('/', '1')
 
     @staticmethod
     def del_key(key):
