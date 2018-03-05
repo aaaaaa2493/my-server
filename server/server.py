@@ -1263,7 +1263,7 @@ class KotlinClient(AbstractClient):
                 elif srv.NAMES[json_message['old name']] != json_message['token']:
                     self.send({'type': 'change name', 'answer': 'fail'})
                 else:
-                    del srv.NAMES[json_message['name']]
+                    del srv.NAMES[json_message['old name']]
                     new_token = Key.generate_key()
                     srv.NAMES['new name'] = new_token
                     self.send({'type': 'change name', 'answer': 'success', 'token': new_token})
