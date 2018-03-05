@@ -24,6 +24,7 @@ class Debug:
     MessageFromTableToSpectator = 0
     MessageReceivedFromJS = 0
     MessageReceivedFromSpectator = 0
+    KotlinDebug = 1
     ClientLeft = 0
     Errors = 0
 
@@ -117,6 +118,15 @@ class Debug:
         def from_sp(*args, **kwargs):
             pass
 
+    if KotlinDebug:
+        @staticmethod
+        def from_kt(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def from_kt(*args, **kwargs):
+            pass
+
     if ClientLeft:
         @staticmethod
         def client_left(*args, **kwargs):
@@ -142,6 +152,7 @@ class AbstractClient:
         Unregistered = 'un'
         Python = 'py'
         JavaScript = 'js'
+        Kotlin = 'kt'
         Replay = 'rp'
         Table = 'tb'
         Spectator = 'sp'
@@ -316,6 +327,13 @@ class UnregisteredClient(AbstractClient):
             Debug.login(f'Unregistered client {self.id} classified not as game engine client')
             self.send({'type': 'finish', 'msg': 'Game server is offline.'})
             self.finish()
+
+        elif client_id == AbstractClient.ID.Kotlin:
+            del srv.unregistered_clients[self.id]
+            Debug.login(f'Unregistered client {self.id} classified as kotlin client')
+            kt_client = KotlinClient(self.id, name, self.handler)
+            client['client'] = kt_client
+            srv.kt_clients += [kt_client]
 
         elif client_id == AbstractClient.ID.JavaScript and name in srv.js_clients:
             Debug.login(f'Unregistered client {self.id} classified as already exist javascript client')
@@ -1138,6 +1156,63 @@ class ReplayClient(AbstractClient):
         Debug.client_left('DEL RP')
 
 
+class KotlinClient(AbstractClient):
+
+    def __init__(self, _id: int, name: str, handler: WebSocketHandler):
+        super().__init__(_id, name, handler)
+
+    def receive(self, srv: 'Server', message: str, client: dict) -> None:
+        Debug.from_kt(f'Message from kotlin {self.name}: {message}')
+
+        try:
+            json_message = loads(message)
+
+        except JSONDecodeError:
+            Debug.from_kt(f'JSON decode error msg from kotlin {self.name} {message}')
+
+        else:
+            if json_message['type'] == 'get replays':
+                replays = sorted(listdir('files/replay/poker/games'))
+                info = []
+                for _id, replay_info in enumerate(replays):
+
+                    rep_split = replay_info.split()
+
+                    if len(rep_split) == 4:
+                        date, tables, players, hands = rep_split
+                        name = ''
+
+                    else:
+                        date, tables, players, hands = rep_split[:4]
+                        name = ' '.join(rep_split[4:])
+
+                    info += [[str(_id), date, tables, players, hands, name]]
+
+                self.send({'type': 'replays', 'info': info})
+
+            elif json_message['type'] == 'get replay tables' and 'id' in json_message:
+
+                num = json_message['id']
+
+                replays = sorted(listdir('files/replay/poker/games'))
+                replay_info = listdir('files/replay/poker/games/' + replays[num])
+
+                info = []
+                for rep in replay_info:
+                    _id, hands = rep.split()
+                    info += [[_id, hands]]
+
+                self.send({'type': 'replay tables', 'info': info})
+
+            elif json_message['type'] == 'create tournament':
+                # TODO
+                ...
+
+    def left(self, srv: 'Server') -> None:
+        del srv.kt_clients[srv.kt_clients.index(self)]
+        Debug.client_left('DEL KT')
+
+
 class Server:
 
     if Debug.Debug:
@@ -1170,6 +1245,7 @@ class Server:
         self.sp_clients: List[SpectatorClient] = []
         self.tb_clients: Dict[str, TableClient] = dict()
         self.rp_clients: List[ReplayClient] = []
+        self.kt_clients: List[KotlinClient] = []
 
         self.game_engine: GameEngineClient = None
         self.started_time = None
