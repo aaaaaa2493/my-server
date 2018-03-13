@@ -353,7 +353,7 @@ class PokerGame:
             mkdir('games/parsed')
 
         path = PokerGame.path_to_parsed_games + path
-        *dirs, file_name = path.split('/')
+        *dirs, _ = path.split('/')
 
         dirs = '/'.join(dirs)
 

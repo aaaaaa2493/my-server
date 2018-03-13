@@ -1,6 +1,6 @@
-from websocket import create_connection
 from typing import Optional, List, Tuple
 from json import loads, dumps
+from websocket import create_connection
 from holdem.base_play import Result, Step
 from holdem.board import Board
 from holdem.holdem_poker import Hand

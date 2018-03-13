@@ -235,8 +235,8 @@ class GameParser:
             find_reconnected = compile(r'^(' + name + r') has been reconnected and has [0-9]+ seconds to act\.$')
             find_chat_message = compile(r'^(' + name + r'): ([^\n]+)$')
             find_disconnected_wait = compile(r'^(' + name + r') is disconnected\. '
-                                                            r'We will wait for (' + name + r') to reconnect '
-                                                            r'for a maximum of [0-9]+ seconds\.$')
+                                             r'We will wait for (' + name + r') to reconnect '
+                                             r'for a maximum of [0-9]+ seconds\.$')
             find_level_moves = compile(r'^Tournament moves into Level [0-9]+ '
                                        r'and will complete at the end of Level [0-9]+\.$')
             find_end_of_hand = compile(r'^Game #[0-9]+ starts\.$')
@@ -343,7 +343,7 @@ class GameParser:
 
         def split_into_hands(self, text):
             every_hand = self.parser.hand_border.split(text)[1:]
-            if len(every_hand) == 0:
+            if not every_hand:
                 every_hand = self.parser.hand_border_2.split(text)
             return every_hand
 
@@ -368,11 +368,11 @@ class GameParser:
                     return PokerGame.Event.Call, int(text.split()[1]) + player.gived(step)
 
             elif text.startswith('bets'):
-                bets, money = text.split()
+                _, money = text.split()
                 return PokerGame.Event.Raise, int(money)
 
             elif text.startswith('calls'):
-                calls, money = text.split()
+                _, money = text.split()
                 return PokerGame.Event.Call, int(money) + player.gived(step)
 
             elif text.startswith('raises'):
@@ -1107,7 +1107,7 @@ class GameParser:
                 except StopIteration:
                     return
 
-                if len(line) == 0:
+                if not line:
                     return
 
                 match = self.parser.find_dealt_cards.search(line)
@@ -1342,7 +1342,7 @@ class GameParser:
 
                 line = next(lines).strip()
 
-            if len(players) == 0:
+            if not players:
 
                 if not self.parser.empty_init.search(line):
                     raise ValueError('Can not parse player: ' + line)
@@ -1505,7 +1505,7 @@ class GameParser:
                 except StopIteration:
                     return
 
-                if len(line) == 0:
+                if not line:
                     return
 
                 match = self.parser.find_dealt_cards.search(line)
@@ -1766,7 +1766,7 @@ class GameParser:
 
                 line = next(lines).strip()
 
-            if len(players) == 0:
+            if not players:
                 raise ValueError('Can not parse player: ' + line)
 
             self.game.add_hand(players)

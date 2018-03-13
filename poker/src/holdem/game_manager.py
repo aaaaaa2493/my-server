@@ -1,9 +1,9 @@
 from threading import Thread
 from typing import Dict
+from special.debug import Debug
 from holdem.game import Game
 from holdem.network import Network
 from holdem.blinds import Blinds
-from special.debug import Debug
 from holdem.tournament_game import TournamentGame
 from holdem.quick_game import QuickGame
 
@@ -19,7 +19,7 @@ class GameManager:
 
     def run(self):
 
-        Thread(target=lambda: self.infinite(), name='GameManager infinite').start()
+        Thread(target=self.infinite, name='GameManager infinite').start()
 
     def create_tournament(self, json_message: dict):
 
@@ -55,8 +55,9 @@ class GameManager:
         else:
             return
 
-        self.tournaments[self.next_id] = TournamentGame(self.next_id, name, total, bots,
-                                                        stack, seats, scheme, start_blinds, password)
+        game = TournamentGame(self.next_id, name, total, bots,
+                              stack, seats, scheme, start_blinds, password)
+        self.tournaments[self.next_id] = game
         self.next_id += 1
 
     def create_quick_game(self, request: dict):

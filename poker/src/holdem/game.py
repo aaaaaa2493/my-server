@@ -64,7 +64,7 @@ class Game:
         self.players_count += 1
 
         if self.players_count == self.total_players:
-            self.thread = Thread(target=lambda: self.start_game(), name='Game infinite')
+            self.thread = Thread(target=self.start_game, name='Game infinite')
             self.thread.start()
             return True
 
@@ -112,7 +112,8 @@ class Game:
     def do_one_hand(self) -> None:
 
         if self.blinds.next_hand():
-            Debug.game_progress(f'Blinds are: {self.blinds.small_blind} {self.blinds.big_blind} {self.blinds.ante}')
+            Debug.game_progress(f'Blinds are: {self.blinds.small_blind} '
+                                f'{self.blinds.big_blind} {self.blinds.ante}')
 
         Debug.game_progress(f'Start hand {self.tables[0].board.hand} tables = {len(self.tables)} '
                             f'players = {sum(table.players.count for table in self.tables)}')
@@ -122,15 +123,16 @@ class Game:
 
     def blinds_increased(self):
 
-        Debug.game_progress(f'Blinds are: {self.blinds.small_blind} {self.blinds.big_blind} {self.blinds.ante}')
+        Debug.game_progress(f'Blinds are: {self.blinds.small_blind} '
+                            f'{self.blinds.big_blind} {self.blinds.ante}')
 
-        sb = self.blinds.small_blind
-        bb = self.blinds.big_blind
+        small = self.blinds.small_blind
+        big = self.blinds.big_blind
         ante = self.blinds.ante
 
         for table in self.tables:
             if table.online:
-                table.network.blinds_increased(sb, bb, ante)
+                table.network.blinds_increased(small, big, ante)
                 sleep(Delay.BlindsIncreased)
 
     @staticmethod
@@ -352,7 +354,7 @@ class Game:
 
             self.blinds.start()
 
-            self.resitting_thread = Thread(target=lambda: self.infinite_resitting(), name='Resitting infinite')
+            self.resitting_thread = Thread(target=self.infinite_resitting, name='Resitting infinite')
             self.resitting_thread.start()
 
             counter = 0

@@ -139,7 +139,8 @@ class BasePlay:
         # если необходимый колл больше ставки то фолд
         self.bet_ = random() * 3
 
-        # если решил сделать рейз то поставит max( max(шансы * bet * reduced_raise, 1) * money, min(min_raise, money))
+        # если решил сделать рейз то поставит
+        # max( max(шансы * bet * reduced_raise, 1) * money, min(min_raise, money))
         self.reduced_raise = random()
 
         # если что то хочет поставить то с такой вероятностью чекнет

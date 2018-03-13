@@ -66,7 +66,7 @@ class Blinds:
 
     def __init__(self, scheme: 'Blinds.SchemeType', game: 'Game'):
 
-        self.game: Game = game
+        self.game: 'Game' = game
         self.thread: Thread = None
 
         self.order: Blinds.Scheme.OrderType = scheme['order']
@@ -100,14 +100,15 @@ class Blinds:
 
     def start(self) -> None:
 
-        self.thread = Thread(target=lambda: self.infinite(), name='Blinds infinite')
+        self.thread = Thread(target=self.infinite, name='Blinds infinite')
         self.thread.start()
 
     def infinite(self) -> None:
 
         self.curr_round += 1
 
-        while self.curr_round < len(self.order) - 1 and not self.game.game_finished and not self.game.game_broken:
+        while self.curr_round < len(self.order) - 1 and (
+                not self.game.game_finished and not self.game.game_broken):
 
             sleep(self.time * 60)
 

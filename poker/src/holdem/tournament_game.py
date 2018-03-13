@@ -14,7 +14,7 @@ class TournamentGame(Game):
 
         self.id = id_
 
-        for i in range(bots):
+        for _ in range(bots):
             self.add_player()
 
         if start_blinds == 1:

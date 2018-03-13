@@ -1,11 +1,10 @@
 from typing import Dict, Iterator, Tuple
 from itertools import combinations
+from pokereval.card import Card as _Card
+from pokereval.hand_evaluator import HandEvaluator
 from special.ordered_enum import OrderedEnum
 from core.card import Card, Rank
 from holdem.cards_pair import CardsPair
-
-from pokereval.card import Card as _Card
-from pokereval.hand_evaluator import HandEvaluator
 
 
 class Strength(OrderedEnum):
@@ -162,11 +161,11 @@ class HoldemPoker:
                     c3.rank.to_int() + 2 ==
                     c4.rank.to_int() + 3 ==
                     c5.rank.to_int() + 4) or (
-            c1.rank == Rank.Ace and
-            c2.rank == Rank.Five and
-            c3.rank == Rank.Four and
-            c4.rank == Rank.Three and
-            c5.rank == Rank.Two)
+                        c1.rank == Rank.Ace and
+                        c2.rank == Rank.Five and
+                        c3.rank == Rank.Four and
+                        c4.rank == Rank.Three and
+                        c5.rank == Rank.Two)
 
         if straight and flush:
 
@@ -297,7 +296,7 @@ class HoldemPoker:
     @staticmethod
     def calculate_outs(hidden: CardsPair, common: Card.Cards) -> Tuple[int, Card.Cards]:
 
-        if len(common) == 5 or len(common) == 0:
+        if len(common) == 5 or not common:
             return 0, []
 
         cards: Card.Cards = [hidden.first, hidden.second] + common

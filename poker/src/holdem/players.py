@@ -178,7 +178,7 @@ class Players:
         self.curr_player = save_curr_player
         return length
 
-    def sort_by_nearest_to_button(self, players: TablePlayers) -> TablePlayers:
+    def sort_by_nearest_to_button(self, players: TablePlayers) -> Players.TablePlayers:
 
         return sorted(players, key=lambda p: self.length_to_button(p))
 

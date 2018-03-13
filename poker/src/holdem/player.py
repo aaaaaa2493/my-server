@@ -2,8 +2,8 @@ from typing import List
 from datetime import datetime
 from random import random, uniform
 from time import sleep
-from holdem.base_play import Decision, Step, Result
 from special.debug import Debug
+from holdem.base_play import Decision, Step, Result
 from holdem.holdem_poker import HoldemPoker as Poker, Hand
 from holdem.cards_pair import CardsPair
 from holdem.play_manager import Play, PlayManager
@@ -237,7 +237,7 @@ class Player:
         self.wins: int = 0
         self.in_game: bool = False
         self.in_play: bool = True
-        self.re_seat: Players = None
+        self.re_seat: 'Players' = None
         self.cards: CardsPair = CardsPair()
         self.history: Player.History = Player.History()
         self.hand: Hand = None

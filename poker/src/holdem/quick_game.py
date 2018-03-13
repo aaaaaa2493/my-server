@@ -14,7 +14,7 @@ class QuickGame(Game):
         self.id = id_
 
         # adding 8 bots
-        for i in range(8):
+        for _ in range(8):
             self.add_player()
 
         self.add_player(name)

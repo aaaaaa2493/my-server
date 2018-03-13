@@ -10,19 +10,22 @@ class Suitability(Enum):
 
 class CardsPair:
 
-    All = ('22o', '32s', '32o', '33o', '42s', '42o', '43s', '43o', '44o', '52s', '52o', '53s', '53o',
-           '54s', '54o', '55o', '62s', '62o', '63s', '63o', '64s', '64o', '65s', '65o', '66o', '72s',
-           '72o', '73s', '73o', '74s', '74o', '75s', '75o', '76s', '76o', '77o', '82s', '82o', '83s',
-           '83o', '84s', '84o', '85s', '85o', '86s', '86o', '87s', '87o', '88o', '92s', '92o', '93s',
-           '93o', '94s', '94o', '95s', '95o', '96s', '96o', '97s', '97o', '98s', '98o', '99o', 'T2s',
-           'T2o', 'T3s', 'T3o', 'T4s', 'T4o', 'T5s', 'T5o', 'T6s', 'T6o', 'T7s', 'T7o', 'T8s', 'T8o',
-           'T9s', 'T9o', 'TTo', 'J2s', 'J2o', 'J3s', 'J3o', 'J4s', 'J4o', 'J5s', 'J5o', 'J6s', 'J6o',
-           'J7s', 'J7o', 'J8s', 'J8o', 'J9s', 'J9o', 'JTs', 'JTo', 'JJo', 'Q2s', 'Q2o', 'Q3s', 'Q3o',
-           'Q4s', 'Q4o', 'Q5s', 'Q5o', 'Q6s', 'Q6o', 'Q7s', 'Q7o', 'Q8s', 'Q8o', 'Q9s', 'Q9o', 'QTs',
-           'QTo', 'QJs', 'QJo', 'QQo', 'K2s', 'K2o', 'K3s', 'K3o', 'K4s', 'K4o', 'K5s', 'K5o', 'K6s',
-           'K6o', 'K7s', 'K7o', 'K8s', 'K8o', 'K9s', 'K9o', 'KTs', 'KTo', 'KJs', 'KJo', 'KQs', 'KQo',
-           'KKo', 'A2s', 'A2o', 'A3s', 'A3o', 'A4s', 'A4o', 'A5s', 'A5o', 'A6s', 'A6o', 'A7s', 'A7o',
-           'A8s', 'A8o', 'A9s', 'A9o', 'ATs', 'ATo', 'AJs', 'AJo', 'AQs', 'AQo', 'AKs', 'AKo', 'AAo')
+    All = ('22o', '32s', '32o', '33o', '42s', '42o', '43s', '43o', '44o', '52s', '52o',
+           '53s', '53o', '54s', '54o', '55o', '62s', '62o', '63s', '63o', '64s', '64o',
+           '65s', '65o', '66o', '72s', '72o', '73s', '73o', '74s', '74o', '75s', '75o',
+           '76s', '76o', '77o', '82s', '82o', '83s', '83o', '84s', '84o', '85s', '85o',
+           '86s', '86o', '87s', '87o', '88o', '92s', '92o', '93s', '93o', '94s', '94o',
+           '95s', '95o', '96s', '96o', '97s', '97o', '98s', '98o', '99o', 'T2s', 'T2o',
+           'T3s', 'T3o', 'T4s', 'T4o', 'T5s', 'T5o', 'T6s', 'T6o', 'T7s', 'T7o', 'T8s',
+           'T8o', 'T9s', 'T9o', 'TTo', 'J2s', 'J2o', 'J3s', 'J3o', 'J4s', 'J4o', 'J5s',
+           'J5o', 'J6s', 'J6o', 'J7s', 'J7o', 'J8s', 'J8o', 'J9s', 'J9o', 'JTs', 'JTo',
+           'JJo', 'Q2s', 'Q2o', 'Q3s', 'Q3o', 'Q4s', 'Q4o', 'Q5s', 'Q5o', 'Q6s', 'Q6o',
+           'Q7s', 'Q7o', 'Q8s', 'Q8o', 'Q9s', 'Q9o', 'QTs', 'QTo', 'QJs', 'QJo', 'QQo',
+           'K2s', 'K2o', 'K3s', 'K3o', 'K4s', 'K4o', 'K5s', 'K5o', 'K6s', 'K6o', 'K7s',
+           'K7o', 'K8s', 'K8o', 'K9s', 'K9o', 'KTs', 'KTo', 'KJs', 'KJo', 'KQs', 'KQo',
+           'KKo', 'A2s', 'A2o', 'A3s', 'A3o', 'A4s', 'A4o', 'A5s', 'A5o', 'A6s', 'A6o',
+           'A7s', 'A7o', 'A8s', 'A8o', 'A9s', 'A9o', 'ATs', 'ATo', 'AJs', 'AJo', 'AQs',
+           'AQo', 'AKs', 'AKo', 'AAo')
 
     Suitabilities: str = 'so'
 
@@ -33,15 +36,15 @@ class CardsPair:
                                                'o': Suitability.Offsuited}
 
     @staticmethod
-    def gt_str(self: str, opp: str):
+    def gt_str(this: str, opp: str):
 
-        sfv = Card.FromRank[self[0]]
-        ssv = Card.FromRank[self[1]]
-        ss = CardsPair.FromSuitability[self[2]]
+        sfv = Card.FromRank[this[0]]
+        ssv = Card.FromRank[this[1]]
+        ssb = CardsPair.FromSuitability[this[2]]
 
         ofv = Card.FromRank[opp[0]]
         osv = Card.FromRank[opp[1]]
-        os = CardsPair.FromSuitability[opp[2]]
+        osb = CardsPair.FromSuitability[opp[2]]
 
         if sfv == ssv:
             if ofv != osv:
@@ -63,7 +66,7 @@ class CardsPair:
         elif ssv < osv:
             return False
 
-        if ss == Suitability.Suited and os == Suitability.Offsuited:
+        if ssb == Suitability.Suited and osb == Suitability.Offsuited:
             return True
 
         return False
@@ -124,7 +127,10 @@ class CardsPair:
     def str(self) -> str:
 
         if self.initialized():
-            return self.first.r() + self.second.r() + ('s' if self.first.suit == self.second.suit else 'o')
+            first = self.first.r()
+            second = self.second.r()
+            suitability = 's' if self.first.suit == self.second.suit else 'o'
+            return first + second + suitability
 
         raise ValueError('Pair of cards is not initialized')
 
