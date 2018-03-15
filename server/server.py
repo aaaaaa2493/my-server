@@ -1268,7 +1268,7 @@ class KotlinClient(AbstractClient):
                 info = []
                 for rep in replay_info:
                     _id, hands = rep.split()
-                    info += [[_id, hands]]
+                    info += [{'id': _id, 'hands': hands}]
 
                 self.send({'type': 'replay tables', 'info': info})
 
