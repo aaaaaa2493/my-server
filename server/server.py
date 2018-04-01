@@ -239,7 +239,7 @@ class GameHandlerClient(AbstractClient):
             self.initial_stack = json_message['initial stack']
             self.table_seats = json_message['table seats']
             self.password = json_message['password']
-            self.need_to_register = json_message['players left']
+            self.players_left = json_message['players left']
 
         elif json_message['game type'] == 'quick':
             self.is_tournament = False
@@ -314,6 +314,9 @@ class GameHandlerClient(AbstractClient):
             self.replays = []
             self.game_name = None
             self.finish_all_clients()
+
+        elif json_message['type'] == 'update players':
+            self.players_left = json_message['left']
 
     def finish_all_clients(self):
         for curr in list(self.tb_clients.values()):
@@ -1335,7 +1338,7 @@ class KotlinClient(AbstractClient):
                                 'initial stack': game.initial_stack,
                                 'table seats': game.table_seats,
                                 'password': game.password,
-                                'players left': game.need_to_register,
+                                'players left': game.players_left,
                                 'started': game.is_game_started
                             }
                         ]

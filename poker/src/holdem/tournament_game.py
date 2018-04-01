@@ -1,4 +1,5 @@
 from threading import Thread
+from time import sleep
 from holdem.game import Game
 from holdem.blinds import Blinds
 from holdem.network import Network
@@ -34,7 +35,7 @@ class TournamentGame(Game):
                                 'initial stack': stack,
                                 'table seats': seats,
                                 'password': password,
-                                'players left': total - bots})
+                                'players left': bots})
 
         self.network.send({'type': 'start registration'})
         Thread(target=lambda: self.network_process()).start()
@@ -56,6 +57,11 @@ class TournamentGame(Game):
                     if self.add_player(request['name']):
                         self.network.send({'type': 'start game'})
                         Thread(target=lambda: self.wait_for_end(), name=f'Game {self.id}: wait for end').start()
+                        Thread(target=lambda: self.send_players_left(), 
+                               name=f'Game {self.id}: send players left').start()
+
+                    else:
+                        self.network.send({'type': 'update players', 'left': self.players_count})
 
                 elif request['type'] == 'delete player' and not self.game_started:
                     Debug.game_manager(f'Game {self.id}: delete player')
@@ -82,3 +88,9 @@ class TournamentGame(Game):
 
         if not self.game_broken:
             self.network.send({'type': 'end game'})
+
+    def send_players_left(self) -> None:
+        
+        while self.thread.is_alive():
+            self.network.send({'type': 'update players', 'left': self.players_left})
+            sleep(5)
