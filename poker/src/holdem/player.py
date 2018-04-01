@@ -250,7 +250,7 @@ class Player:
 
         else:
             self.play: Play = Play()
-            self.network: Network = Network('py', f'{self.name} {self.id}', is_dummy)
+            self.network: Network = Network({'type': 'py', 'name': f'{self.name} {self.id}'}, is_dummy)
 
     def __str__(self):
 

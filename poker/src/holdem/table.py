@@ -148,7 +148,7 @@ class Table:
         self.deck: Deck = Deck()
         self.blinds: Blinds = blinds
         self.board: Board = Board(self.deck, start_hand)
-        self.players: Players = Players(seats, _id, is_final)
+        self.players: Players = Players(game, seats, _id, is_final)
         self.history: Table.History = Table.History(start_hand)
 
     def __del__(self):

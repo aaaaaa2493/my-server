@@ -350,8 +350,7 @@ class UnregisteredClient(AbstractClient):
 
             game_id = ''
 
-            if (client_id == AbstractClient.ID.Python or
-                    client_id == AbstractClient.ID.JavaScript or
+            if (client_id == AbstractClient.ID.JavaScript or
                     client_id == AbstractClient.ID.Table or
                     client_id == AbstractClient.ID.Spectator):
                 game_id = json_message['id']
@@ -404,7 +403,6 @@ class UnregisteredClient(AbstractClient):
             Debug.login(f'Unregistered client {self.id} classified as table client')
             tb_client = TableClient(self.id, name, srv.gh_clients[game_id], self.handler)
             client['client'] = tb_client
-            srv.tb_clients[name] = tb_client
 
         elif client_id == AbstractClient.ID.Spectator and name in srv.gh_clients[game_id].tb_clients:
             del srv.unregistered_clients[self.id]
@@ -650,9 +648,10 @@ class PythonClient(AbstractClient):
 
         elif message.startswith('resit'):
 
-            _, table_num, message = message.split(' ', 2)
+            _, game_id, table_num, message = message.split(' ', 3)
 
-            new_table = srv.tb_clients[table_num]
+            gh_client: GameHandlerClient = srv.gh_clients[int(game_id)]
+            new_table: TableClient = gh_client.tb_clients[table_num]
 
             if self.connected_table is not None:
                 self.connected_table.players.remove(self)
@@ -875,7 +874,7 @@ class TableClient(AbstractClient):
             self.cast(message)
 
     def left(self, srv: 'Server') -> None:
-        del srv.tb_clients[self.name]
+        del self.connected_game.tb_clients[self.name]
 
         if self.replay:
             self.hands_history += [self.replay]
@@ -1368,7 +1367,6 @@ class Server:
         self.js_clients: Dict[str, JavaScriptClient] = dict()
         self.py_clients: Dict[str, PythonClient] = dict()
         self.sp_clients: List[SpectatorClient] = []
-        self.tb_clients: Dict[str, TableClient] = dict()
         self.rp_clients: List[ReplayClient] = []
         self.kt_clients: List[KotlinClient] = []
         self.gh_clients: Dict[int, GameHandlerClient] = dict()

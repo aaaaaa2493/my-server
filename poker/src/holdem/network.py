@@ -292,7 +292,7 @@ class Network:
         to_send['players'] = players_send
 
         if self.need_disconnect_info:
-            return self.send_raw(f'resit {players.id} {dumps(to_send)}')
+            return self.send_raw(f'resit {players.game.id} {players.id} {dumps(to_send)}')
         else:
             return self.send(to_send)
 

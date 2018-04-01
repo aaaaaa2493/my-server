@@ -10,8 +10,9 @@ class Players:
 
     TablePlayers = List[Optional[Player]]
 
-    def __init__(self, seats: int, _id: int, is_final: bool):
-
+    def __init__(self, game, seats: int, _id: int, is_final: bool):
+        
+        self.game = game
         self.players: Players.TablePlayers = [None] * seats
         self.controlled: Players.TablePlayers = []
         self.network: Network = None

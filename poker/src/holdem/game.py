@@ -20,6 +20,7 @@ class Game:
         if players < 1:
             raise ValueError("Can not be players less than one in new game")
 
+        self.id = None
         self.next_id: int = 0
         self.thread: Thread = None
         self.resitting_thread: Thread = None
@@ -88,7 +89,7 @@ class Game:
             Play.ExtendedName = False
 
             for table in self.tables:
-                table.network = Network('tb', str(table.id))
+                table.network = Network({'type': 'tb', 'name': str(table.id), 'id': self.id})
                 table.online = True
 
                 table.players.network = table.network
@@ -177,7 +178,7 @@ class Game:
                 final_table = self.final_table
 
                 if self.online:
-                    final_table.network = Network('tb', '0')
+                    final_table.network = Network({'type': 'tb', 'name': '0', 'id': self.id})
                     final_table.online = True
                     final_table.players.network = final_table.network
                     final_table.players.online = True
