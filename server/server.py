@@ -14,16 +14,16 @@ from typing import List, Dict, Tuple
 
 class Debug:
     Debug = 0
-    PythonAndJSConnections = 0
+    PythonAndJSConnections = 1
     ClientTriesToLogin = 1
-    SpectatorInit = 0
-    JSClientRestore = 0
-    GameEngineMessage = 0
-    JSResittingRestore = 0
-    MessageFromPythonToJS = 0
-    MessageFromTableToSpectator = 0
-    MessageReceivedFromJS = 0
-    MessageReceivedFromSpectator = 0
+    SpectatorInit = 1
+    JSClientRestore = 1
+    GameEngineMessage = 1
+    JSResittingRestore = 1
+    MessageFromPythonToJS = 1
+    MessageFromTableToSpectator = 1
+    MessageReceivedFromJS = 1
+    MessageReceivedFromSpectator = 1
     KotlinDebug = 1
     Send = 1
     ClientLeft = 1
@@ -383,7 +383,6 @@ class UnregisteredClient(AbstractClient):
             gh_client = GameHandlerClient(self.id, json_message, self.handler)
             client['client'] = gh_client
             srv.gh_clients[json_message['id']] = gh_client
-            self.finish()
 
         elif client_id == AbstractClient.ID.JavaScript and name in srv.js_clients:
             Debug.login(f'Unregistered client {self.id} classified as already exist javascript client')
@@ -1322,6 +1321,26 @@ class KotlinClient(AbstractClient):
                     open('files/names', 'w').write('\n'.join(dumps({'name': name, 'token': srv.NAMES[name]})
                                                              for name in srv.NAMES))
                     self.send({'type': 'change name', 'answer': 'success', 'token': new_token})
+
+            elif json_message['type'] == 'get tournaments':
+                reply = []
+
+                for game in srv.gh_clients:
+                    if game.is_tournament:
+                        reply += [
+                            {
+                                'id': game.game_id,
+                                'name': game.name,
+                                'total players': game.total_players,
+                                'initial stack': game.initial_stack,
+                                'table seats': game.table_seats,
+                                'password': game.password,
+                                'players left': game.need_to_register,
+                                'started': game.is_game_started
+                            }
+                        ]
+                self.send({'type': 'get tournaments', 'info': reply})
+                    
 
             else:
                 self.send({'type': 'error', 'message': 'bad request'})
