@@ -170,7 +170,7 @@ class AbstractClient:
         GameEngine = 'ge'
 
     def __init__(self, _id: int, name: str, handler: WebSocketHandler):
-        self.id: int = _id
+        self.id: int = _id  # Это внутренний ID клиента, присваиваемый сервером
         self.name: str = name
         self.handler: WebSocketHandler = handler
 
@@ -1328,7 +1328,7 @@ class KotlinClient(AbstractClient):
             elif json_message['type'] == 'get tournaments':
                 reply = []
 
-                for game in srv.gh_clients:
+                for game in srv.gh_clients.values():
                     if game.is_tournament:
                         reply += [
                             {
@@ -1343,7 +1343,31 @@ class KotlinClient(AbstractClient):
                             }
                         ]
                 self.send({'type': 'get tournaments', 'info': reply})
-                    
+
+            elif json_message['type'] == 'get tournament tables' and 'id' in json_message:
+                reply = []
+
+                if json_message['id'] not in srv.gh_clients:
+                    self.send({'type': 'error', 'message': 'no such game id'})
+                    return
+
+                game_handler: GameHandlerClient = srv.gh_clients[json_message['id']]
+
+                if not game_handler.is_tournament:
+                    self.send({'type': 'error', 'message': 'this game is not tournament'})
+                    return
+
+                if not game.is_game_started:
+                    self.send({'type': 'error', 'message': 'this game not started'})
+                    return
+
+                for table in game_handler.tb_clients.values():
+                    table: TableClient
+                    reply += [
+                        {
+                            'id': table.name
+                        }
+                    ]
 
             else:
                 self.send({'type': 'error', 'message': 'bad request'})
