@@ -83,7 +83,7 @@ class Game:
 
     def start_game(self) -> None:
 
-        if any(player.controlled for player in self.players):
+        if any(player.controlled for player in self.players) or self.online:
 
             self.online = True
             Play.ExtendedName = False

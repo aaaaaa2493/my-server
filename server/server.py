@@ -248,12 +248,11 @@ class GameHandlerClient(AbstractClient):
         self.is_game_started: bool = False
         self.started_time: datetime = datetime.now()
         self.replays = []
-        self.game_name = None
         self.tb_clients: Dict[str, TableClient] = dict()
 
     def receive(self, srv: 'Server', message: str, client: dict) -> None:
 
-        Debug.engine_msg(f'GameEngine said: {message}')
+        Debug.engine_msg(f'GameHandler {self.game_id} said: {message}')
 
         json_message = loads(message)
 
@@ -273,7 +272,7 @@ class GameHandlerClient(AbstractClient):
 
                 total_tables = len(self.replays)
                 total_players = self.total_players
-                name = self.game_name
+                name = self.name
                 total_hands = sum(rep[1] for rep in self.replays)
 
                 if name == '':
@@ -305,15 +304,15 @@ class GameHandlerClient(AbstractClient):
                         open(table_path + '/%s' % (num,), 'w').write(ReplayClient.dump_replay(hand))
 
             self.replays = []
-            self.game_name = None
             self.finish_all_clients()
+            self.finish()
 
         elif json_message['type'] == 'game broken':
             self.is_game_started = False
             self.is_registration_started = False
             self.replays = []
-            self.game_name = None
             self.finish_all_clients()
+            self.finish()
 
         elif json_message['type'] == 'update players':
             self.players_left = json_message['left']
@@ -330,6 +329,7 @@ class GameHandlerClient(AbstractClient):
         self.tb_clients = dict()
 
     def left(self, srv: 'Server') -> None:
+        del srv.gh_clients[self.game_id]
         Debug.client_left('DEL GAME HANDLER')
         self.finish_all_clients()
 
@@ -382,7 +382,7 @@ class UnregisteredClient(AbstractClient):
             self.finish()
 
         elif client_id == AbstractClient.ID.GameHandler:
-            Debug.login(f'Unregistered client {self.id} classified not as game handler client')
+            Debug.login(f'Unregistered client {self.id} classified as game handler client')
             gh_client = GameHandlerClient(self.id, json_message, self.handler)
             client['client'] = gh_client
             srv.gh_clients[json_message['id']] = gh_client
@@ -1329,6 +1329,7 @@ class KotlinClient(AbstractClient):
                 reply = []
 
                 for game in srv.gh_clients.values():
+                    game: GameHandlerClient
                     if game.is_tournament:
                         reply += [
                             {
@@ -1357,7 +1358,7 @@ class KotlinClient(AbstractClient):
                     self.send({'type': 'error', 'message': 'this game is not tournament'})
                     return
 
-                if not game.is_game_started:
+                if not game_handler.is_game_started:
                     self.send({'type': 'error', 'message': 'this game not started'})
                     return
 
@@ -1368,6 +1369,8 @@ class KotlinClient(AbstractClient):
                             'id': table.name
                         }
                     ]
+
+                self.send({'type': 'get tournament tables', 'info': reply})
 
             else:
                 self.send({'type': 'error', 'message': 'bad request'})

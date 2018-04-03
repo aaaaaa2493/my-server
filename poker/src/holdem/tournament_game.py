@@ -15,6 +15,23 @@ class TournamentGame(Game):
 
         self.id = id_
 
+        self.network = Network({'type': 'gh',
+                                'id': self.id,
+                                'game type': 'tournament',
+                                'name': name,
+                                'total players': total,
+                                'initial stack': stack,
+                                'table seats': seats,
+                                'password': password,
+                                'players left': bots})
+
+        self.network.send({'type': 'start registration'})
+
+        if total == bots:
+            self.network.send({'type': 'start game'})
+
+        self.online = True
+
         for _ in range(bots):
             self.add_player()
 
@@ -27,18 +44,12 @@ class TournamentGame(Game):
         elif start_blinds == 3:
             self.blinds.curr_round = 11
 
-        self.network = Network({'type': 'gh',
-                                'id': self.id,
-                                'game type': 'tournament',
-                                'name': name,
-                                'total players': total,
-                                'initial stack': stack,
-                                'table seats': seats,
-                                'password': password,
-                                'players left': bots})
-
-        self.network.send({'type': 'start registration'})
         Thread(target=lambda: self.network_process()).start()
+
+        if total == bots:
+            Thread(target=lambda: self.wait_for_end(), name=f'Game {self.id}: wait for end').start()
+            Thread(target=lambda: self.send_players_left(), 
+                               name=f'Game {self.id}: send players left').start()
 
     def network_process(self):
 
@@ -86,11 +97,16 @@ class TournamentGame(Game):
 
         self.thread.join()
 
+        print("JOINED!")
+
         if not self.game_broken:
             self.network.send({'type': 'end game'})
 
     def send_players_left(self) -> None:
         
         while self.thread.is_alive():
-            self.network.send({'type': 'update players', 'left': self.players_left})
-            sleep(5)
+            if self.players_left is not None:
+                self.network.send({'type': 'update players', 'left': self.players_left})
+                sleep(5)
+
+        print("NOT ALIVE!")
