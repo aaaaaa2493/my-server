@@ -97,8 +97,6 @@ class TournamentGame(Game):
 
         self.thread.join()
 
-        print("JOINED!")
-
         if not self.game_broken:
             self.network.send({'type': 'end game'})
 
@@ -108,5 +106,3 @@ class TournamentGame(Game):
             if self.players_left is not None:
                 self.network.send({'type': 'update players', 'left': self.players_left})
                 sleep(5)
-
-        print("NOT ALIVE!")
