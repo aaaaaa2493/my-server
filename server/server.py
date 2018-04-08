@@ -317,6 +317,14 @@ class GameHandlerClient(AbstractClient):
         elif json_message['type'] == 'update players':
             self.players_left = json_message['left']
 
+    def has_player(name: str) -> bool:
+        for table in self.tb_clients.values():
+            table: TableClient
+            for player in table.players:
+                if player.name == name:
+                    return True
+        return False
+
     def finish_all_clients(self):
         for curr in list(self.tb_clients.values()):
             for curr_sp in curr.spectators:
@@ -1325,12 +1333,18 @@ class KotlinClient(AbstractClient):
                                                              for name in srv.NAMES))
                     self.send({'type': 'change name', 'answer': 'success', 'token': new_token})
 
-            elif json_message['type'] == 'get tournaments':
+            elif json_message['type'] == 'get tournaments' and 'name' in json_message and 'token' in json_message:
                 reply = []
+
+                token_fails = json_message['name'] not in srv.NAMES or srv.NAMES[json_message['name']] != json_message['token']
 
                 for game in srv.gh_clients.values():
                     game: GameHandlerClient
                     if game.is_tournament:
+                        if token_fails:
+                            has_player = False
+                        else:
+                            has_player = game.has_player(json_message['name'])
                         reply += [
                             {
                                 'id': game.game_id,
@@ -1340,7 +1354,8 @@ class KotlinClient(AbstractClient):
                                 'table seats': game.table_seats,
                                 'password': game.password,
                                 'players left': game.players_left,
-                                'started': game.is_game_started
+                                'started': game.is_game_started,
+                                'can play': has_player
                             }
                         ]
                 self.send({'type': 'get tournaments', 'info': reply})
@@ -1604,6 +1619,8 @@ if __name__ == '__main__':
 
     @route('/poker')
     def poker():
+
+        return redirect('/poker/replay')
 
         state = 'unknown state'
 
