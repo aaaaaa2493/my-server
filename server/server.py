@@ -1341,7 +1341,7 @@ class KotlinClient(AbstractClient):
                 for game in srv.gh_clients.values():
                     game: GameHandlerClient
                     if game.is_tournament:
-                        if token_fails:
+                        if token_fails or not game.is_game_started:
                             has_player = False
                         else:
                             has_player = game.has_player(json_message['name'])
