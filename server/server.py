@@ -317,7 +317,7 @@ class GameHandlerClient(AbstractClient):
         elif json_message['type'] == 'update players':
             self.players_left = json_message['left']
 
-    def has_player(name: str) -> bool:
+    def has_player(self, name: str) -> bool:
         for table in self.tb_clients.values():
             table: TableClient
             for player in table.players:
