@@ -226,7 +226,7 @@ class Player:
             else:
                 raise ValueError(f'Undefined step id {step}')
 
-    def __init__(self, _id: int, name: str, money: int, controlled: bool, is_dummy: bool = False):
+    def __init__(self, game_id: int, _id: int, name: str, money: int, controlled: bool, is_dummy: bool = False):
 
         self.id: int = _id
         self.name: str = name
@@ -250,7 +250,11 @@ class Player:
 
         else:
             self.play: Play = Play()
-            self.network: Network = Network({'type': 'py', 'name': f'{self.name} {self.id}'}, is_dummy)
+            self.network: Network = Network({
+                'type': 'py', 
+                'name': f'{self.name}',
+                'id':  self.id,
+                'game id': game_id}, is_dummy)
 
     def __str__(self):
 

@@ -1,4 +1,5 @@
 from threading import Thread
+from time import sleep
 from holdem.game import Game
 from holdem.blinds import Blinds
 from holdem.network import Network
@@ -17,15 +18,13 @@ class QuickGame(Game):
         for _ in range(8):
             self.add_player()
 
-        self.add_player(name)
-
         self.network = Network({'type': 'gh',
                                 'id': self.id,
                                 'game type': 'quick',
                                 'name': name})
 
         self.network.send({'type': 'start registration'})
-        Thread(target=lambda: self.network_process()).start()
+        Thread(target=lambda: self.network_process(), name=f'Quick game {self.id}: network process').start()
 
     def network_process(self):
 
@@ -46,8 +45,8 @@ class QuickGame(Game):
                         Thread(target=lambda: self.wait_for_end(), name=f'Game {self.id}: wait for end').start()
 
                 elif request['type'] == 'delete player' and not self.game_started:
-                    Debug.game_manager(f'Game {self.id}: delete player')
-                    self.delete_player(request['name'])
+                    Debug.game_manager(f'Game {self.id}: delete quick game')
+                    self.break_game()
 
                 elif request['type'] == 'break':
                     Debug.game_manager(f'Game {self.id}: break game')

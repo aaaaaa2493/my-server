@@ -58,7 +58,7 @@ class Game:
         if name:
             controlled = True
 
-        player = Player(self.next_id, name, self.start_stack, controlled)
+        player = Player(self.id, self.next_id, name, self.start_stack, controlled)
         self.next_id += 1
 
         self.players += [player]

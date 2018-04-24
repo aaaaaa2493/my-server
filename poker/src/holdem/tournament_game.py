@@ -61,7 +61,7 @@ class TournamentGame(Game):
 
                 request = self.network.receive()
 
-                Debug.game_manager(f'Game {self.id}:  message {request}')
+                Debug.game_manager(f'Game {self.id}: message {request}')
 
                 if request['type'] == 'add player' and not self.game_started:
                     Debug.game_manager(f'Game {self.id}: add player')
@@ -78,7 +78,7 @@ class TournamentGame(Game):
                     Debug.game_manager(f'Game {self.id}: delete player')
                     self.delete_player(request['name'])
 
-                elif request['type'] == 'break' and not self.game_started:
+                elif request['type'] == 'break':
                     Debug.game_manager(f'Game {self.id}: break game')
                     self.break_game()
 
