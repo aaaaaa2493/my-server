@@ -2,8 +2,8 @@ from typing import List
 from datetime import datetime
 from random import random, uniform
 from time import sleep
-from holdem.base_play import Decision, Step, Result
 from special.debug import Debug
+from holdem.base_play import Decision, Step, Result
 from holdem.holdem_poker import HoldemPoker as Poker, Hand
 from holdem.cards_pair import CardsPair
 from holdem.play_manager import Play, PlayManager
@@ -226,7 +226,7 @@ class Player:
             else:
                 raise ValueError(f'Undefined step id {step}')
 
-    def __init__(self, _id: int, name: str, money: int, controlled: bool, is_dummy: bool = False):
+    def __init__(self, game_id: int, _id: int, name: str, money: int, controlled: bool, is_dummy: bool = False):
 
         self.id: int = _id
         self.name: str = name
@@ -237,7 +237,7 @@ class Player:
         self.wins: int = 0
         self.in_game: bool = False
         self.in_play: bool = True
-        self.re_seat: Players = None
+        self.re_seat: 'Players' = None
         self.cards: CardsPair = CardsPair()
         self.history: Player.History = Player.History()
         self.hand: Hand = None
@@ -250,7 +250,11 @@ class Player:
 
         else:
             self.play: Play = Play()
-            self.network: Network = Network('py', f'{self.name} {self.id}', is_dummy)
+            self.network: Network = Network({
+                'type': 'py', 
+                'name': f'{self.name}',
+                'id':  self.id,
+                'game id': game_id}, is_dummy)
 
     def __str__(self):
 

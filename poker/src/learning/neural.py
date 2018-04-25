@@ -1,5 +1,5 @@
 from typing import List, Callable, Tuple
-from operator import add, sub, mul, truediv, pow, abs, neg, gt
+from operator import add, sub, mul, truediv, neg, gt
 from random import random, choice
 
 

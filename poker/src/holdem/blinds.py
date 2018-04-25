@@ -26,6 +26,8 @@ class Blinds:
                         (400000, 800000, 120000), (600000, 1200000, 160000),
                         (800000, 1600000, 220000), (1000000, 2000000, 300000)]
 
+            Static = [(5, 10, 1)]
+
         TimeType = int
 
         class Time:
@@ -46,6 +48,10 @@ class Blinds:
                     'time': Time.Standard,
                     'hands': Hands.Standard}
 
+        Static = {'order': Order.Static,
+                  'time': Time.Standard,
+                  'hands': Hands.Standard}
+
         Fast = {'order': Order.Standard,
                 'time': Time.Fast,
                 'hands': Hands.Fast}
@@ -60,7 +66,7 @@ class Blinds:
 
     def __init__(self, scheme: 'Blinds.SchemeType', game: 'Game'):
 
-        self.game: Game = game
+        self.game: 'Game' = game
         self.thread: Thread = None
 
         self.order: Blinds.Scheme.OrderType = scheme['order']
@@ -94,14 +100,15 @@ class Blinds:
 
     def start(self) -> None:
 
-        self.thread = Thread(target=lambda: self.infinite(), name='Blinds infinite')
+        self.thread = Thread(target=self.infinite, name='Blinds infinite')
         self.thread.start()
 
     def infinite(self) -> None:
 
         self.curr_round += 1
 
-        while self.curr_round < len(self.order) - 1 and not self.game.game_finished and not self.game.game_broken:
+        while self.curr_round < len(self.order) - 1 and (
+                not self.game.game_finished and not self.game.game_broken):
 
             sleep(self.time * 60)
 

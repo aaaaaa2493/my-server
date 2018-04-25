@@ -20,6 +20,7 @@ class Game:
         if players < 1:
             raise ValueError("Can not be players less than one in new game")
 
+        self.id = None
         self.next_id: int = 0
         self.thread: Thread = None
         self.resitting_thread: Thread = None
@@ -57,14 +58,14 @@ class Game:
         if name:
             controlled = True
 
-        player = Player(self.next_id, name, self.start_stack, controlled)
+        player = Player(self.id, self.next_id, name, self.start_stack, controlled)
         self.next_id += 1
 
         self.players += [player]
         self.players_count += 1
 
         if self.players_count == self.total_players:
-            self.thread = Thread(target=lambda: self.start_game(), name='Game infinite')
+            self.thread = Thread(target=self.start_game, name='Game infinite')
             self.thread.start()
             return True
 
@@ -82,13 +83,13 @@ class Game:
 
     def start_game(self) -> None:
 
-        if any(player.controlled for player in self.players):
+        if any(player.controlled for player in self.players) or self.online:
 
             self.online = True
             Play.ExtendedName = False
 
             for table in self.tables:
-                table.network = Network('tb', str(table.id))
+                table.network = Network({'type': 'tb', 'name': str(table.id), 'id': self.id})
                 table.online = True
 
                 table.players.network = table.network
@@ -112,7 +113,8 @@ class Game:
     def do_one_hand(self) -> None:
 
         if self.blinds.next_hand():
-            Debug.game_progress(f'Blinds are: {self.blinds.small_blind} {self.blinds.big_blind} {self.blinds.ante}')
+            Debug.game_progress(f'Blinds are: {self.blinds.small_blind} '
+                                f'{self.blinds.big_blind} {self.blinds.ante}')
 
         Debug.game_progress(f'Start hand {self.tables[0].board.hand} tables = {len(self.tables)} '
                             f'players = {sum(table.players.count for table in self.tables)}')
@@ -122,15 +124,16 @@ class Game:
 
     def blinds_increased(self):
 
-        Debug.game_progress(f'Blinds are: {self.blinds.small_blind} {self.blinds.big_blind} {self.blinds.ante}')
+        Debug.game_progress(f'Blinds are: {self.blinds.small_blind} '
+                            f'{self.blinds.big_blind} {self.blinds.ante}')
 
-        sb = self.blinds.small_blind
-        bb = self.blinds.big_blind
+        small = self.blinds.small_blind
+        big = self.blinds.big_blind
         ante = self.blinds.ante
 
         for table in self.tables:
             if table.online:
-                table.network.blinds_increased(sb, bb, ante)
+                table.network.blinds_increased(small, big, ante)
                 sleep(Delay.BlindsIncreased)
 
     @staticmethod
@@ -175,7 +178,7 @@ class Game:
                 final_table = self.final_table
 
                 if self.online:
-                    final_table.network = Network('tb', '0')
+                    final_table.network = Network({'type': 'tb', 'name': '0', 'id': self.id})
                     final_table.online = True
                     final_table.players.network = final_table.network
                     final_table.players.online = True
@@ -352,7 +355,7 @@ class Game:
 
             self.blinds.start()
 
-            self.resitting_thread = Thread(target=lambda: self.infinite_resitting(), name='Resitting infinite')
+            self.resitting_thread = Thread(target=self.infinite_resitting, name='Resitting infinite')
             self.resitting_thread.start()
 
             counter = 0

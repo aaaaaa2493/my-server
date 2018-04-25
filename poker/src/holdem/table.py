@@ -27,7 +27,7 @@ class Table:
 
             def __init__(self, player: 'Player', decision: Result, money: int):
 
-                self.player: Player = player
+                self.player: 'Player' = player
                 self.decision: Result = decision
                 self.money: int = money
 
@@ -55,7 +55,7 @@ class Table:
 
                 self.number = number
                 self.opened_cards: Card.Cards = None
-                self.dealt_cards: List[Tuple[Player, CardsPair]] = None
+                self.dealt_cards: List[Tuple['Player', CardsPair]] = None
                 self.last_step: Step = Step.Preflop
 
                 self.preflop: Table.History.Step = Table.History.Step()
@@ -148,7 +148,7 @@ class Table:
         self.deck: Deck = Deck()
         self.blinds: Blinds = blinds
         self.board: Board = Board(self.deck, start_hand)
-        self.players: Players = Players(seats, _id, is_final)
+        self.players: Players = Players(game, seats, _id, is_final)
         self.history: Table.History = Table.History(start_hand)
 
     def __del__(self):
@@ -341,9 +341,9 @@ class Table:
             while True:
 
                 if player.money > 0 and player.in_game and self.players.count_in_game_players() > 1 and not (
-                            self.players.count_in_game_players() - self.players.count_all_in_players() == 1 and
-                            max(p.gived for p in self.players.in_game_not_in_all_in_players()) >=
-                            max(p.gived for p in self.players.all_in_players())):
+                        self.players.count_in_game_players() - self.players.count_all_in_players() == 1 and
+                        max(p.gived for p in self.players.in_game_not_in_all_in_players()) >=
+                        max(p.gived for p in self.players.all_in_players())):
 
                     if self.online:
                         self.network.switch_decision(player)
@@ -578,7 +578,7 @@ class Table:
                 all_inners = [p for p in self.players.all_in_players()]
                 undivided_money = 0
 
-                if len(all_inners) > 0:
+                if all_inners:
                     all_inners_wins = sorted([p for p in all_inners if p in players_wins], key=lambda x: x.in_pot)
 
                     for player in all_inners_wins:

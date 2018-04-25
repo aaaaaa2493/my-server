@@ -1,5 +1,5 @@
 class Debug:
-    Debug = 1
+    Debug = 0
     Table = 0
     Decision = 0
     InputDecision = 0

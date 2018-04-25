@@ -353,7 +353,7 @@ class PokerGame:
             mkdir('games/parsed')
 
         path = PokerGame.path_to_parsed_games + path
-        *dirs, file_name = path.split('/')
+        *dirs, _ = path.split('/')
 
         dirs = '/'.join(dirs)
 
@@ -418,7 +418,7 @@ class PokerGame:
         makedirs(chat_path)
 
         time = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), 0)
-        network = Network('', '', True, False)
+        network = Network({}, True, False)
         chat_messages: List[Tuple[datetime, str]] = []
 
         for num, hand in enumerate(self.hands):

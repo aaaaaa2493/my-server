@@ -884,7 +884,9 @@ class ReplayHandler extends Handler{
         worker.class_rem([{id: 'replay_control', class: 'hidden'}]);
         worker.bigger_chat();
 
-        this.socket.send('rp ' + this.replay_id);
+        let js = {type: 'rp', name: this.replay_id};
+
+        this.socket.send(JSON.stringify(js));
     }
 
     chat_message(){

@@ -10,8 +10,9 @@ class Players:
 
     TablePlayers = List[Optional[Player]]
 
-    def __init__(self, seats: int, _id: int, is_final: bool):
-
+    def __init__(self, game, seats: int, _id: int, is_final: bool):
+        
+        self.game = game
         self.players: Players.TablePlayers = [None] * seats
         self.controlled: Players.TablePlayers = []
         self.network: Network = None
@@ -178,7 +179,7 @@ class Players:
         self.curr_player = save_curr_player
         return length
 
-    def sort_by_nearest_to_button(self, players: TablePlayers) -> TablePlayers:
+    def sort_by_nearest_to_button(self, players: TablePlayers) -> 'Players.TablePlayers':
 
         return sorted(players, key=lambda p: self.length_to_button(p))
 

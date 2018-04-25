@@ -1,6 +1,6 @@
-from websocket import create_connection
 from typing import Optional, List, Tuple
 from json import loads, dumps
+from websocket import create_connection
 from holdem.base_play import Result, Step
 from holdem.board import Board
 from holdem.holdem_poker import Hand
@@ -18,14 +18,14 @@ class Network:
 
     port = 9001
 
-    def __init__(self, _id: str, name: str, is_dummy: bool = False, need_disconnect_info: bool = True):
+    def __init__(self, identifier: dict, is_dummy: bool = False, need_disconnect_info: bool = True):
 
         self.is_dummy = is_dummy
         self.need_disconnect_info = need_disconnect_info
 
         if not is_dummy:
             self.socket = create_connection(f'ws://{Network.ip}:{Network.port}')
-            self.socket.send(f'{_id} {name}')
+            self.socket.send(dumps(identifier))
 
     def __del__(self):
 
@@ -292,7 +292,7 @@ class Network:
         to_send['players'] = players_send
 
         if self.need_disconnect_info:
-            return self.send_raw(f'resit {players.id} {dumps(to_send)}')
+            return self.send_raw(f'resit {players.game.id} {players.id} {dumps(to_send)}')
         else:
             return self.send(to_send)
 

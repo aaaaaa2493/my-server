@@ -144,7 +144,7 @@ class PlayManager:
         if not PlayManager._initialized:
             PlayManager.init()
 
-        if len(PlayManager._bank_of_plays) == 0:
+        if not PlayManager._bank_of_plays:
             PlayManager.fill_zero_gens()
 
         if only_profitable:

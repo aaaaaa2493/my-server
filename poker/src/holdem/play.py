@@ -53,7 +53,7 @@ class Play:
         return out_of / sum(1 / i for i in range(1, out_of + 1))
 
     def value(self) -> float:
-        if len(self.plays_history) == 0:
+        if not self.plays_history:
             return 0
         return sum(1 / place * self.calc_norm(out_of) for place, out_of in self.plays_history) / len(self.plays_history)
 
