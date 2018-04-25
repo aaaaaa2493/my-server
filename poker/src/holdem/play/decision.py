@@ -22,8 +22,7 @@ class Decision(Enum):
     CheckRaise = 16
     CheckAllin = 17
 
-    @property
-    def str_decision(self):
+    def __str__(self) -> str:
         return _to_str[self]
 
 

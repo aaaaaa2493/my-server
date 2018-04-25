@@ -16,8 +16,7 @@ class Result(Enum):
     WinMoney = 10
     ReturnMoney = 11
 
-    @property
-    def str_result(self) -> str:
+    def __str__(self) -> str:
         return _to_str[self]
 
 

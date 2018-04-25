@@ -8,13 +8,12 @@ class Suit(OrderedEnum):
     Clubs = 3
     Spades = 4
 
-    @property
-    def str_suit(self) -> str:
-        return _to_str[self]
-
     @classmethod
     def get_suit(cls, suit: str) -> 'Suit':
         return _from_str[suit]
+
+    def __str__(self) -> str:
+        return _to_str[self]
 
 
 _to_str: Dict[Suit, str] = {

@@ -18,13 +18,12 @@ class Rank(OrderedEnum):
     Two = 2
     Invalid = 1
 
-    @property
-    def str_rank(self) -> str:
-        return _to_str[self]
-
     @classmethod
     def get_rank(cls, rank: str) -> 'Rank':
         return _from_str[rank]
+
+    def __str__(self) -> str:
+        return _to_str[self]
 
 
 _to_str: Dict[Rank, str] = {

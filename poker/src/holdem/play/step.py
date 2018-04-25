@@ -24,8 +24,7 @@ class Step(OrderedEnum):
 
         raise LastGameStep(f'No next step id for {step}')
 
-    @property
-    def str_step(self) -> str:
+    def __str__(self) -> str:
         return _to_str[self]
 
 
