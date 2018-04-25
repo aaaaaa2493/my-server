@@ -1,6 +1,6 @@
 from special.settings import Settings, Mode
 from holdem.game_manager import GameManager
-from holdem.play_manager import PlayManager
+from holdem.play.play_manager import PlayManager
 from holdem.blinds import Blinds
 from parsing.game_parser import GameParser
 from learning.evolution import Evolution

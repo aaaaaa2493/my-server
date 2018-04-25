@@ -1,8 +1,8 @@
 from time import sleep
 from holdem.blinds import Blinds
-from holdem.play import Play
+from holdem.play.play import Play
 from holdem.game import Game
-from holdem.play_manager import PlayManager
+from holdem.play.play_manager import PlayManager
 from special.debug import Debug
 
 

@@ -7,7 +7,7 @@ from holdem.blinds import Blinds
 from holdem.delay import Delay
 from holdem.table import Table
 from holdem.player import Player
-from holdem.play import Play
+from holdem.play.play import Play
 from holdem.network import Network
 from special.debug import Debug
 

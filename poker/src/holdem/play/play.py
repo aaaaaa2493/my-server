@@ -81,7 +81,7 @@ class Play:
     def set_place(self, place: int, out_of: int) -> None:
 
         # TODO move to top
-        from holdem.play_manager import PlayManager
+        from holdem.play.play_manager import PlayManager
 
         if Settings.game_mode == Mode.Evolution:
 

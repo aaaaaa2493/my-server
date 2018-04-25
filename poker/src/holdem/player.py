@@ -8,7 +8,7 @@ from holdem.play.step import Step
 from holdem.play.result import Result
 from holdem.holdem_poker import HoldemPoker as Poker, Hand
 from holdem.cards_pair import CardsPair
-from holdem.play_manager import Play, PlayManager
+from holdem.play.play_manager import Play, PlayManager
 from holdem.play.base_play import BasePlay
 from holdem.network import Network
 from core.card import Card
