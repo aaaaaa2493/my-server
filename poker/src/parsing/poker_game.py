@@ -6,7 +6,7 @@ from json import loads, dumps
 from datetime import datetime, timedelta
 from shutil import rmtree
 from statistics import mean
-from holdem.base_play import Result, Step
+from holdem.play.base_play import Result, Step
 from holdem.cards_pair import CardsPair
 from holdem.board import Board
 from holdem.network import Network

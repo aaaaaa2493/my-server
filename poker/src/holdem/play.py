@@ -1,7 +1,7 @@
 from typing import List, Tuple
 from functools import lru_cache
 from copy import deepcopy
-from holdem.base_play import BasePlay
+from holdem.play.base_play import BasePlay
 from special.settings import Settings, Mode
 
 
