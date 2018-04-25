@@ -1,54 +1,8 @@
 from random import uniform, random
-from typing import Dict
-from holdem.play.step import Step
 from holdem.play.decision import Decision
-from holdem.play.result import Result
 
 
 class BasePlay:
-
-    ToStep: Dict[Step, str] = {
-        Step.Preflop: 'preflop',
-        Step.Flop: 'flop',
-        Step.Turn: 'turn',
-        Step.River: 'river'
-    }
-
-    ToResult: Dict[Result, str] = {
-        Result.DoNotPlay: 'do not play',
-        Result.Fold: 'fold',
-        Result.Call: 'call',
-        Result.Check: 'check',
-        Result.Raise: 'raise',
-        Result.Allin: 'all in',
-        Result.InAllin: 'in all in',
-        Result.Ante: 'ante',
-        Result.SmallBlind: 'sb',
-        Result.BigBlind: 'bb',
-        Result.WinMoney: 'win',
-        Result.ReturnMoney: 'return'
-    }
-
-    ToDecision: Dict[Decision, str] = {
-        Decision.Fold: 'fold',
-        Decision.Check: 'check',
-        Decision.Bet: 'bet',
-        Decision.Raise: 'raise',
-        Decision.Bet3: '3-bet',
-        Decision.Bet4: '4-bet+',
-        Decision.Allin: 'all in',
-        Decision.CallR: 'call raise',
-        Decision.Call3: 'call 3-bet',
-        Decision.Call4: 'call 4-bet+',
-        Decision.CallA: 'call and go all in',
-        Decision.CheckFold: 'check then fold',
-        Decision.BetFold: 'bet then fold',
-        Decision.CallFold: 'call then fold',
-        Decision.RaiseFold: 'raise then fold',
-        Decision.CheckCall: 'check then call',
-        Decision.CheckRaise: 'check then raise',
-        Decision.CheckAllin: 'check then all in'
-    }
 
     def __init__(self):
 

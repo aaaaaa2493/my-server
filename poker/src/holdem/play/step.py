@@ -1,3 +1,4 @@
+from typing import Dict
 from special.ordered_enum import OrderedEnum
 
 
@@ -22,3 +23,15 @@ class Step(OrderedEnum):
             return Step.River
 
         raise LastGameStep(f'No next step id for {step}')
+
+    @property
+    def str_step(self) -> str:
+        return _to_str[self]
+
+
+_to_str: Dict[Step, str] = {
+    Step.Preflop: 'preflop',
+    Step.Flop: 'flop',
+    Step.Turn: 'turn',
+    Step.River: 'river'
+}
