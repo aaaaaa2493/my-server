@@ -26,11 +26,11 @@ class Card:
 
     @property
     def str_rank(self) -> str:
-        return self.rank.str_rank
+        return str(self.rank)
 
     @property
     def str_suit(self) -> str:
-        return self.suit.str_suit
+        return str(self.suit)
 
     @property
     def r(self) -> str:

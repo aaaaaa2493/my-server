@@ -1,11 +1,13 @@
-from enum import Enum
-from typing import Dict
 from core.cards.card import Card, Rank
+from core.cards.suitability import Suitability
 
 
-class Suitability(Enum):
-    Suited = True
-    Offsuited = False
+class CanNotAddAnotherCard(Exception):
+    pass
+
+
+class NotInitializedCards(Exception):
+    pass
 
 
 class CardsPair:
@@ -27,24 +29,16 @@ class CardsPair:
            'A7s', 'A7o', 'A8s', 'A8o', 'A9s', 'A9o', 'ATs', 'ATo', 'AJs', 'AJo', 'AQs',
            'AQo', 'AKs', 'AKo', 'AAo')
 
-    Suitabilities: str = 'so'
-
-    ToSuitability: Dict[Suitability, str] = {Suitability.Suited: 'suited',
-                                             Suitability.Offsuited: 'offsuited'}
-
-    FromSuitability: Dict[str, Suitability] = {'s': Suitability.Suited,
-                                               'o': Suitability.Offsuited}
-
     @staticmethod
-    def gt_str(this: str, opp: str):
+    def gt_str(this: str, opp: str) -> bool:
 
-        sfv = Rank.get_rank(this[0])
-        ssv = Rank.get_rank(this[1])
-        ssb = CardsPair.FromSuitability[this[2]]
+        sfv: Rank = Rank.get_rank(this[0])
+        ssv: Rank = Rank.get_rank(this[1])
+        ssb: Suitability = Suitability.get_suitability(this[2])
 
-        ofv = Rank.get_rank(opp[0])
-        osv = Rank.get_rank(opp[1])
-        osb = CardsPair.FromSuitability[opp[2]]
+        ofv: Rank = Rank.get_rank(opp[0])
+        osv: Rank = Rank.get_rank(opp[1])
+        osb: Suitability = Suitability.get_suitability(opp[2])
 
         if sfv == ssv:
             if ofv != osv:
@@ -96,6 +90,7 @@ class CardsPair:
     def half_initialized(self) -> bool:
         return self.first is not None and self.second is None
 
+    @property
     def suitability(self) -> Suitability:
 
         if self.first.suit == self.second.suit:
@@ -122,7 +117,7 @@ class CardsPair:
             else:
                 self.second = card
         else:
-            raise OverflowError('Can not set third card to pair of cards')
+            raise CanNotAddAnotherCard('Can not set third card to pair of cards')
 
     def str(self) -> str:
 
@@ -132,14 +127,14 @@ class CardsPair:
             suitability = 's' if self.first.suit == self.second.suit else 'o'
             return first + second + suitability
 
-        raise ValueError('Pair of cards is not initialized')
+        raise NotInitializedCards('Pair of cards is not initialized')
 
     def long_str(self) -> str:
 
         if self.initialized():
-            return f'{self.first.str_rank} and {self.second.str_rank} {self.suitability()}'
+            return f'{self.first.str_rank} and {self.second.str_rank} {self.suitability}'
 
-        raise ValueError('Pair of cards is not initialized')
+        raise NotInitializedCards('Pair of cards is not initialized')
 
     def __gt__(self, opp: 'CardsPair') -> bool:
 
