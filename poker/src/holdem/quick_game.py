@@ -1,6 +1,6 @@
 from threading import Thread
 from holdem.game import Game
-from holdem.blinds import Blinds
+from core.blinds.scheme.schemes import Schemes
 from holdem.network import Network
 from special.debug import Debug
 
@@ -9,9 +9,7 @@ class QuickGame(Game):
 
     def __init__(self, id_: int, name: str):
 
-        super().__init__(9, 9, 1000, Blinds.Scheme.Static)
-
-        self.id = id_
+        super().__init__(id_, 9, 9, 1000, Schemes.Static.value)
 
         # adding 8 bots
         for _ in range(8):

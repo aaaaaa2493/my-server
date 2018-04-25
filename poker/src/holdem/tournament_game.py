@@ -1,19 +1,17 @@
 from threading import Thread
 from time import sleep
 from holdem.game import Game
-from holdem.blinds import Blinds
+from core.blinds.scheme.scheme import Scheme
 from holdem.network import Network
 from special.debug import Debug
 
 
 class TournamentGame(Game):
 
-    def __init__(self, id_: int, name: str, total: int, bots: int, stack: int, seats: int, blinds: Blinds.SchemeType,
+    def __init__(self, id_: int, name: str, total: int, bots: int, stack: int, seats: int, blinds: Scheme,
                  start_blinds: int, password: str):
 
-        super().__init__(total, seats, stack, blinds)
-
-        self.id = id_
+        super().__init__(id_, total, seats, stack, blinds)
 
         self.network = Network({'type': 'gh',
                                 'id': self.id,

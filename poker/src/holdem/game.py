@@ -3,7 +3,10 @@ from random import shuffle, choice
 from time import sleep
 from statistics import mean
 from typing import List
-from holdem.blinds import Blinds
+from core.abstract_game import AbstractGame
+from core.blinds.scheme.scheme import Scheme
+from core.blinds.scheme.schemes import Schemes
+from core.blinds.timed_blinds import TimedBlinds
 from holdem.delay import Delay
 from holdem.table import Table
 from holdem.player import Player
@@ -12,29 +15,25 @@ from holdem.network import Network
 from special.debug import Debug
 
 
-class Game:
+class Game(AbstractGame):
 
-    def __init__(self, players: int = 9, seats: int = 9, start_stack: int = 1000,
-                 blinds: Blinds.SchemeType = Blinds.Scheme.Standard):
+    def __init__(self, id_: int, players: int = 9, seats: int = 9, start_stack: int = 1000,
+                 blinds: Scheme = Schemes.Standard.value):
+
+        super().__init__(id_, TimedBlinds(blinds, self))
 
         if players < 1:
             raise ValueError("Can not be players less than one in new game")
 
-        self.id = None
         self.next_id: int = 0
         self.thread: Thread = None
         self.resitting_thread: Thread = None
-        self.game_started: bool = False
-        self.game_finished: bool = False
-        self.game_broken: bool = False
-        self.online: bool = False
         self.start_stack: int = start_stack
         self.total_players: int = players
         self.total_seats: int = seats
         self.total_tables: int = (players - 1) // seats + 1
         self.players_count: int = 0
         self.players: List[Player] = []
-        self.blinds: Blinds = Blinds(blinds, self)
 
         if self.total_tables == 1:
             self.tables: Table.Tables = [Table(self, 0, seats, self.blinds, True)]

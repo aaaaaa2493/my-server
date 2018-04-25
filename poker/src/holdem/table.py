@@ -5,7 +5,7 @@ from holdem.play.result import Result
 from holdem.play.step import Step
 from core.cards.cards_pair import CardsPair
 from holdem.players import Players
-from holdem.blinds import Blinds
+from core.blinds.blinds import Blinds
 from holdem.board import Board
 from holdem.holdem_poker import HoldemPoker as Poker
 from holdem.network import Network

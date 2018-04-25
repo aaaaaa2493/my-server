@@ -428,7 +428,7 @@ class PokerGame:
             hand.switch_to_step(Step.Preflop)
             events: Iterator[PokerGame.PokerEvent] = iter(hand.curr_events)
 
-            game = Game(self.seats, self.seats, 0)
+            game = Game(0, self.seats, self.seats, 0)
             table = game.final_table
             table.is_final = hand.is_final
 

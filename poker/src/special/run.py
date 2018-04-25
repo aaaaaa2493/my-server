@@ -1,7 +1,7 @@
 from special.settings import Settings, Mode
 from holdem.game_manager import GameManager
 from holdem.play.play_manager import PlayManager
-from holdem.blinds import Blinds
+from core.blinds.scheme.schemes import Schemes
 from parsing.game_parser import GameParser
 from learning.evolution import Evolution
 from learning.neural_network import NeuralNetwork
@@ -24,7 +24,7 @@ class Run:
 
         elif mode == Mode.Evolution:
             PlayManager.standings()
-            Evolution(100000, 9, 999, 10000, Blinds.Scheme.Rapid).run()
+            Evolution(100000, 9, 999, 10000, Schemes.Rapid.value).run()
 
         elif mode == Mode.Testing:
             NeuralNetwork.PokerDecision.Bubble(100, 9).show()
