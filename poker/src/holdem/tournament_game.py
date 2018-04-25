@@ -49,7 +49,7 @@ class TournamentGame(Game):
         if total == bots:
             Thread(target=lambda: self.wait_for_end(), name=f'Game {self.id}: wait for end').start()
             Thread(target=lambda: self.send_players_left(), 
-                               name=f'Game {self.id}: send players left').start()
+                   name=f'Game {self.id}: send players left').start()
 
     def network_process(self):
 

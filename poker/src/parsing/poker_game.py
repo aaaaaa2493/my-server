@@ -455,7 +455,7 @@ class PokerGame:
                     raise ValueError('Two players with same seat')
 
                 if player is not None:
-                    new_player = Player(player.seat, player.name, player.money, True, True)
+                    new_player = Player(0, player.seat, player.name, player.money, True, True)
                     new_player.in_game = True
                     new_player.cards = player.cards
                     players += [new_player]
@@ -517,7 +517,7 @@ class PokerGame:
             if hand.sit_during_game:
 
                 for player in hand.sit_during_game:
-                    converted += [(time, network.add_player(Player(player.seat, player.name,
+                    converted += [(time, network.add_player(Player(0, player.seat, player.name,
                                                                    player.money, True, True), player.seat - 1))]
                     time = time + timedelta(seconds=Delay.AddPlayer)
 

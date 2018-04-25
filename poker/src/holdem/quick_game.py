@@ -1,5 +1,4 @@
 from threading import Thread
-from time import sleep
 from holdem.game import Game
 from holdem.blinds import Blinds
 from holdem.network import Network
