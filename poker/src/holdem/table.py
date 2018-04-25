@@ -3,7 +3,7 @@ from threading import Thread, Lock
 from time import sleep
 from holdem.play.result import Result
 from holdem.play.step import Step
-from holdem.cards_pair import CardsPair
+from core.cards.cards_pair import CardsPair
 from holdem.players import Players
 from holdem.blinds import Blinds
 from holdem.board import Board

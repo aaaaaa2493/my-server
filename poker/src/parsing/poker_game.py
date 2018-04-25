@@ -8,7 +8,7 @@ from shutil import rmtree
 from statistics import mean
 from holdem.play.result import Result
 from holdem.play.step import Step
-from holdem.cards_pair import CardsPair
+from core.cards.cards_pair import CardsPair
 from holdem.board import Board
 from holdem.network import Network
 from holdem.game import Game
