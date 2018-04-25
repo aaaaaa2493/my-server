@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Dict
-from core.card import Card
+from core.card import Card, Rank
 
 
 class Suitability(Enum):
@@ -38,12 +38,12 @@ class CardsPair:
     @staticmethod
     def gt_str(this: str, opp: str):
 
-        sfv = Card.FromRank[this[0]]
-        ssv = Card.FromRank[this[1]]
+        sfv = Rank.get_rank(this[0])
+        ssv = Rank.get_rank(this[1])
         ssb = CardsPair.FromSuitability[this[2]]
 
-        ofv = Card.FromRank[opp[0]]
-        osv = Card.FromRank[opp[1]]
+        ofv = Rank.get_rank(opp[0])
+        osv = Rank.get_rank(opp[1])
         osb = CardsPair.FromSuitability[opp[2]]
 
         if sfv == ssv:

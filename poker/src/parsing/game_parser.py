@@ -4,7 +4,7 @@ from os import listdir, makedirs, remove
 from os.path import exists
 from calendar import month_name
 from parsing.poker_game import PokerGame
-from holdem.play.base_play import Step
+from holdem.play.step import Step
 from holdem.cards_pair import CardsPair
 from special.debug import Debug
 from core.card import Card
