@@ -6,16 +6,17 @@ from json import loads, dumps
 from datetime import datetime, timedelta
 from shutil import rmtree
 from statistics import mean
-from holdem.base_play import Result, Step
-from holdem.cards_pair import CardsPair
+from holdem.play.result import Result
+from holdem.play.step import Step
+from core.cards.cards_pair import CardsPair
 from holdem.board import Board
 from holdem.network import Network
 from holdem.game import Game
 from holdem.player import Player
 from holdem.table import Delay
 from holdem.holdem_poker import HoldemPoker as Poker, Hand
-from core.deck import Deck
-from core.card import Card
+from core.cards.deck import Deck
+from core.cards.card import Card
 
 
 class PokerGame:
@@ -427,7 +428,7 @@ class PokerGame:
             hand.switch_to_step(Step.Preflop)
             events: Iterator[PokerGame.PokerEvent] = iter(hand.curr_events)
 
-            game = Game(self.seats, self.seats, 0)
+            game = Game(0, self.seats, self.seats, 0)
             table = game.final_table
             table.is_final = hand.is_final
 
@@ -455,7 +456,7 @@ class PokerGame:
                     raise ValueError('Two players with same seat')
 
                 if player is not None:
-                    new_player = Player(player.seat, player.name, player.money, True, True)
+                    new_player = Player(0, player.seat, player.name, player.money, True, True)
                     new_player.in_game = True
                     new_player.cards = player.cards
                     players += [new_player]
@@ -517,7 +518,7 @@ class PokerGame:
             if hand.sit_during_game:
 
                 for player in hand.sit_during_game:
-                    converted += [(time, network.add_player(Player(player.seat, player.name,
+                    converted += [(time, network.add_player(Player(0, player.seat, player.name,
                                                                    player.money, True, True), player.seat - 1))]
                     time = time + timedelta(seconds=Delay.AddPlayer)
 

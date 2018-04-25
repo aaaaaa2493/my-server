@@ -3,8 +3,8 @@ from itertools import combinations
 from pokereval.card import Card as _Card
 from pokereval.hand_evaluator import HandEvaluator
 from special.ordered_enum import OrderedEnum
-from core.card import Card, Rank
-from holdem.cards_pair import CardsPair
+from core.cards.card import Card, Rank
+from core.cards.cards_pair import CardsPair
 
 
 class Strength(OrderedEnum):
@@ -105,34 +105,31 @@ class Hand:
             return 'royal flush'
 
         if self.strength == Strength.StraightFlush:
-            return f'straight flush starts with {Card.ToRank[self.kicker1]}'
+            return f'straight flush starts with {self.kicker1}'
 
         if self.strength == Strength.Quad:
-            return f'quad of {Card.ToRank[self.kicker1]}, kicker {Card.ToRank[self.kicker2]}))'
+            return f'quad of {self.kicker1}, kicker {self.kicker2}))'
 
         if self.strength == Strength.FullHouse:
-            return f'full house of {Card.ToRank[self.kicker1]} and {Card.ToRank[self.kicker2]}'
+            return f'full house of {self.kicker1} and {self.kicker2}'
 
         if self.strength == Strength.Flush:
-            return f'flush, kickers: {" ".join(Card.ToRank[i] for i in self.kickers())}'
+            return f'flush, kickers: {" ".join(str(i) for i in self.kickers())}'
 
         if self.strength == Strength.Straight:
-            return f'straight starts with {Card.ToRank[self.kicker1]}'
+            return f'straight starts with {self.kicker1}'
 
         if self.strength == Strength.Set:
-            return f'set of {Card.ToRank[self.kicker1]}, kickers: ' \
-                   f'{Card.ToRank[self.kicker2]} {Card.ToRank[self.kicker3]}'
+            return f'set of {self.kicker1}, kickers: {self.kicker2} {self.kicker3}'
 
         if self.strength == Strength.Pairs:
-            return f'two pairs of {Card.ToRank[self.kicker1]} and {Card.ToRank[self.kicker2]}, ' \
-                   f'kicker {Card.ToRank[self.kicker3]}'
+            return f'two pairs of {self.kicker1} and {self.kicker2}, kicker {self.kicker3}'
 
         if self.strength == Strength.Pair:
-            return f'pair of {Card.ToRank[self.kicker1]}, kickers: {Card.ToRank[self.kicker2]} ' \
-                   f'{Card.ToRank[self.kicker3]} {Card.ToRank[self.kicker4]}'
+            return f'pair of {self.kicker1}, kickers: {self.kicker2} {self.kicker3} {self.kicker4}'
 
         if self.strength == Strength.Nothing:
-            return f'nothing, kickers: {" ".join(Card.ToRank[i] for i in self.kickers())}'
+            return f'nothing, kickers: {" ".join(str(i) for i in self.kickers())}'
 
         raise IndexError(f'Impossible hand with strength id {self.strength}')
 

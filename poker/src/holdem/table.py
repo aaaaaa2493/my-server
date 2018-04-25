@@ -1,17 +1,18 @@
 from typing import List, Tuple
 from threading import Thread, Lock
 from time import sleep
-from holdem.base_play import Result, Step
-from holdem.cards_pair import CardsPair
+from holdem.play.result import Result
+from holdem.play.step import Step
+from core.cards.cards_pair import CardsPair
 from holdem.players import Players
-from holdem.blinds import Blinds
+from core.blinds.blinds import Blinds
 from holdem.board import Board
 from holdem.holdem_poker import HoldemPoker as Poker
 from holdem.network import Network
 from holdem.delay import Delay
 from special.debug import Debug
-from core.card import Card
-from core.deck import Deck
+from core.cards.card import Card
+from core.cards.deck import Deck
 from core.pot import Pot
 
 

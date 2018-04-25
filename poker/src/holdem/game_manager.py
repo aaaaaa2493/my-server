@@ -3,7 +3,7 @@ from typing import Dict
 from special.debug import Debug
 from holdem.game import Game
 from holdem.network import Network
-from holdem.blinds import Blinds
+from core.blinds.scheme.schemes import Schemes
 from holdem.tournament_game import TournamentGame
 from holdem.quick_game import QuickGame
 
@@ -41,16 +41,16 @@ class GameManager:
             return
 
         if blinds_speed == 'standard':
-            scheme = Blinds.Scheme.Standard
+            scheme = Schemes.Standard.value
 
         elif blinds_speed == 'fast':
-            scheme = Blinds.Scheme.Fast
+            scheme = Schemes.Fast.value
 
         elif blinds_speed == 'rapid':
-            scheme = Blinds.Scheme.Rapid
+            scheme = Schemes.Rapid.value
 
         elif blinds_speed == 'bullet':
-            scheme = Blinds.Scheme.Bullet
+            scheme = Schemes.Bullet.value
 
         else:
             return

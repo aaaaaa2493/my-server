@@ -1,11 +1,12 @@
 from typing import Optional, List, Tuple
 from json import loads, dumps
 from websocket import create_connection
-from holdem.base_play import Result, Step
+from holdem.play.result import Result
+from holdem.play.step import Step
 from holdem.board import Board
 from holdem.holdem_poker import Hand
 from special.debug import Debug
-from core.card import Card
+from core.cards.card import Card
 
 
 class Network:

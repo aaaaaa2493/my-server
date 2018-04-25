@@ -3,7 +3,7 @@ from os import listdir, mkdir, remove
 from os.path import exists
 from pickle import load, dump
 from random import randint
-from holdem.play import Play
+from holdem.play.play import Play
 from holdem.name_manager import NameManager
 from special.debug import Debug
 from special.settings import Settings, Mode
