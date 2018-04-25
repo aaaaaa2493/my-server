@@ -74,20 +74,24 @@ class Card:
         self.rank: Rank = Card.FromRank[card[0]]
         self.suit: Suit = Card.FromSuit[card[1]]
 
-    def get_rank(self) -> str:
+    @property
+    def str_rank(self) -> str:
         return Rank.ToStr[self.rank]
 
-    def get_suit(self) -> str:
+    @property
+    def str_suit(self) -> str:
         return Suit.ToStr[self.suit]
 
+    @property
     def r(self) -> str:
         return self.card[0]
 
+    @property
     def s(self) -> str:
         return self.card[1]
 
     def __str__(self) -> str:
-        return f'{self.get_rank()} of {self.get_suit()}'
+        return f'{self.str_rank} of {self.str_suit}'
 
     def __lt__(self, other: 'Card') -> bool:
         return (self.rank, self.suit) < (other.rank, other.suit)

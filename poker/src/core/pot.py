@@ -5,3 +5,6 @@ class Pot:
 
     def __str__(self):
         return str(self.money)
+
+    def __bool__(self):
+        return self.money

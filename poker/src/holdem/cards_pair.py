@@ -127,8 +127,8 @@ class CardsPair:
     def str(self) -> str:
 
         if self.initialized():
-            first = self.first.r()
-            second = self.second.r()
+            first = self.first.r
+            second = self.second.r
             suitability = 's' if self.first.suit == self.second.suit else 'o'
             return first + second + suitability
 
@@ -137,7 +137,7 @@ class CardsPair:
     def long_str(self) -> str:
 
         if self.initialized():
-            return f'{self.first.get_rank()} and {self.second.get_rank()} {self.suitability()}'
+            return f'{self.first.str_rank} and {self.second.str_rank} {self.suitability()}'
 
         raise ValueError('Pair of cards is not initialized')
 

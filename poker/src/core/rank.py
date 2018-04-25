@@ -1,5 +1,6 @@
 from special.ordered_enum import OrderedEnum
 
+
 class Rank(OrderedEnum):
     Ace = 14
     King = 13
