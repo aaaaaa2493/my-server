@@ -3,7 +3,7 @@ from itertools import combinations
 from pokereval.card import Card as _Card
 from pokereval.hand_evaluator import HandEvaluator
 from special.ordered_enum import OrderedEnum
-from core.card import Card, Rank
+from core.cards.card import Card, Rank
 from holdem.cards_pair import CardsPair
 
 

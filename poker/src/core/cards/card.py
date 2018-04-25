@@ -1,6 +1,6 @@
 from typing import List
-from core.rank import Rank, Ranks
-from core.suit import Suit, Suits
+from core.cards.rank import Rank, Ranks
+from core.cards.suit import Suit, Suits
 
 
 class Card:

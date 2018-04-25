@@ -1,6 +1,6 @@
 from enum import Enum
 from typing import Dict
-from core.card import Card, Rank
+from core.cards.card import Card, Rank
 
 
 class Suitability(Enum):

@@ -1,5 +1,5 @@
 from time import sleep
-from core.deck import Card, Deck
+from core.cards.deck import Card, Deck
 from holdem.play.step import Step
 from holdem.delay import Delay
 

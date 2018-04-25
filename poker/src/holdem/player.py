@@ -11,7 +11,7 @@ from holdem.cards_pair import CardsPair
 from holdem.play.play_manager import Play, PlayManager
 from holdem.play.base_play import BasePlay
 from holdem.network import Network
-from core.card import Card
+from core.cards.card import Card
 
 
 class Player:

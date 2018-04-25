@@ -7,7 +7,7 @@ from parsing.poker_game import PokerGame
 from holdem.play.step import Step
 from holdem.cards_pair import CardsPair
 from special.debug import Debug
-from core.card import Card
+from core.cards.card import Card
 
 
 class GameParser:

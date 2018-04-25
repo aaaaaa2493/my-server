@@ -15,8 +15,8 @@ from holdem.game import Game
 from holdem.player import Player
 from holdem.table import Delay
 from holdem.holdem_poker import HoldemPoker as Poker, Hand
-from core.deck import Deck
-from core.card import Card
+from core.cards.deck import Deck
+from core.cards.card import Card
 
 
 class PokerGame:

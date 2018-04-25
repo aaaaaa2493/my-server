@@ -11,8 +11,8 @@ from holdem.holdem_poker import HoldemPoker as Poker
 from holdem.network import Network
 from holdem.delay import Delay
 from special.debug import Debug
-from core.card import Card
-from core.deck import Deck
+from core.cards.card import Card
+from core.cards.deck import Deck
 from core.pot import Pot
 
 
