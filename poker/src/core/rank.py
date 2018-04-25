@@ -1,3 +1,4 @@
+from typing import Dict
 from special.ordered_enum import OrderedEnum
 
 
@@ -16,3 +17,46 @@ class Rank(OrderedEnum):
     Three = 3
     Two = 2
     Invalid = 1
+
+    @property
+    def str_rank(self) -> str:
+        return _to_str[self]
+
+    @classmethod
+    def get_rank(cls, rank: str) -> 'Rank':
+        return _from_str[rank]
+
+
+_to_str: Dict[Rank, str] = {
+    Rank.Two: 'two',
+    Rank.Three: 'three',
+    Rank.Four: 'four',
+    Rank.Five: 'five',
+    Rank.Six: 'six',
+    Rank.Seven: 'seven',
+    Rank.Eight: 'eight',
+    Rank.Nine: 'nine',
+    Rank.Ten: 'ten',
+    Rank.Jack: 'jack',
+    Rank.Queen: 'queen',
+    Rank.King: 'king',
+    Rank.Ace: 'ace'
+}
+
+_from_str: Dict[str, Rank] = {
+    '2': Rank.Two,
+    '3': Rank.Three,
+    '4': Rank.Four,
+    '5': Rank.Five,
+    '6': Rank.Six,
+    '7': Rank.Seven,
+    '8': Rank.Eight,
+    '9': Rank.Nine,
+    'T': Rank.Ten,
+    'J': Rank.Jack,
+    'Q': Rank.Queen,
+    'K': Rank.King,
+    'A': Rank.Ace
+}
+
+Ranks: str = '23456789TJQKA'
