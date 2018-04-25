@@ -1,5 +1,5 @@
 from special.settings import Settings, Mode
-from holdem.game_manager import GameManager
+from holdem.game.game_manager import GameManager
 from holdem.play.play_manager import PlayManager
 from core.blinds.scheme.schemes import Schemes
 from parsing.game_parser import GameParser

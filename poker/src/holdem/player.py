@@ -6,9 +6,9 @@ from special.debug import Debug
 from holdem.play.decision import Decision
 from holdem.play.step import Step
 from holdem.play.result import Result
-from holdem.strength import Strength
-from holdem.holdem_poker import HoldemPoker
-from holdem.hand import Hand
+from holdem.poker.strength import Strength
+from holdem.poker.holdem_poker import HoldemPoker
+from holdem.poker.hand import Hand
 from core.cards.cards_pair import CardsPair
 from holdem.play.play_manager import Play, PlayManager
 from holdem.play.base_play import BasePlay

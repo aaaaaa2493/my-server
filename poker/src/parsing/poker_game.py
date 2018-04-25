@@ -14,8 +14,8 @@ from holdem.network import Network
 from holdem.game import Game
 from holdem.player import Player
 from holdem.table import Delay
-from holdem.strength import Strength
-from holdem.hand import Hand
+from holdem.poker.strength import Strength
+from holdem.poker.hand import Hand
 from core.cards.deck import Deck
 from core.cards.card import Card
 

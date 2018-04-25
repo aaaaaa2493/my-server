@@ -1,7 +1,7 @@
 from typing import Tuple
 from pokereval.card import Card as _Card
 from pokereval.hand_evaluator import HandEvaluator
-from holdem.strength import Strength
+from holdem.poker.strength import Strength
 from core.cards.card import Card
 from core.cards.cards_pair import CardsPair
 

@@ -1,6 +1,6 @@
 from typing import Iterator
 from core.cards.card import Card, Rank
-from holdem.strength import Strength
+from holdem.poker.strength import Strength
 
 
 class BadStrength(Exception):

@@ -7,7 +7,7 @@ from core.cards.cards_pair import CardsPair
 from holdem.players import Players
 from core.blinds.blinds import Blinds
 from holdem.board import Board
-from holdem.strength import Strength
+from holdem.poker.strength import Strength
 from holdem.network import Network
 from holdem.delay import Delay
 from special.debug import Debug

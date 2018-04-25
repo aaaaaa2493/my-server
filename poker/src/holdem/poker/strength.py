@@ -2,7 +2,7 @@ from typing import Dict
 from itertools import combinations
 from special.ordered_enum import OrderedEnum
 from core.cards.card import Card, Rank
-from holdem.hand import Hand
+from holdem.poker.hand import Hand
 
 
 class Strength(OrderedEnum):
