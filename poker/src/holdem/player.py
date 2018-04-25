@@ -6,7 +6,9 @@ from special.debug import Debug
 from holdem.play.decision import Decision
 from holdem.play.step import Step
 from holdem.play.result import Result
-from holdem.holdem_poker import HoldemPoker as Poker, Hand
+from holdem.strength import Strength
+from holdem.holdem_poker import HoldemPoker
+from holdem.hand import Hand
 from core.cards.cards_pair import CardsPair
 from holdem.play.play_manager import Play, PlayManager
 from holdem.play.base_play import BasePlay
@@ -417,7 +419,7 @@ class Player:
 
             return Result.Raise
 
-        probability = Poker.probability(self.cards, cards)
+        probability = HoldemPoker.probability(self.cards, cards)
 
         if probability < curr_play.min_probability_to_play:
 
@@ -688,10 +690,10 @@ class Player:
         Debug.input_decision(f'you have {self.get_cards()}')
         if step != Step.Preflop:
             Debug.input_decision(f'on table {Card.str(cards)}')
-            Debug.input_decision(f'your combination: {Poker.max_strength(self.cards.get() + cards)}')
-        Debug.input_decision(f'probability to win: {Poker.probability(self.cards, cards)}')
+            Debug.input_decision(f'your combination: {Strength.max_strength(self.cards.get() + cards)}')
+        Debug.input_decision(f'probability to win: {HoldemPoker.probability(self.cards, cards)}')
 
-        outs, outs_cards = Poker.calculate_outs(self.cards, cards)
+        outs, outs_cards = HoldemPoker.calculate_outs(self.cards, cards)
 
         Debug.input_decision(f'outs: {outs} - {" ".join([card.card for card in outs_cards])}')
         Debug.input_decision()

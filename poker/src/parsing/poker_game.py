@@ -14,7 +14,8 @@ from holdem.network import Network
 from holdem.game import Game
 from holdem.player import Player
 from holdem.table import Delay
-from holdem.holdem_poker import HoldemPoker as Poker, Hand
+from holdem.strength import Strength
+from holdem.hand import Hand
 from core.cards.deck import Deck
 from core.cards.card import Card
 
@@ -697,17 +698,17 @@ class PokerGame:
                 if player.cards is not None:
                     if hand.board.state == Step.Preflop:
                         if not player.cards.initialized():
-                            curr_hand = Poker.strength1(player.cards.first)
+                            curr_hand = Strength.strength1(player.cards.first)
                         else:
-                            curr_hand = Poker.strength2(player.cards.first, player.cards.second)
+                            curr_hand = Strength.strength2(player.cards.first, player.cards.second)
 
                     elif hand.board.state == Step.Flop:
                         if not player.cards.initialized():
-                            curr_hand = Poker.strength4(player.cards.first, hand.board.flop1,
-                                                        hand.board.flop2, hand.board.flop3)
+                            curr_hand = Strength.strength4(player.cards.first, hand.board.flop1,
+                                                           hand.board.flop2, hand.board.flop3)
                         else:
-                            curr_hand = Poker.strength(player.cards.first, player.cards.second,
-                                                       hand.board.flop1, hand.board.flop2, hand.board.flop3)
+                            curr_hand = Strength.strength(player.cards.first, player.cards.second,
+                                                          hand.board.flop1, hand.board.flop2, hand.board.flop3)
 
                     else:
                         cards = hand.board.get()
@@ -717,7 +718,7 @@ class PokerGame:
                         else:
                             cards += [player.cards.first, player.cards.second]
 
-                        curr_hand = Poker.max_strength(cards)
+                        curr_hand = Strength.max_strength(cards)
 
                     results += [(curr_hand, find[player.seat], '')]
 
