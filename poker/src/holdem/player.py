@@ -6,7 +6,9 @@ from special.debug import Debug
 from holdem.play.decision import Decision
 from holdem.play.step import Step
 from holdem.play.result import Result
-from holdem.holdem_poker import HoldemPoker as Poker, Hand
+from holdem.poker.strength import Strength
+from holdem.poker.holdem_poker import HoldemPoker
+from holdem.poker.hand import Hand
 from core.cards.cards_pair import CardsPair
 from holdem.play.play_manager import Play, PlayManager
 from holdem.play.base_play import BasePlay
@@ -33,135 +35,6 @@ class Player:
             self.flop: Decision = None
             self.turn: Decision = None
             self.river: Decision = None
-
-        @staticmethod
-        def decide(curr: Decision, decision: Decision) -> Decision:
-
-            if curr is None:
-                if decision == Decision.Fold:
-                    return Decision.CheckFold
-
-                return decision
-
-            else:
-
-                if decision == Decision.Fold and curr == Decision.Check:
-                    return Decision.CheckFold
-
-                elif decision == Decision.Fold and (curr == Decision.CheckCall or
-                                                    curr == Decision.CallR or
-                                                    curr == Decision.Call3 or
-                                                    curr == Decision.Call4):
-                    return Decision.CallFold
-
-                elif decision == Decision.Fold and curr == Decision.Bet:
-                    return Decision.BetFold
-
-                elif decision == Decision.Fold and (curr == Decision.Raise or
-                                                    curr == Decision.Bet3 or
-                                                    curr == Decision.Bet4 or
-                                                    curr == Decision.CheckRaise):
-                    return Decision.RaiseFold
-
-                elif curr == Decision.Check and (decision == Decision.CheckCall or
-                                                 decision == Decision.CallR or
-                                                 decision == Decision.Call3 or
-                                                 decision == Decision.Call4 or
-                                                 decision == Decision.CallA):
-                    return decision
-
-                elif curr == Decision.Check and (decision == Decision.Raise or
-                                                 decision == Decision.Bet3 or
-                                                 decision == Decision.Bet4):
-                    return Decision.CheckRaise
-
-                elif curr == Decision.Check and decision == Decision.Allin:
-                    return Decision.CheckAllin
-
-                elif curr == Decision.Bet and (decision == Decision.Bet3 or
-                                               decision == Decision.Bet4 or
-                                               decision == Decision.Allin or
-                                               decision == Decision.CallR or
-                                               decision == Decision.Call3 or
-                                               decision == Decision.Call4 or
-                                               decision == Decision.CallA):
-                    return decision
-
-                elif curr == Decision.CheckRaise and (decision == Decision.Bet4 or
-                                                      decision == Decision.Call3 or
-                                                      decision == Decision.Call4):
-                    return Decision.CheckRaise
-
-                elif curr == Decision.CheckRaise and (decision == Decision.Allin or
-                                                      decision == Decision.CallA):
-                    return Decision.CheckAllin
-
-                elif curr == Decision.Raise and (decision == Decision.Bet4 or
-                                                 decision == Decision.Allin or
-                                                 decision == Decision.Call3 or
-                                                 decision == Decision.Call4 or
-                                                 decision == Decision.CallA):
-                    return decision
-
-                elif curr == Decision.Bet3 and (decision == Decision.Bet4 or
-                                                decision == Decision.Allin or
-                                                decision == Decision.Call4 or
-                                                decision == Decision.CallA):
-                    return decision
-
-                elif curr == Decision.Bet4 and (decision == Decision.Bet4 or
-                                                decision == Decision.Allin or
-                                                decision == Decision.Call4 or
-                                                decision == Decision.CallA):
-                    return decision
-
-                elif curr == Decision.CheckCall and (decision == Decision.CallR or
-                                                     decision == Decision.Call3 or
-                                                     decision == Decision.Call4):
-                    return decision
-
-                elif curr == Decision.CheckCall and (decision == Decision.Bet3 or
-                                                     decision == Decision.Bet4):
-                    return Decision.CheckRaise
-
-                elif curr == Decision.CheckCall and (decision == Decision.Allin or
-                                                     decision == Decision.CallA):
-                    return Decision.CheckAllin
-
-                elif curr == Decision.CallR and (decision == Decision.Call3 or
-                                                 decision == Decision.Call4):
-                    return decision
-
-                elif curr == Decision.CallR and decision == Decision.Bet4:
-                    return Decision.CheckRaise
-
-                elif curr == Decision.CallR and (decision == Decision.Allin or
-                                                 decision == Decision.CallA):
-                    return Decision.CheckAllin
-
-                elif curr == Decision.Call3 and (decision == Decision.Call4 or
-                                                 decision == Decision.Check):
-                    return decision
-
-                elif curr == Decision.Call3 and decision == Decision.Bet4:
-                    return Decision.CheckRaise
-
-                elif curr == Decision.Call3 and (decision == Decision.Allin or
-                                                 decision == Decision.CallA):
-                    return Decision.CheckAllin
-
-                elif curr == Decision.Call4 and decision == Decision.Call4:
-                    return decision
-
-                elif curr == Decision.Call4 and decision == Decision.Bet4:
-                    return Decision.CheckRaise
-
-                elif curr == Decision.Call4 and (decision == Decision.Allin or
-                                                 decision == Decision.CallA):
-                    return Decision.CheckAllin
-
-                else:
-                    raise ValueError(f'Undefined behavior curr = {curr} decision = {decision}')
 
         def set(self, step: Step, result: Result,
                 raise_counter: int, all_in: bool) -> None:
@@ -214,16 +87,16 @@ class Player:
                 raise ValueError(f'Wrong result id {result}')
 
             if step == Step.Preflop:
-                self.preflop = self.decide(self.preflop, decision)
+                self.preflop: Decision = Decision.update(self.preflop, decision)
 
             elif step == Step.Flop:
-                self.flop = self.decide(self.flop, decision)
+                self.flop: Decision = Decision.update(self.flop, decision)
 
             elif step == Step.Turn:
-                self.turn = self.decide(self.turn, decision)
+                self.turn: Decision = Decision.update(self.turn, decision)
 
             elif step == Step.River:
-                self.river = self.decide(self.river, decision)
+                self.river: Decision = Decision.update(self.river, decision)
 
             else:
                 raise ValueError(f'Undefined step id {step}')
@@ -417,7 +290,7 @@ class Player:
 
             return Result.Raise
 
-        probability = Poker.probability(self.cards, cards)
+        probability = HoldemPoker.probability(self.cards, cards)
 
         if probability < curr_play.min_probability_to_play:
 
@@ -688,10 +561,10 @@ class Player:
         Debug.input_decision(f'you have {self.get_cards()}')
         if step != Step.Preflop:
             Debug.input_decision(f'on table {Card.str(cards)}')
-            Debug.input_decision(f'your combination: {Poker.max_strength(self.cards.get() + cards)}')
-        Debug.input_decision(f'probability to win: {Poker.probability(self.cards, cards)}')
+            Debug.input_decision(f'your combination: {Strength.max_strength(self.cards.get() + cards)}')
+        Debug.input_decision(f'probability to win: {HoldemPoker.probability(self.cards, cards)}')
 
-        outs, outs_cards = Poker.calculate_outs(self.cards, cards)
+        outs, outs_cards = HoldemPoker.calculate_outs(self.cards, cards)
 
         Debug.input_decision(f'outs: {outs} - {" ".join([card.card for card in outs_cards])}')
         Debug.input_decision()

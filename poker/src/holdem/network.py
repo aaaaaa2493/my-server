@@ -4,7 +4,7 @@ from websocket import create_connection
 from holdem.play.result import Result
 from holdem.play.step import Step
 from holdem.board import Board
-from holdem.holdem_poker import Hand
+from holdem.poker.hand import Hand
 from special.debug import Debug
 from core.cards.card import Card
 

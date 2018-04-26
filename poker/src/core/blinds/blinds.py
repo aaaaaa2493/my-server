@@ -4,9 +4,9 @@ from core.blinds.scheme.scheme import Scheme, Order, Hands, Time
 class Blinds:
 
     def __init__(self, scheme: Scheme):
-        self.order: Order = scheme.order
-        self.hands: Hands = scheme.hands
-        self.time: Time = scheme.time
+        self.order: Order = scheme.order.value
+        self.hands: Hands = scheme.hands.value
+        self.time: Time = scheme.time.value
 
         self.curr_round: int = -1
         self.to_next_round: int = 1

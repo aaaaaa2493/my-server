@@ -1,5 +1,5 @@
 from threading import Thread
-from holdem.game import Game
+from holdem.game.game import Game
 from core.blinds.scheme.schemes import Schemes
 from holdem.network import Network
 from special.debug import Debug

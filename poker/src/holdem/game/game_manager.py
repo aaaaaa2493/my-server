@@ -1,11 +1,11 @@
 from threading import Thread
 from typing import Dict
 from special.debug import Debug
-from holdem.game import Game
+from holdem.game.game import Game
 from holdem.network import Network
 from core.blinds.scheme.schemes import Schemes
-from holdem.tournament_game import TournamentGame
-from holdem.quick_game import QuickGame
+from holdem.game.tournament_game import TournamentGame
+from holdem.game.quick_game import QuickGame
 
 
 class GameManager:
