@@ -11,7 +11,7 @@ from holdem.play.step import Step
 from core.cards.cards_pair import CardsPair
 from holdem.board import Board
 from holdem.network import Network
-from holdem.game import Game
+from holdem.game.game import Game
 from holdem.player import Player
 from holdem.table import Delay
 from holdem.poker.strength import Strength

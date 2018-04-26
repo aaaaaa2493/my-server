@@ -1,7 +1,7 @@
 from time import sleep
 from core.blinds.scheme.scheme import Scheme
 from holdem.play.play import Play
-from holdem.game import Game
+from holdem.game.game import Game
 from holdem.play.play_manager import PlayManager
 from special.debug import Debug
 

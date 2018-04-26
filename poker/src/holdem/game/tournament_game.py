@@ -1,6 +1,6 @@
 from threading import Thread
 from time import sleep
-from holdem.game import Game
+from holdem.game.game import Game
 from core.blinds.scheme.scheme import Scheme
 from holdem.network import Network
 from special.debug import Debug
