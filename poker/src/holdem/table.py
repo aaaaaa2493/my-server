@@ -7,7 +7,7 @@ from core.cards.cards_pair import CardsPair
 from holdem.players import Players
 from core.blinds.blinds import Blinds
 from holdem.board import Board
-from holdem.poker.strength import Strength
+from holdem.poker.hand_strength import HandStrength
 from holdem.network import Network
 from holdem.delay import Delay
 from special.debug import Debug
@@ -550,7 +550,7 @@ class Table:
 
             for player in self.players.in_game_players():
 
-                player.hand = Strength.max_strength(player.cards.get() + self.board.get())
+                player.hand = HandStrength.max_strength(player.cards.get() + self.board.get())
 
                 hand_results += [(player.hand, player, str(player.hand))]
 

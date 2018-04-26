@@ -1,7 +1,7 @@
 from typing import Tuple
 from pokereval.card import Card as _Card
 from pokereval.hand_evaluator import HandEvaluator
-from holdem.poker.strength import Strength
+from holdem.poker.hand_strength import HandStrength
 from core.cards.card import Card
 from core.cards.cards_pair import CardsPair
 
@@ -22,7 +22,7 @@ class HoldemPoker:
 
         cards: Card.Cards = [hidden.first, hidden.second] + common
 
-        curr_hand_strength = Strength.max_strength(cards).strength
+        curr_hand_strength = HandStrength.max_strength(cards).strength
 
         outs: int = 0
         outs_cards = []
@@ -31,13 +31,13 @@ class HoldemPoker:
 
             if card not in cards:
 
-                new_hand_strength = Strength.max_strength(cards + [card]).strength
+                new_hand_strength = HandStrength.max_strength(cards + [card]).strength
 
                 if len(common) == 4:
-                    new_board_strength = Strength.strength(*common, card).strength
+                    new_board_strength = HandStrength.strength(*common, card).strength
 
                 else:
-                    new_board_strength = Strength.strength4(*common, card).strength
+                    new_board_strength = HandStrength.strength4(*common, card).strength
 
                 if new_board_strength < new_hand_strength > curr_hand_strength:
                     outs += 1

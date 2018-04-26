@@ -87,16 +87,16 @@ class Player:
                 raise ValueError(f'Wrong result id {result}')
 
             if step == Step.Preflop:
-                self.preflop: Decision = self.preflop.update(decision)
+                self.preflop: Decision = Decision.update(self.preflop, decision)
 
             elif step == Step.Flop:
-                self.flop: Decision = self.flop.update(decision)
+                self.flop: Decision = Decision.update(self.flop, decision)
 
             elif step == Step.Turn:
-                self.turn: Decision = self.turn.update(decision)
+                self.turn: Decision = Decision.update(self.turn, decision)
 
             elif step == Step.River:
-                self.river: Decision = self.river.update(decision)
+                self.river: Decision = Decision.update(self.river, decision)
 
             else:
                 raise ValueError(f'Undefined step id {step}')

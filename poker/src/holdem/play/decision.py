@@ -29,9 +29,8 @@ class Decision(Enum):
     def __str__(self) -> str:
         return _to_str[self]
 
-    def update(self, decision: 'Decision') -> 'Decision':
-
-        curr: 'Decision' = self
+    @staticmethod
+    def update(curr: 'Decision', decision: 'Decision') -> 'Decision':
 
         if curr is None:
             if decision == Decision.Fold:

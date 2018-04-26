@@ -140,4 +140,4 @@ class HandStrength:
 
     @staticmethod
     def max_strength(cards: Card.Cards) -> Hand:
-        return max(Strength.strength(*c) for c in combinations(cards, 5))
+        return max(HandStrength.strength(*c) for c in combinations(cards, 5))
