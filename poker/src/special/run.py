@@ -2,7 +2,7 @@ from special.settings import Settings, Mode
 from holdem.game.game_manager import GameManager
 from holdem.play.play_manager import PlayManager
 from core.blinds.scheme.schemes import Schemes
-from parsing.game_parser import GameParser
+from data.game_parser import GameParser
 from learning.evolution import Evolution
 from learning.neural_network import NeuralNetwork
 
