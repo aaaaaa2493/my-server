@@ -5,6 +5,11 @@ from core.blinds.scheme.schemes import Schemes
 from data.game_parser import GameParser
 from learning.evolution import Evolution
 from learning.neural_network import NeuralNetwork
+from unit_tests.testing import UnitTesting
+
+
+class BadMode(Exception):
+    pass
 
 
 class Run:
@@ -28,3 +33,9 @@ class Run:
 
         elif mode == Mode.Testing:
             NeuralNetwork.PokerDecision.Bubble(100, 9).show()
+
+        elif mode == Mode.UnitTest:
+            UnitTesting.test_all()
+
+        else:
+            raise BadMode('Bad mode')

@@ -6,3 +6,4 @@ class Mode(Enum):
     Parse = 1
     GameEngine = 2
     Testing = 3
+    UnitTest = 4
