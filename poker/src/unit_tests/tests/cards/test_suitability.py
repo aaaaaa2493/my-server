@@ -9,3 +9,7 @@ class SuitabilityTest(TestCase):
     def test_get_suitability(self):
         self.assertEqual(Suitability.get_suitability('s'), Suitability.Suited)
         self.assertEqual(Suitability.get_suitability('o'), Suitability.Offsuited)
+
+    def test_to_str(self):
+        self.assertEqual(str(Suitability.Suited), 'suited')
+        self.assertEqual(str(Suitability.Offsuited), 'offsuited')
