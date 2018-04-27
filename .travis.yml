@@ -1,0 +1,6 @@
+language: python
+python:
+  - "3.6"
+script:
+  - cd poker
+  - python src/unit_tests/testing.py
