@@ -3,6 +3,7 @@ python:
   - "3.6"
 install:
   - pip install pokereval
+  - python poker/lib/setup.py
 script:
   - cd poker
   - python src/main.py --unit-tests
