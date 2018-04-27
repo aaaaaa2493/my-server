@@ -1,6 +1,8 @@
 language: python
 python:
   - "3.6"
+install:
+  - pip install pokereval
 script:
   - cd poker
   - python src/main.py --unit-tests
