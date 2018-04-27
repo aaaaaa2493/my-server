@@ -43,6 +43,9 @@ class Card:
     def __str__(self) -> str:
         return f'{self.str_rank} of {self.str_suit}'
 
+    def __hash__(self) -> int:
+        return hash((self.rank, self.suit))
+
     def __lt__(self, other: 'Card') -> bool:
         return (self.rank, self.suit) < (other.rank, other.suit)
 
