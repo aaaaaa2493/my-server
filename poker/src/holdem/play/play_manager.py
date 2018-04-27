@@ -3,6 +3,7 @@ from os import listdir, mkdir, remove
 from os.path import exists
 from pickle import load, dump
 from random import randint
+from shutil import rmtree
 from holdem.play.play import Play
 from holdem.name_manager import NameManager
 from special.debug import Debug
@@ -15,7 +16,9 @@ class PlayManager:
 
     _initialized = False
     _bank_of_plays: Plays = None
-    _zero_gen_count: int = 10000
+
+    GenCount: int = 10000
+    PlayPath = 'play'
 
     @staticmethod
     def init():
@@ -24,18 +27,18 @@ class PlayManager:
 
         PlayManager._bank_of_plays = []
 
-        if not exists('play'):
-            mkdir('play')
+        if not exists(f'{PlayManager.PlayPath}'):
+            mkdir(f'{PlayManager.PlayPath}')
 
-        if not Settings.game_mode == Mode.Evolution and 'all' in listdir('play'):
+        if not Settings.game_mode == Mode.Evolution and 'all' in listdir(f'{PlayManager.PlayPath}'):
             PlayManager._initialized = True
-            PlayManager._bank_of_plays = load(open('play/all', 'rb'))
+            PlayManager._bank_of_plays = load(open(f'{PlayManager.PlayPath}/all', 'rb'))
             for play in PlayManager._bank_of_plays:
                 play.busy = False
             Debug.play_manager('End initialization (short way)')
             return
 
-        generations = listdir('play')
+        generations = listdir(f'{PlayManager.PlayPath}')
 
         for gen_path in generations:
 
@@ -43,11 +46,11 @@ class PlayManager:
                 continue
 
             Debug.play_manager(f'Initialize generation {gen_path}')
-            exemplars = listdir(f'play/{gen_path}')
+            exemplars = listdir(f'{PlayManager.PlayPath}/{gen_path}')
 
             for ex_path in exemplars:
                 Debug.play_manager(f'Initialize exemplar {gen_path} {ex_path}')
-                play: Play = load(open(f'play/{gen_path}/{ex_path}', 'rb'))
+                play: Play = load(open(f'{PlayManager.PlayPath}/{gen_path}/{ex_path}', 'rb'))
 
                 if play.generation != int(gen_path):
                     raise ValueError(f'Generation path {gen_path} does not work')
@@ -60,7 +63,7 @@ class PlayManager:
 
         PlayManager._initialized = True
 
-        dump(PlayManager._bank_of_plays, open('play/all', 'wb'))
+        dump(PlayManager._bank_of_plays, open(f'{PlayManager.PlayPath}/all', 'wb'))
 
         PlayManager.fill_zero_gens()
 
@@ -90,7 +93,7 @@ class PlayManager:
                         play.total_plays > 800 and play.average_places > 0.12 and play.value() < 10):
 
                     indexes_to_delete += [index]
-                    remove(f'play/{play.generation}/{play.exemplar}')
+                    remove(f'{PlayManager.PlayPath}/{play.generation}/{play.exemplar}')
 
                     Debug.play_manager(f'Delete bad play gen {play.generation} '
                                        f'ex {play.exemplar} after {play.total_plays} games '
@@ -111,10 +114,10 @@ class PlayManager:
 
         if Settings.game_mode == Mode.Evolution:
 
-            if not exists(f'play/{play.generation}'):
-                mkdir(f'play/{play.generation}')
+            if not exists(f'{PlayManager.PlayPath}/{play.generation}'):
+                mkdir(f'{PlayManager.PlayPath}/{play.generation}')
 
-            dump(play, open(f'play/{play.generation}/{play.exemplar}', 'wb'))
+            dump(play, open(f'{PlayManager.PlayPath}/{play.generation}/{play.exemplar}', 'wb'))
 
     @staticmethod
     def fill_zero_gens():
@@ -128,7 +131,7 @@ class PlayManager:
             zero_count = len(zero_plays)
             max_exemplar = max(zero_plays) if zero_count > 0 else 0
 
-            to_fill = PlayManager._zero_gen_count - zero_count
+            to_fill = PlayManager.GenCount - zero_count
             starts_with = max_exemplar + 1
 
             for curr_ex in range(starts_with, starts_with + to_fill):
@@ -181,3 +184,7 @@ class PlayManager:
                                              if len(play.plays_history) > 10 and play.value() > 1],
                                             key=lambda p: p.value(), reverse=True)[:count]):
             Debug.evolution(f'{place + 1:<2}) {play}')
+
+    @staticmethod
+    def remove_folder():
+        rmtree(PlayManager.PlayPath)

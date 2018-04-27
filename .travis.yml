@@ -1,6 +1,9 @@
 language: python
 python:
   - "3.6"
+install:
+  - pip install websocket-client
 script:
   - cd poker
-  - python src/tests.py
+  - python src/main.py --unit-tests
+  - python src/main.py --evolution-tests

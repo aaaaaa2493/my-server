@@ -1,5 +1,8 @@
 from typing import List
 from random import randint
+from os.path import exists
+from os import mkdir
+from shutil import rmtree
 
 
 class NameManager:
@@ -10,14 +13,26 @@ class NameManager:
     BusyNames = []
     _length = 0
     _initialized = False
-    _free_nicks_path = 'nicks/free.txt'
-    _busy_nicks_path = 'nicks/busy.txt'
+    NicksPath = 'nicks'
+    free_nicks_file = 'free.txt'
+    busy_nicks_file = 'busy.txt'
 
     @staticmethod
     def init():
 
-        NameManager.FreeNames = open(NameManager._free_nicks_path).read().split()
-        NameManager.BusyNames = open(NameManager._busy_nicks_path).read().split()
+        if not exists(NameManager.NicksPath):
+            mkdir(NameManager.NicksPath)
+            free = []
+            for i in range(1000):
+                free += [f't{i}']
+            NameManager.FreeNames = free
+            NameManager._length = len(NameManager.FreeNames)
+            NameManager._initialized = True
+            NameManager.save()
+            return
+
+        NameManager.FreeNames = open(NameManager.free_nicks_file).read().split()
+        NameManager.BusyNames = open(NameManager.busy_nicks_file).read().split()
         NameManager._length = len(NameManager.FreeNames)
         NameManager._initialized = True
 
@@ -73,5 +88,12 @@ class NameManager:
         if not NameManager._initialized:
             NameManager.init()
 
-        open(NameManager._free_nicks_path, 'w').write('\n'.join(NameManager.FreeNames))
-        open(NameManager._busy_nicks_path, 'w').write('\n'.join(NameManager.BusyNames))
+        free_nicks_path = f'{NameManager.NicksPath}/{NameManager.free_nicks_file}'
+        busy_nicks_path = f'{NameManager.NicksPath}/{NameManager.busy_nicks_file}'
+
+        open(free_nicks_path, 'w').write('\n'.join(NameManager.FreeNames))
+        open(busy_nicks_path, 'w').write('\n'.join(NameManager.BusyNames))
+
+    @staticmethod
+    def remove_folder():
+        rmtree(NameManager.NicksPath)
