@@ -14,8 +14,8 @@ class NameManager:
     _length = 0
     _initialized = False
     NicksPath = 'nicks'
-    _free_nicks_path = NicksPath + '/free.txt'
-    _busy_nicks_path = NicksPath + '/busy.txt'
+    free_nicks_file = 'free.txt'
+    busy_nicks_file = 'busy.txt'
 
     @staticmethod
     def init():
@@ -31,8 +31,8 @@ class NameManager:
             NameManager.save()
             return
 
-        NameManager.FreeNames = open(NameManager._free_nicks_path).read().split()
-        NameManager.BusyNames = open(NameManager._busy_nicks_path).read().split()
+        NameManager.FreeNames = open(NameManager.free_nicks_file).read().split()
+        NameManager.BusyNames = open(NameManager.busy_nicks_file).read().split()
         NameManager._length = len(NameManager.FreeNames)
         NameManager._initialized = True
 
@@ -88,8 +88,11 @@ class NameManager:
         if not NameManager._initialized:
             NameManager.init()
 
-        open(NameManager._free_nicks_path, 'w').write('\n'.join(NameManager.FreeNames))
-        open(NameManager._busy_nicks_path, 'w').write('\n'.join(NameManager.BusyNames))
+        free_nicks_path = f'{NameManager.NicksPath}/{NameManager.free_nicks_file}'
+        busy_nicks_path = f'{NameManager.NicksPath}/{NameManager.busy_nicks_file}'
+
+        open(free_nicks_path, 'w').write('\n'.join(NameManager.FreeNames))
+        open(busy_nicks_path, 'w').write('\n'.join(NameManager.BusyNames))
 
     @staticmethod
     def remove_folder():
