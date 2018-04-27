@@ -36,17 +36,14 @@ class UnitTesting:
         while catalogs:
             curr_catalog = catalogs.pop()
             for file in listdir(curr_catalog):
+                curr_location = curr_catalog + '/' + file
                 if file.startswith('__'):
                     continue
-                curr_location = curr_catalog + '\\' + file
                 if isfile(curr_location):
                     if file.endswith('.py'):
-                        modules += [curr_location[len(curr_dir)+1:-3].replace('\\', '.')]
+                        print('PY', curr_location)
+                        modules += [curr_location[len(curr_dir)+1:-3].replace('/', '.')]
                 elif isdir(curr_location):
                     catalogs += [curr_location]
 
         return modules
-
-
-if __name__ == '__main__':
-    UnitTesting.test_all()
