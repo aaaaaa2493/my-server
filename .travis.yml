@@ -3,4 +3,4 @@ python:
   - "3.6"
 script:
   - cd poker
-  - python src/tests.py
+  - python src/main.py --tests
