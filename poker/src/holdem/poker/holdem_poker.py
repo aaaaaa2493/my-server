@@ -1,6 +1,6 @@
 from typing import Tuple
-from pokereval.card import Card as _Card
-from pokereval.hand_evaluator import HandEvaluator
+from lib.pokereval.card import Card as _Card
+from lib.pokereval.hand_evaluator import HandEvaluator
 from holdem.poker.hand_strength import HandStrength
 from core.cards.card import Card
 from core.cards.cards_pair import CardsPair
