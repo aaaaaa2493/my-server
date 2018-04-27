@@ -1,5 +1,8 @@
 from typing import List
 from random import randint
+from os.path import exists
+from os import mkdir
+from shutil import rmtree
 
 
 class NameManager:
@@ -10,11 +13,23 @@ class NameManager:
     BusyNames = []
     _length = 0
     _initialized = False
-    _free_nicks_path = 'nicks/free.txt'
-    _busy_nicks_path = 'nicks/busy.txt'
+    NicksPath = 'nicks'
+    _free_nicks_path = NicksPath + '/free.txt'
+    _busy_nicks_path = NicksPath + '/busy.txt'
 
     @staticmethod
     def init():
+
+        if not exists(NameManager.NicksPath):
+            mkdir(NameManager.NicksPath)
+            free = []
+            for i in range(1000):
+                free += [f't{i}']
+            NameManager.FreeNames = free
+            NameManager._length = len(NameManager.FreeNames)
+            NameManager._initialized = True
+            NameManager.save()
+            return
 
         NameManager.FreeNames = open(NameManager._free_nicks_path).read().split()
         NameManager.BusyNames = open(NameManager._busy_nicks_path).read().split()
@@ -75,3 +90,7 @@ class NameManager:
 
         open(NameManager._free_nicks_path, 'w').write('\n'.join(NameManager.FreeNames))
         open(NameManager._busy_nicks_path, 'w').write('\n'.join(NameManager.BusyNames))
+
+    @staticmethod
+    def remove_folder():
+        rmtree(NameManager.NicksPath)
