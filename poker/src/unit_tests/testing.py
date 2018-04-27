@@ -14,6 +14,8 @@ class UnitTesting:
         tests_suite = []
         loader = TestLoader()
 
+        print('BEFORE FIND')
+
         for module in UnitTesting.find_modules():
             imported = import_module(f'unit_tests.{module}')
             for name, obj in getmembers(imported):
@@ -30,6 +32,9 @@ class UnitTesting:
 
         curr_dir = dirname(__file__)
         catalogs = [curr_dir]
+
+        print('FIND', curr_dir)
+        print(listdir(curr_dir))
 
         modules = []
 
