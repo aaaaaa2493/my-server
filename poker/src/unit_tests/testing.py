@@ -41,7 +41,6 @@ class UnitTesting:
                     continue
                 if isfile(curr_location):
                     if file.endswith('.py'):
-                        print('PY', curr_location)
                         modules += [curr_location[len(curr_dir)+1:-3].replace('/', '.')]
                 elif isdir(curr_location):
                     catalogs += [curr_location]
