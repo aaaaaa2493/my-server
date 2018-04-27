@@ -46,3 +46,7 @@ class UnitTesting:
                     catalogs += [curr_location]
 
         return modules
+
+
+if __name__ == '__main__':
+    UnitTesting.test_all()
