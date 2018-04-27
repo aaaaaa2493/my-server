@@ -42,6 +42,7 @@ class UnitTesting:
             curr_catalog = catalogs.pop()
             for file in listdir(curr_catalog):
                 curr_location = curr_catalog + '\\' + file
+                print('TEST', curr_location, file.startswith('__'), isfile(curr_location), isdir(curr_location))
                 if file.startswith('__'):
                     print('IGNORE', curr_location)
                     continue
