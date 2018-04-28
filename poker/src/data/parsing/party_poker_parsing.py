@@ -3,7 +3,7 @@ from calendar import month_name
 from core.cards.cards_pair import Card, CardsPair
 from data.parsing.base_parsing import BaseParsing
 from data.reg_ex.party_poker import PartyPoker
-from data.poker_game import PokerGame
+from data.game_model.poker_game import PokerGame
 from holdem.play.step import Step
 
 

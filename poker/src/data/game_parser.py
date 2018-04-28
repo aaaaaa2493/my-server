@@ -1,7 +1,7 @@
 from typing import Optional
 from os import listdir, makedirs, remove
 from os.path import exists
-from data.poker_game import PokerGame
+from data.game_model.poker_game import PokerGame
 from data.parsing.poker_stars_parsing import PokerStars, PokerStarsParsing
 from data.parsing.party_poker_parsing import PartyPoker, PartyPokerParsing
 from data.parsing.poker_888_parsing import Poker888, Poker888Parsing

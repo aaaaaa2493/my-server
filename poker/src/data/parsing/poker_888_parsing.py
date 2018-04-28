@@ -2,7 +2,7 @@ from typing import List
 from core.cards.cards_pair import Card, CardsPair
 from data.parsing.base_parsing import BaseParsing
 from data.reg_ex.poker_888 import Poker888
-from data.poker_game import PokerGame
+from data.game_model.poker_game import PokerGame
 from holdem.play.step import Step
 
 

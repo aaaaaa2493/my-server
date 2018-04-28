@@ -1,4 +1,4 @@
-from data.poker_game import PokerGame
+from data.game_model.poker_game import PokerGame
 
 
 class BaseParsing:

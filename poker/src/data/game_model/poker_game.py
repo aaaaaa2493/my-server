@@ -1,4 +1,4 @@
-from typing import List, Union, Tuple, Iterator, Dict
+from typing import List, Tuple, Iterator, Dict
 from os import mkdir, makedirs
 from os.path import exists
 from pickle import load, dump
@@ -6,320 +6,22 @@ from json import loads, dumps
 from datetime import datetime, timedelta
 from shutil import rmtree
 from statistics import mean
-from holdem.play.result import Result
 from holdem.play.step import Step
-from core.cards.cards_pair import CardsPair
-from holdem.board import Board
 from holdem.network import Network
 from holdem.game.game import Game
 from holdem.player import Player
 from holdem.table import Delay
 from holdem.poker.hand_strength import HandStrength
 from holdem.poker.hand import Hand
-from core.cards.deck import Deck
-from core.cards.card import Card
+from data.game_model.poker_hand import PokerHand
+from data.game_model.mock_player import MockPlayer
+from data.game_model.event import Event
 
 
 class PokerGame:
     path_to_raw_games = 'games/raw/'
     path_to_parsed_games = 'games/parsed/'
     path_to_converted_games = 'games/converted/'
-
-    EventType = int
-
-    class Event:
-        Fold = 0
-        Call = 1
-        Check = 2
-        Raise = 3
-        Allin = 4
-        Ante = 5
-        SmallBlind = 6
-        BigBlind = 7
-        WinMoney = 8
-        ReturnMoney = 9
-        ChatMessage = 10
-        ObserverChatMessage = 11
-        Disconnected = 12
-        Connected = 13
-        FinishGame = 14
-
-        ToResult = {Fold: Result.Fold,
-                    Check: Result.Check,
-                    Call: Result.Call,
-                    Raise: Result.Raise,
-                    Allin: Result.Allin}
-
-        ToStr = {Fold: 'fold',
-                 Call: 'call',
-                 Check: 'check',
-                 Raise: 'raise',
-                 Allin: 'all in',
-                 Ante: 'ante',
-                 SmallBlind: 'sb',
-                 BigBlind: 'bb',
-                 WinMoney: 'win',
-                 ReturnMoney: 'return',
-                 ChatMessage: 'chat message',
-                 ObserverChatMessage: 'observer message',
-                 Disconnected: 'disconnected',
-                 Connected: 'connected',
-                 FinishGame: 'finished'}
-
-    class MockPlayer:
-
-        class PlayerEvent:
-
-            def __init__(self, event: 'PokerGame.EventType', money: int):
-                self.event: PokerGame.EventType = event
-                self.money: int = money
-
-        def __init__(self, name: str, money: int, seat: int, is_active: bool):
-            self.name: str = name
-            self.money: int = money
-            self.seat: int = seat
-            self.is_active = is_active
-            self.is_all_in: bool = False
-            self.is_winner: bool = False
-            self.is_loser: bool = False
-            self.cards: CardsPair = None
-            self.preflop: List['PokerGame.MockPlayer.PlayerEvent'] = []
-            self.flop: List['PokerGame.MockPlayer.PlayerEvent'] = []
-            self.turn: List['PokerGame.MockPlayer.PlayerEvent'] = []
-            self.river: List['PokerGame.MockPlayer.PlayerEvent'] = []
-
-        def get_list(self, step: Step) -> List['PokerGame.MockPlayer.PlayerEvent']:
-
-            if step == Step.Preflop:
-                return self.preflop
-            elif step == Step.Flop:
-                return self.flop
-            elif step == Step.Turn:
-                return self.turn
-            elif step == Step.River:
-                return self.river
-            else:
-                raise ValueError('No such step id ' + str(step))
-
-        def add_decision(self, step: Step, event: 'PokerGame.EventType', money: int) -> None:
-            self.get_list(step).append(PokerGame.MockPlayer.PlayerEvent(event, money))
-
-        def gived(self, step: Step) -> int:
-
-            curr_list = self.get_list(step)
-            for action in reversed(curr_list):
-
-                if action.event == PokerGame.Event.Check:
-                    return 0
-
-                elif action.event == PokerGame.Event.Allin or \
-                        action.event == PokerGame.Event.BigBlind or \
-                        action.event == PokerGame.Event.SmallBlind or \
-                        action.event == PokerGame.Event.Call or \
-                        action.event == PokerGame.Event.Raise:
-                    return action.money
-
-            return 0
-
-    class ObserverPlayer:
-        def __init__(self, name):
-            self.name = name
-
-    class PokerEvent:
-
-        def __init__(self, player: Union['PokerGame.MockPlayer', 'PokerGame.ObserverPlayer'],
-                     event: 'PokerGame.EventType', money: int, msg: str):
-            self.player = player
-            self.event: PokerGame.EventType = event
-            self.money: int = money
-            self.message: str = msg
-
-        def __str__(self) -> str:
-            if self.event == PokerGame.Event.Fold or \
-                    self.event == PokerGame.Event.Check or \
-                    self.event == PokerGame.Event.Disconnected or \
-                    self.event == PokerGame.Event.Connected:
-                return f'{self.player.name} {PokerGame.Event.ToStr[self.event]}'
-
-            elif self.event == PokerGame.Event.Call or \
-                    self.event == PokerGame.Event.Raise or \
-                    self.event == PokerGame.Event.Allin or \
-                    self.event == PokerGame.Event.Ante or \
-                    self.event == PokerGame.Event.SmallBlind or \
-                    self.event == PokerGame.Event.BigBlind or \
-                    self.event == PokerGame.Event.WinMoney or \
-                    self.event == PokerGame.Event.ReturnMoney:
-                return f'{self.player.name} {PokerGame.Event.ToStr[self.event]} {self.money}'
-
-            elif self.event == PokerGame.Event.ChatMessage:
-                return f'{self.player.name}: {self.message}'
-
-            elif self.event == PokerGame.Event.ObserverChatMessage:
-                return f'{self.player.name} [observer]: {self.message}'
-
-            elif self.event == PokerGame.Event.FinishGame:
-                return f'{self.player.name} {PokerGame.Event.ToStr[self.event]} ' \
-                       f'{self.message} and get {self.money / 100}'
-
-            raise ValueError(f'Do not know how to interpret Event id {self.event}')
-
-    class PokerHand:
-
-        def __init__(self, players: List['PokerGame.MockPlayer']):
-            self.id: int = 0
-            self.players: List[PokerGame.MockPlayer] = players
-            self.sit_during_game: List[PokerGame.MockPlayer] = None
-            self.preflop: List[PokerGame.PokerEvent] = []
-            self.flop: List[PokerGame.PokerEvent] = []
-            self.turn: List[PokerGame.PokerEvent] = []
-            self.river: List[PokerGame.PokerEvent] = []
-            self.small_blind: int = 0
-            self.big_blind: int = 0
-            self.ante: int = 0
-            self.total_pot: int = 0
-            self.table_id: int = 0
-            self.button_seat: int = 0
-            self.players_left: int = 0
-            self.is_final: bool = False
-            self.goes_to_showdown: bool = False
-            self.board: Board = Board(Deck())
-            self.curr_step: Step = Step.Preflop
-            self.curr_events: List[PokerGame.PokerEvent] = self.preflop
-
-        def init(self, hand_id, sb, bb, out_of_hand, table_num, button):
-            self.id = hand_id
-            self.small_blind = sb
-            self.big_blind = bb
-            self.sit_during_game = out_of_hand
-            self.table_id = table_num
-            self.button_seat = button
-
-        def add_winner(self, name: str) -> None:
-            self.get_player(name).is_winner = True
-
-        def get_winners(self) -> List['PokerGame.MockPlayer']:
-            return [player for player in self.players if player.is_winner]
-
-        def get_losers(self) -> List['PokerGame.MockPlayer']:
-            return [player for player in self.players if player.is_loser]
-
-        def add_loser(self, name: str) -> None:
-            self.get_player(name).is_loser = True
-
-        def set_flop_cards(self, card1: Card, card2: Card, card3: Card) -> None:
-            self.board.set_flop_cards(card1, card2, card3)
-
-        def set_turn_card(self, card: Card) -> None:
-            self.board.set_turn_card(card)
-
-        def set_river_card(self, card: Card) -> None:
-            self.board.set_river_card(card)
-
-        def set_cards(self, name: str, cards: CardsPair) -> None:
-            player = self.get_player(name)
-            if player.cards is None:
-                player.cards = cards
-            elif player.cards.second is not None and cards.second is None and cards.first in player.cards.get():
-                # means that player cards is already known but he show only one card to everyone else
-                return
-            elif player.cards != cards:
-                raise ValueError(f'Player {name} firstly has {player.cards} '
-                                 f'then {cards} in one hand')
-
-        def get_player(self, name: str) -> 'PokerGame.MockPlayer':
-            return max(player for player in self.players if player.name == name)
-
-        def add_decision(self, name: str, event: 'PokerGame.EventType', money: int, msg: str = '') -> None:
-            if event == PokerGame.Event.ObserverChatMessage:
-                self.curr_events += [PokerGame.PokerEvent(PokerGame.ObserverPlayer(name), event, money, msg)]
-            else:
-                player = self.get_player(name)
-                self.curr_events += [PokerGame.PokerEvent(player, event, money, msg)]
-                player.add_decision(self.curr_step, event, money)
-
-        def set_all_in(self, name: str) -> None:
-            self.get_player(name).is_all_in = True
-
-        def get_only_all_in(self) -> str:
-            return max(player for player in self.players if player.is_all_in).name
-
-        def switch_to_step(self, step: Step) -> None:
-
-            self.curr_step = step
-
-            if step == Step.Preflop:
-                self.curr_events = self.preflop
-            elif step == Step.Flop:
-                self.curr_events = self.flop
-            elif step == Step.Turn:
-                self.curr_events = self.turn
-            elif step == Step.River:
-                self.curr_events = self.river
-            else:
-                raise ValueError('No such step id ' + str(step))
-
-        def next_step(self) -> None:
-            self.switch_to_step(Step.next_step(self.curr_step))
-
-        def __str__(self) -> str:
-
-            ret = [f'    Small blind: {self.small_blind}']
-            ret += [f'    Big blind: {self.big_blind}']
-            ret += [f'    Ante: {self.ante}']
-            ret += [f'    Players left: {self.players_left}']
-            ret += [f'    Total pot: {self.total_pot}']
-
-            ret += ['    Players:']
-            for player in self.players:
-                ret += [f'        {player.name} : {player.money} : '
-                        f'{player.cards if player.cards is not None else "?? ??"} '
-                        f'{"disconnected" if not player.is_active else ""}']
-
-            if self.preflop:
-                ret += ['    Preflop:']
-                for event in self.preflop:
-                    ret += [' ' * 8 + str(event)]
-
-            if self.flop:
-                ret += [f'    Flop: {self.board.flop1.card} '
-                        f'{self.board.flop2.card} '
-                        f'{self.board.flop3.card}']
-                for event in self.flop:
-                    ret += [' ' * 8 + str(event)]
-
-            if self.turn:
-                ret += [f'    Turn: {self.board.flop1.card} '
-                        f'{self.board.flop2.card} '
-                        f'{self.board.flop3.card} '
-                        f'{self.board.turn.card}']
-                for event in self.turn:
-                    ret += [' ' * 8 + str(event)]
-
-            if self.river:
-                ret += [f'    River: {self.board.flop1.card} '
-                        f'{self.board.flop2.card} '
-                        f'{self.board.flop3.card} '
-                        f'{self.board.turn.card} '
-                        f'{self.board.river.card}']
-                for event in self.river:
-                    ret += [' ' * 8 + str(event)]
-
-            ret += [f'    Board: {self.board}']
-
-            winners = self.get_winners()
-            losers = self.get_losers()
-
-            if winners:
-                ret += [f'    Winners:']
-                for winner in winners:
-                    ret += [' ' * 8 + winner.name]
-
-            if losers:
-                ret += [f'    Losers:']
-                for loser in losers:
-                    ret += [' ' * 8 + loser.name]
-
-            return '\n'.join(ret)
 
     def __init__(self):
         self.id: int = 0
@@ -328,8 +30,8 @@ class PokerGame:
         self.time: str = ''
         self.source: str = ''
         self.seats: int = 0
-        self.hands: List[PokerGame.PokerHand] = []
-        self.curr_hand: PokerGame.PokerHand = None
+        self.hands: List[PokerHand] = []
+        self.curr_hand: PokerHand = None
 
     def init(self, id_, name, seats, date, time):
         self.id = id_
@@ -338,8 +40,8 @@ class PokerGame:
         self.date = date
         self.time = time
 
-    def add_hand(self, players: List['PokerGame.MockPlayer']):
-        new_hand = PokerGame.PokerHand(players)
+    def add_hand(self, players: List[MockPlayer]):
+        new_hand = PokerHand(players)
         self.hands += [new_hand]
         self.curr_hand = new_hand
 
@@ -427,7 +129,7 @@ class PokerGame:
 
             converted: List[Tuple[datetime, str]] = []
             hand.switch_to_step(Step.Preflop)
-            events: Iterator[PokerGame.PokerEvent] = iter(hand.curr_events)
+            events: Iterator[Event] = iter(hand.curr_events)
 
             game = Game(0, self.seats, self.seats, 0)
             table = game.final_table
@@ -491,7 +193,7 @@ class PokerGame:
             if hand.ante > 0:
 
                 paid: List[Tuple[Player, int]] = []
-                while event.event == PokerGame.Event.Ante:
+                while event.event == Event.Ante:
                     paid += [(find[event.player.seat], event.money)]
                     event = next(events)
 
@@ -505,11 +207,11 @@ class PokerGame:
 
             blinds_info: List[Tuple[Player, int]] = []
 
-            if event.event == PokerGame.Event.SmallBlind:
+            if event.event == Event.SmallBlind:
                 blinds_info += [(find[event.player.seat], event.money)]
                 event = next(events)
 
-            if event.event == PokerGame.Event.BigBlind:
+            if event.event == Event.BigBlind:
                 blinds_info += [(find[event.player.seat], event.money)]
                 event = next(events)
 
@@ -570,15 +272,15 @@ class PokerGame:
 
                 while True:
 
-                    if event.event == PokerGame.Event.Fold or \
-                            event.event == PokerGame.Event.Check or \
-                            event.event == PokerGame.Event.Call or \
-                            event.event == PokerGame.Event.Raise or \
-                            event.event == PokerGame.Event.Allin:
+                    if event.event == Event.Fold or \
+                            event.event == Event.Check or \
+                            event.event == Event.Call or \
+                            event.event == Event.Raise or \
+                            event.event == Event.Allin:
 
-                        if event.event == PokerGame.Event.Call or \
-                                event.event == PokerGame.Event.Raise or \
-                                event.event == PokerGame.Event.Allin:
+                        if event.event == Event.Call or \
+                                event.event == Event.Raise or \
+                                event.event == Event.Allin:
                             need_to_collect_money = True
 
                         player = find[event.player.seat]
@@ -587,10 +289,10 @@ class PokerGame:
                         converted += [(time, network.switch_decision(player))]
                         time = time + timedelta(seconds=Delay.SwitchDecision + Delay.DummyMove)
 
-                        converted += [(time, network.made_decision(player, PokerGame.Event.ToResult[event.event]))]
+                        converted += [(time, network.made_decision(player, Event.ToResult[event.event]))]
                         time = time + timedelta(seconds=Delay.MadeDecision)
 
-                    elif event.event == PokerGame.Event.WinMoney:
+                    elif event.event == Event.WinMoney:
 
                         if need_to_collect_money:
                             converted += [(time, network.collect_money())]
@@ -600,19 +302,19 @@ class PokerGame:
                         converted += [(time, network.give_money(find[event.player.seat], event.money))]
                         time = time + timedelta(seconds=Delay.GiveMoney)
 
-                    elif event.event == PokerGame.Event.ReturnMoney:
+                    elif event.event == Event.ReturnMoney:
 
-                        if sum(e.event == PokerGame.Event.Allin or
-                               e.event == PokerGame.Event.Raise or
-                               e.event == PokerGame.Event.Call or
-                               e.event == PokerGame.Event.SmallBlind or
-                               e.event == PokerGame.Event.BigBlind for e in hand.curr_events) == 1:
+                        if sum(e.event == Event.Allin or
+                               e.event == Event.Raise or
+                               e.event == Event.Call or
+                               e.event == Event.SmallBlind or
+                               e.event == Event.BigBlind for e in hand.curr_events) == 1:
                             need_to_collect_money = False
 
                         converted += [(time, network.back_excess_money(find[event.player.seat], event.money))]
                         time = time + timedelta(seconds=Delay.ExcessMoney)
 
-                    elif event.event == PokerGame.Event.ChatMessage:
+                    elif event.event == Event.ChatMessage:
 
                         chat_message = network.send({'type': 'chat', 'text': f'{event.player.name}: {event.message}'})
 
@@ -621,7 +323,7 @@ class PokerGame:
 
                         time = time + timedelta(seconds=0)
 
-                    elif event.event == PokerGame.Event.ObserverChatMessage:
+                    elif event.event == Event.ObserverChatMessage:
 
                         chat_message = network.send({'type': 'chat',
                                                      'text': f'{event.player.name} [observer]: {event.message}'})
@@ -631,7 +333,7 @@ class PokerGame:
 
                         time = time + timedelta(seconds=0)
 
-                    elif event.event == PokerGame.Event.Disconnected:
+                    elif event.event == Event.Disconnected:
 
                         converted += [(time, network.send({'type': 'disconnected', 'id': event.player.seat}))]
                         time = time + timedelta(seconds=0)
@@ -643,7 +345,7 @@ class PokerGame:
 
                         time = time + timedelta(seconds=0)
 
-                    elif event.event == PokerGame.Event.Connected:
+                    elif event.event == Event.Connected:
 
                         converted += [(time, network.send({'type': 'connected', 'id': event.player.seat}))]
                         time = time + timedelta(seconds=0)
@@ -655,7 +357,7 @@ class PokerGame:
 
                         time = time + timedelta(seconds=0)
 
-                    elif event.event == PokerGame.Event.FinishGame:
+                    elif event.event == Event.FinishGame:
 
                         if event.money == 0:
                             chat_message = network.send({'type': 'chat',
