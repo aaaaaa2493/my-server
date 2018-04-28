@@ -16,12 +16,16 @@ from holdem.poker.hand import Hand
 from data.game_model.poker_hand import PokerHand
 from data.game_model.mock_player import MockPlayer
 from data.game_model.event import Event
+from special.debug import Debug
 
 
 class PokerGame:
     path_to_raw_games = 'games/raw/'
     path_to_parsed_games = 'games/parsed/'
     path_to_converted_games = 'games/converted/'
+
+    converted_games_folder = 'games'
+    converted_chat_folder = 'chat'
 
     def __init__(self):
         self.id: int = 0
@@ -75,6 +79,7 @@ class PokerGame:
 
     @staticmethod
     def load(path: str) -> 'PokerGame':
+        Debug.parser(f'Loading {path}')
         return load(open(PokerGame.path_to_parsed_games + path, 'rb'))
 
     def convert(self) -> None:
@@ -111,9 +116,12 @@ class PokerGame:
             second = '0' + second
 
         folder_name = f'{year}-{month}-{day}_{hour}-{minute}-{second} 1 {self.seats} {len(self.hands)} {self.name}'
+        folder_name = folder_name.strip()
 
-        path = PokerGame.path_to_converted_games + 'games/' + folder_name
-        chat_path = PokerGame.path_to_converted_games + 'chat/' + folder_name
+        Debug.parser(f'Converting {folder_name}')
+
+        path = PokerGame.path_to_converted_games + PokerGame.converted_games_folder + '/' + folder_name
+        chat_path = PokerGame.path_to_converted_games + PokerGame.converted_chat_folder + '/' + folder_name
 
         if exists(path):
             rmtree(path)
@@ -133,7 +141,6 @@ class PokerGame:
         chat_messages: List[Tuple[datetime, str]] = []
 
         for num, hand in enumerate(self.hands):
-
             converted: List[Tuple[datetime, str]] = []
             hand.switch_to_step(Step.Preflop)
             events: Iterator[Event] = iter(hand.curr_events)
@@ -201,7 +208,10 @@ class PokerGame:
 
                 paid: List[Tuple[Player, int]] = []
                 while event.event == Event.Ante:
-                    paid += [(find[event.player.seat], event.money)]
+                    try:
+                        paid += [(find[event.player.seat], event.money)]
+                    except KeyError:
+                        pass
                     event = next(events)
 
                 converted += [(time, network.ante(paid))]
@@ -210,16 +220,25 @@ class PokerGame:
                 converted += [(time, network.collect_money())]
                 time = time + timedelta(seconds=Delay.CollectMoney)
 
-            button: Player = find[hand.button_seat]
+            try:
+                button: Player = find[hand.button_seat]
+            except KeyError:
+                continue
 
             blinds_info: List[Tuple[Player, int]] = []
 
             if event.event == Event.SmallBlind:
-                blinds_info += [(find[event.player.seat], event.money)]
+                try:
+                    blinds_info += [(find[event.player.seat], event.money)]
+                except KeyError:
+                    pass
                 event = next(events)
 
             if event.event == Event.BigBlind:
-                blinds_info += [(find[event.player.seat], event.money)]
+                try:
+                    blinds_info += [(find[event.player.seat], event.money)]
+                except KeyError:
+                    pass
                 event = next(events)
 
             converted += [(time, network.blinds(button, blinds_info))]
@@ -279,6 +298,24 @@ class PokerGame:
 
                 while True:
 
+                    need_continue = True
+                    while need_continue:
+                        try:
+                            _ = find[event.player.seat]
+                        except KeyError:
+                            try:
+                                event = next(events)
+                            except StopIteration:
+                                need_continue = False
+                            else:
+                                continue
+                        except AttributeError:
+                            break
+                        else:
+                            break
+                    else:
+                        break
+
                     if event.event == Event.Fold or \
                             event.event == Event.Check or \
                             event.event == Event.Call or \
@@ -296,7 +333,7 @@ class PokerGame:
                         converted += [(time, network.switch_decision(player))]
                         time = time + timedelta(seconds=Delay.SwitchDecision + Delay.DummyMove)
 
-                        converted += [(time, network.made_decision(player, Event.ToResult[event.event]))]
+                        converted += [(time, network.made_decision(player, event.event.to_result()))]
                         time = time + timedelta(seconds=Delay.MadeDecision)
 
                     elif event.event == Event.WinMoney:
@@ -388,17 +425,32 @@ class PokerGame:
                     else:
                         raise ValueError(f'Undefined event id {event.event}')
 
-                    try:
-                        event = next(events)
-                    except StopIteration:
+                    need_continue = True
+                    while need_continue:
+                        try:
+                            event = next(events)
+                            _ = find[event.player.seat]
+                        except StopIteration:
 
-                        time = time + timedelta(seconds=Delay.EndOfRound)
+                            time = time + timedelta(seconds=Delay.EndOfRound)
 
-                        if need_to_collect_money:
-                            converted += [(time, network.collect_money())]
-                            time = time + timedelta(seconds=Delay.CollectMoney)
-                            need_to_collect_money = False
+                            if need_to_collect_money:
+                                converted += [(time, network.collect_money())]
+                                time = time + timedelta(seconds=Delay.CollectMoney)
+                                need_to_collect_money = False
 
+                            need_continue = False
+
+                        except KeyError:
+                            continue
+
+                        except AttributeError:
+                            break
+
+                        else:
+                            break
+
+                    else:
                         break
 
             results: List[Tuple[Hand, Player, str]] = []
@@ -429,7 +481,10 @@ class PokerGame:
 
                         curr_hand = HandStrength.max_strength(cards)
 
-                    results += [(curr_hand, find[player.seat], '')]
+                    try:
+                        results += [(curr_hand, find[player.seat], '')]
+                    except KeyError:
+                        pass
 
             results.sort(reverse=True, key=lambda x: x[0])
 
