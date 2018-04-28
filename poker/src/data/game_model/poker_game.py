@@ -1,5 +1,5 @@
 from typing import List, Tuple, Iterator, Dict
-from os import mkdir, makedirs
+from os import mkdir, makedirs, listdir
 from os.path import exists
 from pickle import load, dump
 from json import loads, dumps
@@ -65,6 +65,13 @@ class PokerGame:
             makedirs(dirs)
 
         dump(self, open(path, 'wb'))
+
+    @staticmethod
+    def load_dir(path: str) -> List['PokerGame']:
+        games = []
+        for curr_path in listdir(PokerGame.path_to_parsed_games + path):
+            games += [PokerGame.load(path + '/' + curr_path)]
+        return games
 
     @staticmethod
     def load(path: str) -> 'PokerGame':

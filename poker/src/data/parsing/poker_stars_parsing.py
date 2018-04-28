@@ -2,7 +2,8 @@ from typing import Tuple, Iterator, List
 from core.cards.cards_pair import Card, CardsPair
 from data.parsing.base_parsing import BaseParsing
 from data.reg_ex.poker_stars import PokerStars
-from data.game_model.poker_game import PokerGame
+from data.game_model.mock_player import MockPlayer
+from data.game_model.player_event import Event
 from holdem.play.step import Step
 
 
@@ -17,35 +18,35 @@ class PokerStarsParsing(BaseParsing):
         return every_hand
 
     @staticmethod
-    def parse_action(player: PokerGame.MockPlayer, step: Step, text: str) \
-            -> Tuple[PokerGame.EventType, int]:
+    def parse_action(player: MockPlayer, step: Step, text: str) \
+            -> Tuple[Event, int]:
 
         if text == 'folds':
-            return PokerGame.Event.Fold, 0
+            return Event.Fold, 0
 
         elif text == 'checks':
-            return PokerGame.Event.Check, 0
+            return Event.Check, 0
 
         elif 'all-in' in text:
             if 'raises' in text:
-                return PokerGame.Event.Allin, int(text.split()[3])
+                return Event.Allin, int(text.split()[3])
 
             elif 'bets' in text:
-                return PokerGame.Event.Allin, int(text.split()[1])
+                return Event.Allin, int(text.split()[1])
 
             elif 'calls' in text:
-                return PokerGame.Event.Call, int(text.split()[1]) + player.gived(step)
+                return Event.Call, int(text.split()[1]) + player.gived(step)
 
         elif text.startswith('bets'):
             _, money = text.split()
-            return PokerGame.Event.Raise, int(money)
+            return Event.Raise, int(money)
 
         elif text.startswith('calls'):
             _, money = text.split()
-            return PokerGame.Event.Call, int(money) + player.gived(step)
+            return Event.Call, int(money) + player.gived(step)
 
         elif text.startswith('raises'):
-            return PokerGame.Event.Raise, int(text.split()[3])
+            return Event.Raise, int(text.split()[3])
 
         else:
             raise ValueError(f'Undefined action: {text}')
@@ -73,7 +74,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 money = int(match.group(1))
                 name = match.group(2)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.ReturnMoney, money)
+                self.game.curr_hand.add_decision(name, Event.ReturnMoney, money)
                 continue
 
             match = self.parser.find_collect_pot.search(line)
@@ -81,7 +82,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 money = int(match.group(2))
-                self.game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                self.game.curr_hand.add_decision(name, Event.WinMoney, money)
                 continue
 
             match = self.parser.find_collect_side_pot.search(line)
@@ -89,7 +90,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 money = int(match.group(2))
-                self.game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                self.game.curr_hand.add_decision(name, Event.WinMoney, money)
                 continue
 
             match = self.parser.find_collect_side_pot_n.search(line)
@@ -97,7 +98,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 money = int(match.group(2))
-                self.game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                self.game.curr_hand.add_decision(name, Event.WinMoney, money)
                 continue
 
             match = self.parser.find_collect_main_pot.search(line)
@@ -105,7 +106,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 money = int(match.group(2))
-                self.game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                self.game.curr_hand.add_decision(name, Event.WinMoney, money)
                 continue
 
             match = self.parser.find_show_cards.search(line)
@@ -132,7 +133,7 @@ class PokerStarsParsing(BaseParsing):
 
             if match is not None:
                 name = match.group(1)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Connected, 0)
+                self.game.curr_hand.add_decision(name, Event.Connected, 0)
                 continue
 
             match = self.parser.find_is_disconnected.search(line)
@@ -140,7 +141,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 try:
-                    self.game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                    self.game.curr_hand.add_decision(name, Event.Disconnected, 0)
                 except ValueError:
                     pass
                 continue
@@ -150,7 +151,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 try:
-                    self.game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                    self.game.curr_hand.add_decision(name, Event.Disconnected, 0)
                 except ValueError:
                     pass
                 continue
@@ -161,9 +162,9 @@ class PokerStarsParsing(BaseParsing):
                 name = match.group(1)
                 msg = match.group(2)
                 try:
-                    self.game.curr_hand.add_decision(name, PokerGame.Event.ChatMessage, 0, msg)
+                    self.game.curr_hand.add_decision(name, Event.ChatMessage, 0, msg)
                 except ValueError:
-                    self.game.curr_hand.add_decision(name, PokerGame.Event.ObserverChatMessage, 0, msg)
+                    self.game.curr_hand.add_decision(name, Event.ObserverChatMessage, 0, msg)
                 continue
 
             match = self.parser.find_observer_said.search(line)
@@ -171,7 +172,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 msg = match.group(2)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.ObserverChatMessage, 0, msg)
+                self.game.curr_hand.add_decision(name, Event.ObserverChatMessage, 0, msg)
                 continue
 
             match = self.parser.find_finished.search(line)
@@ -179,7 +180,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 place = match.group(2)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, 0, place)
+                self.game.curr_hand.add_decision(name, Event.FinishGame, 0, place)
                 match = self.parser.find_place.search(place)
                 self.game.curr_hand.players_left = int(match.group(1))
                 continue
@@ -190,7 +191,7 @@ class PokerStarsParsing(BaseParsing):
                 name = match.group(1)
                 place = match.group(2)
                 earn = int(match.group(3).replace('.', ''))
-                self.game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, earn, place)
+                self.game.curr_hand.add_decision(name, Event.FinishGame, earn, place)
                 match = self.parser.find_place.search(place)
                 self.game.curr_hand.players_left = int(match.group(1))
                 continue
@@ -201,7 +202,7 @@ class PokerStarsParsing(BaseParsing):
                 name = match.group(1)
                 place = match.group(2)
                 earn = int(match.group(3))
-                self.game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, earn, place)
+                self.game.curr_hand.add_decision(name, Event.FinishGame, earn, place)
                 match = self.parser.find_place.search(place)
                 self.game.curr_hand.players_left = int(match.group(1))
                 continue
@@ -211,7 +212,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 earn = int(match.group(2).replace('.', ''))
-                self.game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, earn, '1st')
+                self.game.curr_hand.add_decision(name, Event.FinishGame, earn, '1st')
                 continue
 
             match = self.parser.find_does_not_show.search(line)
@@ -224,7 +225,7 @@ class PokerStarsParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 try:
-                    self.game.curr_hand.add_decision(name, PokerGame.Event.Connected, 0)
+                    self.game.curr_hand.add_decision(name, Event.Connected, 0)
                 except ValueError:
                     pass
                 continue
@@ -238,14 +239,14 @@ class PokerStarsParsing(BaseParsing):
 
             if match is not None:
                 name = match.group(1)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                self.game.curr_hand.add_decision(name, Event.Disconnected, 0)
                 continue
 
             match = self.parser.find_timed_being_disconnected.search(line)
 
             if match is not None:
                 name = match.group(1)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                self.game.curr_hand.add_decision(name, Event.Disconnected, 0)
                 continue
 
             match = self.parser.find_finished_the_tournament.search(line)
@@ -305,7 +306,7 @@ class PokerStarsParsing(BaseParsing):
 
             if match is not None:
                 name = match.group(1)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                self.game.curr_hand.add_decision(name, Event.Disconnected, 0)
                 continue
 
             match = self.parser.find_shows_in_show_down.search(line)
@@ -413,8 +414,8 @@ class PokerStarsParsing(BaseParsing):
             self.game.seats = number_of_seats
 
         line = next(every_line).strip()
-        players: List[PokerGame.MockPlayer] = []
-        out_of_hand: List[PokerGame.MockPlayer] = []
+        players: List[MockPlayer] = []
+        out_of_hand: List[MockPlayer] = []
 
         match = self.parser.find_rebuy_and_receive_chips.search(line)
         while match is not None:
@@ -495,9 +496,9 @@ class PokerStarsParsing(BaseParsing):
             line = next(every_line).strip()
 
             if is_out_of_hand:
-                out_of_hand += [PokerGame.MockPlayer(name, money, seat, is_active)]
+                out_of_hand += [MockPlayer(name, money, seat, is_active)]
             else:
-                players += [PokerGame.MockPlayer(name, money, seat, is_active)]
+                players += [MockPlayer(name, money, seat, is_active)]
 
         self.game.add_hand(players)
         self.game.curr_hand.id = hand_id
@@ -532,7 +533,7 @@ class PokerStarsParsing(BaseParsing):
             if self.game.curr_hand.ante == 0:
                 self.game.curr_hand.ante = ante
 
-            self.game.curr_hand.add_decision(name, PokerGame.Event.Ante, ante)
+            self.game.curr_hand.add_decision(name, Event.Ante, ante)
 
             if is_all_in:
                 self.game.curr_hand.set_all_in(name)
@@ -557,13 +558,13 @@ class PokerStarsParsing(BaseParsing):
             name = match.group(1)
             small_blind = int(match.group(2))
 
-            self.game.curr_hand.add_decision(name, PokerGame.Event.SmallBlind, small_blind)
+            self.game.curr_hand.add_decision(name, Event.SmallBlind, small_blind)
 
             try:
                 line = next(every_line)
             except StopIteration:
                 all_in_name = self.game.curr_hand.get_only_all_in()
-                self.game.curr_hand.add_decision(all_in_name, PokerGame.Event.BigBlind, 0)
+                self.game.curr_hand.add_decision(all_in_name, Event.BigBlind, 0)
 
             if is_all_in:
                 self.game.curr_hand.set_all_in(name)
@@ -588,7 +589,7 @@ class PokerStarsParsing(BaseParsing):
             name = match.group(1)
             big_blind = int(match.group(2))
 
-            self.game.curr_hand.add_decision(name, PokerGame.Event.BigBlind, big_blind)
+            self.game.curr_hand.add_decision(name, Event.BigBlind, big_blind)
 
             if is_all_in:
                 self.game.curr_hand.set_all_in(name)

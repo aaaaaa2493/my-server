@@ -32,6 +32,10 @@ class Run:
             self.start_evolution(3, 9, 27, 1000)
             PlayManager.remove_folder()
             NameManager.remove_folder()
+        elif args[0] == '--parsing-tests':
+            from data.game_parser import GameParser, PokerGame
+            GameParser.parse_dir('testing', True)
+            PokerGame.load_dir('testing')
         else:
             raise BadCommandLineArguments(str(args))
 
@@ -43,11 +47,15 @@ class Run:
             GameManager().run()
 
         elif mode == Mode.Parse:
-            from data.game_parser import GameParser
-            GameParser.parse_dir('pack1')
+            from data.game_parser import GameParser, PokerGame
+            # GameParser.parse_dir('pack0')
+            # GameParser.parse_dir('pack1')
+            GameParser.parse_dir('testing')
+            PokerGame.load_dir('testing')
             # game.save()
             # game.convert()
             # print(game)
+            # PokerGame.load('hh.txt')
 
         elif mode == Mode.Evolution:
             self.start_evolution(100000, 9, 999, 10000)

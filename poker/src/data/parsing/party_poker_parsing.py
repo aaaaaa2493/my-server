@@ -3,7 +3,8 @@ from calendar import month_name
 from core.cards.cards_pair import Card, CardsPair
 from data.parsing.base_parsing import BaseParsing
 from data.reg_ex.party_poker import PartyPoker
-from data.game_model.poker_game import PokerGame
+from data.game_model.event import Event
+from data.game_model.mock_player import MockPlayer
 from holdem.play.step import Step
 
 
@@ -39,7 +40,7 @@ class PartyPokerParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 try:
-                    self.game.curr_hand.add_decision(name, PokerGame.Event.Fold, 0)
+                    self.game.curr_hand.add_decision(name, Event.Fold, 0)
                 except ValueError:
                     pass
                 continue
@@ -50,14 +51,14 @@ class PartyPokerParsing(BaseParsing):
                 name = match.group(1)
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Call, self.call_amount)
+                self.game.curr_hand.add_decision(name, Event.Call, self.call_amount)
                 continue
 
             match = self.parser.find_check.search(line)
 
             if match is not None:
                 name = match.group(1)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Check, 0)
+                self.game.curr_hand.add_decision(name, Event.Check, 0)
                 continue
 
             match = self.parser.find_bet.search(line)
@@ -67,7 +68,7 @@ class PartyPokerParsing(BaseParsing):
                 money = int(match.group(2).replace(',', ''))
                 self.call_amount = money
                 self.total_pot += money
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Raise, money)
+                self.game.curr_hand.add_decision(name, Event.Raise, money)
                 continue
 
             match = self.parser.find_raise.search(line)
@@ -77,7 +78,7 @@ class PartyPokerParsing(BaseParsing):
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
                 self.call_amount += money
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Raise, self.call_amount)
+                self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 continue
 
             match = self.parser.find_all_in.search(line)
@@ -87,7 +88,7 @@ class PartyPokerParsing(BaseParsing):
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
                 self.call_amount += money
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Raise, self.call_amount)
+                self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 continue
 
             match = self.parser.find_did_not_show.search(line)
@@ -100,7 +101,7 @@ class PartyPokerParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 money = int(match.group(2).replace(',', ''))
-                self.game.curr_hand.add_decision(name, PokerGame.Event.WinMoney, money)
+                self.game.curr_hand.add_decision(name, Event.WinMoney, money)
                 self.game.curr_hand.add_winner(name)
                 continue
 
@@ -120,7 +121,7 @@ class PartyPokerParsing(BaseParsing):
             if match is not None:
                 name = match.group(1)
                 place = match.group(2)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.FinishGame, 0, place)
+                self.game.curr_hand.add_decision(name, Event.FinishGame, 0, place)
                 continue
 
             match = self.parser.find_knocked_out.search(line)
@@ -147,7 +148,7 @@ class PartyPokerParsing(BaseParsing):
 
             if match is not None:
                 name = match.group(1)
-                self.game.curr_hand.add_decision(name, PokerGame.Event.Disconnected, 0)
+                self.game.curr_hand.add_decision(name, Event.Disconnected, 0)
                 continue
 
             match = self.parser.find_moved_from_other_table.search(line)
@@ -186,9 +187,9 @@ class PartyPokerParsing(BaseParsing):
                 name = match.group(1)
                 message = match.group(2)
                 try:
-                    self.game.curr_hand.add_decision(name, PokerGame.Event.ChatMessage, 0, message)
+                    self.game.curr_hand.add_decision(name, Event.ChatMessage, 0, message)
                 except ValueError:
-                    self.game.curr_hand.add_decision(name, PokerGame.Event.ObserverChatMessage, 0, message)
+                    self.game.curr_hand.add_decision(name, Event.ObserverChatMessage, 0, message)
                 continue
 
             match = self.parser.find_end_of_hand.search(line)
@@ -259,8 +260,8 @@ class PartyPokerParsing(BaseParsing):
 
         line = next(lines).strip()
 
-        players: List[PokerGame.MockPlayer] = []
-        out_of_hand: List[PokerGame.MockPlayer] = []
+        players: List[MockPlayer] = []
+        out_of_hand: List[MockPlayer] = []
 
         while True:
             is_active = True
@@ -276,9 +277,9 @@ class PartyPokerParsing(BaseParsing):
             money = int(match.group(3).replace(',', ''))
 
             if is_out_of_hand:
-                out_of_hand += [PokerGame.MockPlayer(name, money, seat, is_active)]
+                out_of_hand += [MockPlayer(name, money, seat, is_active)]
             else:
-                players += [PokerGame.MockPlayer(name, money, seat, is_active)]
+                players += [MockPlayer(name, money, seat, is_active)]
 
             line = next(lines).strip()
 
@@ -316,7 +317,7 @@ class PartyPokerParsing(BaseParsing):
 
             self.total_pot += ante
 
-            self.game.curr_hand.add_decision(name, PokerGame.Event.Ante, ante)
+            self.game.curr_hand.add_decision(name, Event.Ante, ante)
 
             line = next(lines)
 
@@ -337,13 +338,13 @@ class PartyPokerParsing(BaseParsing):
 
             self.total_pot += small_blind
 
-            self.game.curr_hand.add_decision(name, PokerGame.Event.SmallBlind, small_blind)
+            self.game.curr_hand.add_decision(name, Event.SmallBlind, small_blind)
 
             try:
                 line = next(lines)
             except StopIteration:
                 all_in_game = self.game.curr_hand.get_only_all_in()
-                self.game.curr_hand.add_decision(all_in_game, PokerGame.Event.BigBlind, 0)
+                self.game.curr_hand.add_decision(all_in_game, Event.BigBlind, 0)
 
             break
 
@@ -358,7 +359,7 @@ class PartyPokerParsing(BaseParsing):
 
             self.total_pot += big_blind
 
-            self.game.curr_hand.add_decision(name, PokerGame.Event.BigBlind, big_blind)
+            self.game.curr_hand.add_decision(name, Event.BigBlind, big_blind)
 
             break
 
