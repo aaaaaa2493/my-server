@@ -1,7 +1,7 @@
 from typing import Optional
 from os import listdir, makedirs, remove
 from os.path import exists
-from data.poker_game import PokerGame
+from data.game_model.poker_game import PokerGame
 from data.parsing.poker_stars_parsing import PokerStars, PokerStarsParsing
 from data.parsing.party_poker_parsing import PartyPoker, PartyPokerParsing
 from data.parsing.poker_888_parsing import Poker888, Poker888Parsing
@@ -35,7 +35,7 @@ class GameParser:
         return None
 
     @staticmethod
-    def parse_dir(path: str) -> None:
+    def parse_dir(path: str, need_convert: bool = False) -> None:
         games = listdir(PokerGame.path_to_raw_games + path)
         if not exists(PokerGame.path_to_parsed_games + path):
             makedirs(PokerGame.path_to_parsed_games + path)
@@ -43,7 +43,8 @@ class GameParser:
             game = GameParser.parse_game(f'{path}/{game_path}')
             if game is not None:
                 game.save()
-                # game.convert()
+                if need_convert:
+                    game.convert()
                 remove(PokerGame.path_to_raw_games + path + '/' + game_path)
 
     @staticmethod
