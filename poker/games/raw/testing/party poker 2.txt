@@ -1,0 +1,5681 @@
+***** Hand History for Game 16417160073 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:00:06 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,000 )
+Seat 5: Jp...1 ( 2,000 )
+Seat 4: RITZ35 ( 4,000 )
+Seat 6: filmschiebr ( 2,000 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 2,000 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+RITZ35 posts small blind [20].
+Jp...1 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  Js Qs ]
+filmschiebr raises [200]
+rihaly55 folds
+turoff77 calls [200]
+Chancentot29 folds
+RITZ35 calls [180]
+Jp...1 calls [160]
+** Dealing Flop ** [ 4h, Kh, 4c ]
+RITZ35 is all-In  [3,800]
+Jp...1 folds
+filmschiebr is all-In  [1,800]
+turoff77 folds
+** Dealing Turn ** [ Th ]
+** Dealing River ** [ As ]
+RITZ35 shows [ Ac, Ks ]two pairs, Aces and Kings.
+filmschiebr shows [ 7s, 7h ]two pairs, Sevens and Fours.
+RITZ35 wins 2,000 chips from the side pot 1 with two pairs, Aces and Kings.
+RITZ35 wins 4,400 chips from the main pot with two pairs, Aces and Kings.
+waiting for filmschiebr  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: filmschiebr rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Game #16417162415 starts.
+
+#Game No : 16417162415 
+
+
+***** Hand History for Game 16417162415 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:01:02 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 2,000 )
+Seat 4: RITZ35 ( 6,400 )
+Seat 6: filmschiebr ( 2,000 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 1,800 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+There is no Small Blind in this hand as the Big Blind of the previous hand left the table.
+filmschiebr posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  Jd 3s ]
+rihaly55 calls [40]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+filmschiebr checks
+** Dealing Flop ** [ Qh, Kc, Ts ]
+KAX10 has joined the table.
+filmschiebr checks
+rihaly55 checks
+** Dealing Turn ** [ Ad ]
+filmschiebr checks
+rihaly55 checks
+** Dealing River ** [ Kh ]
+filmschiebr checks
+rihaly55 checks
+filmschiebr shows [ 7h, Th ]two pairs, Kings and Tens.
+rihaly55 shows [ 2c, Tc ]two pairs, Kings and Tens.
+rihaly55 wins 40 chips from the main pot with two pairs, Kings and Tens.
+filmschiebr wins 40 chips from the main pot with two pairs, Kings and Tens.
+Game #16417164370 starts.
+
+#Game No : 16417164370 
+
+
+***** Hand History for Game 16417164370 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:01:38 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,000 )
+Seat 5: KAX10 ( 2,000 )
+Seat 4: RITZ35 ( 6,400 )
+Seat 6: filmschiebr ( 2,000 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 1,800 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+filmschiebr posts small blind [20].
+rihaly55 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  5d 3c ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 raises [80]
+filmschiebr folds
+rihaly55 folds
+KAX10 does not show cards.
+KAX10 wins 140 chips
+Game #16417166105 starts.
+
+#Game No : 16417166105 
+
+
+***** Hand History for Game 16417166105 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:02:02 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,000 )
+Seat 5: KAX10 ( 2,060 )
+Seat 4: RITZ35 ( 6,400 )
+Seat 6: filmschiebr ( 1,980 )
+Seat 1: rihaly55 ( 1,960 )
+Seat 2: turoff77 ( 1,800 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+rihaly55 posts small blind [20].
+turoff77 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  Jc 6s ]
+Chancentot29 folds
+RITZ35 folds
+KAX10 folds
+filmschiebr raises [120]
+rihaly55 folds
+turoff77 folds
+filmschiebr does not show cards.
+filmschiebr wins 180 chips
+Game #16417167481 starts.
+
+#Game No : 16417167481 
+
+
+***** Hand History for Game 16417167481 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:02:29 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,000 )
+Seat 5: KAX10 ( 2,060 )
+Seat 4: RITZ35 ( 6,400 )
+Seat 6: filmschiebr ( 2,040 )
+Seat 1: rihaly55 ( 1,940 )
+Seat 2: turoff77 ( 1,760 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+turoff77 posts small blind [20].
+Chancentot29 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  6s Ts ]
+RITZ35 folds
+KAX10 raises [80]
+filmschiebr raises [300]
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+KAX10 folds
+filmschiebr does not show cards.
+filmschiebr wins 440 chips
+Game #16417168516 starts.
+
+#Game No : 16417168516 
+
+
+***** Hand History for Game 16417168516 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:02:48 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,960 )
+Seat 5: KAX10 ( 1,980 )
+Seat 4: RITZ35 ( 6,400 )
+Seat 6: filmschiebr ( 2,180 )
+Seat 1: rihaly55 ( 1,940 )
+Seat 2: turoff77 ( 1,740 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+Chancentot29 posts small blind [20].
+RITZ35 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  Th Kd ]
+KAX10 raises [80]
+filmschiebr folds
+rihaly55 folds
+turoff77 calls [80]
+Chancentot29 folds
+RITZ35 calls [40]
+** Dealing Flop ** [ 6s, 7d, 9s ]
+RITZ35 bets [260]
+KAX10 raises [1,040]
+turoff77 folds
+RITZ35 calls [780]
+** Dealing Turn ** [ Td ]
+RITZ35 bets [1,120]
+KAX10 is all-In  [860]
+** Dealing River ** [ Jh ]
+RITZ35 shows [ 6h, Ah ]a pair of Sixes.
+KAX10 shows [ Ac, As ]a pair of Aces.
+RITZ35 wins 260 chips from the side pot 1 with a pair of Sixes.
+KAX10 wins 4,060 chips from the main pot with a pair of Aces.
+Game #16417171665 starts.
+
+#Game No : 16417171665 
+
+
+***** Hand History for Game 16417171665 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:03:34 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,940 )
+Seat 5: KAX10 ( 4,060 )
+Seat 4: RITZ35 ( 4,420 )
+Seat 6: filmschiebr ( 2,180 )
+Seat 1: rihaly55 ( 1,940 )
+Seat 2: turoff77 ( 1,660 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+RITZ35 posts small blind [20].
+KAX10 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  Qh Kc ]
+filmschiebr folds
+rihaly55 folds
+turoff77 raises [100]
+Chancentot29 folds
+RITZ35 folds
+KAX10 folds
+turoff77 does not show cards.
+turoff77 wins 160 chips
+Game #16417172727 starts.
+
+#Game No : 16417172727 
+
+
+***** Hand History for Game 16417172727 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:03:53 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,940 )
+Seat 5: KAX10 ( 4,020 )
+Seat 4: RITZ35 ( 4,400 )
+Seat 6: filmschiebr ( 2,180 )
+Seat 1: rihaly55 ( 1,940 )
+Seat 2: turoff77 ( 1,720 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+KAX10 posts small blind [20].
+filmschiebr posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  7c Ts ]
+rihaly55 raises [80]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 calls [60]
+filmschiebr folds
+** Dealing Flop ** [ Ac, 7h, 5s ]
+KAX10 bets [100]
+rihaly55 calls [100]
+** Dealing Turn ** [ 2s ]
+KAX10 bets [200]
+rihaly55 folds
+KAX10 does not show cards.
+KAX10 wins 600 chips
+Game #16417175653 starts.
+
+#Game No : 16417175653 
+
+
+***** Hand History for Game 16417175653 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:04:43 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,940 )
+Seat 5: KAX10 ( 4,240 )
+Seat 4: RITZ35 ( 4,400 )
+Seat 6: filmschiebr ( 2,140 )
+Seat 1: rihaly55 ( 1,760 )
+Seat 2: turoff77 ( 1,720 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+filmschiebr posts small blind [20].
+rihaly55 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  Th 7c ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [100]
+KAX10 folds
+filmschiebr calls [80]
+rihaly55 folds
+** Dealing Flop ** [ Tc, 4s, 8d ]
+filmschiebr bets [40]
+RITZ35 raises [360]
+filmschiebr calls [320]
+** Dealing Turn ** [ 4h ]
+filmschiebr checks
+RITZ35 is all-In  [3,940]
+filmschiebr folds
+RITZ35 shows [ Qc, 9s ]a pair of Fours.
+RITZ35 wins 4,900 chips from the main pot with a pair of Fours.
+Game #16417179432 starts.
+
+#Game No : 16417179432 
+
+
+***** Hand History for Game 16417179432 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:05:35 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,940 )
+Seat 5: KAX10 ( 4,240 )
+Seat 4: RITZ35 ( 4,900 )
+Seat 6: filmschiebr ( 1,680 )
+Seat 1: rihaly55 ( 1,720 )
+Seat 2: turoff77 ( 1,720 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+rihaly55 posts small blind [20].
+turoff77 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  As 9h ]
+Chancentot29 folds
+RITZ35 folds
+KAX10 raises [120]
+filmschiebr folds
+rihaly55 calls [100]
+turoff77 folds
+** Dealing Flop ** [ 3h, 3d, 3s ]
+rihaly55 checks
+KAX10 bets [140]
+rihaly55 folds
+KAX10 does not show cards.
+KAX10 wins 420 chips
+Game #16417181171 starts.
+
+#Game No : 16417181171 
+
+
+***** Hand History for Game 16417181171 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:06:04 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,940 )
+Seat 5: KAX10 ( 4,400 )
+Seat 4: RITZ35 ( 4,900 )
+Seat 6: filmschiebr ( 1,680 )
+Seat 1: rihaly55 ( 1,600 )
+Seat 2: turoff77 ( 1,680 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+turoff77 posts small blind [20].
+Chancentot29 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  9d 5c ]
+RITZ35 folds
+KAX10 folds
+filmschiebr folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 does not show cards.
+Chancentot29 wins 60 chips
+Game #16417182086 starts.
+
+#Game No : 16417182086 
+
+
+***** Hand History for Game 16417182086 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:06:21 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,960 )
+Seat 5: KAX10 ( 4,400 )
+Seat 4: RITZ35 ( 4,900 )
+Seat 6: filmschiebr ( 1,680 )
+Seat 1: rihaly55 ( 1,600 )
+Seat 2: turoff77 ( 1,660 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+Chancentot29 posts small blind [20].
+RITZ35 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  Ah 9s ]
+KAX10 folds
+filmschiebr folds
+rihaly55 folds
+turoff77 raises [100]
+Chancentot29 calls [80]
+RITZ35 raises [120]
+turoff77 calls [60]
+Chancentot29 calls [60]
+** Dealing Flop ** [ Td, 4h, 6c ]
+Chancentot29 checks
+RITZ35 bets [480]
+turoff77 folds
+Chancentot29 folds
+RITZ35 does not show cards.
+RITZ35 wins 960 chips
+Game #16417184556 starts.
+
+#Game No : 16417184556 
+
+
+***** Hand History for Game 16417184556 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:07:05 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,800 )
+Seat 5: KAX10 ( 4,400 )
+Seat 4: RITZ35 ( 5,220 )
+Seat 6: filmschiebr ( 1,680 )
+Seat 1: rihaly55 ( 1,600 )
+Seat 2: turoff77 ( 1,500 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+RITZ35 posts small blind [20].
+KAX10 posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  Kh 7h ]
+filmschiebr folds
+rihaly55 folds
+turoff77 raises [100]
+Chancentot29 folds
+RITZ35 folds
+KAX10 folds
+turoff77 does not show cards.
+turoff77 wins 160 chips
+Game #16417185725 starts.
+
+#Game No : 16417185725 
+
+
+***** Hand History for Game 16417185725 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 1  Blinds(20/40) - Tuesday, September 05, 18:07:25 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 1,800 )
+Seat 5: KAX10 ( 4,360 )
+Seat 4: RITZ35 ( 5,200 )
+Seat 6: filmschiebr ( 1,680 )
+Seat 1: rihaly55 ( 1,600 )
+Seat 2: turoff77 ( 1,560 )
+Trny: 143908069 Level: 1 
+Blinds(20/40)
+KAX10 posts small blind [20].
+filmschiebr posts big blind [40].
+** Dealing down cards **
+Dealt to turoff77 [  6s Jc ]
+rihaly55 calls [40]
+turoff77 folds
+Chancentot29 calls [40]
+RITZ35 folds
+KAX10 folds
+filmschiebr checks
+** Dealing Flop ** [ 4d, 3d, Kd ]
+filmschiebr checks
+rihaly55 bets [40]
+Chancentot29 calls [40]
+filmschiebr folds
+** Dealing Turn ** [ 7s ]
+rihaly55 bets [40]
+Chancentot29 raises [80]
+rihaly55 raises [420]
+Chancentot29 calls [380]
+** Dealing River ** [ 5d ]
+rihaly55 bets [570]
+Chancentot29 raises [1,140]
+rihaly55 is all-In  [490]
+Chancentot29 shows [ 6d, Ks ]a flush, King high.
+rihaly55 shows [ 4s, Kh ]two pairs, Kings and Fours.
+Chancentot29 wins 80 chips from the side pot 1 with a flush, King high.
+Chancentot29 wins 3,260 chips from the main pot with a flush, King high.
+waiting for rihaly55  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: rihaly55 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Game #16417192221 starts.
+
+#Game No : 16417192221 
+
+
+***** Hand History for Game 16417192221 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:08:57 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,460 )
+Seat 5: KAX10 ( 4,340 )
+Seat 4: RITZ35 ( 5,200 )
+Seat 6: filmschiebr ( 1,640 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 1,560 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+filmschiebr posts small blind [25].
+rihaly55 posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  6d 4h ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [100]
+KAX10 calls [100]
+filmschiebr folds
+rihaly55 calls [50]
+** Dealing Flop ** [ 8s, Qh, 2d ]
+rihaly55 checks
+RITZ35 checks
+KAX10 bets [162]
+rihaly55 calls [162]
+RITZ35 folds
+** Dealing Turn ** [ 8h ]
+rihaly55 checks
+KAX10 bets [350]
+rihaly55 folds
+KAX10 does not show cards.
+KAX10 wins 999 chips
+Game #16417195828 starts.
+
+#Game No : 16417195828 
+
+
+***** Hand History for Game 16417195828 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:09:58 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,460 )
+Seat 5: KAX10 ( 4,727 )
+Seat 4: RITZ35 ( 5,100 )
+Seat 6: filmschiebr ( 1,615 )
+Seat 1: rihaly55 ( 1,738 )
+Seat 2: turoff77 ( 1,560 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+rihaly55 posts small blind [25].
+turoff77 posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  7s 3d ]
+Chancentot29 calls [50]
+RITZ35 folds
+KAX10 folds
+filmschiebr folds
+rihaly55 calls [25]
+turoff77 checks
+** Dealing Flop ** [ Ac, 7d, 6d ]
+rihaly55 checks
+turoff77 checks
+Chancentot29 checks
+** Dealing Turn ** [ 3c ]
+rihaly55 checks
+turoff77 bets [75]
+Chancentot29 folds
+rihaly55 calls [75]
+** Dealing River ** [ Kd ]
+rihaly55 checks
+turoff77 bets [150]
+rihaly55 folds
+turoff77 does not show cards.
+turoff77 wins 450 chips
+Game #16417200236 starts.
+
+#Game No : 16417200236 
+
+
+***** Hand History for Game 16417200236 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:11:07 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,410 )
+Seat 5: KAX10 ( 4,727 )
+Seat 4: RITZ35 ( 5,100 )
+Seat 6: filmschiebr ( 1,615 )
+Seat 1: rihaly55 ( 1,613 )
+Seat 2: turoff77 ( 1,735 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+turoff77 posts small blind [25].
+Chancentot29 posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  4d 8d ]
+RITZ35 raises [200]
+KAX10 folds
+filmschiebr raises [350]
+rihaly55 calls [350]
+turoff77 folds
+Chancentot29 folds
+RITZ35 calls [150]
+** Dealing Flop ** [ Th, 4c, 9s ]
+RITZ35 bets [1,125]
+filmschiebr is all-In  [1,265]
+rihaly55 is all-In  [1,263]
+RITZ35 calls [140]
+** Dealing Turn ** [ Ts ]
+** Dealing River ** [ 7h ]
+RITZ35 shows [ As, Kh ]a pair of Tens.
+filmschiebr shows [ Qs, Td ]three of a kind, Tens.
+rihaly55 shows [ Kc, Jd ]a pair of Tens.
+filmschiebr wins 4 chips from the side pot 1 with three of a kind, Tens.
+filmschiebr wins 4,914 chips from the main pot with three of a kind, Tens.
+waiting for rihaly55  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: rihaly55 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Game #16417202655 starts.
+
+#Game No : 16417202655 
+
+
+***** Hand History for Game 16417202655 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:11:50 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,360 )
+Seat 5: KAX10 ( 4,727 )
+Seat 4: RITZ35 ( 3,485 )
+Seat 6: filmschiebr ( 4,918 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 1,710 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+Chancentot29 posts small blind [25].
+RITZ35 posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  3h 3d ]
+KAX10 raises [125]
+filmschiebr folds
+rihaly55 calls [125]
+turoff77 calls [125]
+Chancentot29 folds
+RITZ35 folds
+** Dealing Flop ** [ Jh, 2c, 3s ]
+KAX10 bets [225]
+rihaly55 folds
+turoff77 raises [450]
+KAX10 calls [225]
+** Dealing Turn ** [ Ad ]
+KAX10 bets [1,350]
+turoff77 is all-In  [1,135]
+** Dealing River ** [ 4d ]
+KAX10 shows [ Tc, Js ]a pair of Jacks.
+turoff77 shows [ 3h, 3d ]three of a kind, Threes.
+KAX10 wins 215 chips from the side pot 1 with a pair of Jacks.
+turoff77 wins 3,620 chips from the main pot with three of a kind, Threes.
+Game #16417206263 starts.
+
+#Game No : 16417206263 
+
+
+***** Hand History for Game 16417206263 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:12:35 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,335 )
+Seat 5: KAX10 ( 3,017 )
+Seat 4: RITZ35 ( 3,435 )
+Seat 6: filmschiebr ( 4,918 )
+Seat 1: rihaly55 ( 1,875 )
+Seat 2: turoff77 ( 3,620 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+RITZ35 posts small blind [25].
+KAX10 posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  8c Qh ]
+filmschiebr folds
+rihaly55 calls [50]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 raises [150]
+rihaly55 calls [150]
+** Dealing Flop ** [ Qd, 2s, 2d ]
+KAX10 bets [225]
+rihaly55 folds
+KAX10 does not show cards.
+KAX10 wins 650 chips
+Game #16417208757 starts.
+
+#Game No : 16417208757 
+
+
+***** Hand History for Game 16417208757 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:13:19 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,335 )
+Seat 5: KAX10 ( 3,242 )
+Seat 4: RITZ35 ( 3,410 )
+Seat 6: filmschiebr ( 4,918 )
+Seat 1: rihaly55 ( 1,675 )
+Seat 2: turoff77 ( 3,620 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+KAX10 posts small blind [25].
+filmschiebr posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  5h 3h ]
+rihaly55 calls [50]
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [100]
+KAX10 folds
+filmschiebr folds
+rihaly55 calls [50]
+** Dealing Flop ** [ Js, 8d, 6d ]
+rihaly55 checks
+RITZ35 bets [275]
+rihaly55 folds
+RITZ35 does not show cards.
+RITZ35 wins 550 chips
+Game #16417211868 starts.
+
+#Game No : 16417211868 
+
+
+***** Hand History for Game 16417211868 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:14:13 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,335 )
+Seat 5: KAX10 ( 3,217 )
+Seat 4: RITZ35 ( 3,585 )
+Seat 6: filmschiebr ( 4,868 )
+Seat 1: rihaly55 ( 1,575 )
+Seat 2: turoff77 ( 3,620 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+filmschiebr posts small blind [25].
+rihaly55 posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  7d 6h ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 raises [150]
+filmschiebr folds
+rihaly55 calls [100]
+** Dealing Flop ** [ 2h, Kd, 4h ]
+rihaly55 checks
+KAX10 bets [162]
+rihaly55 folds
+KAX10 does not show cards.
+KAX10 wins 487 chips
+Game #16417213981 starts.
+
+#Game No : 16417213981 
+
+
+***** Hand History for Game 16417213981 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:14:42 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,335 )
+Seat 5: KAX10 ( 3,392 )
+Seat 4: RITZ35 ( 3,585 )
+Seat 6: filmschiebr ( 4,843 )
+Seat 1: rihaly55 ( 1,425 )
+Seat 2: turoff77 ( 3,620 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+rihaly55 posts small blind [25].
+turoff77 posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  7h Jh ]
+Chancentot29 calls [50]
+RITZ35 folds
+KAX10 calls [50]
+filmschiebr folds
+rihaly55 calls [25]
+turoff77 checks
+** Dealing Flop ** [ 4s, Qd, 9c ]
+rihaly55 checks
+turoff77 checks
+Chancentot29 checks
+KAX10 bets [100]
+rihaly55 calls [100]
+turoff77 folds
+Chancentot29 folds
+** Dealing Turn ** [ 6c ]
+rihaly55 checks
+KAX10 bets [300]
+rihaly55 calls [300]
+** Dealing River ** [ Qc ]
+rihaly55 checks
+KAX10 checks
+rihaly55 shows [ Kd, Jd ]a pair of Queens.
+KAX10 shows [ 6d, 9d ]two pairs, Queens and Nines.
+KAX10 wins 1,000 chips from the main pot with two pairs, Queens and Nines.
+Game #16417219080 starts.
+
+#Game No : 16417219080 
+
+
+***** Hand History for Game 16417219080 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 2  Blinds(25/50) - Tuesday, September 05, 18:16:03 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,285 )
+Seat 5: KAX10 ( 3,942 )
+Seat 4: RITZ35 ( 3,585 )
+Seat 6: filmschiebr ( 4,843 )
+Seat 1: rihaly55 ( 975 )
+Seat 2: turoff77 ( 3,570 )
+Trny: 143908069 Level: 2 
+Blinds(25/50)
+turoff77 posts small blind [25].
+Chancentot29 posts big blind [50].
+** Dealing down cards **
+Dealt to turoff77 [  Qd Jc ]
+RITZ35 folds
+KAX10 folds
+filmschiebr folds
+rihaly55 calls [50]
+turoff77 calls [25]
+Chancentot29 folds
+** Dealing Flop ** [ Qs, 4s, Ad ]
+turoff77 checks
+rihaly55 checks
+** Dealing Turn ** [ As ]
+turoff77 checks
+rihaly55 checks
+** Dealing River ** [ 2c ]
+turoff77 checks
+rihaly55 bets [50]
+turoff77 calls [50]
+rihaly55 shows [ Th, Kh ]a pair of Aces.
+turoff77 shows [ Qd, Jc ]two pairs, Aces and Queens.
+turoff77 wins 250 chips from the main pot with two pairs, Aces and Queens.
+Rebuy: rihaly55 rebuys 2 000 chips and the chip stack increases from 875 chips to 2 875 chips.
+Game #16417222996 starts.
+
+#Game No : 16417222996 
+
+
+***** Hand History for Game 16417222996 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 3  Blinds(30/60) - Tuesday, September 05, 18:17:05 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,235 )
+Seat 5: KAX10 ( 3,942 )
+Seat 4: RITZ35 ( 3,585 )
+Seat 6: filmschiebr ( 4,843 )
+Seat 1: rihaly55 ( 2,875 )
+Seat 2: turoff77 ( 3,720 )
+Trny: 143908069 Level: 3 
+Blinds(30/60)
+Chancentot29 posts small blind [30].
+RITZ35 posts big blind [60].
+** Dealing down cards **
+Dealt to turoff77 [  5d 3s ]
+KAX10 folds
+filmschiebr calls [60]
+rihaly55 calls [60]
+turoff77 folds
+Chancentot29 folds
+RITZ35 checks
+** Dealing Flop ** [ Qh, 7c, 6c ]
+RITZ35 bets [210]
+filmschiebr folds
+rihaly55 calls [210]
+** Dealing Turn ** [ Jd ]
+RITZ35 bets [630]
+rihaly55 folds
+RITZ35 does not show cards.
+RITZ35 wins 1,260 chips
+Game #16417225934 starts.
+
+#Game No : 16417225934 
+
+
+***** Hand History for Game 16417225934 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 3  Blinds(30/60) - Tuesday, September 05, 18:17:57 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,205 )
+Seat 5: KAX10 ( 3,942 )
+Seat 4: RITZ35 ( 3,945 )
+Seat 6: filmschiebr ( 4,783 )
+Seat 1: rihaly55 ( 2,605 )
+Seat 2: turoff77 ( 3,720 )
+Trny: 143908069 Level: 3 
+Blinds(30/60)
+RITZ35 posts small blind [30].
+KAX10 posts big blind [60].
+** Dealing down cards **
+Dealt to turoff77 [  As 3h ]
+filmschiebr raises [120]
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 calls [60]
+** Dealing Flop ** [ Ts, 7h, 4h ]
+KAX10 checks
+filmschiebr bets [330]
+KAX10 calls [330]
+** Dealing Turn ** [ 4c ]
+KAX10 checks
+filmschiebr bets [930]
+KAX10 folds
+filmschiebr does not show cards.
+filmschiebr wins 1,860 chips
+Game #16417229816 starts.
+
+#Game No : 16417229816 
+
+
+***** Hand History for Game 16417229816 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 3  Blinds(30/60) - Tuesday, September 05, 18:18:56 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,205 )
+Seat 5: KAX10 ( 3,492 )
+Seat 4: RITZ35 ( 3,915 )
+Seat 6: filmschiebr ( 5,263 )
+Seat 1: rihaly55 ( 2,605 )
+Seat 2: turoff77 ( 3,720 )
+Trny: 143908069 Level: 3 
+Blinds(30/60)
+KAX10 posts small blind [30].
+filmschiebr posts big blind [60].
+** Dealing down cards **
+Dealt to turoff77 [  Js 5d ]
+rihaly55 folds
+turoff77 folds
+Chancentot29 calls [60]
+RITZ35 raises [120]
+KAX10 folds
+filmschiebr raises [120]
+Chancentot29 calls [120]
+RITZ35 calls [60]
+** Dealing Flop ** [ 7c, Qd, 8h ]
+filmschiebr checks
+Chancentot29 bets [180]
+RITZ35 calls [180]
+filmschiebr raises [360]
+Chancentot29 calls [180]
+RITZ35 folds
+** Dealing Turn ** [ 7h ]
+filmschiebr bets [1,102]
+Chancentot29 is all-In  [2,665]
+filmschiebr calls [1,563]
+** Dealing River ** [ 2h ]
+filmschiebr shows [ Kd, Qs ]two pairs, Queens and Sevens.
+Chancentot29 shows [ Ad, Ac ]two pairs, Aces and Sevens.
+Chancentot29 wins 6,800 chips from the main pot with two pairs, Aces and Sevens.
+Game #16417234494 starts.
+
+#Game No : 16417234494 
+
+
+***** Hand History for Game 16417234494 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 3  Blinds(30/60) - Tuesday, September 05, 18:20:10 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,800 )
+Seat 5: KAX10 ( 3,462 )
+Seat 4: RITZ35 ( 3,555 )
+Seat 6: filmschiebr ( 2,058 )
+Seat 1: rihaly55 ( 2,605 )
+Seat 2: turoff77 ( 3,720 )
+Trny: 143908069 Level: 3 
+Blinds(30/60)
+filmschiebr posts small blind [30].
+rihaly55 posts big blind [60].
+** Dealing down cards **
+Dealt to turoff77 [  8s 7d ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 raises [180]
+filmschiebr raises [270]
+rihaly55 calls [240]
+KAX10 is all-In  [3,282]
+filmschiebr is all-In  [1,758]
+rihaly55 folds
+** Dealing Flop ** [ Tc, 6d, 5d ]
+** Dealing Turn ** [ 4s ]
+** Dealing River ** [ Qd ]
+filmschiebr shows [ 3d, 3h ]a pair of Threes.
+KAX10 shows [ Jd, Js ]a pair of Jacks.
+KAX10 wins 1,404 chips from the side pot 1 with a pair of Jacks.
+KAX10 wins 4,416 chips from the main pot with a pair of Jacks.
+waiting for filmschiebr  to rebuy in  20 seconds to continue playing in the tournament
+Player filmschiebr finished in 82.
+Game #16417236556 starts.
+
+#Game No : 16417236556 
+
+
+***** Hand History for Game 16417236556 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 3  Blinds(30/60) - Tuesday, September 05, 18:21:07 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 6,800 )
+Seat 5: KAX10 ( 5,820 )
+Seat 4: RITZ35 ( 3,555 )
+Seat 1: rihaly55 ( 2,305 )
+Seat 2: turoff77 ( 3,720 )
+Trny: 143908069 Level: 3 
+Blinds(30/60)
+rihaly55 posts small blind [30].
+turoff77 posts big blind [60].
+** Dealing down cards **
+Dealt to turoff77 [  3d 8s ]
+Chancentot29 folds
+RITZ35 folds
+KAX10 folds
+rihaly55 folds
+turoff77 does not show cards.
+turoff77 wins 90 chips
+Game #16417240409 starts.
+
+#Game No : 16417240409 
+
+
+***** Hand History for Game 16417240409 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 3  Blinds(30/60) - Tuesday, September 05, 18:21:46 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 6,800 )
+Seat 5: KAX10 ( 5,820 )
+Seat 4: RITZ35 ( 3,555 )
+Seat 1: rihaly55 ( 2,275 )
+Seat 2: turoff77 ( 3,750 )
+Trny: 143908069 Level: 3 
+Blinds(30/60)
+turoff77 posts small blind [30].
+Chancentot29 posts big blind [60].
+** Dealing down cards **
+Dealt to turoff77 [  Qs 7s ]
+RITZ35 folds
+KAX10 raises [120]
+rihaly55 calls [120]
+turoff77 calls [90]
+Chancentot29 folds
+** Dealing Flop ** [ Jh, Th, 2c ]
+billjam99 has joined the table.
+turoff77 checks
+KAX10 checks
+rihaly55 checks
+** Dealing Turn ** [ 6d ]
+turoff77 checks
+KAX10 bets [210]
+rihaly55 folds
+turoff77 folds
+KAX10 does not show cards.
+KAX10 wins 630 chips
+Game #16417244144 starts.
+
+#Game No : 16417244144 
+
+
+***** Hand History for Game 16417244144 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 3  Blinds(30/60) - Tuesday, September 05, 18:22:42 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,740 )
+Seat 5: KAX10 ( 6,120 )
+Seat 4: RITZ35 ( 3,555 )
+Seat 6: billjam99 ( 2,000 )
+Seat 1: rihaly55 ( 2,155 )
+Seat 2: turoff77 ( 3,630 )
+Trny: 143908069 Level: 3 
+Blinds(30/60)
+Chancentot29 posts small blind [30].
+RITZ35 posts big blind [60].
+** Dealing down cards **
+Dealt to turoff77 [  2h 2s ]
+KAX10 folds
+billjam99 folds
+rihaly55 calls [60]
+turoff77 calls [60]
+Chancentot29 folds
+RITZ35 checks
+** Dealing Flop ** [ Qd, Js, Qc ]
+RITZ35 checks
+rihaly55 bets [210]
+turoff77 folds
+RITZ35 folds
+rihaly55 does not show cards.
+rihaly55 wins 420 chips
+Game #16417246994 starts.
+
+#Game No : 16417246994 
+
+
+***** Hand History for Game 16417246994 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 3  Blinds(30/60) - Tuesday, September 05, 18:23:24 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,710 )
+Seat 5: KAX10 ( 6,120 )
+Seat 4: RITZ35 ( 3,495 )
+Seat 6: billjam99 ( 2,000 )
+Seat 1: rihaly55 ( 2,305 )
+Seat 2: turoff77 ( 3,570 )
+Trny: 143908069 Level: 3 
+Blinds(30/60)
+RITZ35 posts small blind [30].
+KAX10 posts big blind [60].
+** Dealing down cards **
+Dealt to turoff77 [  6d Ad ]
+billjam99 calls [60]
+rihaly55 folds
+turoff77 calls [60]
+Chancentot29 folds
+RITZ35 folds
+KAX10 checks
+** Dealing Flop ** [ 4d, 3d, Ah ]
+KAX10 checks
+billjam99 bets [105]
+turoff77 calls [105]
+KAX10 folds
+** Dealing Turn ** [ 7h ]
+billjam99 bets [210]
+turoff77 calls [210]
+** Dealing River ** [ Th ]
+billjam99 checks
+turoff77 checks
+billjam99 shows [ 8d, 8h ]a pair of Eights.
+turoff77 shows [ 6d, Ad ]a pair of Aces.
+turoff77 wins 840 chips from the main pot with a pair of Aces.
+Game #16417249688 starts.
+
+#Game No : 16417249688 
+
+
+***** Hand History for Game 16417249688 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:24:12 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,710 )
+Seat 5: KAX10 ( 6,060 )
+Seat 4: RITZ35 ( 3,465 )
+Seat 6: billjam99 ( 1,625 )
+Seat 1: rihaly55 ( 2,305 )
+Seat 2: turoff77 ( 4,035 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+KAX10 posts small blind [40].
+billjam99 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  4s 5d ]
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [160]
+KAX10 folds
+billjam99 calls [80]
+** Dealing Flop ** [ 3h, Js, 8h ]
+billjam99 checks
+RITZ35 bets [360]
+billjam99 folds
+RITZ35 does not show cards.
+RITZ35 wins 720 chips
+Game #16417251742 starts.
+
+#Game No : 16417251742 
+
+
+***** Hand History for Game 16417251742 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:24:40 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,710 )
+Seat 5: KAX10 ( 6,020 )
+Seat 4: RITZ35 ( 3,665 )
+Seat 6: billjam99 ( 1,465 )
+Seat 1: rihaly55 ( 2,305 )
+Seat 2: turoff77 ( 4,035 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+billjam99 posts small blind [40].
+rihaly55 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  Jd 6d ]
+turoff77 raises [200]
+Chancentot29 folds
+RITZ35 folds
+KAX10 folds
+billjam99 calls [160]
+rihaly55 calls [120]
+** Dealing Flop ** [ 9s, Ks, 4s ]
+billjam99 checks
+rihaly55 checks
+turoff77 checks
+** Dealing Turn ** [ 6h ]
+billjam99 bets [300]
+rihaly55 folds
+turoff77 folds
+billjam99 does not show cards.
+billjam99 wins 900 chips
+Game #16417254892 starts.
+
+#Game No : 16417254892 
+
+
+***** Hand History for Game 16417254892 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:25:29 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,710 )
+Seat 5: KAX10 ( 6,020 )
+Seat 4: RITZ35 ( 3,665 )
+Seat 6: billjam99 ( 1,865 )
+Seat 1: rihaly55 ( 2,105 )
+Seat 2: turoff77 ( 3,835 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+rihaly55 posts small blind [40].
+turoff77 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  6s 3s ]
+Chancentot29 folds
+RITZ35 raises [240]
+KAX10 folds
+billjam99 folds
+rihaly55 calls [200]
+turoff77 calls [160]
+** Dealing Flop ** [ 4d, 4c, Qh ]
+rihaly55 bets [720]
+turoff77 folds
+RITZ35 raises [2,880]
+rihaly55 is all-In  [1,145]
+** Dealing Turn ** [ 6d ]
+** Dealing River ** [ 8h ]
+RITZ35 shows [ Qc, Ad ]two pairs, Queens and Fours.
+rihaly55 shows [ 9d, 9h ]two pairs, Nines and Fours.
+RITZ35 wins 1,015 chips from the side pot 1 with two pairs, Queens and Fours.
+RITZ35 wins 4,450 chips from the main pot with two pairs, Queens and Fours.
+waiting for rihaly55  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: rihaly55 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Game #16417258290 starts.
+
+#Game No : 16417258290 
+
+
+***** Hand History for Game 16417258290 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:26:31 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,710 )
+Seat 5: KAX10 ( 6,020 )
+Seat 4: RITZ35 ( 6,010 )
+Seat 6: billjam99 ( 1,865 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 3,595 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+turoff77 posts small blind [40].
+Chancentot29 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  8c 9d ]
+RITZ35 folds
+KAX10 raises [200]
+billjam99 calls [200]
+rihaly55 folds
+turoff77 calls [160]
+Chancentot29 folds
+** Dealing Flop ** [ 6s, Js, Jh ]
+turoff77 checks
+KAX10 bets [340]
+billjam99 folds
+turoff77 folds
+KAX10 does not show cards.
+KAX10 wins 1,020 chips
+Game #16417260769 starts.
+
+#Game No : 16417260769 
+
+
+***** Hand History for Game 16417260769 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:27:04 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,630 )
+Seat 5: KAX10 ( 6,500 )
+Seat 4: RITZ35 ( 6,010 )
+Seat 6: billjam99 ( 1,665 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 3,395 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+Chancentot29 posts small blind [40].
+RITZ35 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  Ac Kh ]
+KAX10 folds
+billjam99 calls [80]
+rihaly55 folds
+turoff77 raises [400]
+Chancentot29 folds
+RITZ35 calls [320]
+billjam99 calls [320]
+** Dealing Flop ** [ Js, 6d, Qd ]
+RITZ35 bets [1,240]
+billjam99 is all-In  [1,265]
+turoff77 folds
+RITZ35 calls [25]
+** Dealing Turn ** [ 9h ]
+** Dealing River ** [ 9s ]
+RITZ35 shows [ Ah, Jd ]two pairs, Jacks and Nines.
+billjam99 shows [ 7d, 9d ]three of a kind, Nines.
+billjam99 wins 3,770 chips from the main pot with three of a kind, Nines.
+Game #16417262781 starts.
+
+#Game No : 16417262781 
+
+
+***** Hand History for Game 16417262781 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:27:42 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,590 )
+Seat 5: KAX10 ( 6,500 )
+Seat 4: RITZ35 ( 4,345 )
+Seat 6: billjam99 ( 3,770 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 2,995 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+RITZ35 posts small blind [40].
+KAX10 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  3d Th ]
+billjam99 calls [80]
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 checks
+** Dealing Flop ** [ 6h, Qh, Td ]
+KAX10 checks
+billjam99 checks
+** Dealing Turn ** [ Ac ]
+KAX10 checks
+billjam99 bets [100]
+KAX10 folds
+billjam99 does not show cards.
+billjam99 wins 300 chips
+Game #16417264422 starts.
+
+#Game No : 16417264422 
+
+
+***** Hand History for Game 16417264422 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:28:14 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,590 )
+Seat 5: KAX10 ( 6,420 )
+Seat 4: RITZ35 ( 4,305 )
+Seat 6: billjam99 ( 3,890 )
+Seat 1: rihaly55 ( 2,000 )
+Seat 2: turoff77 ( 2,995 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+KAX10 posts small blind [40].
+billjam99 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  Tc 8s ]
+rihaly55 calls [80]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 raises [200]
+billjam99 folds
+rihaly55 calls [160]
+** Dealing Flop ** [ 9s, 4c, 4h ]
+KAX10 bets [280]
+rihaly55 folds
+KAX10 does not show cards.
+KAX10 wins 840 chips
+Game #16417268139 starts.
+
+#Game No : 16417268139 
+
+
+***** Hand History for Game 16417268139 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:29:03 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,590 )
+Seat 5: KAX10 ( 6,740 )
+Seat 4: RITZ35 ( 4,305 )
+Seat 6: billjam99 ( 3,810 )
+Seat 1: rihaly55 ( 1,760 )
+Seat 2: turoff77 ( 2,995 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+billjam99 posts small blind [40].
+rihaly55 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  Qd 8c ]
+turoff77 folds
+Chancentot29 calls [80]
+RITZ35 folds
+KAX10 calls [80]
+billjam99 calls [40]
+rihaly55 checks
+** Dealing Flop ** [ 9h, Jc, 9c ]
+billjam99 bets [160]
+rihaly55 calls [160]
+Chancentot29 folds
+KAX10 folds
+** Dealing Turn ** [ 3s ]
+billjam99 bets [320]
+rihaly55 calls [320]
+** Dealing River ** [ 7s ]
+billjam99 checks
+rihaly55 checks
+billjam99 shows [ Js, 6c ]two pairs, Jacks and Nines.
+rihaly55 doesn't show [ Kh, Tc ]a pair of Nines.
+billjam99 wins 1,280 chips from the main pot with two pairs, Jacks and Nines.
+Game #16417270956 starts.
+
+#Game No : 16417270956 
+
+
+***** Hand History for Game 16417270956 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:29:56 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,510 )
+Seat 5: KAX10 ( 6,660 )
+Seat 4: RITZ35 ( 4,305 )
+Seat 6: billjam99 ( 4,530 )
+Seat 1: rihaly55 ( 1,200 )
+Seat 2: turoff77 ( 2,995 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+rihaly55 posts small blind [40].
+turoff77 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  Jh 3c ]
+Chancentot29 calls [80]
+RITZ35 did not respond in time
+RITZ35 folds
+KAX10 folds
+billjam99 calls [80]
+rihaly55 calls [40]
+turoff77 checks
+** Dealing Flop ** [ Kc, 6c, Kh ]
+rihaly55 checks
+turoff77 checks
+Chancentot29 bets [160]
+billjam99 folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 does not show cards.
+Chancentot29 wins 480 chips
+Game #16417275686 starts.
+
+#Game No : 16417275686 
+
+
+***** Hand History for Game 16417275686 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:31:15 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,750 )
+Seat 5: KAX10 ( 6,660 )
+Seat 4: RITZ35 ( 4,305 )
+Seat 6: billjam99 ( 4,450 )
+Seat 1: rihaly55 ( 1,120 )
+Seat 2: turoff77 ( 2,915 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+turoff77 posts small blind [40].
+Chancentot29 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  9h Jh ]
+RITZ35 folds
+KAX10 folds
+billjam99 folds
+rihaly55 folds
+turoff77 raises [160]
+Chancentot29 calls [120]
+** Dealing Flop ** [ 7s, 4s, 9s ]
+turoff77 bets [200]
+Chancentot29 raises [400]
+turoff77 calls [200]
+** Dealing Turn ** [ Td ]
+turoff77 checks
+Chancentot29 bets [600]
+turoff77 calls [600]
+** Dealing River ** [ 5c ]
+turoff77 is all-In  [1,715]
+Chancentot29 calls [1,715]
+turoff77 shows [ 9h, Jh ]a pair of Nines.
+Chancentot29 shows [ 7c, 7d ]three of a kind, Sevens.
+Chancentot29 wins 5,830 chips from the main pot with three of a kind, Sevens.
+waiting for turoff77  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Game #16417278168 starts.
+
+#Game No : 16417278168 
+
+
+***** Hand History for Game 16417278168 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny: 143908069 Level: 4  Blinds(40/80) - Tuesday, September 05, 18:32:04 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,665 )
+Seat 5: KAX10 ( 6,660 )
+Seat 4: RITZ35 ( 4,305 )
+Seat 6: billjam99 ( 4,450 )
+Seat 1: rihaly55 ( 1,120 )
+Seat 2: turoff77 ( 2,000 )
+Trny: 143908069 Level: 4 
+Blinds(40/80)
+Chancentot29 posts small blind [40].
+RITZ35 posts big blind [80].
+** Dealing down cards **
+Dealt to turoff77 [  6d 2h ]
+KAX10 raises [160]
+billjam99 folds
+rihaly55 calls [160]
+turoff77 folds
+Chancentot29 folds
+RITZ35 calls [80]
+** Dealing Flop ** [ 6h, 3d, 9c ]
+RITZ35 checks
+KAX10 bets [260]
+rihaly55 folds
+RITZ35 calls [260]
+** Dealing Turn ** [ Qc ]
+RITZ35 is all-In  [3,885]
+KAX10 folds
+RITZ35 does not show cards.
+RITZ35 wins 4,925 chips
+Game #16417281817 starts.
+
+#Game No : 16417281817 
+
+
+***** Hand History for Game 16417281817 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:33:01 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,625 )
+Seat 5: KAX10 ( 6,240 )
+Seat 4: RITZ35 ( 4,925 )
+Seat 6: billjam99 ( 4,450 )
+Seat 1: rihaly55 ( 960 )
+Seat 2: turoff77 ( 2,000 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+RITZ35 posts small blind [50].
+KAX10 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  Ad Jc ]
+billjam99 folds
+rihaly55 folds
+turoff77 is all-In  [1,990]
+Chancentot29 folds
+RITZ35 folds
+KAX10 calls [1,890]
+** Dealing Flop ** [ Qs, 8c, 6s ]
+** Dealing Turn ** [ Jd ]
+** Dealing River ** [ As ]
+KAX10 shows [ Qd, Kc ]a pair of Queens.
+turoff77 shows [ Ad, Jc ]two pairs, Aces and Jacks.
+turoff77 wins 4,090 chips from the main pot with two pairs, Aces and Jacks.
+Game #16417284188 starts.
+
+#Game No : 16417284188 
+
+
+***** Hand History for Game 16417284188 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:33:36 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,615 )
+Seat 5: KAX10 ( 4,240 )
+Seat 4: RITZ35 ( 4,865 )
+Seat 6: billjam99 ( 4,440 )
+Seat 1: rihaly55 ( 950 )
+Seat 2: turoff77 ( 4,090 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+KAX10 posts small blind [50].
+billjam99 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  6c 4d ]
+rihaly55 folds
+turoff77 folds
+Chancentot29 calls [100]
+RITZ35 folds
+KAX10 calls [50]
+billjam99 checks
+** Dealing Flop ** [ 8h, Ad, 8c ]
+KAX10 checks
+billjam99 checks
+Chancentot29 bets [150]
+KAX10 folds
+billjam99 folds
+Chancentot29 does not show cards.
+Chancentot29 wins 510 chips
+Game #16417285645 starts.
+
+#Game No : 16417285645 
+
+
+***** Hand History for Game 16417285645 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:34:04 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,865 )
+Seat 5: KAX10 ( 4,130 )
+Seat 4: RITZ35 ( 4,855 )
+Seat 6: billjam99 ( 4,330 )
+Seat 1: rihaly55 ( 940 )
+Seat 2: turoff77 ( 4,080 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+billjam99 posts small blind [50].
+rihaly55 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  7h 4d ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 raises [200]
+billjam99 calls [150]
+rihaly55 calls [100]
+** Dealing Flop ** [ Jc, Qc, Td ]
+billjam99 checks
+rihaly55 is all-In  [730]
+KAX10 calls [730]
+billjam99 calls [730]
+** Dealing Turn ** [ 9s ]
+billjam99 checks
+KAX10 bets [300]
+billjam99 calls [300]
+** Dealing River ** [ 6d ]
+billjam99 checks
+KAX10 checks
+billjam99 shows [ Ah, 8d ]a straight, Eight to Queen.
+rihaly55 shows [ Kc, 6h ]a straight, Nine to King.
+KAX10 doesn't show [ 5s, Js ]a pair of Jacks.
+billjam99 wins 600 chips from the side pot 1 with a straight, Eight to Queen.
+rihaly55 wins 2,850 chips from the main pot with a straight, Nine to King.
+Game #16417288467 starts.
+
+#Game No : 16417288467 
+
+
+***** Hand History for Game 16417288467 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:34:58 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,855 )
+Seat 5: KAX10 ( 2,890 )
+Seat 4: RITZ35 ( 4,845 )
+Seat 6: billjam99 ( 3,690 )
+Seat 1: rihaly55 ( 2,850 )
+Seat 2: turoff77 ( 4,070 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+rihaly55 posts small blind [50].
+turoff77 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  Ks Jd ]
+Chancentot29 calls [100]
+RITZ35 folds
+KAX10 folds
+billjam99 calls [100]
+rihaly55 folds
+turoff77 checks
+** Dealing Flop ** [ 5s, 6s, 5c ]
+turoff77 checks
+Chancentot29 checks
+billjam99 checks
+** Dealing Turn ** [ 3s ]
+turoff77 checks
+Chancentot29 checks
+billjam99 checks
+** Dealing River ** [ Ah ]
+turoff77 checks
+Chancentot29 checks
+billjam99 checks
+turoff77 shows [ Ks, Jd ]a pair of Fives with King kicker.
+Chancentot29 doesn't show [ Qh, 2h ]a pair of Fives.
+billjam99 doesn't show [ 9d, Jc ]a pair of Fives.
+turoff77 wins 410 chips from the main pot with a pair of Fives with King kicker.
+Game #16417291614 starts.
+
+#Game No : 16417291614 
+
+
+***** Hand History for Game 16417291614 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:35:48 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,745 )
+Seat 5: KAX10 ( 2,880 )
+Seat 4: RITZ35 ( 4,835 )
+Seat 6: billjam99 ( 3,580 )
+Seat 1: rihaly55 ( 2,790 )
+Seat 2: turoff77 ( 4,370 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+turoff77 posts small blind [50].
+Chancentot29 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  6h Qh ]
+RITZ35 folds
+KAX10 calls [100]
+billjam99 folds
+rihaly55 folds
+turoff77 calls [50]
+Chancentot29 checks
+** Dealing Flop ** [ Jh, 5s, 3h ]
+turoff77 bets [270]
+Chancentot29 folds
+KAX10 calls [270]
+** Dealing Turn ** [ Jc ]
+turoff77 bets [450]
+KAX10 folds
+turoff77 does not show cards.
+turoff77 wins 1,350 chips
+Game #16417294569 starts.
+
+#Game No : 16417294569 
+
+
+***** Hand History for Game 16417294569 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:36:35 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,635 )
+Seat 5: KAX10 ( 2,500 )
+Seat 4: RITZ35 ( 4,825 )
+Seat 6: billjam99 ( 3,570 )
+Seat 1: rihaly55 ( 2,780 )
+Seat 2: turoff77 ( 4,890 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+Chancentot29 posts small blind [50].
+RITZ35 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  Td 5s ]
+KAX10 folds
+billjam99 calls [100]
+rihaly55 folds
+turoff77 folds
+Chancentot29 calls [50]
+RITZ35 checks
+** Dealing Flop ** [ 8s, 3d, 2d ]
+Chancentot29 checks
+RITZ35 bets [400]
+billjam99 calls [400]
+Chancentot29 folds
+** Dealing Turn ** [ 7d ]
+RITZ35 bets [1,160]
+billjam99 folds
+RITZ35 does not show cards.
+RITZ35 wins 2,320 chips
+Game #16417297574 starts.
+
+#Game No : 16417297574 
+
+
+***** Hand History for Game 16417297574 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:37:23 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,525 )
+Seat 5: KAX10 ( 2,490 )
+Seat 4: RITZ35 ( 5,475 )
+Seat 6: billjam99 ( 3,060 )
+Seat 1: rihaly55 ( 2,770 )
+Seat 2: turoff77 ( 4,880 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+RITZ35 posts small blind [50].
+KAX10 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  2d Qs ]
+billjam99 calls [100]
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+KAX10 checks
+** Dealing Flop ** [ 9s, Tc, 8s ]
+KAX10 bets [155]
+billjam99 calls [155]
+** Dealing Turn ** [ Kh ]
+KAX10 bets [310]
+billjam99 folds
+KAX10 does not show cards.
+KAX10 wins 930 chips
+Game #16417300309 starts.
+
+#Game No : 16417300309 
+
+
+***** Hand History for Game 16417300309 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:38:06 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,515 )
+Seat 5: KAX10 ( 2,845 )
+Seat 4: RITZ35 ( 5,415 )
+Seat 6: billjam99 ( 2,795 )
+Seat 1: rihaly55 ( 2,760 )
+Seat 2: turoff77 ( 4,870 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+KAX10 posts small blind [50].
+billjam99 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  2s Js ]
+rihaly55 calls [100]
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [450]
+KAX10 folds
+billjam99 folds
+rihaly55 calls [350]
+** Dealing Flop ** [ 6s, Th, 6h ]
+rihaly55 checks
+RITZ35 bets [1,110]
+rihaly55 folds
+RITZ35 does not show cards.
+RITZ35 wins 2,220 chips
+Game #16417304338 starts.
+
+#Game No : 16417304338 
+
+
+***** Hand History for Game 16417304338 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:39:12 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,505 )
+Seat 5: KAX10 ( 2,785 )
+Seat 4: RITZ35 ( 6,065 )
+Seat 6: billjam99 ( 2,685 )
+Seat 1: rihaly55 ( 2,300 )
+Seat 2: turoff77 ( 4,860 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+billjam99 posts small blind [50].
+rihaly55 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  9s 6d ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [350]
+KAX10 calls [350]
+billjam99 folds
+rihaly55 raises [500]
+RITZ35 raises [1,850]
+KAX10 is all-In  [2,425]
+rihaly55 is all-In  [1,690]
+RITZ35 calls [575]
+** Dealing Flop ** [ 6s, 4h, 5d ]
+** Dealing Turn ** [ 7s ]
+** Dealing River ** [ Ts ]
+RITZ35 shows [ Kc, Qs ]high card King.
+KAX10 shows [ Ad, Kh ]high card Ace.
+rihaly55 shows [ Th, Td ]three of a kind, Tens.
+KAX10 wins 970 chips from the side pot 1 with high card, Ace.
+rihaly55 wins 6,980 chips from the main pot with three of a kind, Tens.
+Game #16417306649 starts.
+
+#Game No : 16417306649 
+
+
+***** Hand History for Game 16417306649 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:5  Blinds-Antes(50/100 -10) - Tuesday, September 05, 18:39:56 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,495 )
+Seat 5: KAX10 ( 970 )
+Seat 4: RITZ35 ( 3,280 )
+Seat 6: billjam99 ( 2,625 )
+Seat 1: rihaly55 ( 6,980 )
+Seat 2: turoff77 ( 4,850 )
+Trny:143908069 Level:5 
+Blinds-Antes(50/100 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+rihaly55 posts small blind [50].
+turoff77 posts big blind [100].
+** Dealing down cards **
+Dealt to turoff77 [  Ac Qh ]
+Chancentot29 folds
+RITZ35 folds
+KAX10 folds
+billjam99 folds
+rihaly55 folds
+turoff77 does not show cards.
+turoff77 wins 210 chips
+Game #16417307918 starts.
+
+#Game No : 16417307918 
+
+
+***** Hand History for Game 16417307918 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:40:20 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,485 )
+Seat 5: KAX10 ( 960 )
+Seat 4: RITZ35 ( 3,270 )
+Seat 6: billjam99 ( 2,615 )
+Seat 1: rihaly55 ( 6,920 )
+Seat 2: turoff77 ( 4,950 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+KAX10 posts ante [10]
+billjam99 posts ante [10]
+turoff77 posts small blind [60].
+Chancentot29 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  As Ts ]
+RITZ35 folds
+KAX10 is all-In  [950]
+billjam99 is all-In  [2,605]
+rihaly55 calls [2,605]
+turoff77 is all-In  [4,880]
+Chancentot29 folds
+rihaly55 calls [2,335]
+** Dealing Flop ** [ 5c, 9s, 8s ]
+** Dealing Turn ** [ 6h ]
+** Dealing River ** [ Qh ]
+turoff77 shows [ As, Ts ]high card Ace.
+KAX10 shows [ 6s, Js ]a pair of Sixes.
+billjam99 shows [ Ac, 7d ]a straight, Five to Nine.
+rihaly55 shows [ Ks, Ah ]high card Ace with King kicker.
+rihaly55 wins 4,670 chips from the side pot 2 with high card, Ace with King kicker.
+billjam99 wins 4,965 chips from the side pot 1 with a straight, Five to Nine.
+billjam99 wins 3,980 chips from the main pot with a straight, Five to Nine.
+waiting for turoff77, KAX10  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Player KAX10 finished in 98.
+Game #16417310683 starts.
+
+#Game No : 16417310683 
+
+
+***** Hand History for Game 16417310683 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:41:23 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 9,355 )
+Seat 4: RITZ35 ( 3,260 )
+Seat 6: billjam99 ( 8,945 )
+Seat 1: rihaly55 ( 6,640 )
+Seat 2: turoff77 ( 2,000 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+billjam99 posts ante [10]
+Chancentot29 posts small blind [60].
+RITZ35 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  8c Kh ]
+billjam99 folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 calls [60]
+RITZ35 checks
+** Dealing Flop ** [ Tc, 6h, 4h ]
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 1 990 chips to 3 990 chips.
+Chancentot29 checks
+RITZ35 bets [290]
+Chancentot29 folds
+RITZ35 does not show cards.
+RITZ35 wins 580 chips
+Game #16417313050 starts.
+
+#Game No : 16417313050 
+
+
+***** Hand History for Game 16417313050 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:41:49 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 9,225 )
+Seat 4: RITZ35 ( 3,420 )
+Seat 6: billjam99 ( 8,935 )
+Seat 1: rihaly55 ( 6,630 )
+Seat 2: turoff77 ( 3,990 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+billjam99 posts ante [10]
+RITZ35 posts small blind [60].
+billjam99 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  9s Qh ]
+sasha30912 has joined the table.
+Player sasha30912 has been moved from table 7 to this table
+rihaly55 folds
+turoff77 raises [360]
+Chancentot29 folds
+RITZ35 folds
+billjam99 raises [1,140]
+turoff77 calls [900]
+** Dealing Flop ** [ 6c, 8d, Tc ]
+billjam99 is all-In  [7,665]
+turoff77 is all-In  [2,720]
+** Dealing Turn ** [ 2s ]
+** Dealing River ** [ 6s ]
+billjam99 shows [ Ac, As ]two pairs, Aces and Sixes.
+turoff77 shows [ 9s, Qh ]a pair of Sixes.
+billjam99 wins 4,945 chips from the side pot 1 with two pairs, Aces and Sixes.
+billjam99 wins 8,070 chips from the main pot with two pairs, Aces and Sixes.
+waiting for turoff77  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Game #16417315276 starts.
+
+#Game No : 16417315276 
+
+
+***** Hand History for Game 16417315276 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:42:23 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,215 )
+Seat 4: RITZ35 ( 3,350 )
+Seat 6: billjam99 ( 13,015 )
+Seat 1: rihaly55 ( 6,620 )
+Seat 5: sasha30912 ( 5,710 )
+Seat 2: turoff77 ( 2,000 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+billjam99 posts ante [10]
+billjam99 posts small blind [60].
+rihaly55 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  2d Qs ]
+turoff77 folds
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 1 990 chips to 3 990 chips.
+Chancentot29 folds
+RITZ35 folds
+billjam99 calls [60]
+rihaly55 checks
+** Dealing Flop ** [ 9s, 9d, Jh ]
+billjam99 checks
+rihaly55 checks
+** Dealing Turn ** [ Kc ]
+billjam99 bets [240]
+rihaly55 folds
+billjam99 does not show cards.
+billjam99 wins 530 chips
+Game #16417317658 starts.
+
+#Game No : 16417317658 
+
+
+***** Hand History for Game 16417317658 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:43:06 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,205 )
+Seat 4: RITZ35 ( 3,340 )
+Seat 6: billjam99 ( 13,175 )
+Seat 1: rihaly55 ( 6,490 )
+Seat 5: sasha30912 ( 5,710 )
+Seat 2: turoff77 ( 3,990 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+sasha30912 posts ante [10]
+billjam99 posts ante [10]
+rihaly55 posts small blind [60].
+turoff77 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  3s 7h ]
+Chancentot29 calls [120]
+RITZ35 raises [540]
+sasha30912 folds
+billjam99 calls [540]
+rihaly55 folds
+turoff77 folds
+Chancentot29 calls [420]
+** Dealing Flop ** [ Qh, 5s, 2c ]
+Chancentot29 checks
+RITZ35 is all-In  [2,790]
+billjam99 folds
+Chancentot29 folds
+RITZ35 does not show cards.
+RITZ35 wins 4,650 chips
+Game #16417320202 starts.
+
+#Game No : 16417320202 
+
+
+***** Hand History for Game 16417320202 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:43:47 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,655 )
+Seat 4: RITZ35 ( 4,650 )
+Seat 6: billjam99 ( 12,625 )
+Seat 1: rihaly55 ( 6,420 )
+Seat 5: sasha30912 ( 5,700 )
+Seat 2: turoff77 ( 3,860 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+sasha30912 posts ante [10]
+billjam99 posts ante [10]
+turoff77 posts small blind [60].
+Chancentot29 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  8h Jc ]
+RITZ35 folds
+sasha30912 raises [240]
+billjam99 folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 calls [120]
+** Dealing Flop ** [ 3c, Ts, Qs ]
+Chancentot29 checks
+sasha30912 checks
+** Dealing Turn ** [ 5c ]
+Chancentot29 checks
+sasha30912 checks
+** Dealing River ** [ 4d ]
+Chancentot29 bets [240]
+sasha30912 calls [240]
+Chancentot29 shows [ Kd, 8c ]high card King.
+sasha30912 shows [ Th, 7h ]a pair of Tens.
+sasha30912 wins 1,080 chips from the main pot with a pair of Tens.
+Game #16417324032 starts.
+
+#Game No : 16417324032 
+
+
+***** Hand History for Game 16417324032 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:45:02 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,165 )
+Seat 4: RITZ35 ( 4,640 )
+Seat 6: billjam99 ( 12,615 )
+Seat 1: rihaly55 ( 6,410 )
+Seat 5: sasha30912 ( 6,290 )
+Seat 2: turoff77 ( 3,790 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+sasha30912 posts ante [10]
+billjam99 posts ante [10]
+Chancentot29 posts small blind [60].
+RITZ35 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  2c 6d ]
+sasha30912 folds
+billjam99 folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 calls [60]
+RITZ35 checks
+** Dealing Flop ** [ 9s, 3s, Th ]
+Chancentot29 checks
+RITZ35 checks
+** Dealing Turn ** [ 5d ]
+Chancentot29 checks
+RITZ35 checks
+** Dealing River ** [ 6h ]
+Chancentot29 checks
+RITZ35 bets [300]
+Chancentot29 folds
+RITZ35 shows [ 5h, 3h ]two pairs, Fives and Threes.
+RITZ35 wins 600 chips from the main pot with two pairs, Fives and Threes.
+Game #16417327278 starts.
+
+#Game No : 16417327278 
+
+
+***** Hand History for Game 16417327278 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:45:54 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,035 )
+Seat 4: RITZ35 ( 4,810 )
+Seat 6: billjam99 ( 12,605 )
+Seat 1: rihaly55 ( 6,400 )
+Seat 5: sasha30912 ( 6,280 )
+Seat 2: turoff77 ( 3,780 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+sasha30912 posts ante [10]
+billjam99 posts ante [10]
+RITZ35 posts small blind [60].
+sasha30912 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  6h 7c ]
+billjam99 folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+sasha30912 does not show cards.
+sasha30912 wins 240 chips
+Game #16417330095 starts.
+
+#Game No : 16417330095 
+
+
+***** Hand History for Game 16417330095 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:46:30 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,025 )
+Seat 4: RITZ35 ( 4,740 )
+Seat 6: billjam99 ( 12,595 )
+Seat 1: rihaly55 ( 6,390 )
+Seat 5: sasha30912 ( 6,390 )
+Seat 2: turoff77 ( 3,770 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+sasha30912 posts ante [10]
+billjam99 posts ante [10]
+sasha30912 posts small blind [60].
+billjam99 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  2c 5s ]
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+sasha30912 calls [60]
+billjam99 checks
+** Dealing Flop ** [ Td, 3s, Ts ]
+sasha30912 bets [120]
+billjam99 calls [120]
+** Dealing Turn ** [ 9h ]
+sasha30912 checks
+billjam99 bets [270]
+sasha30912 calls [270]
+** Dealing River ** [ 3h ]
+sasha30912 checks
+billjam99 bets [1,080]
+sasha30912 calls [1,080]
+billjam99 shows [ Th, 4d ]a full house, Tens full of Threes.
+sasha30912 doesn't show [ Js, Ac ]two pairs, Tens and Threes.
+billjam99 wins 3,240 chips from the main pot with a full house, Tens full of Threes.
+Game #16417332549 starts.
+
+#Game No : 16417332549 
+
+
+***** Hand History for Game 16417332549 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:47:17 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,015 )
+Seat 4: RITZ35 ( 4,730 )
+Seat 6: billjam99 ( 14,235 )
+Seat 1: rihaly55 ( 6,380 )
+Seat 5: sasha30912 ( 4,790 )
+Seat 2: turoff77 ( 3,760 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+sasha30912 posts ante [10]
+billjam99 posts ante [10]
+billjam99 posts small blind [60].
+rihaly55 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  Jc Th ]
+turoff77 raises [240]
+Chancentot29 folds
+RITZ35 folds
+sasha30912 folds
+billjam99 folds
+rihaly55 folds
+turoff77 does not show cards.
+turoff77 wins 480 chips
+Game #16417334616 starts.
+
+#Game No : 16417334616 
+
+
+***** Hand History for Game 16417334616 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:6  Blinds-Antes(60/120 -10) - Tuesday, September 05, 18:47:47 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,005 )
+Seat 4: RITZ35 ( 4,720 )
+Seat 6: billjam99 ( 14,165 )
+Seat 1: rihaly55 ( 6,250 )
+Seat 5: sasha30912 ( 4,780 )
+Seat 2: turoff77 ( 3,990 )
+Trny:143908069 Level:6 
+Blinds-Antes(60/120 -10)
+rihaly55 posts ante [10]
+turoff77 posts ante [10]
+Chancentot29 posts ante [10]
+RITZ35 posts ante [10]
+sasha30912 posts ante [10]
+billjam99 posts ante [10]
+rihaly55 posts small blind [60].
+turoff77 posts big blind [120].
+** Dealing down cards **
+Dealt to turoff77 [  Ad 5d ]
+Chancentot29 folds
+RITZ35 folds
+sasha30912 raises [240]
+billjam99 folds
+rihaly55 will be using their time bank for this hand.
+rihaly55 folds
+turoff77 calls [120]
+** Dealing Flop ** [ As, 7h, 3s ]
+turoff77 checks
+sasha30912 checks
+** Dealing Turn ** [ 5h ]
+turoff77 bets [240]
+sasha30912 folds
+turoff77 does not show cards.
+turoff77 wins 840 chips
+Game #16417337579 starts.
+
+#Game No : 16417337579 
+
+
+***** Hand History for Game 16417337579 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:7  Blinds-Antes(80/160 -15) - Tuesday, September 05, 18:48:44 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,995 )
+Seat 4: RITZ35 ( 4,710 )
+Seat 6: billjam99 ( 14,155 )
+Seat 1: rihaly55 ( 6,180 )
+Seat 5: sasha30912 ( 4,530 )
+Seat 2: turoff77 ( 4,340 )
+Trny:143908069 Level:7 
+Blinds-Antes(80/160 -15)
+rihaly55 posts ante [15]
+turoff77 posts ante [15]
+Chancentot29 posts ante [15]
+RITZ35 posts ante [15]
+sasha30912 posts ante [15]
+billjam99 posts ante [15]
+turoff77 posts small blind [80].
+Chancentot29 posts big blind [160].
+** Dealing down cards **
+Dealt to turoff77 [  6d Kd ]
+RITZ35 folds
+sasha30912 folds
+billjam99 raises [640]
+rihaly55 will be using their time bank for this hand.
+rihaly55 did not respond in time
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+billjam99 does not show cards.
+billjam99 wins 970 chips
+Game #16417341731 starts.
+
+#Game No : 16417341731 
+
+
+***** Hand History for Game 16417341731 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:7  Blinds-Antes(80/160 -15) - Tuesday, September 05, 18:49:41 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,820 )
+Seat 4: RITZ35 ( 4,695 )
+Seat 6: billjam99 ( 14,470 )
+Seat 1: rihaly55 ( 6,165 )
+Seat 5: sasha30912 ( 4,515 )
+Seat 2: turoff77 ( 4,245 )
+Trny:143908069 Level:7 
+Blinds-Antes(80/160 -15)
+rihaly55 posts ante [15]
+turoff77 posts ante [15]
+Chancentot29 posts ante [15]
+RITZ35 posts ante [15]
+sasha30912 posts ante [15]
+billjam99 posts ante [15]
+Chancentot29 posts small blind [80].
+RITZ35 posts big blind [160].
+** Dealing down cards **
+Dealt to turoff77 [  5c 9c ]
+sasha30912 raises [320]
+billjam99 folds
+rihaly55 folds
+turoff77 calls [320]
+Chancentot29 folds
+RITZ35 folds
+** Dealing Flop ** [ Jh, 9h, 8c ]
+sasha30912 checks
+turoff77 checks
+** Dealing Turn ** [ 6s ]
+There will be a break in 4 minute(s)
+sasha30912 bets [659]
+turoff77 folds
+sasha30912 does not show cards.
+sasha30912 wins 1,629 chips
+Game #16417343665 starts.
+
+#Game No : 16417343665 
+
+
+***** Hand History for Game 16417343665 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:7  Blinds-Antes(80/160 -15) - Tuesday, September 05, 18:50:17 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,725 )
+Seat 4: RITZ35 ( 4,520 )
+Seat 6: billjam99 ( 14,455 )
+Seat 1: rihaly55 ( 6,150 )
+Seat 5: sasha30912 ( 5,150 )
+Seat 2: turoff77 ( 3,910 )
+Trny:143908069 Level:7 
+Blinds-Antes(80/160 -15)
+rihaly55 posts ante [15]
+turoff77 posts ante [15]
+Chancentot29 posts ante [15]
+RITZ35 posts ante [15]
+sasha30912 posts ante [15]
+billjam99 posts ante [15]
+RITZ35 posts small blind [80].
+sasha30912 posts big blind [160].
+** Dealing down cards **
+Dealt to turoff77 [  Kd 8s ]
+billjam99 calls [160]
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+sasha30912 is all-In  [4,975]
+billjam99 folds
+sasha30912 does not show cards.
+sasha30912 wins 5,465 chips
+Game #16417344644 starts.
+
+#Game No : 16417344644 
+
+
+***** Hand History for Game 16417344644 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:7  Blinds-Antes(80/160 -15) - Tuesday, September 05, 18:50:37 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,710 )
+Seat 4: RITZ35 ( 4,425 )
+Seat 6: billjam99 ( 14,280 )
+Seat 1: rihaly55 ( 6,135 )
+Seat 5: sasha30912 ( 5,465 )
+Seat 2: turoff77 ( 3,895 )
+Trny:143908069 Level:7 
+Blinds-Antes(80/160 -15)
+rihaly55 posts ante [15]
+turoff77 posts ante [15]
+Chancentot29 posts ante [15]
+RITZ35 posts ante [15]
+sasha30912 posts ante [15]
+billjam99 posts ante [15]
+sasha30912 posts small blind [80].
+billjam99 posts big blind [160].
+** Dealing down cards **
+Dealt to turoff77 [  Tc 5h ]
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [320]
+sasha30912 folds
+billjam99 calls [160]
+** Dealing Flop ** [ As, 3s, 2h ]
+billjam99 checks
+RITZ35 is all-In  [4,090]
+billjam99 folds
+RITZ35 shows [ Qs, Td ]high card Ace.
+RITZ35 wins 4,900 chips from the main pot with high card, Ace.
+Game #16417346025 starts.
+
+#Game No : 16417346025 
+
+
+***** Hand History for Game 16417346025 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:7  Blinds-Antes(80/160 -15) - Tuesday, September 05, 18:51:03 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,695 )
+Seat 4: RITZ35 ( 4,900 )
+Seat 6: billjam99 ( 13,945 )
+Seat 1: rihaly55 ( 6,120 )
+Seat 5: sasha30912 ( 5,370 )
+Seat 2: turoff77 ( 3,880 )
+Trny:143908069 Level:7 
+Blinds-Antes(80/160 -15)
+rihaly55 posts ante [15]
+turoff77 posts ante [15]
+Chancentot29 posts ante [15]
+RITZ35 posts ante [15]
+sasha30912 posts ante [15]
+billjam99 posts ante [15]
+billjam99 posts small blind [80].
+rihaly55 posts big blind [160].
+** Dealing down cards **
+Dealt to turoff77 [  7h 9h ]
+turoff77 raises [400]
+Chancentot29 calls [400]
+RITZ35 folds
+sasha30912 calls [400]
+billjam99 folds
+rihaly55 folds
+** Dealing Flop ** [ Qh, 8d, 4h ]
+turoff77 bets [560]
+Chancentot29 raises [1,120]
+sasha30912 folds
+turoff77 calls [560]
+** Dealing Turn ** [ Kc ]
+turoff77 checks
+Chancentot29 bets [480]
+turoff77 calls [480]
+** Dealing River ** [ 9s ]
+turoff77 checks
+Chancentot29 bets [1,280]
+turoff77 folds
+Chancentot29 does not show cards.
+Chancentot29 wins 6,010 chips
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 1 865 chips to 3 865 chips.
+Game #16417349335 starts.
+
+#Game No : 16417349335 
+
+
+***** Hand History for Game 16417349335 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:7  Blinds-Antes(80/160 -15) - Tuesday, September 05, 18:51:56 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 10,410 )
+Seat 4: RITZ35 ( 4,885 )
+Seat 6: billjam99 ( 13,850 )
+Seat 1: rihaly55 ( 5,945 )
+Seat 5: sasha30912 ( 4,955 )
+Seat 2: turoff77 ( 3,865 )
+Trny:143908069 Level:7 
+Blinds-Antes(80/160 -15)
+rihaly55 posts ante [15]
+turoff77 posts ante [15]
+Chancentot29 posts ante [15]
+RITZ35 posts ante [15]
+sasha30912 posts ante [15]
+billjam99 posts ante [15]
+rihaly55 posts small blind [80].
+turoff77 posts big blind [160].
+** Dealing down cards **
+Dealt to turoff77 [  Kc 8d ]
+Chancentot29 folds
+RITZ35 folds
+sasha30912 folds
+billjam99 folds
+rihaly55 folds
+turoff77 does not show cards.
+turoff77 wins 330 chips
+
+
+***** Hand History for Game 16417388325 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:03:54 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,925 )
+Seat 4: RITZ35 ( 5,170 )
+Seat 6: billjam99 ( 12,485 )
+Seat 1: rihaly55 ( 5,940 )
+Seat 5: sasha30912 ( 5,400 )
+Seat 2: turoff77 ( 4,990 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+sasha30912 posts ante [20]
+billjam99 posts ante [20]
+Chancentot29 posts small blind [100].
+RITZ35 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  8h 8c ]
+sasha30912 raises [400]
+billjam99 folds
+rihaly55 folds
+turoff77 is all-In  [4,970]
+Chancentot29 folds
+RITZ35 folds
+sasha30912 folds
+turoff77 does not show cards.
+turoff77 wins 5,790 chips
+Game #16417390673 starts.
+
+#Game No : 16417390673 
+
+
+***** Hand History for Game 16417390673 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:04:24 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,805 )
+Seat 4: RITZ35 ( 4,950 )
+Seat 6: billjam99 ( 12,465 )
+Seat 1: rihaly55 ( 5,920 )
+Seat 5: sasha30912 ( 4,980 )
+Seat 2: turoff77 ( 5,790 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+sasha30912 posts ante [20]
+billjam99 posts ante [20]
+RITZ35 posts small blind [100].
+sasha30912 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  6h 5s ]
+billjam99 folds
+rihaly55 calls [200]
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [700]
+sasha30912 folds
+rihaly55 calls [600]
+** Dealing Flop ** [ 3c, Kh, Qc ]
+RITZ35 bets [1,920]
+rihaly55 calls [1,920]
+** Dealing Turn ** [ Ac ]
+RITZ35 is all-In  [2,210]
+rihaly55 calls [2,210]
+** Dealing River ** [ 5h ]
+RITZ35 shows [ 9s, 9d ]a pair of Nines.
+rihaly55 shows [ Th, Qh ]a pair of Queens.
+rihaly55 wins 10,180 chips from the main pot with a pair of Queens.
+waiting for RITZ35  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: RITZ35 rebuys 4 000 chips and the chip stack increases from 0 chips to 4 000 chips.
+Game #16417393097 starts.
+
+#Game No : 16417393097 
+
+
+***** Hand History for Game 16417393097 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:05:10 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 9,785 )
+Seat 4: RITZ35 ( 4,000 )
+Seat 6: billjam99 ( 12,445 )
+Seat 1: rihaly55 ( 11,150 )
+Seat 2: turoff77 ( 5,770 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+billjam99 posts ante [20]
+There is no Small Blind in this hand as the Big Blind of the previous hand left the table.
+billjam99 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  9c 6c ]
+rihaly55 folds
+turoff77 calls [200]
+Chancentot29 folds
+RITZ35 folds
+billjam99 checks
+** Dealing Flop ** [ 2c, Ts, Ah ]
+billjam99 checks
+jcdevilfish has joined the table.
+turoff77 checks
+** Dealing Turn ** [ 2h ]
+billjam99 checks
+turoff77 checks
+** Dealing River ** [ 4c ]
+billjam99 checks
+turoff77 checks
+billjam99 shows [ 8c, 3s ]a pair of Twos.
+turoff77 shows [ 9c, 6c ]a pair of Twos with Nine kicker.
+turoff77 wins 500 chips from the main pot with a pair of Twos with Nine kicker.
+Game #16417397141 starts.
+
+#Game No : 16417397141 
+
+
+***** Hand History for Game 16417397141 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:05:59 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,765 )
+Seat 4: RITZ35 ( 3,980 )
+Seat 6: billjam99 ( 12,225 )
+Seat 5: jcdevilfish ( 2,000 )
+Seat 1: rihaly55 ( 11,130 )
+Seat 2: turoff77 ( 6,050 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+jcdevilfish posts ante [20]
+billjam99 posts ante [20]
+billjam99 posts small blind [100].
+rihaly55 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  Qs 5s ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish folds
+billjam99 calls [100]
+rihaly55 checks
+** Dealing Flop ** [ Kh, Jd, 9d ]
+billjam99 bets [260]
+rihaly55 folds
+billjam99 does not show cards.
+billjam99 wins 780 chips
+Game #16417398350 starts.
+
+#Game No : 16417398350 
+
+
+***** Hand History for Game 16417398350 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:06:19 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,745 )
+Seat 4: RITZ35 ( 3,960 )
+Seat 6: billjam99 ( 12,525 )
+Seat 5: jcdevilfish ( 1,980 )
+Seat 1: rihaly55 ( 10,910 )
+Seat 2: turoff77 ( 6,030 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+jcdevilfish posts ante [20]
+billjam99 posts ante [20]
+rihaly55 posts small blind [100].
+turoff77 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  5d 8h ]
+Chancentot29 folds
+RITZ35 raises [400]
+jcdevilfish folds
+billjam99 calls [400]
+rihaly55 will be using their time bank for this hand.
+rihaly55 did not respond in time
+rihaly55 folds
+turoff77 folds
+** Dealing Flop ** [ Tc, Kh, 8c ]
+RITZ35 is all-In  [3,540]
+billjam99 calls [3,540]
+** Dealing Turn ** [ Ah ]
+** Dealing River ** [ Th ]
+RITZ35 shows [ Ad, 4d ]two pairs, Aces and Tens.
+billjam99 shows [ Ac, 5c ]two pairs, Aces and Tens.
+RITZ35 wins 4,150 chips from the main pot with two pairs, Aces and Tens.
+billjam99 wins 4,150 chips from the main pot with two pairs, Aces and Tens.
+Game #16417402574 starts.
+
+#Game No : 16417402574 
+
+
+***** Hand History for Game 16417402574 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:07:28 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,725 )
+Seat 4: RITZ35 ( 4,150 )
+Seat 6: billjam99 ( 12,715 )
+Seat 5: jcdevilfish ( 1,960 )
+Seat 1: rihaly55 ( 10,790 )
+Seat 2: turoff77 ( 5,810 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+jcdevilfish posts ante [20]
+billjam99 posts ante [20]
+turoff77 posts small blind [100].
+Chancentot29 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  Js 7s ]
+RITZ35 folds
+jcdevilfish folds
+billjam99 folds
+rihaly55 folds
+turoff77 raises [400]
+Chancentot29 folds
+turoff77 does not show cards.
+turoff77 wins 820 chips
+Game #16417403973 starts.
+
+#Game No : 16417403973 
+
+
+***** Hand History for Game 16417403973 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:07:50 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,505 )
+Seat 4: RITZ35 ( 4,130 )
+Seat 6: billjam99 ( 12,695 )
+Seat 5: jcdevilfish ( 1,940 )
+Seat 1: rihaly55 ( 10,770 )
+Seat 2: turoff77 ( 6,110 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+jcdevilfish posts ante [20]
+billjam99 posts ante [20]
+Chancentot29 posts small blind [100].
+RITZ35 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  6d Jc ]
+jcdevilfish folds
+billjam99 folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 does not show cards.
+RITZ35 wins 420 chips
+Game #16417405557 starts.
+
+#Game No : 16417405557 
+
+
+***** Hand History for Game 16417405557 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:07:59 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,385 )
+Seat 4: RITZ35 ( 4,330 )
+Seat 6: billjam99 ( 12,675 )
+Seat 5: jcdevilfish ( 1,920 )
+Seat 1: rihaly55 ( 10,750 )
+Seat 2: turoff77 ( 6,090 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+jcdevilfish posts ante [20]
+billjam99 posts ante [20]
+RITZ35 posts small blind [100].
+jcdevilfish posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  Qc 7s ]
+billjam99 folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish does not show cards.
+jcdevilfish wins 420 chips
+Game #16417406509 starts.
+
+#Game No : 16417406509 
+
+
+***** Hand History for Game 16417406509 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:08:15 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,365 )
+Seat 4: RITZ35 ( 4,210 )
+Seat 6: billjam99 ( 12,655 )
+Seat 5: jcdevilfish ( 2,120 )
+Seat 1: rihaly55 ( 10,730 )
+Seat 2: turoff77 ( 6,070 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+jcdevilfish posts ante [20]
+billjam99 posts ante [20]
+jcdevilfish posts small blind [100].
+billjam99 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  4c 2h ]
+rihaly55 folds
+turoff77 folds
+Chancentot29 calls [200]
+RITZ35 raises [900]
+jcdevilfish calls [800]
+billjam99 folds
+Chancentot29 calls [700]
+** Dealing Flop ** [ Kc, 4h, As ]
+jcdevilfish bets [1,000]
+Chancentot29 calls [1,000]
+RITZ35 is all-In  [3,290]
+jcdevilfish is all-In  [200]
+Chancentot29 calls [2,290]
+** Dealing Turn ** [ 9s ]
+** Dealing River ** [ 9h ]
+jcdevilfish shows [ 9d, Ad ]a full house, Nines full of Aces.
+Chancentot29 shows [ Ac, Tc ]two pairs, Aces and Nines.
+RITZ35 shows [ 8d, 8c ]two pairs, Nines and Eights.
+Chancentot29 wins 4,180 chips from the side pot 1 with two pairs, Aces and Nines.
+jcdevilfish wins 6,620 chips from the main pot with a full house, Nines full of Aces.
+waiting for RITZ35  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: RITZ35 rebuys 4 000 chips and the chip stack increases from 0 chips to 4 000 chips.
+Game #16417410704 starts.
+
+#Game No : 16417410704 
+
+
+***** Hand History for Game 16417410704 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:09:19 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,335 )
+Seat 4: RITZ35 ( 4,000 )
+Seat 6: billjam99 ( 12,435 )
+Seat 5: jcdevilfish ( 6,620 )
+Seat 1: rihaly55 ( 10,710 )
+Seat 2: turoff77 ( 6,050 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+jcdevilfish posts ante [20]
+billjam99 posts ante [20]
+billjam99 posts small blind [100].
+rihaly55 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  3d 5h ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish will be using their time bank for this hand.
+jcdevilfish calls [200]
+billjam99 is all-In  [12,315]
+rihaly55 folds
+jcdevilfish folds
+billjam99 does not show cards.
+billjam99 wins 12,935 chips
+Game #16417414430 starts.
+
+#Game No : 16417414430 
+
+
+***** Hand History for Game 16417414430 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:8  Blinds-Antes(100/200 -20) - Tuesday, September 05, 19:10:05 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,315 )
+Seat 4: RITZ35 ( 3,980 )
+Seat 6: billjam99 ( 12,935 )
+Seat 5: jcdevilfish ( 6,400 )
+Seat 1: rihaly55 ( 10,490 )
+Seat 2: turoff77 ( 6,030 )
+Trny:143908069 Level:8 
+Blinds-Antes(100/200 -20)
+rihaly55 posts ante [20]
+turoff77 posts ante [20]
+Chancentot29 posts ante [20]
+RITZ35 posts ante [20]
+jcdevilfish posts ante [20]
+billjam99 posts ante [20]
+rihaly55 posts small blind [100].
+turoff77 posts big blind [200].
+** Dealing down cards **
+Dealt to turoff77 [  6c 7s ]
+Chancentot29 folds
+RITZ35 raises [700]
+jcdevilfish folds
+billjam99 folds
+rihaly55 calls [600]
+turoff77 folds
+** Dealing Flop ** [ Ac, Ks, 4c ]
+rihaly55 checks
+RITZ35 bets [1,720]
+rihaly55 calls [1,720]
+** Dealing Turn ** [ 6d ]
+rihaly55 checks
+RITZ35 is all-In  [1,540]
+rihaly55 calls [1,540]
+** Dealing River ** [ 8c ]
+rihaly55 shows [ Kd, Td ]a pair of Kings.
+RITZ35 shows [ Qh, As ]a pair of Aces.
+RITZ35 wins 8,240 chips from the main pot with a pair of Aces.
+Game #16417418342 starts.
+
+#Game No : 16417418342 
+
+
+***** Hand History for Game 16417418342 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:11:08 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,295 )
+Seat 4: RITZ35 ( 8,240 )
+Seat 6: billjam99 ( 12,915 )
+Seat 5: jcdevilfish ( 6,380 )
+Seat 1: rihaly55 ( 6,510 )
+Seat 2: turoff77 ( 5,810 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+turoff77 posts small blind [125].
+Chancentot29 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  Qd 6c ]
+RITZ35 folds
+jcdevilfish folds
+billjam99 calls [250]
+rihaly55 folds
+turoff77 folds
+Chancentot29 checks
+** Dealing Flop ** [ Kc, Jc, 9h ]
+Chancentot29 checks
+billjam99 checks
+** Dealing Turn ** [ 2h ]
+Chancentot29 checks
+billjam99 checks
+** Dealing River ** [ Jh ]
+Chancentot29 checks
+billjam99 bets [250]
+Chancentot29 folds
+billjam99 does not show cards.
+billjam99 wins 1,025 chips
+Game #16417420769 starts.
+
+#Game No : 16417420769 
+
+
+***** Hand History for Game 16417420769 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:11:41 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 9,020 )
+Seat 4: RITZ35 ( 8,215 )
+Seat 6: billjam99 ( 13,415 )
+Seat 5: jcdevilfish ( 6,355 )
+Seat 1: rihaly55 ( 6,485 )
+Seat 2: turoff77 ( 5,660 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+Chancentot29 posts small blind [125].
+RITZ35 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  Kc Js ]
+jcdevilfish folds
+billjam99 folds
+rihaly55 folds
+turoff77 raises [625]
+Chancentot29 folds
+RITZ35 folds
+turoff77 does not show cards.
+turoff77 wins 1,150 chips
+Game #16417422253 starts.
+
+#Game No : 16417422253 
+
+
+***** Hand History for Game 16417422253 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:11:57 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,870 )
+Seat 4: RITZ35 ( 7,940 )
+Seat 6: billjam99 ( 13,390 )
+Seat 5: jcdevilfish ( 6,330 )
+Seat 1: rihaly55 ( 6,460 )
+Seat 2: turoff77 ( 6,160 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+RITZ35 posts small blind [125].
+jcdevilfish posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  5s Qd ]
+billjam99 folds
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish does not show cards.
+jcdevilfish wins 525 chips
+Game #16417423128 starts.
+
+#Game No : 16417423128 
+
+
+***** Hand History for Game 16417423128 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:12:11 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,845 )
+Seat 4: RITZ35 ( 7,790 )
+Seat 6: billjam99 ( 13,365 )
+Seat 5: jcdevilfish ( 6,580 )
+Seat 1: rihaly55 ( 6,435 )
+Seat 2: turoff77 ( 6,135 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+jcdevilfish posts small blind [125].
+billjam99 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  3c Jd ]
+rihaly55 did not respond in time
+rihaly55 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish raises [375]
+billjam99 calls [250]
+** Dealing Flop ** [ 8s, Jh, 3s ]
+jcdevilfish bets [2,500]
+billjam99 is all-In  [12,840]
+jcdevilfish is all-In  [3,555]
+** Dealing Turn ** [ 4s ]
+** Dealing River ** [ 7s ]
+jcdevilfish shows [ Qs, Js ]a flush, Queen high.
+billjam99 shows [ Jc, Kh ]a pair of Jacks.
+billjam99 wins 6,785 chips from the side pot 1 with a pair of Jacks.
+jcdevilfish wins 13,260 chips from the main pot with a flush, Queen high.
+Game #16417426104 starts.
+
+#Game No : 16417426104 
+
+
+***** Hand History for Game 16417426104 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:12:59 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,820 )
+Seat 4: RITZ35 ( 7,765 )
+Seat 6: billjam99 ( 6,785 )
+Seat 5: jcdevilfish ( 13,260 )
+Seat 1: rihaly55 ( 6,410 )
+Seat 2: turoff77 ( 6,110 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+billjam99 posts small blind [125].
+rihaly55 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  8s 5c ]
+turoff77 folds
+Chancentot29 calls [250]
+RITZ35 folds
+jcdevilfish folds
+billjam99 calls [125]
+rihaly55 checks
+** Dealing Flop ** [ Kd, 6s, Ts ]
+billjam99 checks
+rihaly55 checks
+Chancentot29 checks
+** Dealing Turn ** [ 9s ]
+billjam99 checks
+rihaly55 bets [250]
+Chancentot29 folds
+billjam99 folds
+rihaly55 does not show cards.
+rihaly55 wins 1,150 chips
+Game #16417428125 starts.
+
+#Game No : 16417428125 
+
+
+***** Hand History for Game 16417428125 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:13:31 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 8,545 )
+Seat 4: RITZ35 ( 7,740 )
+Seat 6: billjam99 ( 6,510 )
+Seat 5: jcdevilfish ( 13,235 )
+Seat 1: rihaly55 ( 7,035 )
+Seat 2: turoff77 ( 6,085 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+rihaly55 posts small blind [125].
+turoff77 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  7c 5c ]
+Chancentot29 calls [250]
+RITZ35 folds
+jcdevilfish calls [250]
+billjam99 folds
+rihaly55 folds
+turoff77 checks
+** Dealing Flop ** [ Td, 6c, 4s ]
+turoff77 bets [500]
+Chancentot29 calls [500]
+jcdevilfish raises [2,250]
+turoff77 calls [1,750]
+Chancentot29 folds
+** Dealing Turn ** [ 9s ]
+turoff77 checks
+jcdevilfish is all-In  [10,710]
+turoff77 folds
+jcdevilfish does not show cards.
+jcdevilfish wins 16,735 chips
+Game #16417430903 starts.
+
+#Game No : 16417430903 
+
+
+***** Hand History for Game 16417430903 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:14:07 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,770 )
+Seat 4: RITZ35 ( 7,715 )
+Seat 6: billjam99 ( 6,485 )
+Seat 5: jcdevilfish ( 16,735 )
+Seat 1: rihaly55 ( 6,885 )
+Seat 2: turoff77 ( 3,560 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+turoff77 posts small blind [125].
+Chancentot29 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  5d 9c ]
+RITZ35 folds
+jcdevilfish folds
+billjam99 folds
+rihaly55 calls [250]
+turoff77 folds
+Chancentot29 checks
+** Dealing Flop ** [ Qs, 6h, 7c ]
+Chancentot29 checks
+rihaly55 bets [775]
+Chancentot29 folds
+rihaly55 does not show cards.
+rihaly55 wins 1,550 chips
+Game #16417432743 starts.
+
+#Game No : 16417432743 
+
+
+***** Hand History for Game 16417432743 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:14:37 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,495 )
+Seat 4: RITZ35 ( 7,690 )
+Seat 6: billjam99 ( 6,460 )
+Seat 5: jcdevilfish ( 16,710 )
+Seat 1: rihaly55 ( 7,385 )
+Seat 2: turoff77 ( 3,410 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+Chancentot29 posts small blind [125].
+RITZ35 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  7s Ad ]
+jcdevilfish folds
+billjam99 folds
+rihaly55 calls [250]
+turoff77 is all-In  [3,385]
+Chancentot29 folds
+RITZ35 folds
+rihaly55 folds
+turoff77 does not show cards.
+turoff77 wins 4,160 chips
+Game #16417434055 starts.
+
+#Game No : 16417434055 
+
+
+***** Hand History for Game 16417434055 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:14:59 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,345 )
+Seat 4: RITZ35 ( 7,415 )
+Seat 6: billjam99 ( 6,435 )
+Seat 5: jcdevilfish ( 16,685 )
+Seat 1: rihaly55 ( 7,110 )
+Seat 2: turoff77 ( 4,160 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+RITZ35 posts small blind [125].
+jcdevilfish posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  6d 2c ]
+billjam99 folds
+rihaly55 raises [500]
+turoff77 folds
+Chancentot29 calls [500]
+RITZ35 folds
+jcdevilfish calls [250]
+** Dealing Flop ** [ 3s, 8s, 2d ]
+jcdevilfish checks
+rihaly55 checks
+Chancentot29 checks
+** Dealing Turn ** [ Qh ]
+jcdevilfish checks
+rihaly55 checks
+Chancentot29 checks
+** Dealing River ** [ 7s ]
+jcdevilfish bets [1,500]
+rihaly55 calls [1,500]
+Chancentot29 folds
+jcdevilfish shows [ 3d, Jd ]a pair of Threes.
+rihaly55 doesn't show [ As, Jc ]high card Ace.
+jcdevilfish wins 4,775 chips from the main pot with a pair of Threes.
+Game #16417438537 starts.
+
+#Game No : 16417438537 
+
+
+***** Hand History for Game 16417438537 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:15:56 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,820 )
+Seat 4: RITZ35 ( 7,265 )
+Seat 6: billjam99 ( 6,410 )
+Seat 5: jcdevilfish ( 19,435 )
+Seat 1: rihaly55 ( 5,085 )
+Seat 2: turoff77 ( 4,135 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+rihaly55 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+jcdevilfish posts small blind [125].
+billjam99 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  7h Jd ]
+rihaly55 calls [250]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish calls [125]
+billjam99 checks
+** Dealing Flop ** [ Qc, Ac, 2c ]
+jcdevilfish checks
+billjam99 checks
+rihaly55 bets [250]
+jcdevilfish folds
+billjam99 calls [250]
+** Dealing Turn ** [ 5h ]
+billjam99 checks
+rihaly55 bets [250]
+billjam99 raises [500]
+rihaly55 calls [250]
+** Dealing River ** [ Ah ]
+billjam99 bets [1,800]
+rihaly55 is all-In  [4,060]
+billjam99 calls [2,260]
+billjam99 shows [ Tc, 8c ]a flush, Ace high.
+rihaly55 shows [ Kc, As ]three of a kind, Aces.
+billjam99 wins 10,520 chips from the main pot with a flush, Ace high.
+waiting for rihaly55  to rebuy in  20 seconds to continue playing in the tournament
+Player rihaly55 finished in 104.
+Game #16417442337 starts.
+
+#Game No : 16417442337 
+
+
+***** Hand History for Game 16417442337 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:17:18 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 6,795 )
+Seat 4: RITZ35 ( 7,240 )
+Seat 6: billjam99 ( 11,845 )
+Seat 5: jcdevilfish ( 19,160 )
+Seat 2: turoff77 ( 4,110 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+billjam99 posts small blind [125].
+turoff77 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  Ac 7s ]
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish calls [250]
+billjam99 calls [125]
+turoff77 checks
+** Dealing Flop ** [ Jd, 2h, Ad ]
+billjam99 bets [500]
+turoff77 is all-In  [3,835]
+jcdevilfish folds
+billjam99 folds
+turoff77 does not show cards.
+turoff77 wins 5,210 chips
+Game #16417446364 starts.
+
+#Game No : 16417446364 
+
+
+***** Hand History for Game 16417446364 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:17:54 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 6,770 )
+Seat 4: RITZ35 ( 7,215 )
+Seat 6: billjam99 ( 11,070 )
+Seat 5: jcdevilfish ( 18,885 )
+Seat 2: turoff77 ( 5,210 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+turoff77 posts small blind [125].
+Chancentot29 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  3c 6s ]
+RITZ35 folds
+kota54 has joined the table.
+jcdevilfish folds
+billjam99 is all-In  [11,045]
+turoff77 folds
+Chancentot29 folds
+billjam99 does not show cards.
+billjam99 wins 11,545 chips
+Game #16417447315 starts.
+
+#Game No : 16417447315 
+
+
+***** Hand History for Game 16417447315 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:9  Blinds-Antes(125/250 -25) - Tuesday, September 05, 19:18:09 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,495 )
+Seat 4: RITZ35 ( 7,190 )
+Seat 6: billjam99 ( 11,545 )
+Seat 5: jcdevilfish ( 18,860 )
+Seat 1: kota54 ( 2,000 )
+Seat 2: turoff77 ( 5,060 )
+Trny:143908069 Level:9 
+Blinds-Antes(125/250 -25)
+kota54 posts ante [25]
+turoff77 posts ante [25]
+Chancentot29 posts ante [25]
+RITZ35 posts ante [25]
+jcdevilfish posts ante [25]
+billjam99 posts ante [25]
+Chancentot29 posts small blind [125].
+RITZ35 posts big blind [250].
+** Dealing down cards **
+Dealt to turoff77 [  3h 9d ]
+jcdevilfish folds
+billjam99 calls [250]
+kota54 calls [250]
+turoff77 folds
+Chancentot29 calls [125]
+RITZ35 checks
+** Dealing Flop ** [ Qd, 6c, 7h ]
+Chancentot29 checks
+RITZ35 checks
+billjam99 bets [575]
+kota54 folds
+Chancentot29 folds
+RITZ35 folds
+billjam99 does not show cards.
+billjam99 wins 1,725 chips
+Game #16417449469 starts.
+
+#Game No : 16417449469 
+
+
+***** Hand History for Game 16417449469 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:18:43 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,220 )
+Seat 4: RITZ35 ( 6,915 )
+Seat 6: billjam99 ( 12,420 )
+Seat 5: jcdevilfish ( 18,835 )
+Seat 1: kota54 ( 1,725 )
+Seat 2: turoff77 ( 5,035 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+RITZ35 posts small blind [150].
+jcdevilfish posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  3c Kh ]
+billjam99 folds
+kota54 calls [300]
+turoff77 folds
+Chancentot29 calls [300]
+RITZ35 folds
+jcdevilfish checks
+** Dealing Flop ** [ 3h, 5h, 8s ]
+jcdevilfish checks
+kota54 checks
+Chancentot29 checks
+** Dealing Turn ** [ 8d ]
+jcdevilfish bets [2,400]
+kota54 is all-In  [1,395]
+Chancentot29 raises [4,800]
+jcdevilfish folds
+** Dealing River ** [ 6d ]
+Chancentot29 shows [ Ah, Th ]a pair of Eights.
+kota54 shows [ 4c, 4h ]two pairs, Eights and Fours.
+Chancentot29 wins 4,410 chips from the side pot 1 with a pair of Eights.
+kota54 wins 5,415 chips from the main pot with two pairs, Eights and Fours.
+Game #16417451529 starts.
+
+#Game No : 16417451529 
+
+
+***** Hand History for Game 16417451529 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:19:17 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 5,500 )
+Seat 4: RITZ35 ( 6,735 )
+Seat 6: billjam99 ( 12,390 )
+Seat 5: jcdevilfish ( 16,105 )
+Seat 1: kota54 ( 5,415 )
+Seat 2: turoff77 ( 5,005 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+jcdevilfish posts small blind [150].
+billjam99 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  5s 4h ]
+kota54 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [1,200]
+jcdevilfish folds
+billjam99 folds
+RITZ35 does not show cards.
+RITZ35 wins 1,830 chips
+Game #16417453842 starts.
+
+#Game No : 16417453842 
+
+
+***** Hand History for Game 16417453842 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:19:45 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 5,470 )
+Seat 4: RITZ35 ( 7,335 )
+Seat 6: billjam99 ( 12,060 )
+Seat 5: jcdevilfish ( 15,925 )
+Seat 1: kota54 ( 5,385 )
+Seat 2: turoff77 ( 4,975 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+billjam99 posts small blind [150].
+kota54 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  Jc Ad ]
+turoff77 raises [750]
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish folds
+billjam99 folds
+kota54 calls [450]
+** Dealing Flop ** [ 2d, Qc, 9d ]
+kota54 checks
+turoff77 bets [600]
+kota54 calls [600]
+** Dealing Turn ** [ 9h ]
+kota54 checks
+turoff77 checks
+** Dealing River ** [ 2s ]
+kota54 checks
+turoff77 checks
+kota54 shows [ 6c, 6s ]two pairs, Nines and Sixes.
+turoff77 doesn't show [ Jc, Ad ]two pairs, Nines and Twos.
+kota54 wins 3,030 chips from the main pot with two pairs, Nines and Sixes.
+Game #16417456612 starts.
+
+#Game No : 16417456612 
+
+
+***** Hand History for Game 16417456612 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:20:23 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 5,440 )
+Seat 4: RITZ35 ( 7,305 )
+Seat 6: billjam99 ( 11,880 )
+Seat 5: jcdevilfish ( 15,895 )
+Seat 1: kota54 ( 7,035 )
+Seat 2: turoff77 ( 3,595 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+kota54 posts small blind [150].
+turoff77 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  Td 7s ]
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish folds
+billjam99 calls [300]
+kota54 folds
+turoff77 checks
+** Dealing Flop ** [ 5h, 5d, Ad ]
+turoff77 checks
+billjam99 checks
+** Dealing Turn ** [ 8d ]
+turoff77 checks
+billjam99 checks
+** Dealing River ** [ As ]
+turoff77 checks
+billjam99 checks
+turoff77 shows [ Td, 7s ]two pairs, Aces and Fives.
+billjam99 shows [ Kc, Js ]two pairs, Aces and Fives with King kicker.
+billjam99 wins 930 chips from the main pot with two pairs, Aces and Fives with King kicker.
+Game #16417458027 starts.
+
+#Game No : 16417458027 
+
+
+***** Hand History for Game 16417458027 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:20:46 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 5,410 )
+Seat 4: RITZ35 ( 7,275 )
+Seat 6: billjam99 ( 12,480 )
+Seat 5: jcdevilfish ( 15,865 )
+Seat 1: kota54 ( 6,855 )
+Seat 2: turoff77 ( 3,265 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+turoff77 posts small blind [150].
+Chancentot29 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  7d Jc ]
+RITZ35 folds
+jcdevilfish folds
+billjam99 folds
+kota54 folds
+turoff77 folds
+Chancentot29 does not show cards.
+Chancentot29 wins 630 chips
+Game #16417458672 starts.
+
+#Game No : 16417458672 
+
+
+***** Hand History for Game 16417458672 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:20:56 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 5,710 )
+Seat 4: RITZ35 ( 7,245 )
+Seat 6: billjam99 ( 12,450 )
+Seat 5: jcdevilfish ( 15,835 )
+Seat 1: kota54 ( 6,825 )
+Seat 2: turoff77 ( 3,085 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+Chancentot29 posts small blind [150].
+RITZ35 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  Ah 7s ]
+jcdevilfish folds
+billjam99 folds
+kota54 calls [300]
+turoff77 is all-In  [3,055]
+Chancentot29 calls [2,905]
+RITZ35 folds
+kota54 calls [2,755]
+** Dealing Flop ** [ 6d, 8h, 7h ]
+Chancentot29 is all-In  [2,625]
+kota54 calls [2,625]
+** Dealing Turn ** [ Kh ]
+** Dealing River ** [ Ks ]
+Chancentot29 shows [ 9c, 9h ]two pairs, Kings and Nines.
+kota54 shows [ Tc, Kc ]three of a kind, Kings.
+turoff77 shows [ Ah, 7s ]two pairs, Kings and Sevens.
+kota54 wins 5,250 chips from the side pot 1 with three of a kind, Kings.
+kota54 wins 9,645 chips from the main pot with three of a kind, Kings.
+waiting for turoff77, Chancentot29  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Rebuy: Chancentot29 rebuys 4 000 chips and the chip stack increases from 0 chips to 4 000 chips.
+Game #16417461957 starts.
+
+#Game No : 16417461957 
+
+
+***** Hand History for Game 16417461957 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:21:50 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 4,000 )
+Seat 4: RITZ35 ( 6,915 )
+Seat 6: billjam99 ( 12,420 )
+Seat 5: jcdevilfish ( 15,805 )
+Seat 1: kota54 ( 16,010 )
+Seat 2: turoff77 ( 2,000 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+RITZ35 posts small blind [150].
+jcdevilfish posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  Qs Td ]
+billjam99 folds
+kota54 folds
+turoff77 is all-In  [1,970]
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish folds
+turoff77 does not show cards.
+turoff77 wins 2,600 chips
+Game #16417463524 starts.
+
+#Game No : 16417463524 
+
+
+***** Hand History for Game 16417463524 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:22:06 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,970 )
+Seat 4: RITZ35 ( 6,735 )
+Seat 6: billjam99 ( 12,390 )
+Seat 5: jcdevilfish ( 15,475 )
+Seat 1: kota54 ( 15,980 )
+Seat 2: turoff77 ( 2,600 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+jcdevilfish posts small blind [150].
+billjam99 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  7c 6h ]
+kota54 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish calls [150]
+billjam99 raises [450]
+jcdevilfish folds
+billjam99 does not show cards.
+billjam99 wins 1,230 chips
+Game #16417465418 starts.
+
+#Game No : 16417465418 
+
+
+***** Hand History for Game 16417465418 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:22:29 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,940 )
+Seat 4: RITZ35 ( 6,705 )
+Seat 6: billjam99 ( 12,840 )
+Seat 5: jcdevilfish ( 15,145 )
+Seat 1: kota54 ( 15,950 )
+Seat 2: turoff77 ( 2,570 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+billjam99 posts small blind [150].
+kota54 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  9h 6h ]
+turoff77 folds
+Chancentot29 calls [300]
+RITZ35 folds
+jcdevilfish folds
+billjam99 calls [150]
+kota54 checks
+** Dealing Flop ** [ 5c, 4s, 2s ]
+billjam99 checks
+kota54 checks
+Chancentot29 checks
+** Dealing Turn ** [ Jd ]
+billjam99 checks
+kota54 bets [300]
+Chancentot29 calls [300]
+billjam99 folds
+** Dealing River ** [ 8h ]
+kota54 bets [300]
+Chancentot29 calls [300]
+kota54 shows [ Jh, Ah ]a pair of Jacks.
+Chancentot29 doesn't show [ As, 5s ]a pair of Fives.
+kota54 wins 2,280 chips from the main pot with a pair of Jacks.
+Game #16417467936 starts.
+
+#Game No : 16417467936 
+
+
+***** Hand History for Game 16417467936 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:23:10 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,010 )
+Seat 4: RITZ35 ( 6,675 )
+Seat 6: billjam99 ( 12,510 )
+Seat 5: jcdevilfish ( 15,115 )
+Seat 1: kota54 ( 17,300 )
+Seat 2: turoff77 ( 2,540 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+kota54 posts small blind [150].
+turoff77 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  2c Js ]
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish folds
+billjam99 folds
+kota54 calls [150]
+turoff77 checks
+** Dealing Flop ** [ 7h, 4c, 2h ]
+kota54 checks
+turoff77 checks
+** Dealing Turn ** [ 6d ]
+kota54 checks
+turoff77 checks
+** Dealing River ** [ Kd ]
+kota54 bets [450]
+turoff77 folds
+kota54 does not show cards.
+kota54 wins 1,230 chips
+Game #16417470086 starts.
+
+#Game No : 16417470086 
+
+
+***** Hand History for Game 16417470086 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:23:36 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,980 )
+Seat 4: RITZ35 ( 6,645 )
+Seat 6: billjam99 ( 12,480 )
+Seat 5: jcdevilfish ( 15,085 )
+Seat 1: kota54 ( 17,750 )
+Seat 2: turoff77 ( 2,210 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+turoff77 posts small blind [150].
+Chancentot29 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  4d 2s ]
+RITZ35 raises [1,200]
+jcdevilfish folds
+billjam99 calls [1,200]
+kota54 folds
+turoff77 folds
+Chancentot29 folds
+** Dealing Flop ** [ 6d, 6c, Ac ]
+RITZ35 is all-In  [5,415]
+billjam99 calls [5,415]
+** Dealing Turn ** [ 2d ]
+** Dealing River ** [ Jd ]
+RITZ35 shows [ 9s, 9h ]two pairs, Nines and Sixes.
+billjam99 shows [ Tc, As ]two pairs, Aces and Sixes.
+billjam99 wins 13,860 chips from the main pot with two pairs, Aces and Sixes.
+waiting for RITZ35  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: RITZ35 rebuys 4 000 chips and the chip stack increases from 0 chips to 4 000 chips.
+Game #16417472488 starts.
+
+#Game No : 16417472488 
+
+
+***** Hand History for Game 16417472488 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:24:13 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,650 )
+Seat 4: RITZ35 ( 4,000 )
+Seat 6: billjam99 ( 19,695 )
+Seat 5: jcdevilfish ( 15,055 )
+Seat 1: kota54 ( 17,720 )
+Seat 2: turoff77 ( 2,030 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+Chancentot29 posts small blind [150].
+RITZ35 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  As 6s ]
+jcdevilfish folds
+billjam99 folds
+kota54 folds
+turoff77 is all-In  [2,000]
+Chancentot29 folds
+RITZ35 folds
+turoff77 does not show cards.
+turoff77 wins 2,630 chips
+Game #16417474382 starts.
+
+#Game No : 16417474382 
+
+
+***** Hand History for Game 16417474382 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:24:42 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,470 )
+Seat 4: RITZ35 ( 3,670 )
+Seat 6: billjam99 ( 19,665 )
+Seat 5: jcdevilfish ( 15,025 )
+Seat 1: kota54 ( 17,690 )
+Seat 2: turoff77 ( 2,630 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+RITZ35 posts small blind [150].
+jcdevilfish posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  Js 4c ]
+billjam99 folds
+kota54 calls [300]
+turoff77 folds
+Chancentot29 folds
+RITZ35 calls [150]
+jcdevilfish checks
+** Dealing Flop ** [ Th, 7s, 6d ]
+RITZ35 is all-In  [3,340]
+jcdevilfish folds
+kota54 calls [3,340]
+** Dealing Turn ** [ 8c ]
+** Dealing River ** [ 7c ]
+RITZ35 shows [ As, 9s ]a straight, Six to Ten.
+kota54 shows [ Jh, Td ]two pairs, Tens and Sevens.
+RITZ35 wins 7,760 chips from the main pot with a straight, Six to Ten.
+Game #16417476593 starts.
+
+#Game No : 16417476593 
+
+
+***** Hand History for Game 16417476593 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:25:10 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,440 )
+Seat 4: RITZ35 ( 7,760 )
+Seat 6: billjam99 ( 19,635 )
+Seat 5: jcdevilfish ( 14,695 )
+Seat 1: kota54 ( 14,020 )
+Seat 2: turoff77 ( 2,600 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+jcdevilfish posts small blind [150].
+billjam99 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  Ac 6d ]
+kota54 calls [300]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish calls [150]
+billjam99 checks
+** Dealing Flop ** [ Jc, 7h, Qd ]
+jcdevilfish checks
+billjam99 checks
+kota54 checks
+** Dealing Turn ** [ 6h ]
+jcdevilfish checks
+billjam99 checks
+kota54 checks
+** Dealing River ** [ Qc ]
+jcdevilfish bets [3,300]
+billjam99 folds
+kota54 calls [3,300]
+jcdevilfish shows [ Th, 4s ]a pair of Queens.
+kota54 shows [ 4h, Jd ]two pairs, Queens and Jacks.
+kota54 wins 7,680 chips from the main pot with two pairs, Queens and Jacks.
+Game #16417479092 starts.
+
+#Game No : 16417479092 
+
+
+***** Hand History for Game 16417479092 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:10  Blinds-Antes(150/300 -30) - Tuesday, September 05, 19:25:52 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,410 )
+Seat 4: RITZ35 ( 7,730 )
+Seat 6: billjam99 ( 19,305 )
+Seat 5: jcdevilfish ( 11,065 )
+Seat 1: kota54 ( 18,070 )
+Seat 2: turoff77 ( 2,570 )
+Trny:143908069 Level:10 
+Blinds-Antes(150/300 -30)
+kota54 posts ante [30]
+turoff77 posts ante [30]
+Chancentot29 posts ante [30]
+RITZ35 posts ante [30]
+jcdevilfish posts ante [30]
+billjam99 posts ante [30]
+billjam99 posts small blind [150].
+kota54 posts big blind [300].
+** Dealing down cards **
+Dealt to turoff77 [  Js 4c ]
+turoff77 folds
+Chancentot29 calls [300]
+RITZ35 raises [600]
+jcdevilfish folds
+billjam99 folds
+kota54 calls [300]
+Chancentot29 raises [600]
+RITZ35 calls [300]
+kota54 calls [300]
+** Dealing Flop ** [ 7c, 3h, 6d ]
+kota54 checks
+Chancentot29 checks
+RITZ35 checks
+** Dealing Turn ** [ 2h ]
+kota54 checks
+Chancentot29 is all-In  [1,480]
+RITZ35 calls [1,480]
+kota54 calls [1,480]
+** Dealing River ** [ 2s ]
+kota54 checks
+RITZ35 checks
+kota54 shows [ Ts, Ac ]a pair of Twos with Ten kicker.
+Chancentot29 shows [ Jd, Jh ]two pairs, Jacks and Twos.
+RITZ35 doesn't show [ Ad, 8s ]a pair of Twos.
+Chancentot29 wins 7,470 chips from the main pot with two pairs, Jacks and Twos.
+Game #16417483500 starts.
+
+#Game No : 16417483500 
+
+
+***** Hand History for Game 16417483500 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:26:56 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,470 )
+Seat 4: RITZ35 ( 5,320 )
+Seat 6: billjam99 ( 19,125 )
+Seat 5: jcdevilfish ( 11,035 )
+Seat 1: kota54 ( 15,660 )
+Seat 2: turoff77 ( 2,540 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+jcdevilfish posts ante [40]
+billjam99 posts ante [40]
+kota54 posts small blind [200].
+turoff77 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  6d 2c ]
+Chancentot29 calls [400]
+RITZ35 raises [1,000]
+jcdevilfish folds
+billjam99 folds
+kota54 calls [800]
+turoff77 folds
+Chancentot29 calls [600]
+** Dealing Flop ** [ 9s, Qh, 2h ]
+kota54 checks
+Chancentot29 checks
+RITZ35 is all-In  [4,280]
+kota54 calls [4,280]
+Chancentot29 folds
+** Dealing Turn ** [ 4d ]
+** Dealing River ** [ As ]
+kota54 shows [ 3d, 3s ]a pair of Threes.
+RITZ35 shows [ 8c, 8s ]a pair of Eights.
+RITZ35 wins 12,200 chips from the main pot with a pair of Eights.
+Game #16417485247 starts.
+
+#Game No : 16417485247 
+
+
+***** Hand History for Game 16417485247 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:27:25 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,430 )
+Seat 4: RITZ35 ( 12,200 )
+Seat 6: billjam99 ( 19,085 )
+Seat 5: jcdevilfish ( 10,995 )
+Seat 1: kota54 ( 10,340 )
+Seat 2: turoff77 ( 2,100 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+jcdevilfish posts ante [40]
+billjam99 posts ante [40]
+turoff77 posts small blind [200].
+Chancentot29 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  6d 9s ]
+RITZ35 folds
+jcdevilfish folds
+billjam99 folds
+kota54 calls [400]
+turoff77 folds
+Chancentot29 checks
+** Dealing Flop ** [ 8c, 5c, 7s ]
+Chancentot29 checks
+kota54 checks
+** Dealing Turn ** [ Jh ]
+Chancentot29 checks
+kota54 checks
+** Dealing River ** [ 2h ]
+Chancentot29 bets [1,200]
+kota54 folds
+Chancentot29 does not show cards.
+Chancentot29 wins 2,440 chips
+Game #16417488339 starts.
+
+#Game No : 16417488339 
+
+
+***** Hand History for Game 16417488339 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:28:07 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 7,230 )
+Seat 4: RITZ35 ( 12,160 )
+Seat 6: billjam99 ( 19,045 )
+Seat 5: jcdevilfish ( 10,955 )
+Seat 1: kota54 ( 9,900 )
+Seat 2: turoff77 ( 1,860 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+jcdevilfish posts ante [40]
+billjam99 posts ante [40]
+Chancentot29 posts small blind [200].
+RITZ35 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  6s 5s ]
+jcdevilfish folds
+billjam99 folds
+kota54 folds
+turoff77 is all-In  [1,820]
+Chancentot29 folds
+RITZ35 folds
+turoff77 does not show cards.
+turoff77 wins 2,660 chips
+Game #16417489880 starts.
+
+#Game No : 16417489880 
+
+
+***** Hand History for Game 16417489880 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:28:32 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,990 )
+Seat 4: RITZ35 ( 11,720 )
+Seat 6: billjam99 ( 19,005 )
+Seat 5: jcdevilfish ( 10,915 )
+Seat 1: kota54 ( 9,860 )
+Seat 2: turoff77 ( 2,660 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+jcdevilfish posts ante [40]
+billjam99 posts ante [40]
+RITZ35 posts small blind [200].
+jcdevilfish posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  Kh 8c ]
+billjam99 folds
+kota54 calls [400]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish checks
+** Dealing Flop ** [ Ah, Th, 2d ]
+jcdevilfish bets [1,200]
+kota54 calls [1,200]
+** Dealing Turn ** [ As ]
+jcdevilfish checks
+kota54 checks
+** Dealing River ** [ 8h ]
+jcdevilfish bets [6,800]
+kota54 calls [6,800]
+jcdevilfish shows [ Qd, 7h ]a pair of Aces.
+kota54 shows [ Qh, 9d ]a pair of Aces with Nine kicker.
+kota54 wins 17,240 chips from the main pot with a pair of Aces with Nine kicker.
+Game #16417492938 starts.
+
+#Game No : 16417492938 
+
+
+***** Hand History for Game 16417492938 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:29:16 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,950 )
+Seat 4: RITZ35 ( 11,480 )
+Seat 6: billjam99 ( 18,965 )
+Seat 5: jcdevilfish ( 2,475 )
+Seat 1: kota54 ( 18,660 )
+Seat 2: turoff77 ( 2,620 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+jcdevilfish posts ante [40]
+billjam99 posts ante [40]
+jcdevilfish posts small blind [200].
+billjam99 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  8s Qc ]
+kota54 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 calls [400]
+jcdevilfish calls [200]
+billjam99 checks
+** Dealing Flop ** [ 5d, 2c, Tc ]
+jcdevilfish is all-In  [2,035]
+billjam99 folds
+RITZ35 folds
+jcdevilfish does not show cards.
+jcdevilfish wins 3,475 chips
+Game #16417495157 starts.
+
+#Game No : 16417495157 
+
+
+***** Hand History for Game 16417495157 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:29:52 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,910 )
+Seat 4: RITZ35 ( 11,040 )
+Seat 6: billjam99 ( 18,525 )
+Seat 5: jcdevilfish ( 3,475 )
+Seat 1: kota54 ( 18,620 )
+Seat 2: turoff77 ( 2,580 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+jcdevilfish posts ante [40]
+billjam99 posts ante [40]
+billjam99 posts small blind [200].
+kota54 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  3c Jd ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+jcdevilfish raises [800]
+billjam99 folds
+kota54 calls [400]
+** Dealing Flop ** [ 6h, 8s, Ks ]
+kota54 checks
+jcdevilfish is all-In  [2,635]
+kota54 calls [2,635]
+** Dealing Turn ** [ 5h ]
+** Dealing River ** [ Kd ]
+kota54 shows [ Kh, 6c ]a full house, Kings full of Sixes.
+jcdevilfish shows [ 5d, Qd ]two pairs, Kings and Fives.
+kota54 wins 7,310 chips from the main pot with a full house, Kings full of Sixes.
+waiting for jcdevilfish  to rebuy in  20 seconds to continue playing in the tournament
+Player jcdevilfish finished in 102.
+Game #16417497073 starts.
+
+#Game No : 16417497073 
+
+
+***** Hand History for Game 16417497073 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:30:26 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 6,870 )
+Seat 4: RITZ35 ( 11,000 )
+Seat 6: billjam99 ( 18,285 )
+Seat 1: kota54 ( 22,455 )
+Seat 2: turoff77 ( 2,540 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+billjam99 posts ante [40]
+kota54 posts small blind [200].
+turoff77 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  6h Qd ]
+Chancentot29 folds
+RITZ35 folds
+billjam99 calls [400]
+kota54 folds
+turoff77 checks
+** Dealing Flop ** [ 6c, 7s, Kc ]
+turoff77 checks
+billjam99 bets [600]
+turoff77 folds
+billjam99 does not show cards.
+billjam99 wins 1,800 chips
+Game #16417499198 starts.
+
+#Game No : 16417499198 
+
+
+***** Hand History for Game 16417499198 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:30:51 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 5/6 
+Seat 3: Chancentot29 ( 6,830 )
+Seat 4: RITZ35 ( 10,960 )
+Seat 6: billjam99 ( 19,045 )
+Seat 1: kota54 ( 22,215 )
+Seat 2: turoff77 ( 2,100 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+billjam99 posts ante [40]
+turoff77 posts small blind [200].
+Chancentot29 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  As Qh ]
+RITZ35 folds
+billjam99 folds
+kota54 calls [400]
+lelijkekop has joined the table.
+Player lelijkekop has been moved from table 8 to this table
+turoff77 is all-In  [1,860]
+Chancentot29 folds
+kota54 folds
+turoff77 does not show cards.
+turoff77 wins 3,060 chips
+Game #16417500833 starts.
+
+#Game No : 16417500833 
+
+
+***** Hand History for Game 16417500833 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:31:18 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 6,390 )
+Seat 4: RITZ35 ( 10,920 )
+Seat 6: billjam99 ( 19,005 )
+Seat 1: kota54 ( 21,775 )
+Seat 5: lelijkekop ( 10,776 )
+Seat 2: turoff77 ( 3,060 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+lelijkekop posts ante [40]
+billjam99 posts ante [40]
+Chancentot29 posts small blind [200].
+RITZ35 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  8s 2s ]
+lelijkekop folds
+billjam99 folds
+kota54 calls [400]
+turoff77 folds
+Chancentot29 calls [200]
+RITZ35 checks
+** Dealing Flop ** [ 4h, Qc, 9h ]
+Chancentot29 checks
+RITZ35 bets [1,440]
+kota54 calls [1,440]
+Chancentot29 folds
+** Dealing Turn ** [ 4d ]
+RITZ35 checks
+kota54 checks
+** Dealing River ** [ 5s ]
+RITZ35 checks
+kota54 bets [2,600]
+RITZ35 folds
+kota54 does not show cards.
+kota54 wins 6,920 chips
+Game #16417504171 starts.
+
+#Game No : 16417504171 
+
+
+***** Hand History for Game 16417504171 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:32:05 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 5,950 )
+Seat 4: RITZ35 ( 9,040 )
+Seat 6: billjam99 ( 18,965 )
+Seat 1: kota54 ( 24,215 )
+Seat 5: lelijkekop ( 10,736 )
+Seat 2: turoff77 ( 3,020 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+lelijkekop posts ante [40]
+billjam99 posts ante [40]
+RITZ35 posts small blind [200].
+lelijkekop posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  5d 3d ]
+billjam99 folds
+kota54 folds
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [1,000]
+lelijkekop raises [1,600]
+RITZ35 raises [4,800]
+lelijkekop folds
+RITZ35 does not show cards.
+RITZ35 wins 8,240 chips
+Game #16417506656 starts.
+
+#Game No : 16417506656 
+
+
+***** Hand History for Game 16417506656 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:32:36 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 5,910 )
+Seat 4: RITZ35 ( 11,240 )
+Seat 6: billjam99 ( 18,925 )
+Seat 1: kota54 ( 24,175 )
+Seat 5: lelijkekop ( 8,696 )
+Seat 2: turoff77 ( 2,980 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+lelijkekop posts ante [40]
+billjam99 posts ante [40]
+lelijkekop posts small blind [200].
+billjam99 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  4s 2h ]
+kota54 calls [400]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+lelijkekop folds
+billjam99 checks
+** Dealing Flop ** [ 2d, 9d, 3c ]
+billjam99 bets [1,240]
+kota54 calls [1,240]
+** Dealing Turn ** [ 3s ]
+billjam99 bets [3,720]
+kota54 folds
+billjam99 does not show cards.
+billjam99 wins 7,440 chips
+Game #16417508029 starts.
+
+#Game No : 16417508029 
+
+
+***** Hand History for Game 16417508029 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:32:59 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 5,870 )
+Seat 4: RITZ35 ( 11,200 )
+Seat 6: billjam99 ( 20,965 )
+Seat 1: kota54 ( 22,495 )
+Seat 5: lelijkekop ( 8,456 )
+Seat 2: turoff77 ( 2,940 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+lelijkekop posts ante [40]
+billjam99 posts ante [40]
+billjam99 posts small blind [200].
+kota54 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  6s 4c ]
+turoff77 folds
+Chancentot29 calls [400]
+RITZ35 folds
+lelijkekop folds
+billjam99 calls [200]
+kota54 folds
+** Dealing Flop ** [ 4s, Ks, Jh ]
+billjam99 bets [720]
+Chancentot29 calls [720]
+** Dealing Turn ** [ 4d ]
+billjam99 checks
+Chancentot29 checks
+** Dealing River ** [ Qh ]
+billjam99 checks
+Chancentot29 checks
+billjam99 shows [ Jd, 5d ]two pairs, Jacks and Fours.
+Chancentot29 doesn't show [ 7s, 8s ]a pair of Fours.
+billjam99 wins 2,880 chips from the main pot with two pairs, Jacks and Fours.
+Game #16417509616 starts.
+
+#Game No : 16417509616 
+
+
+***** Hand History for Game 16417509616 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:11  Blinds-Antes(200/400 -40) - Tuesday, September 05, 19:33:26 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 4,710 )
+Seat 4: RITZ35 ( 11,160 )
+Seat 6: billjam99 ( 22,685 )
+Seat 1: kota54 ( 22,055 )
+Seat 5: lelijkekop ( 8,416 )
+Seat 2: turoff77 ( 2,900 )
+Trny:143908069 Level:11 
+Blinds-Antes(200/400 -40)
+kota54 posts ante [40]
+turoff77 posts ante [40]
+Chancentot29 posts ante [40]
+RITZ35 posts ante [40]
+lelijkekop posts ante [40]
+billjam99 posts ante [40]
+kota54 posts small blind [200].
+turoff77 posts big blind [400].
+** Dealing down cards **
+Dealt to turoff77 [  7s 5h ]
+Chancentot29 calls [400]
+RITZ35 raises [1,000]
+lelijkekop folds
+billjam99 folds
+kota54 calls [800]
+turoff77 folds
+Chancentot29 calls [600]
+** Dealing Flop ** [ 8h, Qd, Kd ]
+kota54 checks
+Chancentot29 checks
+RITZ35 bets [3,640]
+kota54 calls [3,640]
+Chancentot29 is all-In  [3,670]
+RITZ35 calls [30]
+kota54 calls [30]
+** Dealing Turn ** [ 6s ]
+kota54 checks
+RITZ35 is all-In  [6,450]
+kota54 calls [6,450]
+** Dealing River ** [ 4d ]
+kota54 shows [ Kc, Jd ]a pair of Kings.
+Chancentot29 shows [ Ts, Tc ]a pair of Tens.
+RITZ35 shows [ Qc, Ks ]two pairs, Kings and Queens.
+RITZ35 wins 12,900 chips from the side pot 1 with two pairs, Kings and Queens.
+RITZ35 wins 14,650 chips from the main pot with two pairs, Kings and Queens.
+waiting for Chancentot29  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: Chancentot29 rebuys 4 000 chips and the chip stack increases from 0 chips to 4 000 chips.
+Game #16417513155 starts.
+
+#Game No : 16417513155 
+
+
+***** Hand History for Game 16417513155 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:34:25 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 4,000 )
+Seat 4: RITZ35 ( 27,550 )
+Seat 6: billjam99 ( 22,645 )
+Seat 1: kota54 ( 10,895 )
+Seat 5: lelijkekop ( 8,376 )
+Seat 2: turoff77 ( 2,460 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+turoff77 posts small blind [250].
+Chancentot29 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  Ac 2c ]
+RITZ35 folds
+lelijkekop folds
+billjam99 calls [500]
+kota54 calls [500]
+turoff77 is all-In  [2,160]
+Chancentot29 folds
+billjam99 calls [1,910]
+kota54 calls [1,910]
+** Dealing Flop ** [ 3s, 6s, Jh ]
+billjam99 bets [1,000]
+kota54 calls [1,000]
+** Dealing Turn ** [ 4s ]
+billjam99 bets [2,750]
+kota54 calls [2,750]
+** Dealing River ** [ 8s ]
+billjam99 checks
+kota54 checks
+billjam99 shows [ Js, Kd ]a flush, Jack high.
+kota54 shows [ Ad, Ks ]a flush, King high.
+turoff77 doesn't show [ Ac, 2c ]high card Ace.
+kota54 wins 7,500 chips from the side pot 1 with a flush, King high.
+kota54 wins 8,030 chips from the main pot with a flush, King high.
+waiting for turoff77  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Game #16417517805 starts.
+
+#Game No : 16417517805 
+
+
+***** Hand History for Game 16417517805 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:35:21 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,450 )
+Seat 4: RITZ35 ( 27,500 )
+Seat 6: billjam99 ( 16,435 )
+Seat 1: kota54 ( 20,215 )
+Seat 5: lelijkekop ( 8,326 )
+Seat 2: turoff77 ( 2,000 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+Chancentot29 posts small blind [250].
+RITZ35 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  8s 7c ]
+lelijkekop folds
+billjam99 folds
+kota54 calls [500]
+turoff77 calls [500]
+Chancentot29 folds
+RITZ35 checks
+** Dealing Flop ** [ 8h, 7h, 7s ]
+RITZ35 bets [2,050]
+kota54 folds
+turoff77 is all-In  [1,450]
+** Dealing Turn ** [ 4h ]
+** Dealing River ** [ Ac ]
+RITZ35 shows [ Th, 6h ]a flush, Ten high.
+turoff77 shows [ 8s, 7c ]a full house, Sevens full of Eights.
+RITZ35 wins 600 chips from the side pot 1 with a flush, Ten high.
+turoff77 wins 4,950 chips from the main pot with a full house, Sevens full of Eights.
+Game #16417519879 starts.
+
+#Game No : 16417519879 
+
+
+***** Hand History for Game 16417519879 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:35:53 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,150 )
+Seat 4: RITZ35 ( 25,500 )
+Seat 6: billjam99 ( 16,385 )
+Seat 1: kota54 ( 19,665 )
+Seat 5: lelijkekop ( 8,276 )
+Seat 2: turoff77 ( 4,950 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+RITZ35 posts small blind [250].
+lelijkekop posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  7s 2h ]
+billjam99 folds
+kota54 calls [500]
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [750]
+lelijkekop folds
+kota54 calls [500]
+** Dealing Flop ** [ 3h, 6s, Qc ]
+RITZ35 bets [2,800]
+kota54 calls [2,800]
+** Dealing Turn ** [ 9d ]
+RITZ35 checks
+kota54 checks
+** Dealing River ** [ Kc ]
+RITZ35 checks
+kota54 checks
+RITZ35 shows [ 8c, Ah ]high card Ace.
+kota54 shows [ 3c, Ad ]a pair of Threes.
+kota54 wins 8,400 chips from the main pot with a pair of Threes.
+Game #16417522363 starts.
+
+#Game No : 16417522363 
+
+
+***** Hand History for Game 16417522363 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:36:26 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,100 )
+Seat 4: RITZ35 ( 21,650 )
+Seat 6: billjam99 ( 16,335 )
+Seat 1: kota54 ( 24,215 )
+Seat 5: lelijkekop ( 7,726 )
+Seat 2: turoff77 ( 4,900 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+lelijkekop posts small blind [250].
+billjam99 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  Ac 7c ]
+kota54 calls [500]
+turoff77 is all-In  [4,850]
+Chancentot29 folds
+RITZ35 folds
+lelijkekop is all-In  [7,426]
+billjam99 folds
+kota54 calls [7,176]
+** Dealing Flop ** [ 7h, 8d, 9h ]
+** Dealing Turn ** [ Kd ]
+** Dealing River ** [ 9c ]
+kota54 shows [ 6s, Kh ]two pairs, Kings and Nines.
+turoff77 shows [ Ac, 7c ]two pairs, Nines and Sevens.
+lelijkekop shows [ Ts, Qh ]a pair of Nines.
+kota54 wins 5,652 chips from the side pot 1 with two pairs, Kings and Nines.
+kota54 wins 15,350 chips from the main pot with two pairs, Kings and Nines.
+waiting for turoff77, lelijkekop  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Rebuy: lelijkekop rebuys 4 000 chips and the chip stack increases from 0 chips to 4 000 chips.
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 2 000 chips to 4 000 chips.
+Game #16417523497 starts.
+
+#Game No : 16417523497 
+
+
+***** Hand History for Game 16417523497 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:36:50 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,050 )
+Seat 4: RITZ35 ( 21,600 )
+Seat 6: billjam99 ( 15,785 )
+Seat 1: kota54 ( 37,491 )
+Seat 5: lelijkekop ( 4,000 )
+Seat 2: turoff77 ( 4,000 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+billjam99 posts small blind [250].
+kota54 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  5h 3s ]
+turoff77 folds
+Chancentot29 folds
+RITZ35 folds
+lelijkekop folds
+billjam99 folds
+kota54 does not show cards.
+kota54 wins 1,050 chips
+Game #16417525034 starts.
+
+#Game No : 16417525034 
+
+
+***** Hand History for Game 16417525034 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:37:12 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,000 )
+Seat 4: RITZ35 ( 21,550 )
+Seat 6: billjam99 ( 15,485 )
+Seat 1: kota54 ( 37,991 )
+Seat 5: lelijkekop ( 3,950 )
+Seat 2: turoff77 ( 3,950 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+kota54 posts small blind [250].
+turoff77 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  8s 5d ]
+Chancentot29 folds
+RITZ35 folds
+lelijkekop folds
+billjam99 folds
+kota54 calls [250]
+turoff77 checks
+** Dealing Flop ** [ 7h, 4d, 3s ]
+kota54 checks
+turoff77 checks
+** Dealing Turn ** [ Jd ]
+kota54 checks
+turoff77 checks
+** Dealing River ** [ Ah ]
+kota54 checks
+turoff77 checks
+kota54 shows [ 5h, As ]a pair of Aces.
+turoff77 doesn't show [ 8s, 5d ]high card Ace.
+kota54 wins 1,300 chips from the main pot with a pair of Aces.
+Game #16417526626 starts.
+
+#Game No : 16417526626 
+
+
+***** Hand History for Game 16417526626 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:37:40 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,950 )
+Seat 4: RITZ35 ( 21,500 )
+Seat 6: billjam99 ( 15,435 )
+Seat 1: kota54 ( 38,741 )
+Seat 5: lelijkekop ( 3,900 )
+Seat 2: turoff77 ( 3,400 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+turoff77 posts small blind [250].
+Chancentot29 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  Kc 9c ]
+RITZ35 folds
+lelijkekop raises [1,000]
+billjam99 folds
+kota54 folds
+turoff77 is all-In  [3,100]
+Chancentot29 is all-In  [2,400]
+lelijkekop calls [2,350]
+** Dealing Flop ** [ 5h, Qd, 4h ]
+** Dealing Turn ** [ Ts ]
+** Dealing River ** [ Tc ]
+lelijkekop shows [ Jh, As ]a pair of Tens with Ace kicker.
+turoff77 shows [ Kc, 9c ]a pair of Tens with King kicker.
+Chancentot29 shows [ 8h, 9s ]a pair of Tens.
+lelijkekop wins 900 chips from the side pot 1 with a pair of Tens with Ace kicker.
+lelijkekop wins 9,000 chips from the main pot with a pair of Tens with Ace kicker.
+waiting for turoff77, Chancentot29  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Rebuy: Chancentot29 rebuys 4 000 chips and the chip stack increases from 0 chips to 4 000 chips.
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 2 000 chips to 4 000 chips.
+Game #16417528571 starts.
+
+#Game No : 16417528571 
+
+
+***** Hand History for Game 16417528571 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:38:10 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 4,000 )
+Seat 4: RITZ35 ( 21,450 )
+Seat 6: billjam99 ( 15,385 )
+Seat 1: kota54 ( 38,691 )
+Seat 5: lelijkekop ( 10,400 )
+Seat 2: turoff77 ( 4,000 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+Chancentot29 posts small blind [250].
+RITZ35 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  Js Tc ]
+lelijkekop folds
+billjam99 is all-In  [15,335]
+kota54 calls [15,335]
+turoff77 is all-In  [3,950]
+Chancentot29 folds
+RITZ35 folds
+** Dealing Flop ** [ 8h, Th, Td ]
+** Dealing Turn ** [ 5d ]
+** Dealing River ** [ 9d ]
+billjam99 shows [ Jc, Jd ]two pairs, Jacks and Tens.
+kota54 shows [ 9c, Ah ]two pairs, Tens and Nines.
+turoff77 shows [ Js, Tc ]three of a kind, Tens.
+billjam99 wins 22,770 chips from the side pot 1 with two pairs, Jacks and Tens.
+turoff77 wins 12,900 chips from the main pot with three of a kind, Tens.
+Game #16417530614 starts.
+
+#Game No : 16417530614 
+
+
+***** Hand History for Game 16417530614 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:38:31 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 3 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,700 )
+Seat 4: RITZ35 ( 20,900 )
+Seat 6: billjam99 ( 22,770 )
+Seat 1: kota54 ( 23,306 )
+Seat 5: lelijkekop ( 10,350 )
+Seat 2: turoff77 ( 12,900 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+RITZ35 posts small blind [250].
+lelijkekop posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  2s 9d ]
+billjam99 folds
+kota54 calls [500]
+turoff77 folds
+Chancentot29 folds
+RITZ35 raises [1,750]
+lelijkekop folds
+kota54 calls [1,500]
+** Dealing Flop ** [ 4h, Ac, Ad ]
+RITZ35 is all-In  [18,850]
+kota54 folds
+RITZ35 does not show cards.
+RITZ35 wins 23,650 chips
+Game #16417532811 starts.
+
+#Game No : 16417532811 
+
+
+***** Hand History for Game 16417532811 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:39:09 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 3,650 )
+Seat 4: RITZ35 ( 23,650 )
+Seat 6: billjam99 ( 22,720 )
+Seat 1: kota54 ( 21,256 )
+Seat 5: lelijkekop ( 9,800 )
+Seat 2: turoff77 ( 12,850 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+lelijkekop posts small blind [250].
+billjam99 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  7h 8s ]
+kota54 folds
+turoff77 folds
+Chancentot29 calls [500]
+RITZ35 folds
+lelijkekop raises [750]
+billjam99 calls [500]
+Chancentot29 calls [500]
+** Dealing Flop ** [ Kh, 3c, 3s ]
+lelijkekop bets [1,500]
+billjam99 folds
+Chancentot29 folds
+lelijkekop does not show cards.
+lelijkekop wins 4,800 chips
+Game #16417534916 starts.
+
+#Game No : 16417534916 
+
+
+***** Hand History for Game 16417534916 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:39:45 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: Chancentot29 ( 2,600 )
+Seat 4: RITZ35 ( 23,600 )
+Seat 6: billjam99 ( 21,670 )
+Seat 1: kota54 ( 21,206 )
+Seat 5: lelijkekop ( 12,050 )
+Seat 2: turoff77 ( 12,800 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+Chancentot29 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+billjam99 posts small blind [250].
+kota54 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  4c 4h ]
+turoff77 folds
+Chancentot29 calls [500]
+RITZ35 folds
+lelijkekop calls [500]
+billjam99 calls [250]
+kota54 checks
+** Dealing Flop ** [ 5h, 9c, 2s ]
+billjam99 bets [2,300]
+kota54 folds
+Chancentot29 is all-In  [2,050]
+lelijkekop folds
+** Dealing Turn ** [ 9d ]
+** Dealing River ** [ Th ]
+billjam99 shows [ 8h, 9s ]three of a kind, Nines.
+Chancentot29 shows [ 5c, Ah ]two pairs, Nines and Fives.
+billjam99 wins 250 chips from the side pot 1 with three of a kind, Nines.
+billjam99 wins 6,400 chips from the main pot with three of a kind, Nines.
+waiting for Chancentot29  to rebuy in  20 seconds to continue playing in the tournament
+Player Chancentot29 finished in 104.
+Game #16417538549 starts.
+
+#Game No : 16417538549 
+
+
+***** Hand History for Game 16417538549 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:41:01 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 5/6 
+Seat 4: RITZ35 ( 23,550 )
+Seat 6: billjam99 ( 25,470 )
+Seat 1: kota54 ( 20,656 )
+Seat 5: lelijkekop ( 11,500 )
+Seat 2: turoff77 ( 12,750 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+kota54 posts small blind [250].
+turoff77 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  5d 3c ]
+RITZ35 folds
+lelijkekop folds
+billjam99 folds
+kota54 folds
+turoff77 does not show cards.
+turoff77 wins 1,000 chips
+Game #16417541005 starts.
+
+#Game No : 16417541005 
+
+
+***** Hand History for Game 16417541005 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:41:15 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 5/6 
+Seat 4: RITZ35 ( 23,500 )
+Seat 6: billjam99 ( 25,420 )
+Seat 1: kota54 ( 20,356 )
+Seat 5: lelijkekop ( 11,450 )
+Seat 2: turoff77 ( 13,200 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+turoff77 posts small blind [250].
+RITZ35 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  Ad 8c ]
+LeMagistrat has joined the table.
+Player LeMagistrat has been moved from table 14 to this table
+lelijkekop folds
+billjam99 folds
+kota54 calls [500]
+turoff77 calls [250]
+RITZ35 checks
+** Dealing Flop ** [ 7s, 7h, 8h ]
+turoff77 checks
+RITZ35 bets [2,000]
+kota54 folds
+turoff77 is all-In  [12,650]
+RITZ35 calls [10,650]
+** Dealing Turn ** [ Tc ]
+** Dealing River ** [ 9c ]
+RITZ35 shows [ 7c, 2h ]three of a kind, Sevens.
+turoff77 shows [ Ad, 8c ]two pairs, Eights and Sevens.
+RITZ35 wins 27,050 chips from the main pot with three of a kind, Sevens.
+waiting for turoff77  to rebuy in  20 seconds to continue playing in the tournament
+Rebuy: turoff77 rebuys 2 000 chips and the chip stack increases from 0 chips to 2 000 chips.
+Game #16417544149 starts.
+
+#Game No : 16417544149 
+
+
+***** Hand History for Game 16417544149 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:42:04 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 2 is the button
+Total number of players : 6/6 
+Seat 3: LeMagistrat ( 8,310 )
+Seat 4: RITZ35 ( 37,350 )
+Seat 6: billjam99 ( 25,370 )
+Seat 1: kota54 ( 19,806 )
+Seat 5: lelijkekop ( 11,400 )
+Seat 2: turoff77 ( 2,000 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+RITZ35 posts small blind [250].
+lelijkekop posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  6d 9h ]
+billjam99 folds
+kota54 folds
+turoff77 is all-In  [1,950]
+RITZ35 folds
+lelijkekop folds
+turoff77 does not show cards.
+turoff77 wins 2,950 chips
+Game #16417545263 starts.
+
+#Game No : 16417545263 
+
+
+***** Hand History for Game 16417545263 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:12  Blinds-Antes(250/500 -50) - Tuesday, September 05, 19:42:21 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 4 is the button
+Total number of players : 6/6 
+Seat 3: LeMagistrat ( 8,310 )
+Seat 4: RITZ35 ( 37,050 )
+Seat 6: billjam99 ( 25,320 )
+Seat 1: kota54 ( 19,756 )
+Seat 5: lelijkekop ( 10,850 )
+Seat 2: turoff77 ( 2,950 )
+Trny:143908069 Level:12 
+Blinds-Antes(250/500 -50)
+kota54 posts ante [50]
+turoff77 posts ante [50]
+LeMagistrat posts ante [50]
+RITZ35 posts ante [50]
+lelijkekop posts ante [50]
+billjam99 posts ante [50]
+lelijkekop posts small blind [250].
+billjam99 posts big blind [500].
+** Dealing down cards **
+Dealt to turoff77 [  Kd Ac ]
+kota54 folds
+turoff77 is all-In  [2,900]
+LeMagistrat folds
+RITZ35 folds
+lelijkekop folds
+billjam99 folds
+turoff77 does not show cards.
+turoff77 wins 3,950 chips
+Game #16417546414 starts.
+
+#Game No : 16417546414 
+
+
+***** Hand History for Game 16417546414 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:13  Blinds-Antes(300/600 -60) - Tuesday, September 05, 19:46:33 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 5 is the button
+Total number of players : 6/6 
+Seat 3: LeMagistrat ( 13,260 )
+Seat 4: RITZ35 ( 42,000 )
+Seat 6: billjam99 ( 29,770 )
+Seat 1: kota54 ( 24,706 )
+Seat 5: lelijkekop ( 15,550 )
+Seat 2: turoff77 ( 8,950 )
+Trny:143908069 Level:13 
+Blinds-Antes(300/600 -60)
+kota54 posts ante [60]
+turoff77 posts ante [60]
+LeMagistrat posts ante [60]
+RITZ35 posts ante [60]
+lelijkekop posts ante [60]
+billjam99 posts ante [60]
+billjam99 posts small blind [300].
+kota54 posts big blind [600].
+** Dealing down cards **
+Dealt to turoff77 [  3d 2c ]
+turoff77 folds
+LeMagistrat folds
+RITZ35 folds
+lelijkekop folds
+billjam99 folds
+kota54 does not show cards.
+kota54 wins 1,260 chips
+Game #16417563271 starts.
+
+#Game No : 16417563271 
+
+
+***** Hand History for Game 16417563271 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:13  Blinds-Antes(300/600 -60) - Tuesday, September 05, 19:47:03 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 6 is the button
+Total number of players : 6/6 
+Seat 3: LeMagistrat ( 13,200 )
+Seat 4: RITZ35 ( 41,940 )
+Seat 6: billjam99 ( 29,410 )
+Seat 1: kota54 ( 25,306 )
+Seat 5: lelijkekop ( 15,490 )
+Seat 2: turoff77 ( 8,890 )
+Trny:143908069 Level:13 
+Blinds-Antes(300/600 -60)
+kota54 posts ante [60]
+turoff77 posts ante [60]
+LeMagistrat posts ante [60]
+RITZ35 posts ante [60]
+lelijkekop posts ante [60]
+billjam99 posts ante [60]
+kota54 posts small blind [300].
+turoff77 posts big blind [600].
+** Dealing down cards **
+Dealt to turoff77 [  Jh 2d ]
+LeMagistrat folds
+RITZ35 folds
+lelijkekop folds
+billjam99 calls [600]
+kota54 calls [300]
+turoff77 checks
+** Dealing Flop ** [ 2c, 3c, Jd ]
+kota54 checks
+turoff77 bets [1,200]
+billjam99 folds
+kota54 folds
+turoff77 does not show cards.
+turoff77 wins 3,360 chips
+Game #16417565243 starts.
+
+#Game No : 16417565243 
+
+
+***** Hand History for Game 16417565243 *****
+NL Texas Hold'em $0.22 USD Buy-in Trny:143908069 Level:13  Blinds-Antes(300/600 -60) - Tuesday, September 05, 19:47:29 CEST 2017
+Table Flyweight. $75 Gtd 6-Max Rebuy (143908069) Table #3 (Real Money)
+Seat 1 is the button
+Total number of players : 6/6 
+Seat 3: LeMagistrat ( 13,140 )
+Seat 4: RITZ35 ( 41,880 )
+Seat 6: billjam99 ( 28,750 )
+Seat 1: kota54 ( 24,646 )
+Seat 5: lelijkekop ( 15,430 )
+Seat 2: turoff77 ( 10,390 )
+Trny:143908069 Level:13 
+Blinds-Antes(300/600 -60)
+kota54 posts ante [60]
+turoff77 posts ante [60]
+LeMagistrat posts ante [60]
+RITZ35 posts ante [60]
+lelijkekop posts ante [60]
+billjam99 posts ante [60]
+turoff77 posts small blind [300].
+LeMagistrat posts big blind [600].
+** Dealing down cards **
+Dealt to turoff77 [  Ts Tc ]
+RITZ35 raises [1,200]
+lelijkekop calls [1,200]
+billjam99 folds
+kota54 folds
+turoff77 is all-In  [10,030]
+LeMagistrat folds
+RITZ35 folds
+lelijkekop calls [9,130]
+** Dealing Flop ** [ 6h, 9h, 4c ]
+** Dealing Turn ** [ Ah ]
+** Dealing River ** [ 3s ]
+turoff77 shows [ Ts, Tc ]a pair of Tens.
+lelijkekop shows [ Jh, Kh ]a flush, Ace high.
+lelijkekop wins 22,820 chips from the main pot with a flush, Ace high.
+Player turoff77 finished in 103.
+
+

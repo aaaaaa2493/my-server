@@ -1,0 +1,487 @@
+Snap Poker Hand History for Game 545854183 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:00:18
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 2 is the button
+Total number of players : 6
+Seat 1: TURovv ( $6,000 )
+Seat 2: melonson2 ( $3,000 )
+Seat 4: cjgrounds ( $3,000 )
+Seat 6: kajajaka30 ( $3,000 )
+Seat 7: georgianaf ( $3,000 )
+Seat 9: Katherine07 ( $6,000 )
+kajajaka30 posts ante [$30]
+cjgrounds posts ante [$30]
+melonson2 posts ante [$30]
+georgianaf posts ante [$30]
+Katherine07 posts ante [$30]
+TURovv posts ante [$30]
+cjgrounds posts small blind [$125]
+kajajaka30 posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ Js, 6h ]
+georgianaf folds
+Katherine07 folds
+TURovv folds
+melonson2 calls [$250]
+cjgrounds folds
+kajajaka30 raises [$2,720]
+melonson2 folds
+** Summary **
+kajajaka30 did not show his hand
+kajajaka30 collected [ $805 ]
+
+
+
+#Game No : 545854230
+***** 888poker 
+
+Snap Poker Hand History for Game 545854230 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:00:19
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: Bobby_Monday ( $8,063 )
+Seat 2: ricklhp777 ( $3,856 )
+Seat 4: TURovv ( $5,970 )
+Seat 6: ovoide14 ( $5,484 )
+Seat 7: Bigshock15 ( $7,262 )
+Seat 9: MauroSossa ( $12,619 )
+Bobby_Monday posts ante [$30]
+TURovv posts ante [$30]
+ricklhp777 posts ante [$30]
+ovoide14 posts ante [$30]
+Bigshock15 posts ante [$30]
+MauroSossa posts ante [$30]
+ricklhp777 posts small blind [$125]
+TURovv posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ 3d, 9s ]
+ovoide14 folds
+Bigshock15 raises [$500]
+MauroSossa folds
+Bobby_Monday folds
+ricklhp777 raises [$3,701]
+TURovv folds
+Bigshock15 folds
+** Summary **
+ricklhp777 did not show his hand
+ricklhp777 collected [ $1,430 ]
+
+
+
+#Game No : 545854264
+***** 888poker 
+
+Snap Poker Hand History for Game 545854264 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:00:59
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: elmagoviejo ( $8,965 )
+Seat 2: gitini123 ( $10,820 )
+Seat 4: zwegle2402 ( $9,340 )
+Seat 6: TURovv ( $5,660 )
+Seat 7: llywydd ( $13,504 )
+Seat 9: setnaset1 ( $13,846 )
+TURovv posts ante [$30]
+elmagoviejo posts ante [$30]
+zwegle2402 posts ante [$30]
+gitini123 posts ante [$30]
+llywydd posts ante [$30]
+setnaset1 posts ante [$30]
+gitini123 posts small blind [$125]
+zwegle2402 posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ 2c, Th ]
+TURovv folds
+llywydd folds
+setnaset1 calls [$250]
+elmagoviejo folds
+gitini123 calls [$125]
+zwegle2402 checks
+** Dealing flop ** [ 5c, Kd, 4c ]
+gitini123 bets [$930]
+zwegle2402 folds
+setnaset1 calls [$930]
+** Dealing turn ** [ 9h ]
+gitini123 bets [$2,790]
+setnaset1 calls [$2,790]
+** Dealing river ** [ Qd ]
+gitini123 bets [$250]
+setnaset1 folds
+** Summary **
+gitini123 did not show his hand
+gitini123 collected [ $8,370 ]
+
+
+
+#Game No : 545854252
+***** 888poker 
+
+Snap Poker Hand History for Game 545854252 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:01:11
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: bikernsk ( $17,611 )
+Seat 2: Chrill393 ( $23,014 )
+Seat 4: Siddhhaartta ( $3,000 )
+Seat 6: ProBluffer92 ( $1,828 )
+Seat 7: TURovv ( $5,690 )
+Seat 9: staycool4eva ( $5,755 )
+Chrill393 posts ante [$30]
+Siddhhaartta posts ante [$30]
+bikernsk posts ante [$30]
+ProBluffer92 posts ante [$30]
+TURovv posts ante [$30]
+staycool4eva posts ante [$30]
+Chrill393 posts small blind [$125]
+Siddhhaartta posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ 6d, 9s ]
+ProBluffer92 folds
+TURovv folds
+staycool4eva raises [$500]
+bikernsk folds
+Chrill393 folds
+Siddhhaartta raises [$2,720]
+staycool4eva calls [$2,470]
+** Dealing flop ** [ 6s, 8c, 5c ]
+** Dealing turn ** [ 8d ]
+** Dealing river ** [ Kc ]
+** Summary **
+Siddhhaartta shows [ Jh, Kd ]
+staycool4eva shows [ 9c, Ad ]
+Siddhhaartta collected [ $6,245 ]
+
+
+
+#Game No : 545854284
+***** 888poker 
+
+Snap Poker Hand History for Game 545854284 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:01:14
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: TURovv ( $5,600 )
+Seat 2: Nut223 ( $16,911 )
+Seat 4: F.8.T.1.W. ( $13,278 )
+Seat 6: ___JustMe___ ( $6,000 )
+Seat 7: DarkSideJedi ( $4,140 )
+Seat 9: luckyfuckers ( $8,959 )
+F.8.T.1.W. posts ante [$30]
+Nut223 posts ante [$30]
+TURovv posts ante [$30]
+___JustMe___ posts ante [$30]
+DarkSideJedi posts ante [$30]
+luckyfuckers posts ante [$30]
+Nut223 posts small blind [$125]
+F.8.T.1.W. posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ 7d, Js ]
+___JustMe___ folds
+DarkSideJedi raises [$652]
+luckyfuckers folds
+TURovv folds
+Nut223 folds
+F.8.T.1.W. folds
+** Summary **
+DarkSideJedi did not show his hand
+DarkSideJedi collected [ $805 ]
+
+
+
+#Game No : 545854276
+***** 888poker 
+
+Snap Poker Hand History for Game 545854276 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:01:18
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: VLADIMIRIVOC ( $5,165 )
+Seat 2: MeikeJ ( $7,123 )
+Seat 4: vova42kem ( $12,059 )
+Seat 6: cjgrounds ( $2,565 )
+Seat 7: TURovv ( $5,630 )
+Seat 9: THESKULL13 ( $14,624 )
+THESKULL13 posts ante [$30]
+MeikeJ posts ante [$30]
+vova42kem posts ante [$30]
+VLADIMIRIVOC posts ante [$30]
+cjgrounds posts ante [$30]
+TURovv posts ante [$30]
+MeikeJ posts small blind [$125]
+vova42kem posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ Th, 5c ]
+cjgrounds folds
+TURovv folds
+THESKULL13 folds
+VLADIMIRIVOC folds
+MeikeJ calls [$125]
+vova42kem checks
+** Dealing flop ** [ Ac, 6s, Td ]
+MeikeJ checks
+vova42kem bets [$250]
+MeikeJ folds
+** Summary **
+vova42kem did not show his hand
+vova42kem collected [ $680 ]
+
+
+
+#Game No : 545854297
+***** 888poker 
+
+Snap Poker Hand History for Game 545854297 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:01:30
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 6 is the button
+Total number of players : 6
+Seat 1: 13Bot ( $41,501 )
+Seat 2: bikernsk ( $17,241 )
+Seat 4: cjgrounds ( $2,505 )
+Seat 6: PayTh3Pric3 ( $27,170 )
+Seat 7: TURovv ( $5,570 )
+Seat 9: suad1987 ( $2,960 )
+PayTh3Pric3 posts ante [$30]
+suad1987 posts ante [$30]
+TURovv posts ante [$30]
+13Bot posts ante [$30]
+bikernsk posts ante [$30]
+cjgrounds posts ante [$30]
+TURovv posts small blind [$125]
+suad1987 posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ 8s, 3d ]
+13Bot calls [$250]
+bikernsk folds
+cjgrounds folds
+PayTh3Pric3 raises [$1,500]
+TURovv folds
+suad1987 folds
+13Bot calls [$1,250]
+** Dealing flop ** [ 2h, Qh, 8h ]
+13Bot bets [$1,777]
+PayTh3Pric3 calls [$1,777]
+** Dealing turn ** [ 2s ]
+13Bot bets [$5,331]
+PayTh3Pric3 calls [$5,331]
+** Dealing river ** [ Ad ]
+13Bot bets [$8,885]
+PayTh3Pric3 calls [$8,885]
+** Summary **
+13Bot shows [ 3h, 3s ]
+PayTh3Pric3 shows [ Kd, Kh ]
+PayTh3Pric3 collected [ $35,541 ]
+
+
+
+#Game No : 545854313
+***** 888poker 
+
+Snap Poker Hand History for Game 545854313 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:02:01
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: Sven200 ( $4,396 )
+Seat 2: miviejo14 ( $6,745 )
+Seat 4: TURovv ( $5,415 )
+Seat 6: decloakberni ( $4,820 )
+Seat 7: Aces2fold ( $2,261 )
+Seat 9: susu174 ( $13,881 )
+Sven200 posts ante [$30]
+TURovv posts ante [$30]
+miviejo14 posts ante [$30]
+decloakberni posts ante [$30]
+Aces2fold posts ante [$30]
+susu174 posts ante [$30]
+miviejo14 posts small blind [$125]
+TURovv posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ 4d, 2h ]
+decloakberni calls [$250]
+Aces2fold folds
+susu174 folds
+Sven200 calls [$250]
+miviejo14 folds
+TURovv checks
+** Dealing flop ** [ 6h, 5s, 2c ]
+TURovv checks
+decloakberni bets [$250]
+Sven200 calls [$250]
+TURovv calls [$250]
+** Dealing turn ** [ Tc ]
+TURovv checks
+decloakberni bets [$250]
+Sven200 calls [$250]
+TURovv calls [$250]
+** Dealing river ** [ Qd ]
+TURovv checks
+decloakberni bets [$1,277]
+Sven200 folds
+TURovv folds
+** Summary **
+decloakberni did not show his hand
+decloakberni collected [ $2,555 ]
+
+
+
+#Game No : 545854464
+***** 888poker 
+
+Snap Poker Hand History for Game 545854464 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:02:23
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: vaseok87 ( $3,970 )
+Seat 2: ollensace ( $10,946 )
+Seat 4: Vor777kuta ( $3,765 )
+Seat 6: ___JustMe___ ( $6,220 )
+Seat 7: TURovv ( $4,605 )
+Seat 9: decloakberni ( $6,595 )
+decloakberni posts ante [$30]
+vaseok87 posts ante [$30]
+Vor777kuta posts ante [$30]
+ollensace posts ante [$30]
+___JustMe___ posts ante [$30]
+TURovv posts ante [$30]
+ollensace posts small blind [$125]
+Vor777kuta posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ 4d, 6c ]
+___JustMe___ folds
+TURovv folds
+decloakberni folds
+vaseok87 raises [$3,940]
+ollensace folds
+Vor777kuta folds
+** Summary **
+vaseok87 did not show his hand
+vaseok87 collected [ $805 ]
+
+
+
+#Game No : 545854456
+***** 888poker 
+
+Snap Poker Hand History for Game 545854456 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:02:26
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: hinghaon ( $5,970 )
+Seat 2: cikadaki ( $2,505 )
+Seat 4: Secretchik ( $9,178 )
+Seat 6: TURovv ( $4,635 )
+Seat 7: tung_eki ( $40,343 )
+Seat 9: shmoog28 ( $10,780 )
+Secretchik posts ante [$30]
+cikadaki posts ante [$30]
+hinghaon posts ante [$30]
+TURovv posts ante [$30]
+tung_eki posts ante [$30]
+shmoog28 posts ante [$30]
+cikadaki posts small blind [$125]
+Secretchik posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ 4h, 2h ]
+TURovv folds
+tung_eki folds
+shmoog28 calls [$250]
+hinghaon raises [$5,940]
+cikadaki folds
+Secretchik folds
+shmoog28 calls [$5,690]
+** Dealing flop ** [ 3h, 5h, Qc ]
+** Dealing turn ** [ 5c ]
+** Dealing river ** [ 8d ]
+** Summary **
+hinghaon shows [ Ad, 5d ]
+shmoog28 shows [ Kc, Js ]
+hinghaon collected [ $12,435 ]
+
+
+
+#Game No : 545854477
+***** 888poker 
+
+Snap Poker Hand History for Game 545854477 *****
+$125/$250 Blinds No Limit Holdem - *** 12 11 2016 18:02:47
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 9 is the button
+Total number of players : 6
+Seat 1: DoctorJeal ( $5,603 )
+Seat 2: seanyoung747 ( $11,848 )
+Seat 4: bibidave2016 ( $105 )
+Seat 6: Sven200 ( $3,556 )
+Seat 7: franmatiazzi ( $21,946 )
+Seat 9: TURovv ( $4,575 )
+seanyoung747 posts ante [$30]
+DoctorJeal posts ante [$30]
+TURovv posts ante [$30]
+bibidave2016 posts ante [$30]
+Sven200 posts ante [$30]
+franmatiazzi posts ante [$30]
+DoctorJeal posts small blind [$125]
+seanyoung747 posts big blind [$250]
+** Dealing down cards **
+Dealt to TURovv [ As, Kc ]
+bibidave2016 folds
+Sven200 folds
+franmatiazzi folds
+TURovv raises [$4,545]
+DoctorJeal raises [$5,448]
+seanyoung747 folds
+** Dealing flop ** [ Ts, Qd, 9d ]
+** Dealing turn ** [ 6h ]
+** Dealing river ** [ 4s ]
+** Summary **
+DoctorJeal shows [ Kd, 9c ]
+TURovv shows [ As, Kc ]
+DoctorJeal collected [ $9,520 ]
+
+
+
+#Game No : 545854569
+***** 888poker 
+
+Snap Poker Hand History for Game 545854569 *****
+$150/$300 Blinds No Limit Holdem - *** 12 11 2016 18:03:13
+Tournament #90468240 $0.90 + $0.10 - Table #1 6 Max (Real Money)
+Seat 1 is the button
+Total number of players : 6
+Seat 1: MyNameIs7 ( $4,431 )
+Seat 2: TURovv ( $2,960 )
+Seat 4: Ragnarlogblo ( $4,678 )
+Seat 6: bikernsk ( $16,416 )
+Seat 7: RareshC ( $18,011 )
+Seat 9: Maschinee ( $25,592 )
+Ragnarlogblo posts ante [$40]
+TURovv posts ante [$40]
+MyNameIs7 posts ante [$40]
+bikernsk posts ante [$40]
+RareshC posts ante [$40]
+Maschinee posts ante [$40]
+TURovv posts small blind [$150]
+Ragnarlogblo posts big blind [$300]
+** Dealing down cards **
+Dealt to TURovv [ 2h, Js ]
+bikernsk folds
+RareshC folds
+Maschinee raises [$600]
+MyNameIs7 folds
+TURovv folds
+Ragnarlogblo folds
+** Summary **
+Maschinee did not show his hand
+Maschinee collected [ $990 ]
+
+
+
+
+
