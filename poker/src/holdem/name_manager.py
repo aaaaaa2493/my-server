@@ -31,8 +31,11 @@ class NameManager:
             NameManager.save()
             return
 
-        NameManager.FreeNames = open(NameManager.free_nicks_file).read().split()
-        NameManager.BusyNames = open(NameManager.busy_nicks_file).read().split()
+        free_nicks_path = f'{NameManager.NicksPath}/{NameManager.free_nicks_file}'
+        busy_nicks_path = f'{NameManager.NicksPath}/{NameManager.busy_nicks_file}'
+
+        NameManager.FreeNames = open(free_nicks_path).read().split()
+        NameManager.BusyNames = open(busy_nicks_path).read().split()
         NameManager._length = len(NameManager.FreeNames)
         NameManager._initialized = True
 

@@ -34,8 +34,8 @@ class Run:
             NameManager.remove_folder()
         elif args[0] == '--parsing-tests':
             from data.game_parser import GameParser, PokerGame
-            PokerGame.converted_games_folder = 'games_'
-            PokerGame.converted_chat_folder = 'chat_'
+            PokerGame.converted_games_folder = 'games_test'
+            PokerGame.converted_chat_folder = 'chat_tests'
             GameParser.parse_dir('testing', True)
             PokerGame.load_dir('testing')
         else:
