@@ -1,4 +1,6 @@
 from numpy import array
+from typing import List
+from data.game_model.poker_hand import PokerHand
 
 
 class BasePokerDecision:
@@ -8,3 +10,7 @@ class BasePokerDecision:
 
     def to_array(self) -> array:
         raise NotImplementedError('to array')
+
+    @staticmethod
+    def get_decisions(hand: PokerHand) -> List['BasePokerDecision']:
+        raise NotImplementedError('get_decisions')
