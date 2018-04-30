@@ -73,6 +73,13 @@ class Run:
         elif mode == Mode.UnitTest:
             self.start_unit_tests()
 
+        elif mode == Mode.Learning:
+            from learning.learning import Learning
+            from learning.data_sets.decision_model.poker_decision import PokerDecision
+            learn = Learning()
+            learn.create_data_set(PokerDecision)
+            learn.add_data_set('testing')
+
         else:
             raise BadMode('Bad mode')
 
