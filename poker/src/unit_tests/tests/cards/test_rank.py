@@ -47,3 +47,18 @@ class RankTest(TestCase):
         self.assertEqual(str(Rank.Four), 'four')
         self.assertEqual(str(Rank.Three), 'three')
         self.assertEqual(str(Rank.Two), 'two')
+
+    def test_short(self):
+        self.assertEqual(Rank.Ace.short, 'A')
+        self.assertEqual(Rank.King.short, 'K')
+        self.assertEqual(Rank.Queen.short, 'Q')
+        self.assertEqual(Rank.Jack.short, 'J')
+        self.assertEqual(Rank.Ten.short, 'T')
+        self.assertEqual(Rank.Nine.short, '9')
+        self.assertEqual(Rank.Eight.short, '8')
+        self.assertEqual(Rank.Seven.short, '7')
+        self.assertEqual(Rank.Six.short, '6')
+        self.assertEqual(Rank.Five.short, '5')
+        self.assertEqual(Rank.Four.short, '4')
+        self.assertEqual(Rank.Three.short, '3')
+        self.assertEqual(Rank.Two.short, '2')

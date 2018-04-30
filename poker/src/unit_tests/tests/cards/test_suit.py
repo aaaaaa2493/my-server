@@ -22,3 +22,9 @@ class SuitTest(TestCase):
         self.assertEqual(str(Suit.Diamonds), 'diamonds')
         self.assertEqual(str(Suit.Clubs), 'clubs')
         self.assertEqual(str(Suit.Spades), 'spades')
+
+    def test_short(self):
+        self.assertEqual(Suit.Hearts.short, 'H')
+        self.assertEqual(Suit.Diamonds.short, 'D')
+        self.assertEqual(Suit.Clubs.short, 'C')
+        self.assertEqual(Suit.Spades.short, 'S')
