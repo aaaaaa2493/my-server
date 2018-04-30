@@ -22,6 +22,7 @@ class Run:
         if args[0] == '--unit-tests':
             Settings.game_mode = Mode.UnitTest
             self.start_unit_tests()
+
         elif args[0] == '--evolution-tests':
             from holdem.name_manager import NameManager
             from holdem.play.play_manager import PlayManager
@@ -32,12 +33,15 @@ class Run:
             self.start_evolution(3, 9, 27, 1000)
             PlayManager.remove_folder()
             NameManager.remove_folder()
+
         elif args[0] == '--parsing-tests':
             from data.game_parser import GameParser, PokerGame
-            PokerGame.converted_games_folder = 'games_'
-            PokerGame.converted_chat_folder = 'chat_'
+            PokerGame.converted_games_folder = 'games_test'
+            PokerGame.converted_chat_folder = 'chat_tests'
             GameParser.parse_dir('testing', True)
+            GameParser.copy_dir('backup testing', 'testing')
             PokerGame.load_dir('testing')
+
         else:
             raise BadCommandLineArguments(str(args))
 

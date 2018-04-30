@@ -1,6 +1,7 @@
 from typing import Optional
 from os import listdir, makedirs, remove
 from os.path import exists
+from shutil import copyfile
 from data.game_model.poker_game import PokerGame
 from data.parsing.poker_stars_parsing import PokerStars, PokerStarsParsing
 from data.parsing.party_poker_parsing import PartyPoker, PartyPokerParsing
@@ -46,6 +47,13 @@ class GameParser:
                 if need_convert:
                     game.convert()
                 remove(PokerGame.path_to_raw_games + path + '/' + game_path)
+
+    @staticmethod
+    def copy_dir(src: str, dst: str) -> None:
+        if exists(PokerGame.path_to_raw_games + src) and exists(PokerGame.path_to_raw_games + dst):
+            for name in listdir(PokerGame.path_to_raw_games + src):
+                copyfile(PokerGame.path_to_raw_games + src + '/' + name,
+                         PokerGame.path_to_raw_games + dst + '/' + name)
 
     @staticmethod
     def parse_game(path: str) -> Optional[PokerGame]:
