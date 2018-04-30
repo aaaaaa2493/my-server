@@ -1,11 +1,15 @@
 from typing import Callable, List
+from pickle import load, dump
 from learning.data_sets.base_poker_decision import BasePokerDecision
 from learning.data_sets.decisions_set import DecisionsSet
 from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame
 
 
-class DataSetCreator:
+class DataSet:
+
+    dataset_folder = 'datasets'
+
     def __init__(self, cls: Callable[..., BasePokerDecision]):
         self.cls: Callable[..., BasePokerDecision] = cls
         self.obj: BasePokerDecision = self.cls()
@@ -23,3 +27,10 @@ class DataSetCreator:
         games: List[PokerGame] = PokerGame.load_dir(path)
         for game in games:
             self.add_data_from_game(game)
+
+    def save(self, path) -> None:
+        dump(self, open(DataSet.dataset_folder + '/' + path, 'wb'))
+
+    @staticmethod
+    def load(path) -> 'DataSet':
+        return load(open(DataSet.dataset_folder + '/' + path, 'rb'))
