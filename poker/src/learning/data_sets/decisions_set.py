@@ -10,6 +10,9 @@ class DecisionsSet:
     def add(self, decision: BasePokerDecision) -> None:
         self._data += [decision]
 
+    def add_many(self, decisions: List[BasePokerDecision]) -> None:
+        self._data += decisions
+
     def get_data(self) -> array:
         arr = [d.to_array() for d in self._data]
         return array(arr)
