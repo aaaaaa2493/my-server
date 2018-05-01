@@ -38,7 +38,8 @@ class Run:
             from data.game_parser import GameParser, PokerGame
             PokerGame.converted_games_folder = 'games_test'
             PokerGame.converted_chat_folder = 'chat_tests'
-            GameParser.parse_dir('testing', True)
+            games = GameParser.parse_dir('testing', True)
+            assert len(games) == 6
             GameParser.copy_dir('backup testing', 'testing')
             PokerGame.load_dir('testing')
 

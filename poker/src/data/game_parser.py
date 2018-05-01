@@ -1,5 +1,5 @@
-from typing import Optional
-from os import listdir, makedirs, remove
+from typing import Optional, List
+from os import listdir, makedirs
 from os.path import exists
 from shutil import copyfile
 from data.game_model.poker_game import PokerGame
@@ -39,17 +39,20 @@ class GameParser:
         return None
 
     @staticmethod
-    def parse_dir(path: str, need_convert: bool = False) -> None:
+    def parse_dir(path: str, need_convert: bool = False) -> List[PokerGame]:
+        parsed = []
         games = listdir(PokerGame.path_to_raw_games + path)
         if not exists(PokerGame.path_to_parsed_games + path):
             makedirs(PokerGame.path_to_parsed_games + path)
         for game_path in games:
             game = GameParser.parse_game(f'{path}/{game_path}')
             if game is not None:
+                parsed += [game]
                 game.save()
                 if need_convert:
                     game.convert()
                 # remove(PokerGame.path_to_raw_games + path + '/' + game_path)
+        return parsed
 
     @staticmethod
     def search_in_dir(path: str, line: str) -> None:
