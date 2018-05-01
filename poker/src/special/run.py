@@ -38,7 +38,7 @@ class Run:
             from data.game_parser import GameParser, PokerGame
             PokerGame.converted_games_folder = 'games_test'
             PokerGame.converted_chat_folder = 'chat_tests'
-            games = GameParser.parse_dir('testing', True)
+            games = GameParser.parse_dir('testing', True, True)
             assert len(games) == 6
             GameParser.copy_dir('backup testing', 'testing')
             PokerGame.load_dir('testing')
@@ -56,7 +56,7 @@ class Run:
         elif mode == Mode.Parse:
             from data.game_parser import GameParser, PokerGame
             # GameParser.parse_dir('pack0')
-            GameParser.parse_dir('pack1')
+            GameParser.parse_dir('pack1', False, False)
             # game.save()
             # game.convert()
             # print(game)
@@ -80,7 +80,7 @@ class Run:
             learn = Learning()
             learn.create_data_set(PokerDecision)
             start = datetime.now()
-            GameParser.parse_dir('pack1')
+            GameParser.parse_dir('pack1', False, False)
             learn.add_data_set('pack1')
             learn.save_data_set('data.txt')
             end = datetime.now()

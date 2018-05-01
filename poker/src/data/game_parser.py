@@ -36,7 +36,7 @@ class GameParser:
         return None
 
     @staticmethod
-    def parse_dir(path: str, need_convert: bool = False) -> List[PokerGame]:
+    def parse_dir(path: str, need_convert: bool, need_output: bool) -> List[PokerGame]:
         parsed = []
         games = listdir(PokerGame.path_to_raw_games + path)
         if not exists(PokerGame.path_to_parsed_games + path):
@@ -44,7 +44,8 @@ class GameParser:
         for game_path in games:
             game = GameParser.parse_game(f'{path}/{game_path}')
             if game is not None:
-                parsed += [game]
+                if need_output:
+                    parsed += [game]
                 game.save()
                 if need_convert:
                     game.convert()
