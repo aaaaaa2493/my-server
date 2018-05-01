@@ -87,7 +87,7 @@ class PokerDecision(BasePokerDecision):
     @staticmethod
     def get_decisions(game: PokerGame, hand: PokerHand) -> List[BasePokerDecision]:
 
-        def print_(*_, **__): ...
+        def print(*_, **__): ...
 
         decisions: List[BasePokerDecision] = []
 
