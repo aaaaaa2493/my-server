@@ -27,12 +27,12 @@ class GameParser:
 
         match = Poker888.identifier_snap.search(text)
         if match is not None:
-            return None
             Debug.parser('Found Poker888 Snap Poker game')
-            return Poker888Parsing(game)
+            return Poker888Parsing(game, True)
 
         match = PartyPoker.identifier.search(text)
         if match is not None:
+            return None
             Debug.parser('Found PartyPoker game')
             return PartyPokerParsing(game)
 
@@ -76,12 +76,12 @@ class GameParser:
         text_game = open(PokerGame.path_to_raw_games + path, 'r', encoding='utf-8').read().strip()
         game.source = path
 
-        Debug.parser('\nStarting to analyse ' + path)
+        # Debug.parser('\nStarting to analyse ' + path)
 
         parser = GameParser.get_parser(text_game, game)
 
         if parser is None:
-            Debug.parser('Cannot parse game - can not identify')
+            # Debug.parser('Cannot parse game - can not identify')
             return None
 
         parser.process_game(text_game)
