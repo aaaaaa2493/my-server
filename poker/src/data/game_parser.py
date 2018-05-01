@@ -15,6 +15,7 @@ class GameParser:
     def get_parser(text, game):
         match = PokerStars.identifier.search(text)
         if match is not None:
+            return None
             Debug.parser('Found PokerStars game')
             return PokerStarsParsing(game)
 
@@ -32,7 +33,6 @@ class GameParser:
 
         match = PartyPoker.identifier.search(text)
         if match is not None:
-            return None
             Debug.parser('Found PartyPoker game')
             return PartyPokerParsing(game)
 

@@ -87,7 +87,7 @@ class PokerDecision(BasePokerDecision):
     @staticmethod
     def get_decisions(game: PokerGame, hand: PokerHand) -> List[BasePokerDecision]:
 
-        def print(*_, **__): ...
+        def print_(*_, **__): ...
 
         decisions: List[BasePokerDecision] = []
 
@@ -173,7 +173,8 @@ class PokerDecision(BasePokerDecision):
                     pot_size += act.money - gived[act.player.name]
                     money[act.player.name] -= act.money - gived[act.player.name]
                     gived[act.player.name] = act.money
-                    raise_amount = act.money
+                    if raise_amount < act.money:
+                        raise_amount = act.money
 
                 elif act.event == Event.ReturnMoney:
                     pot_size -= act.money

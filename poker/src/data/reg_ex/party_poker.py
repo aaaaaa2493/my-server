@@ -28,8 +28,8 @@ class PartyPoker:
 
     player_init = compile(r'^Seat ([0-9]+): (' + name + r') \( ([0-9,]+) \)$')
     skip_tourney = compile(r'^Trny:[ ]?[0-9]+ Level:[ ]?[0-9]+$')
-    skip_blinds = compile(r'^Blinds-Antes\([0-9 ]+/[0-9 ]+ -[0-9 ]+\)$')
-    skip_blinds_2 = compile(r'^Blinds\([0-9]+/[0-9]+\)$')
+    skip_blinds = compile(r'^Blinds-Antes\(([0-9 ]+)/([0-9 ]+) -([0-9 ]+)\)$')
+    skip_blinds_2 = compile(r'^Blinds\(([0-9]+)/([0-9]+)\)$')
 
     find_ante = compile(r'^(' + name + r') posts ante \[([0-9,]+)\]$')
     find_small_blind = compile(r'^(' + name + r') posts small blind \[([0-9,]+)\]\.$')

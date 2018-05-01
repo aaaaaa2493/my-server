@@ -87,7 +87,7 @@ class Run:
 
         elif mode == Mode.Search:
             from data.game_parser import GameParser
-            GameParser.search_in_dir('pack1', 'Goku2284')
+            GameParser.search_in_dir('pack1', 'Seat 10')
 
         else:
             raise BadMode('Bad mode')

@@ -77,17 +77,7 @@ class PartyPokerParsing(BaseParsing):
                 name = match.group(1)
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
-                self.call_amount += money
-                if self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money != self.call_amount:
-                    print('ASSERT',
-                          self.call_amount,
-                          f', {self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step)} + '
-                          f'{money} = '
-                          f'{self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money} '
-                          f'{line}')
-                else:
-                    print('OK', line)
-
+                self.call_amount = self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money
                 self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 continue
 
@@ -97,7 +87,7 @@ class PartyPokerParsing(BaseParsing):
                 name = match.group(1)
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
-                self.call_amount += money
+                self.call_amount = self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money
                 self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 continue
 
@@ -305,11 +295,23 @@ class PartyPokerParsing(BaseParsing):
 
         line = next(lines)
         match = self.parser.skip_blinds.search(line)
-        if match is None:
-            match = self.parser.skip_blinds_2.search(line)
+        if match is not None:
+            sb = int(match.group(1).replace(' ', ''))
+            bb = int(match.group(2).replace(' ', ''))
+            ante = int(match.group(3).replace(' ', ''))
 
-        if match is None:
-            raise ValueError('Skip error 2: ' + line)
+        else:
+            match = self.parser.skip_blinds_2.search(line)
+            if match is None:
+                raise ValueError('Skip error 2: ' + line)
+
+            sb = int(match.group(1).replace(' ', ''))
+            bb = int(match.group(2).replace(' ', ''))
+            ante = 0
+
+        self.game.curr_hand.small_blind = sb
+        self.game.curr_hand.big_blind = bb
+        self.game.curr_hand.ante = ante
 
         line = next(lines)
 
