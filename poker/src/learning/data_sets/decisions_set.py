@@ -18,5 +18,8 @@ class DecisionsSet:
         return array(arr)
 
     def get_answers(self) -> array:
-        arr = [d.answer for d in self._data]
+        arr = [d.get_answer() for d in self._data]
         return array(arr)
+
+    def __len__(self):
+        return len(self._data)

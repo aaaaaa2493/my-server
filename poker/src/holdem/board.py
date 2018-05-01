@@ -153,14 +153,16 @@ class Board:
             self.open_river_with_network(table)
 
     def get(self) -> Card.Cards:
+        return self.get_from_step(self.state)
 
-        if self.state == Step.Preflop:
+    def get_from_step(self, step: Step) -> Card.Cards:
+        if step == Step.Preflop:
             return []
 
-        elif self.state == Step.Flop:
+        elif step == Step.Flop:
             return [self.flop1, self.flop2, self.flop3]
 
-        elif self.state == Step.Turn:
+        elif step == Step.Turn:
             return [self.flop1, self.flop2, self.flop3, self.turn]
 
         return [self.flop1, self.flop2, self.flop3, self.turn, self.river]

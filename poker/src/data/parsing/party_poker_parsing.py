@@ -78,6 +78,16 @@ class PartyPokerParsing(BaseParsing):
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
                 self.call_amount += money
+                if self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money != self.call_amount:
+                    print('ASSERT',
+                          self.call_amount,
+                          f', {self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step)} + '
+                          f'{money} = '
+                          f'{self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money} '
+                          f'{line}')
+                else:
+                    print('OK', line)
+
                 self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 continue
 

@@ -72,10 +72,12 @@ class PokerGame:
 
     @staticmethod
     def load_dir(path: str) -> List['PokerGame']:
-        games = []
+        return [game for game in PokerGame.load_dir_gen(path)]
+
+    @staticmethod
+    def load_dir_gen(path: str) -> Iterator['PokerGame']:
         for curr_path in listdir(PokerGame.path_to_parsed_games + path):
-            games += [PokerGame.load(path + '/' + curr_path)]
-        return games
+            yield PokerGame.load(path + '/' + curr_path)
 
     @staticmethod
     def load(path: str) -> 'PokerGame':

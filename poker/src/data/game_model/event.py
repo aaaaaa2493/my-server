@@ -1,5 +1,5 @@
 from enum import Enum
-from typing import Dict
+from typing import Dict, List
 from holdem.play.result import Result
 
 
@@ -26,6 +26,18 @@ class Event(Enum):
     def to_result(self) -> Result:
         return _to_result[self]
 
+    def is_statement(self) -> bool:
+        return self in _statements
+
+
+_statements: List[Event] = [
+    Event.WinMoney,
+    Event.ChatMessage,
+    Event.ObserverChatMessage,
+    Event.Disconnected,
+    Event.Connected,
+    Event.FinishGame
+]
 
 _to_result: Dict[Event, Result] = {
     Event.Fold: Result.Fold,

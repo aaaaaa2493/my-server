@@ -97,6 +97,12 @@ class Poker888Parsing(BaseParsing):
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
                 self.call_amount += money
+                if self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money != self.call_amount:
+                    print('ASSERT',
+                          self.call_amount,
+                          f', {self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step)} + '
+                          f'{money} = '
+                          f'{self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money}')
                 try:
                     self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 except ValueError:
@@ -111,6 +117,14 @@ class Poker888Parsing(BaseParsing):
                 money = int(match.group(2).replace('\xa0', ''))
                 self.total_pot += money
                 self.call_amount += money
+                if self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money != self.call_amount:
+                    print('ASSERT',
+                          self.call_amount,
+                          f', {self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step)} + '
+                          f'{money} = '
+                          f'{self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money}')
+                else:
+                    print('OK', line)
                 try:
                     self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 except ValueError:

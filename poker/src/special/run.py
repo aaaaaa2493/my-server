@@ -55,9 +55,7 @@ class Run:
         elif mode == Mode.Parse:
             from data.game_parser import GameParser, PokerGame
             # GameParser.parse_dir('pack0')
-            # GameParser.parse_dir('pack1')
-            GameParser.parse_dir('testing')
-            PokerGame.load_dir('testing')
+            GameParser.parse_dir('pack1')
             # game.save()
             # game.convert()
             # print(game)
@@ -76,9 +74,20 @@ class Run:
         elif mode == Mode.Learning:
             from learning.learning import Learning
             from learning.data_sets.decision_model.poker_decision import PokerDecision
+            from data.game_parser import GameParser
+            from datetime import datetime
             learn = Learning()
             learn.create_data_set(PokerDecision)
-            learn.add_data_set('testing')
+            start = datetime.now()
+            GameParser.parse_dir('pack1')
+            learn.add_data_set('pack1')
+            learn.save_data_set('data.txt')
+            end = datetime.now()
+            print('it took', end - start)
+
+        elif mode == Mode.Search:
+            from data.game_parser import GameParser
+            GameParser.search_in_dir('pack1', 'Goku2284')
 
         else:
             raise BadMode('Bad mode')

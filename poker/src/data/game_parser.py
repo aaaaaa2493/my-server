@@ -20,16 +20,19 @@ class GameParser:
 
         match = Poker888.identifier.search(text)
         if match is not None:
+            return None
             Debug.parser('Found Poker888 game')
             return Poker888Parsing(game)
 
         match = Poker888.identifier_snap.search(text)
         if match is not None:
+            return None
             Debug.parser('Found Poker888 Snap Poker game')
             return Poker888Parsing(game)
 
         match = PartyPoker.identifier.search(text)
         if match is not None:
+            return None
             Debug.parser('Found PartyPoker game')
             return PartyPokerParsing(game)
 
@@ -46,7 +49,16 @@ class GameParser:
                 game.save()
                 if need_convert:
                     game.convert()
-                remove(PokerGame.path_to_raw_games + path + '/' + game_path)
+                # remove(PokerGame.path_to_raw_games + path + '/' + game_path)
+
+    @staticmethod
+    def search_in_dir(path: str, line: str) -> None:
+        games = listdir(PokerGame.path_to_raw_games + path)
+        for game_path in games:
+            game_path = f'{path}/{game_path}'
+            text_game = open(PokerGame.path_to_raw_games + game_path, 'r', encoding='utf-8').read().strip()
+            if line in text_game:
+                Debug.parser('FOUND', line, ':', game_path)
 
     @staticmethod
     def copy_dir(src: str, dst: str) -> None:

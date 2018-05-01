@@ -11,6 +11,7 @@ class Learning:
 
     def add_data_set(self, games_path: str) -> None:
         self._data.add_data_from_folder(games_path)
+        print('data set contains', len(self._data.decisions), 'decisions with answers')
 
     def save_data_set(self, path: str) -> None:
         self._data.save(path)

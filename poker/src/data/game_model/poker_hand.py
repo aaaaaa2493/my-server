@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Iterator, Tuple
 from data.game_model.poker_event import Event, PokerEvent
 from data.game_model.mock_player import MockPlayer
 from data.game_model.observer_player import ObserverPlayer
@@ -30,6 +30,12 @@ class PokerHand:
         self.board: Board = Board(Deck())
         self.curr_step: Step = Step.Preflop
         self.curr_events: List[PokerEvent] = self.preflop
+
+    def __iter__(self) -> Iterator[Tuple[Step, List[PokerEvent]]]:
+        yield Step.Preflop, self.preflop
+        yield Step.Flop, self.flop
+        yield Step.Turn, self.turn
+        yield Step.River, self.river
 
     def init(self, hand_id, sb, bb, out_of_hand, table_num, button):
         self.id = hand_id

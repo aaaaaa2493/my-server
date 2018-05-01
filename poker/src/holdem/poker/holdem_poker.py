@@ -9,7 +9,9 @@ class HoldemPoker:
 
     @staticmethod
     def probability(c: CardsPair, f: Card.Cards) -> float:
-        return HandEvaluator.evaluate_hand([c.first.convert(), c.second.convert()], [card.convert() for card in f])
+        pr = HandEvaluator.evaluate_hand([c.first.convert(), c.second.convert()], [card.convert() for card in f])
+        # print('EVALUATING', c, 'board', Card.str(f), '=', pr)
+        return pr
 
     @staticmethod
     def calculate_outs(hidden: CardsPair, common: Card.Cards) -> Tuple[int, Card.Cards]:
