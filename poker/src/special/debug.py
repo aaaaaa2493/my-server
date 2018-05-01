@@ -10,6 +10,7 @@ class Debug:
     PlayManager = 1
     GameManager = 1
     Parser = 1
+    Learning = 0
     Error = 1
 
     if Table:
@@ -100,6 +101,15 @@ class Debug:
     else:
         @staticmethod
         def parser(*args, **kwargs):
+            pass
+
+    if Learning:
+        @staticmethod
+        def learning(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def learning(*args, **kwargs):
             pass
 
     if Error:

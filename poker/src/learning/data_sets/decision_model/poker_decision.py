@@ -1,12 +1,12 @@
 from numpy import array
 from typing import List, Dict
-from time import sleep
 from holdem.poker.holdem_poker import HoldemPoker
 from holdem.play.step import Step
 from data.game_model.event import Event
 from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame
 from learning.data_sets.base_poker_decision import BasePokerDecision, Answer
+from special.debug import Debug
 
 
 class PokerDecisionAnswer(Answer):
@@ -22,6 +22,7 @@ class PokerDecision(BasePokerDecision):
         self.my_money: int = 0
         self.money_in_pot: int = 0
         self.money_to_call: int = 0
+        self.big_blind: int = 0
         self.is_preflop: int = 0
         self.is_flop: int = 0
         self.is_turn: int = 0
@@ -32,6 +33,7 @@ class PokerDecision(BasePokerDecision):
             self.probability_to_win,
             self.my_money / self.money_in_pot,
             self.money_to_call / self.money_in_pot,
+            self.big_blind / self.money_in_pot,
             self.is_preflop,
             self.is_flop,
             self.is_turn,
@@ -43,11 +45,12 @@ class PokerDecision(BasePokerDecision):
         return f'{self._answer.name} ' \
                f'money {self.my_money} ' \
                f'pot {self.money_in_pot} ' \
+               f'bb {self.big_blind} ' \
                f'call {self.money_to_call} ' \
-               f'prob {self.probability_to_win}'
+               f'prob {self.probability_to_win} '
 
     @staticmethod
-    def create(res: Answer, prob: float, money: int, pot: int, call: int, step: Step) -> 'PokerDecision':
+    def create(res: Answer, prob: float, money: int, pot: int, call: int, bb: int, step: Step) -> 'PokerDecision':
         if prob < 0 or prob > 1:
             raise ValueError(f'Probability must be in [0, 1], gived {prob}')
 
@@ -59,6 +62,9 @@ class PokerDecision(BasePokerDecision):
 
         if call < 0:
             raise ValueError(f'Call must be > 0, gived {call}')
+
+        if bb < 0:
+            raise ValueError(f'Big blinds must be > 0, gived {bb}')
 
         if pot <= call and step != Step.Preflop:
             raise ValueError(f'Pot must be > call, gived call {call} pot {pot}')
@@ -72,6 +78,7 @@ class PokerDecision(BasePokerDecision):
         des.my_money = money
         des.money_in_pot = pot
         des.money_to_call = call
+        des.big_blind = bb
 
         if step == Step.Preflop:
             des.is_preflop = 1
@@ -87,21 +94,20 @@ class PokerDecision(BasePokerDecision):
     @staticmethod
     def get_decisions(game: PokerGame, hand: PokerHand) -> List[BasePokerDecision]:
 
-        def print(*_, **__): ...
-
         decisions: List[BasePokerDecision] = []
 
         pot_size = 0
 
         money: Dict[str, int] = {p.name: p.money for p in hand.players}
+        bb: int = hand.big_blind
 
-        print(')' * 20)
+        Debug.learning(')' * 20)
         for n, v in money.items():
-            print(f'{n} - {v}')
-        print('(' * 20)
+            Debug.learning(f'{n} - {v}')
+        Debug.learning('(' * 20)
 
         for step, stage in hand:
-            print('NEW STEP', step)
+            Debug.learning('NEW STEP', step)
             gived: Dict[str, int] = {p.name: 0 for p in hand.players}
 
             if step == Step.Preflop:
@@ -113,7 +119,7 @@ class PokerDecision(BasePokerDecision):
                 if act.event.is_statement():
                     continue
 
-                print(act, raise_amount)
+                Debug.learning(act, raise_amount)
 
                 if act.event == Event.Ante:
                     pot_size += act.money
@@ -135,7 +141,7 @@ class PokerDecision(BasePokerDecision):
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
                         des = PokerDecision.create(PokerDecisionAnswer.Fold, pr,
-                                                   my_money, pot_size, to_call, step)
+                                                   my_money, pot_size, to_call, bb, step)
                         decisions += [des]
 
                 elif act.event == Event.Check:
@@ -144,7 +150,7 @@ class PokerDecision(BasePokerDecision):
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
                         des = PokerDecision.create(PokerDecisionAnswer.CheckCall, pr,
-                                                   my_money, pot_size, to_call, step)
+                                                   my_money, pot_size, to_call, bb, step)
                         decisions += [des]
 
                 elif act.event == Event.Call:
@@ -156,7 +162,7 @@ class PokerDecision(BasePokerDecision):
                         else:
                             to_call = raise_amount - gived[act.player.name]
                         des = PokerDecision.create(PokerDecisionAnswer.CheckCall, pr,
-                                                   my_money, pot_size, to_call, step)
+                                                   my_money, pot_size, to_call, bb, step)
                         decisions += [des]
                     pot_size += act.money - gived[act.player.name]
                     money[act.player.name] -= act.money - gived[act.player.name]
@@ -168,7 +174,7 @@ class PokerDecision(BasePokerDecision):
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
                         des = PokerDecision.create(PokerDecisionAnswer.Raise, pr,
-                                                   my_money, pot_size, to_call, step)
+                                                   my_money, pot_size, to_call, bb, step)
                         decisions += [des]
                     pot_size += act.money - gived[act.player.name]
                     money[act.player.name] -= act.money - gived[act.player.name]
@@ -182,16 +188,15 @@ class PokerDecision(BasePokerDecision):
                 else:
                     raise ValueError('you forget about', act.event)
 
-                print(')' * 20)
+                Debug.learning(')' * 20)
                 for n, v in gived.items():
-                    print(f'{n}: {money[n]} ({v})')
-                print('(' * 20)
+                    Debug.learning(f'{n}: {money[n]} ({v})')
+                Debug.learning('(' * 20)
 
-        print('*' * 20)
+        Debug.learning('*' * 20)
 
         for des in decisions:
-            print(des)
+            Debug.learning(des)
 
-        print('_' * 20)
-        # sleep(1)
+        Debug.learning('_' * 20)
         return decisions
