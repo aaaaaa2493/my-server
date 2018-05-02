@@ -24,7 +24,7 @@ class Evolution:
             game = Game(0, self.players, self.seats, self.money, self.blinds_scheme)
 
             for _ in range(game.total_players):
-                game.add_player()
+                game.add_bot_player()
 
             Debug.evolution(f'Start game #{num + 1}')
 
