@@ -75,14 +75,16 @@ class Run:
         elif mode == Mode.Learning:
             from learning.learning import Learning
             from learning.data_sets.decision_model.poker_decision import PokerDecision
-            from data.game_parser import GameParser
+            # data.game_parser import GameParser
             from datetime import datetime
             learn = Learning()
             learn.create_data_set(PokerDecision)
             start = datetime.now()
-            GameParser.parse_dir('pack1', False, False)
-            learn.add_data_set('pack1')
-            learn.save_data_set('data.txt')
+            # GameParser.parse_dir('pack1', False, False)
+            # learn.add_data_set('pack1')
+            # learn.save_data_set('data without losers.txt')
+            learn.load_data_set('data without losers.txt')
+            learn.learning()
             end = datetime.now()
             print('it took', end - start)
 

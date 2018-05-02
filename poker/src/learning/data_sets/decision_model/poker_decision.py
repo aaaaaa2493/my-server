@@ -136,7 +136,7 @@ class PokerDecision(BasePokerDecision):
                     money[act.player.name] -= act.money
 
                 elif act.event == Event.Fold:
-                    if act.player.cards is not None and act.player.cards.initialized():
+                    if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
                         pr = HoldemPoker.probability(act.player.cards, hand.board.get_from_step(step))
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
@@ -145,7 +145,7 @@ class PokerDecision(BasePokerDecision):
                         decisions += [des]
 
                 elif act.event == Event.Check:
-                    if act.player.cards is not None and act.player.cards.initialized():
+                    if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
                         pr = HoldemPoker.probability(act.player.cards, hand.board.get_from_step(step))
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
@@ -154,7 +154,7 @@ class PokerDecision(BasePokerDecision):
                         decisions += [des]
 
                 elif act.event == Event.Call:
-                    if act.player.cards is not None and act.player.cards.initialized():
+                    if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
                         pr = HoldemPoker.probability(act.player.cards, hand.board.get_from_step(step))
                         my_money = money[act.player.name]
                         if raise_amount > my_money + gived[act.player.name]:
@@ -169,7 +169,7 @@ class PokerDecision(BasePokerDecision):
                     gived[act.player.name] = act.money
 
                 elif act.event == Event.Raise or act.event == Event.Allin:
-                    if act.player.cards is not None and act.player.cards.initialized():
+                    if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
                         pr = HoldemPoker.probability(act.player.cards, hand.board.get_from_step(step))
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
