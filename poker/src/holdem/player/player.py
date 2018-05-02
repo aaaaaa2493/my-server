@@ -5,7 +5,7 @@ from holdem.play.step import Step
 from holdem.play.result import Result
 from holdem.poker.hand import Hand
 from core.cards.cards_pair import CardsPair
-from holdem.play.play_manager import Play
+from holdem.play.play import Play
 from holdem.base_network import BaseNetwork
 from core.cards.card import Card
 

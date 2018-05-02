@@ -1,4 +1,3 @@
-from typing import List
 from pickle import load, dump
 from learning.data_sets.base_poker_decision import BasePokerDecision, DecisionClass
 from learning.data_sets.decisions_set import DecisionsSet

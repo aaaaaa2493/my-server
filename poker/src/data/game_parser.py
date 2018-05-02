@@ -3,9 +3,12 @@ from os import listdir, makedirs
 from os.path import exists
 from shutil import copyfile
 from data.game_model.poker_game import PokerGame
-from data.parsing.poker_stars_parsing import PokerStars, PokerStarsParsing
-from data.parsing.party_poker_parsing import PartyPoker, PartyPokerParsing
-from data.parsing.poker_888_parsing import Poker888, Poker888Parsing
+from data.reg_ex.poker_stars import PokerStars
+from data.reg_ex.party_poker import PartyPoker
+from data.reg_ex.poker_888 import Poker888
+from data.parsing.poker_stars_parsing import PokerStarsParsing
+from data.parsing.party_poker_parsing import PartyPokerParsing
+from data.parsing.poker_888_parsing import Poker888Parsing
 from special.debug import Debug
 
 

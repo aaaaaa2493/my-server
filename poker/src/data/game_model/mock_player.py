@@ -1,5 +1,6 @@
 from typing import List
-from data.game_model.player_event import Event, PlayerEvent
+from data.game_model.event import Event
+from data.game_model.player_event import PlayerEvent
 from core.cards.cards_pair import CardsPair
 from holdem.play.step import Step
 

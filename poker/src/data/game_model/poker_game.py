@@ -10,7 +10,7 @@ from holdem.play.step import Step
 from holdem.base_network import BaseNetwork
 from holdem.game.game import Game
 from holdem.player.dummy_player import DummyPlayer
-from holdem.table import Delay
+from holdem.delay import Delay
 from holdem.poker.hand_strength import HandStrength
 from holdem.poker.hand import Hand
 from data.game_model.poker_hand import PokerHand

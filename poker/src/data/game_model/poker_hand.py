@@ -1,8 +1,10 @@
 from typing import List, Iterator, Tuple
-from data.game_model.poker_event import Event, PokerEvent
+from data.game_model.event import Event
+from data.game_model.poker_event import PokerEvent
 from data.game_model.mock_player import MockPlayer
 from data.game_model.observer_player import ObserverPlayer
-from core.cards.deck import Deck, Card
+from core.cards.card import Card
+from core.cards.deck import Deck
 from core.cards.cards_pair import CardsPair
 from holdem.board import Board
 from holdem.play.step import Step

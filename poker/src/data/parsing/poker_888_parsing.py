@@ -1,5 +1,6 @@
 from typing import List
-from core.cards.cards_pair import Card, CardsPair
+from core.cards.card import Card
+from core.cards.cards_pair import CardsPair
 from data.parsing.base_parsing import BaseParsing
 from data.reg_ex.poker_888 import Poker888
 from data.game_model.event import Event

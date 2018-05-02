@@ -1,6 +1,7 @@
 from threading import Thread
 from time import sleep
-from core.blinds.blinds import Blinds, Scheme
+from core.blinds.scheme.scheme import Scheme
+from core.blinds.blinds import Blinds
 from core.abstract_game import AbstractGame
 
 

@@ -1,5 +1,6 @@
 from sys import argv
-from special.settings import Settings, Mode
+from special.mode import Mode
+from special.settings import Settings
 
 
 class BadMode(Exception):
