@@ -67,8 +67,9 @@ class Run:
             self.start_evolution(100000, 9, 999, 10000)
 
         elif mode == Mode.Testing:
-            from learning.neural_network import NeuralNetwork
-            NeuralNetwork.PokerDecision.Bubble(100, 9).show()
+            # from learning.neural_network import NeuralNetwork
+            # NeuralNetwork.PokerDecision.Bubble(100, 9).show()
+            pass
 
         elif mode == Mode.UnitTest:
             self.start_unit_tests()

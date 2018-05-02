@@ -5,6 +5,7 @@ from holdem.play.result import Result
 from holdem.play.step import Step
 from core.cards.cards_pair import CardsPair
 from holdem.players import Players
+from holdem.player.neural_network_player import NeuralNetworkPlayer
 from core.blinds.blinds import Blinds
 from holdem.board import Board
 from holdem.poker.hand_strength import HandStrength
@@ -350,7 +351,11 @@ class Table:
                         self.network.switch_decision(player)
                         sleep(Delay.SwitchDecision)
 
-                    result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
+                    if type(player) is NeuralNetworkPlayer:
+                        result = player.decide(step, to_call, can_raise_from, self.board.get(),
+                                               self.pot.money, self.blinds.big_blind)
+                    else:
+                        result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
 
                     if self.online:
                         self.network.made_decision(player, result)
