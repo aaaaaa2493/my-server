@@ -7,9 +7,9 @@ from datetime import datetime, timedelta
 from shutil import rmtree
 from statistics import mean
 from holdem.play.step import Step
-from holdem.network import Network
+from holdem.base_network import BaseNetwork
 from holdem.game.game import Game
-from holdem.player.player import Player
+from holdem.player.dummy_player import DummyPlayer
 from holdem.table import Delay
 from holdem.poker.hand_strength import HandStrength
 from holdem.poker.hand import Hand
@@ -139,7 +139,7 @@ class PokerGame:
         makedirs(chat_path)
 
         time = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), 0)
-        network = Network({}, True, False)
+        network = BaseNetwork()
         chat_messages: List[Tuple[datetime, str]] = []
 
         for num, hand in enumerate(self.hands):
@@ -175,7 +175,7 @@ class PokerGame:
                     raise ValueError('Two players with same seat')
 
                 if player is not None:
-                    new_player = Player(0, player.seat, player.name, player.money, True, True)
+                    new_player = DummyPlayer(player.seat, player.name, player.money)
                     new_player.in_game = True
                     new_player.cards = player.cards
                     players += [new_player]

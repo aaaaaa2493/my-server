@@ -10,6 +10,8 @@ from core.blinds.timed_blinds import TimedBlinds
 from holdem.delay import Delay
 from holdem.table import Table
 from holdem.player.player import Player
+from holdem.player.bot_player import BotPlayer
+from holdem.player.real_player import RealPlayer
 from holdem.play.play import Play
 from holdem.network import Network
 from special.debug import Debug
@@ -48,16 +50,17 @@ class Game(AbstractGame):
         self.players_left: int = None
         self.top_9: List[Player] = None
 
-    def add_player(self, name: str = '') -> bool:
+    def add_real_player(self, name: str) -> bool:
+        return self.add_player(RealPlayer(self.id, self.next_id, name, self.start_stack, False))
+
+    def add_bot_player(self) -> bool:
+        return self.add_player(BotPlayer(self.next_id, self.start_stack))
+
+    def add_player(self, player: Player) -> bool:
 
         if self.players_count == self.total_players:
             raise OverflowError(f'Player limit reached max = {self.total_players}')
 
-        controlled = False
-        if name:
-            controlled = True
-
-        player = Player(self.id, self.next_id, name, self.start_stack, controlled)
         self.next_id += 1
 
         self.players += [player]
@@ -418,7 +421,7 @@ class Game(AbstractGame):
                     for player in table.players.all_players():
 
                         if player.controlled:
-                            player.network.socket.close()
+                            del player.network
 
                         else:
                             player.play.busy = False
