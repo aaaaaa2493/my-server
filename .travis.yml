@@ -3,6 +3,7 @@ python:
   - "3.6"
 install:
   - pip install websocket-client
+  - pip install numpy, scipy, scikit-learn
 script:
   - cd poker
   - python src/main.py --unit-tests
