@@ -9,7 +9,7 @@ from statistics import mean
 from holdem.play.step import Step
 from holdem.network import Network
 from holdem.game.game import Game
-from holdem.player import Player
+from holdem.player.player import Player
 from holdem.table import Delay
 from holdem.poker.hand_strength import HandStrength
 from holdem.poker.hand import Hand
