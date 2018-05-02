@@ -9,7 +9,7 @@ from core.blinds.scheme.schemes import Schemes
 from core.blinds.timed_blinds import TimedBlinds
 from holdem.delay import Delay
 from holdem.table import Table
-from holdem.player import Player
+from holdem.player.player import Player
 from holdem.play.play import Play
 from holdem.network import Network
 from special.debug import Debug
