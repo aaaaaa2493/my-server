@@ -69,7 +69,7 @@ class PokerDecision(BasePokerDecision):
         if pot <= call and step != Step.Preflop:
             raise ValueError(f'Pot must be > call, gived call {call} pot {pot}')
 
-        if not res.__class__ == PokerDecisionAnswer:
+        if not type(res) is PokerDecisionAnswer:
             raise ValueError(f'Result must ne instance of PokerDecisionAnswer, gived {res}')
 
         des = PokerDecision()
