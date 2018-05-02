@@ -249,8 +249,8 @@ class PokerGame:
             if hand.sit_during_game:
 
                 for player in hand.sit_during_game:
-                    converted += [(time, network.add_player(Player(0, player.seat, player.name,
-                                                                   player.money, True, True), player.seat - 1))]
+                    converted += [(time, network.add_player(DummyPlayer(player.seat, player.name,
+                                                                        player.money), player.seat - 1))]
                     time = time + timedelta(seconds=Delay.AddPlayer)
 
             avoid_in_first_iteration = True
