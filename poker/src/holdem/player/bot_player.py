@@ -15,7 +15,7 @@ from special.debug import Debug
 class BotPlayer(Player):
     def __init__(self, _id: int, money: int):
         play: Play = PlayManager.get_play()
-        super().__init__(_id, money, False, str(self.play), play, BaseNetwork())
+        super().__init__(_id, money, False, str(play), play, BaseNetwork())
 
     def decide(self, step: Step, to_call: int, can_raise_from: int,
                cards: Card.Cards, online: bool) -> Result:
