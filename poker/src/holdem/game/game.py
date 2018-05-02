@@ -51,7 +51,7 @@ class Game(AbstractGame):
         self.top_9: List[Player] = None
 
     def add_real_player(self, name: str) -> bool:
-        return self.add_player(RealPlayer(self.id, self.next_id, name, self.start_stack, False))
+        return self.add_player(RealPlayer(self.id, self.next_id, name, self.start_stack))
 
     def add_bot_player(self) -> bool:
         return self.add_player(BotPlayer(self.next_id, self.start_stack))
