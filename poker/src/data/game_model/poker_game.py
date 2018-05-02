@@ -7,10 +7,10 @@ from datetime import datetime, timedelta
 from shutil import rmtree
 from statistics import mean
 from holdem.play.step import Step
-from holdem.network import Network
+from holdem.base_network import BaseNetwork
 from holdem.game.game import Game
-from holdem.player import Player
-from holdem.table import Delay
+from holdem.player.dummy_player import DummyPlayer
+from holdem.delay import Delay
 from holdem.poker.hand_strength import HandStrength
 from holdem.poker.hand import Hand
 from data.game_model.poker_hand import PokerHand
@@ -72,10 +72,12 @@ class PokerGame:
 
     @staticmethod
     def load_dir(path: str) -> List['PokerGame']:
-        games = []
+        return [game for game in PokerGame.load_dir_gen(path)]
+
+    @staticmethod
+    def load_dir_gen(path: str) -> Iterator['PokerGame']:
         for curr_path in listdir(PokerGame.path_to_parsed_games + path):
-            games += [PokerGame.load(path + '/' + curr_path)]
-        return games
+            yield PokerGame.load(path + '/' + curr_path)
 
     @staticmethod
     def load(path: str) -> 'PokerGame':
@@ -137,7 +139,7 @@ class PokerGame:
         makedirs(chat_path)
 
         time = datetime(int(year), int(month), int(day), int(hour), int(minute), int(second), 0)
-        network = Network({}, True, False)
+        network = BaseNetwork()
         chat_messages: List[Tuple[datetime, str]] = []
 
         for num, hand in enumerate(self.hands):
@@ -173,7 +175,7 @@ class PokerGame:
                     raise ValueError('Two players with same seat')
 
                 if player is not None:
-                    new_player = Player(0, player.seat, player.name, player.money, True, True)
+                    new_player = DummyPlayer(player.seat, player.name, player.money)
                     new_player.in_game = True
                     new_player.cards = player.cards
                     players += [new_player]
@@ -247,8 +249,8 @@ class PokerGame:
             if hand.sit_during_game:
 
                 for player in hand.sit_during_game:
-                    converted += [(time, network.add_player(Player(0, player.seat, player.name,
-                                                                   player.money, True, True), player.seat - 1))]
+                    converted += [(time, network.add_player(DummyPlayer(player.seat, player.name,
+                                                                        player.money), player.seat - 1))]
                     time = time + timedelta(seconds=Delay.AddPlayer)
 
             avoid_in_first_iteration = True

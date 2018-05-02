@@ -1,5 +1,8 @@
 from enum import Enum
-from core.blinds.scheme.scheme import Scheme, Order, Time, Hands
+from core.blinds.scheme.scheme import Scheme
+from core.blinds.scheme.hands import Hands
+from core.blinds.scheme.time import Time
+from core.blinds.scheme.order import Order
 
 
 class Schemes(Enum):

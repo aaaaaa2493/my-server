@@ -1,5 +1,6 @@
 from typing import Tuple, Iterator, List
-from core.cards.cards_pair import Card, CardsPair
+from core.cards.card import Card
+from core.cards.cards_pair import CardsPair
 from data.parsing.base_parsing import BaseParsing
 from data.reg_ex.poker_stars import PokerStars
 from data.game_model.mock_player import MockPlayer

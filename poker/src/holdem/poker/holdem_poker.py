@@ -1,5 +1,4 @@
 from typing import Tuple
-from lib.pokereval.card import Card as _Card
 from lib.pokereval.hand_evaluator import HandEvaluator
 from holdem.poker.hand_strength import HandStrength
 from core.cards.card import Card
@@ -10,9 +9,9 @@ class HoldemPoker:
 
     @staticmethod
     def probability(c: CardsPair, f: Card.Cards) -> float:
-        return HandEvaluator.evaluate_hand([_Card(c.first.rank.to_int(), c.first.suit.to_int()),
-                                            _Card(c.second.rank.to_int(), c.second.suit.to_int())],
-                                           [_Card(card.rank.to_int(), card.suit.to_int()) for card in f])
+        pr = HandEvaluator.evaluate_hand([c.first.convert(), c.second.convert()], [card.convert() for card in f])
+        # print('EVALUATING', c, 'board', Card.str(f), '=', pr)
+        return pr
 
     @staticmethod
     def calculate_outs(hidden: CardsPair, common: Card.Cards) -> Tuple[int, Card.Cards]:

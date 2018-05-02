@@ -46,3 +46,10 @@ class CardTest(TestCase):
         self.assertGreater(Card('QD'), Card('2C'))
         self.assertGreater(Card('7H'), Card('4D'))
         self.assertGreater(Card('TS'), Card('9S'))
+
+    def test_convert(self):
+        for card in Card('AS'), Card('QH'), Card('TD'), Card('4C'):
+            card2 = card.convert()
+            self.assertEqual(card.rank.value, card2.rank)
+            self.assertEqual(card.suit.value, card2.suit)
+            self.assertEqual(card, Card.get_card(card2))

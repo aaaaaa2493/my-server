@@ -31,7 +31,7 @@ class TournamentGame(Game):
         self.online = True
 
         for _ in range(bots):
-            self.add_player()
+            self.add_bot_player()
 
         if start_blinds == 1:
             self.blinds.curr_round = -1
@@ -63,7 +63,7 @@ class TournamentGame(Game):
 
                 if request['type'] == 'add player' and not self.game_started:
                     Debug.game_manager(f'Game {self.id}: add player')
-                    if self.add_player(request['name']):
+                    if self.add_real_player(request['name']):
                         self.network.send({'type': 'start game'})
                         Thread(target=lambda: self.wait_for_end(), name=f'Game {self.id}: wait for end').start()
                         Thread(target=lambda: self.send_players_left(), 

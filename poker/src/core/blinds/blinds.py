@@ -1,4 +1,7 @@
-from core.blinds.scheme.scheme import Scheme, Order, Hands, Time
+from core.blinds.scheme.scheme import Scheme
+from core.blinds.scheme.hands import Hands
+from core.blinds.scheme.time import Time
+from core.blinds.scheme.order import Order
 
 
 class Blinds:

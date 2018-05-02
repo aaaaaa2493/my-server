@@ -7,7 +7,8 @@ from shutil import rmtree
 from holdem.play.play import Play
 from holdem.name_manager import NameManager
 from special.debug import Debug
-from special.settings import Settings, Mode
+from special.mode import Mode
+from special.settings import Settings
 
 
 class PlayManager:

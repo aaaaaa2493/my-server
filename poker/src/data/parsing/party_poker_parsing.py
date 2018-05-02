@@ -1,6 +1,7 @@
 from typing import List
 from calendar import month_name
-from core.cards.cards_pair import Card, CardsPair
+from core.cards.card import Card
+from core.cards.cards_pair import CardsPair
 from data.parsing.base_parsing import BaseParsing
 from data.reg_ex.party_poker import PartyPoker
 from data.game_model.event import Event
@@ -77,7 +78,7 @@ class PartyPokerParsing(BaseParsing):
                 name = match.group(1)
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
-                self.call_amount += money
+                self.call_amount = self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money
                 self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 continue
 
@@ -87,7 +88,7 @@ class PartyPokerParsing(BaseParsing):
                 name = match.group(1)
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
-                self.call_amount += money
+                self.call_amount = self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money
                 self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 continue
 
@@ -295,11 +296,23 @@ class PartyPokerParsing(BaseParsing):
 
         line = next(lines)
         match = self.parser.skip_blinds.search(line)
-        if match is None:
-            match = self.parser.skip_blinds_2.search(line)
+        if match is not None:
+            sb = int(match.group(1).replace(' ', ''))
+            bb = int(match.group(2).replace(' ', ''))
+            ante = int(match.group(3).replace(' ', ''))
 
-        if match is None:
-            raise ValueError('Skip error 2: ' + line)
+        else:
+            match = self.parser.skip_blinds_2.search(line)
+            if match is None:
+                raise ValueError('Skip error 2: ' + line)
+
+            sb = int(match.group(1).replace(' ', ''))
+            bb = int(match.group(2).replace(' ', ''))
+            ante = 0
+
+        self.game.curr_hand.small_blind = sb
+        self.game.curr_hand.big_blind = bb
+        self.game.curr_hand.ante = ante
 
         line = next(lines)
 

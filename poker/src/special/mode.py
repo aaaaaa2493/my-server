@@ -7,3 +7,5 @@ class Mode(Enum):
     GameEngine = 2
     Testing = 3
     UnitTest = 4
+    Learning = 5
+    Search = 6

@@ -12,6 +12,10 @@ class Suit(OrderedEnum):
     def get_suit(cls, suit: str) -> 'Suit':
         return _from_str[suit]
 
+    @property
+    def short(self) -> str:
+        return _to_short_str[self]
+
     def __str__(self) -> str:
         return _to_str[self]
 
@@ -21,6 +25,13 @@ _to_str: Dict[Suit, str] = {
     Suit.Diamonds: 'diamonds',
     Suit.Clubs: 'clubs',
     Suit.Spades: 'spades'
+}
+
+_to_short_str: Dict[Suit, str] = {
+    Suit.Hearts: 'H',
+    Suit.Diamonds: 'D',
+    Suit.Clubs: 'C',
+    Suit.Spades: 'S'
 }
 
 _from_str: Dict[str, Suit] = {

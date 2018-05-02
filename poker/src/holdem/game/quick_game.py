@@ -11,9 +11,8 @@ class QuickGame(Game):
 
         super().__init__(id_, 9, 9, 1000, Schemes.Static.value)
 
-        # adding 8 bots
         for _ in range(8):
-            self.add_player()
+            self.add_bot_player()
 
         self.network = Network({'type': 'gh',
                                 'id': self.id,
@@ -37,7 +36,7 @@ class QuickGame(Game):
 
                 if request['type'] == 'add player' and not self.game_started:
                     Debug.game_manager(f'Game {self.id}: add player')
-                    if self.add_player(request['name']):
+                    if self.add_real_player(request['name']):
                         self.network.send({'type': 'start game'})
                         Thread(target=lambda: self.wait_for_end(), name=f'Game {self.id}: wait for end').start()
 

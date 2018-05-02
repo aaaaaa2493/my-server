@@ -22,6 +22,10 @@ class Rank(OrderedEnum):
     def get_rank(cls, rank: str) -> 'Rank':
         return _from_str[rank]
 
+    @property
+    def short(self) -> str:
+        return _to_short_str[self]
+
     def __str__(self) -> str:
         return _to_str[self]
 
@@ -40,6 +44,22 @@ _to_str: Dict[Rank, str] = {
     Rank.Queen: 'queen',
     Rank.King: 'king',
     Rank.Ace: 'ace'
+}
+
+_to_short_str: Dict[Rank, str] = {
+    Rank.Two: '2',
+    Rank.Three: '3',
+    Rank.Four: '4',
+    Rank.Five: '5',
+    Rank.Six: '6',
+    Rank.Seven: '7',
+    Rank.Eight: '8',
+    Rank.Nine: '9',
+    Rank.Ten: 'T',
+    Rank.Jack: 'J',
+    Rank.Queen: 'Q',
+    Rank.King: 'K',
+    Rank.Ace: 'A'
 }
 
 _from_str: Dict[str, Rank] = {

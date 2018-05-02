@@ -1,5 +1,6 @@
 from typing import List
-from core.cards.cards_pair import Card, CardsPair
+from core.cards.card import Card
+from core.cards.cards_pair import CardsPair
 from data.parsing.base_parsing import BaseParsing
 from data.reg_ex.poker_888 import Poker888
 from data.game_model.event import Event
@@ -96,7 +97,7 @@ class Poker888Parsing(BaseParsing):
                 name = match.group(1)
                 money = int(match.group(2).replace(',', ''))
                 self.total_pot += money
-                self.call_amount += money
+                self.call_amount = self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money
                 try:
                     self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 except ValueError:
@@ -110,7 +111,7 @@ class Poker888Parsing(BaseParsing):
                 name = match.group(1)
                 money = int(match.group(2).replace('\xa0', ''))
                 self.total_pot += money
-                self.call_amount += money
+                self.call_amount = self.game.curr_hand.get_player(name).gived(self.game.curr_hand.curr_step) + money
                 try:
                     self.game.curr_hand.add_decision(name, Event.Raise, self.call_amount)
                 except ValueError:

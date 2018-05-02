@@ -1,11 +1,14 @@
-from typing import Optional
-from os import listdir, makedirs, remove
+from typing import Optional, List
+from os import listdir, makedirs
 from os.path import exists
 from shutil import copyfile
 from data.game_model.poker_game import PokerGame
-from data.parsing.poker_stars_parsing import PokerStars, PokerStarsParsing
-from data.parsing.party_poker_parsing import PartyPoker, PartyPokerParsing
-from data.parsing.poker_888_parsing import Poker888, Poker888Parsing
+from data.reg_ex.poker_stars import PokerStars
+from data.reg_ex.party_poker import PartyPoker
+from data.reg_ex.poker_888 import Poker888
+from data.parsing.poker_stars_parsing import PokerStarsParsing
+from data.parsing.party_poker_parsing import PartyPokerParsing
+from data.parsing.poker_888_parsing import Poker888Parsing
 from special.debug import Debug
 
 
@@ -26,7 +29,7 @@ class GameParser:
         match = Poker888.identifier_snap.search(text)
         if match is not None:
             Debug.parser('Found Poker888 Snap Poker game')
-            return Poker888Parsing(game)
+            return Poker888Parsing(game, True)
 
         match = PartyPoker.identifier.search(text)
         if match is not None:
@@ -36,17 +39,30 @@ class GameParser:
         return None
 
     @staticmethod
-    def parse_dir(path: str, need_convert: bool = False) -> None:
+    def parse_dir(path: str, need_convert: bool, need_output: bool) -> List[PokerGame]:
+        parsed = []
         games = listdir(PokerGame.path_to_raw_games + path)
         if not exists(PokerGame.path_to_parsed_games + path):
             makedirs(PokerGame.path_to_parsed_games + path)
         for game_path in games:
             game = GameParser.parse_game(f'{path}/{game_path}')
             if game is not None:
+                if need_output:
+                    parsed += [game]
                 game.save()
                 if need_convert:
                     game.convert()
-                remove(PokerGame.path_to_raw_games + path + '/' + game_path)
+                # remove(PokerGame.path_to_raw_games + path + '/' + game_path)
+        return parsed
+
+    @staticmethod
+    def search_in_dir(path: str, line: str) -> None:
+        games = listdir(PokerGame.path_to_raw_games + path)
+        for game_path in games:
+            game_path = f'{path}/{game_path}'
+            text_game = open(PokerGame.path_to_raw_games + game_path, 'r', encoding='utf-8').read().strip()
+            if line in text_game:
+                Debug.parser('FOUND', line, ':', game_path)
 
     @staticmethod
     def copy_dir(src: str, dst: str) -> None:

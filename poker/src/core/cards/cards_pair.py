@@ -1,4 +1,5 @@
-from core.cards.card import Card, Rank
+from core.cards.card import Card
+from core.cards.rank import Rank
 from core.cards.suitability import Suitability
 
 

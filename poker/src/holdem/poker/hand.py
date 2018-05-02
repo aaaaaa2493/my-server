@@ -1,5 +1,6 @@
 from typing import Iterator
-from core.cards.card import Card, Rank
+from core.cards.rank import Rank
+from core.cards.card import Card
 from holdem.poker.strength import Strength
 
 

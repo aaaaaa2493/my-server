@@ -1,5 +1,6 @@
 from sys import argv
-from special.settings import Settings, Mode
+from special.mode import Mode
+from special.settings import Settings
 
 
 class BadMode(Exception):
@@ -38,7 +39,8 @@ class Run:
             from data.game_parser import GameParser, PokerGame
             PokerGame.converted_games_folder = 'games_test'
             PokerGame.converted_chat_folder = 'chat_tests'
-            GameParser.parse_dir('testing', True)
+            games = GameParser.parse_dir('testing', True, True)
+            assert len(games) == 6
             GameParser.copy_dir('backup testing', 'testing')
             PokerGame.load_dir('testing')
 
@@ -55,9 +57,7 @@ class Run:
         elif mode == Mode.Parse:
             from data.game_parser import GameParser, PokerGame
             # GameParser.parse_dir('pack0')
-            # GameParser.parse_dir('pack1')
-            GameParser.parse_dir('testing')
-            PokerGame.load_dir('testing')
+            GameParser.parse_dir('pack1', False, False)
             # game.save()
             # game.convert()
             # print(game)
@@ -72,6 +72,26 @@ class Run:
 
         elif mode == Mode.UnitTest:
             self.start_unit_tests()
+
+        elif mode == Mode.Learning:
+            from learning.learning import Learning
+            from learning.data_sets.decision_model.poker_decision import PokerDecision
+            # data.game_parser import GameParser
+            from datetime import datetime
+            learn = Learning()
+            learn.create_data_set(PokerDecision)
+            start = datetime.now()
+            # GameParser.parse_dir('pack1', False, False)
+            # learn.add_data_set('pack1')
+            # learn.save_data_set('data without losers.txt')
+            learn.load_data_set('data without losers.txt')
+            learn.learning()
+            end = datetime.now()
+            print('it took', end - start)
+
+        elif mode == Mode.Search:
+            from data.game_parser import GameParser
+            GameParser.search_in_dir('pack1', 'Seat 10')
 
         else:
             raise BadMode('Bad mode')
