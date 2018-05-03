@@ -20,6 +20,15 @@ class Run:
             self.parse_mode(mode)
 
     def parse_arguments(self, args):
+
+        nicks_path = 'nicks_test'
+        play_path = 'play_test'
+        games_path = 'games_test'
+        chat_path = 'chat_test'
+        testing_data_path = 'testing'
+        backup_testing_path = 'backup testing'
+        network_name = 'neural network'
+
         if args[0] == '--unit-tests':
             Settings.game_mode = Mode.UnitTest
             self.start_unit_tests()
@@ -28,22 +37,21 @@ class Run:
             from holdem.name_manager import NameManager
             from holdem.play.play_manager import PlayManager
             Settings.game_mode = Mode.Evolution
-            NameManager.NicksPath = 'nicks_test'
-            PlayManager.PlayPath = 'play_test'
+            NameManager.NicksPath = nicks_path
+            PlayManager.PlayPath = play_path
             PlayManager.GenCount = 30
             self.start_evolution(3, 9, 27, 1000)
-            PlayManager.remove_folder()
             NameManager.remove_folder()
 
         elif args[0] == '--parsing-tests':
             from data.game_parser import GameParser, PokerGame
             Settings.game_mode = Mode.Parse
-            PokerGame.converted_games_folder = 'games_test'
-            PokerGame.converted_chat_folder = 'chat_tests'
-            games = GameParser.parse_dir('testing', True, True)
+            PokerGame.converted_games_folder = games_path
+            PokerGame.converted_chat_folder = chat_path
+            games = GameParser.parse_dir(testing_data_path, True, True)
             assert len(games) == 6
-            GameParser.copy_dir('backup testing', 'testing')
-            PokerGame.load_dir('testing')
+            GameParser.copy_dir(backup_testing_path, testing_data_path)
+            PokerGame.load_dir(testing_data_path)
 
         elif args[0] == '--learning-tests':
             from learning.learning import Learning
@@ -51,22 +59,21 @@ class Run:
             Settings.game_mode = Mode.Learning
             learn = Learning()
             learn.create_data_set(PokerDecision)
-            name = 'Neural network'
-            learn.add_data_set('testing')
-            learn.save_data_set(name)
-            learn.load_data_set(name)
-            learn.learning(name)
+            learn.add_data_set(testing_data_path)
+            learn.save_data_set(network_name)
+            learn.load_data_set(network_name)
+            learn.learning(network_name)
 
         elif args[0] == '--network-play-tests':
             from holdem.game.game import Game
             from holdem.play.play_manager import PlayManager
             Settings.game_mode = Mode.Testing
-            PlayManager.PlayPath = 'play_test'
+            PlayManager.PlayPath = play_path
             game = Game()
-            name = 'Neural network'
             for _ in range(26):
                 game.add_bot_player()
-            game.add_nn_player(name)
+            game.add_nn_player(network_name)
+            PlayManager.remove_folder()
 
         else:
             raise BadCommandLineArguments(str(args))
