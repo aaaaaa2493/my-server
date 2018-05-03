@@ -1,6 +1,8 @@
 from sklearn.neural_network import MLPClassifier
 from sklearn.model_selection import train_test_split
 from pickle import dump
+from os.path import exists
+from os import mkdir
 from learning.data_sets.base_poker_decision import DecisionClass
 from learning.data_sets.data_set import DataSet
 from special.debug import Debug
@@ -32,4 +34,6 @@ class Learning:
         mlp.fit(x_train, y_train)
         Debug.learning('train', mlp.score(x_train, y_train))
         Debug.learning('test ', mlp.score(x_test, y_test))
+        if not exists('networks'):
+            mkdir('networks')
         dump(mlp, open(f'networks/{path}', 'wb'))
