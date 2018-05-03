@@ -15,6 +15,8 @@ class Result(Enum):
     BigBlind = 9
     WinMoney = 10
     ReturnMoney = 11
+    Button = 12
+    MoveToPot = 13
 
     def __str__(self) -> str:
         return _to_str[self]
@@ -32,5 +34,7 @@ _to_str: Dict[Result, str] = {
     Result.SmallBlind: 'sb',
     Result.BigBlind: 'bb',
     Result.WinMoney: 'win',
-    Result.ReturnMoney: 'return'
+    Result.ReturnMoney: 'return',
+    Result.Button: 'button',
+    Result.MoveToPot: 'move to pot',
 }
