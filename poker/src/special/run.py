@@ -70,7 +70,7 @@ class Run:
             Settings.game_mode = Mode.Testing
             PlayManager.PlayPath = play_path
             game = Game()
-            for _ in range(26):
+            for _ in range(8):
                 game.add_bot_player()
             game.add_nn_player(network_name)
             PlayManager.remove_folder()
