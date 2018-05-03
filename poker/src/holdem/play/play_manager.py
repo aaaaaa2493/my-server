@@ -37,6 +37,9 @@ class PlayManager:
             for play in PlayManager._bank_of_plays:
                 play.busy = False
             PlayManager.GenCount = len(PlayManager._bank_of_plays)
+            print(len(PlayManager._bank_of_plays))
+            from pprint import pprint
+            pprint(PlayManager._bank_of_plays)
             Debug.play_manager('End initialization (short way)')
             return
 
