@@ -36,6 +36,7 @@ class PlayManager:
             PlayManager._bank_of_plays = load(open(f'{PlayManager.PlayPath}/all', 'rb'))
             for play in PlayManager._bank_of_plays:
                 play.busy = False
+            PlayManager.GenCount = len(PlayManager._bank_of_plays)
             Debug.play_manager('End initialization (short way)')
             return
 
