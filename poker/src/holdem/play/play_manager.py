@@ -37,9 +37,6 @@ class PlayManager:
             for play in PlayManager._bank_of_plays:
                 play.busy = False
             PlayManager.GenCount = len(PlayManager._bank_of_plays)
-            print(len(PlayManager._bank_of_plays))
-            from pprint import pprint
-            pprint(PlayManager._bank_of_plays)
             Debug.play_manager('End initialization (short way)')
             return
 
@@ -68,8 +65,8 @@ class PlayManager:
 
         PlayManager._initialized = True
 
-        dump(PlayManager._bank_of_plays, open(f'{PlayManager.PlayPath}/all', 'wb'))
         PlayManager.fill_zero_gens()
+        dump(PlayManager._bank_of_plays, open(f'{PlayManager.PlayPath}/all', 'wb'))
 
         Debug.play_manager('End initialization')
 
