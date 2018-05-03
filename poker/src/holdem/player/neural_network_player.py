@@ -9,7 +9,7 @@ from holdem.play.play import Play
 from holdem.play.step import Step
 from holdem.play.result import Result
 from holdem.base_network import BaseNetwork
-from learning.data_sets.decision_model.poker_decision import PokerDecisionAnswer
+from learning.data_sets.decision_model.poker_decision_answer import PokerDecisionAnswer
 
 
 class NeuralNetworkPlayer(Player):

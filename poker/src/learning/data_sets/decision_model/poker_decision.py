@@ -5,14 +5,10 @@ from holdem.play.step import Step
 from data.game_model.event import Event
 from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame
-from learning.data_sets.base_poker_decision import BasePokerDecision, Answer
+from learning.data_sets.base_poker_decision import BasePokerDecision
+from learning.data_sets.base_poker_decision_answer import BasePokerDecisionAnswer
+from learning.data_sets.decision_model.poker_decision_answer import PokerDecisionAnswer
 from special.debug import Debug
-
-
-class PokerDecisionAnswer(Answer):
-    Fold = 0
-    CheckCall = 1
-    Raise = 2
 
 
 class PokerDecision(BasePokerDecision):
@@ -50,7 +46,8 @@ class PokerDecision(BasePokerDecision):
                f'prob {self.probability_to_win} '
 
     @staticmethod
-    def create(res: Answer, prob: float, money: int, pot: int, call: int, bb: int, step: Step) -> 'PokerDecision':
+    def create(res: BasePokerDecisionAnswer, prob: float,
+               money: int, pot: int, call: int, bb: int, step: Step) -> 'PokerDecision':
         if prob < 0 or prob > 1:
             raise ValueError(f'Probability must be in [0, 1], gived {prob}')
 
