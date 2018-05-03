@@ -59,7 +59,9 @@ class Run:
 
         elif args[0] == '--network-play-tests':
             from holdem.game.game import Game
+            from holdem.play.play_manager import PlayManager
             Settings.game_mode = Mode.Testing
+            PlayManager.PlayPath = 'play_test'
             game = Game()
             name = 'Neural network'
             for _ in range(26):
