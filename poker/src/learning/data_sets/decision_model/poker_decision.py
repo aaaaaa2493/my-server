@@ -98,13 +98,13 @@ class PokerDecision(BasePokerDecision):
         money: Dict[str, int] = {p.name: p.money for p in hand.players}
         bb: int = hand.big_blind
 
-        Debug.learning(')' * 20)
+        Debug.datasets(')' * 20)
         for n, v in money.items():
-            Debug.learning(f'{n} - {v}')
-        Debug.learning('(' * 20)
+            Debug.datasets(f'{n} - {v}')
+        Debug.datasets('(' * 20)
 
         for step, stage in hand:
-            Debug.learning('NEW STEP', step)
+            Debug.datasets('NEW STEP', step)
             gived: Dict[str, int] = {p.name: 0 for p in hand.players}
 
             if step == Step.Preflop:
@@ -116,7 +116,7 @@ class PokerDecision(BasePokerDecision):
                 if act.event.is_statement():
                     continue
 
-                Debug.learning(act, raise_amount)
+                Debug.datasets(act, raise_amount)
 
                 if act.event == Event.Ante:
                     pot_size += act.money
@@ -185,15 +185,15 @@ class PokerDecision(BasePokerDecision):
                 else:
                     raise ValueError('you forget about', act.event)
 
-                Debug.learning(')' * 20)
+                Debug.datasets(')' * 20)
                 for n, v in gived.items():
-                    Debug.learning(f'{n}: {money[n]} ({v})')
-                Debug.learning('(' * 20)
+                    Debug.datasets(f'{n}: {money[n]} ({v})')
+                Debug.datasets('(' * 20)
 
-        Debug.learning('*' * 20)
+        Debug.datasets('*' * 20)
 
         for des in decisions:
-            Debug.learning(des)
+            Debug.datasets(des)
 
-        Debug.learning('_' * 20)
+        Debug.datasets('_' * 20)
         return decisions

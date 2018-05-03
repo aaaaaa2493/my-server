@@ -21,7 +21,7 @@ from special.debug import Debug
 class Game(AbstractGame):
 
     def __init__(self, id_: int = 0, players: int = 9, seats: int = 9, start_stack: int = 1000,
-                 blinds: Scheme = Schemes.Standard.value):
+                 blinds: Scheme = Schemes.Rapid.value):
 
         super().__init__(id_, TimedBlinds(blinds, self))
 

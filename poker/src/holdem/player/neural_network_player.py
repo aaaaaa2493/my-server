@@ -15,6 +15,7 @@ from learning.data_sets.decision_model.poker_decision_answer import PokerDecisio
 class NeuralNetworkPlayer(Player):
     def __init__(self, _id: int, money: int, path: str):
         super().__init__(_id, money, False, path, Play(), BaseNetwork())
+        self.play.name = path
         self.nn: MLPClassifier = load(open(f'networks/{path}', 'rb'))
 
     @staticmethod

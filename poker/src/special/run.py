@@ -44,6 +44,25 @@ class Run:
             GameParser.copy_dir('backup testing', 'testing')
             PokerGame.load_dir('testing')
 
+        elif args[0] == '--learning-tests':
+            from learning.learning import Learning
+            from learning.data_sets.decision_model.poker_decision import PokerDecision
+            learn = Learning()
+            learn.create_data_set(PokerDecision)
+            name = 'Neural network'
+            learn.add_data_set('testing')
+            learn.save_data_set(name)
+            learn.load_data_set(name)
+            learn.learning(name)
+
+        elif args[0] == '--network-play-tests':
+            from holdem.game.game import Game
+            game = Game()
+            name = 'Neural network'
+            for _ in range(26):
+                game.add_bot_player()
+            game.add_nn_player(name)
+
         else:
             raise BadCommandLineArguments(str(args))
 
@@ -89,11 +108,11 @@ class Run:
             start = datetime.now()
             # GameParser.parse_dir('pack1', False, False)
             # learn.add_data_set('pack1')
-            # learn.save_data_set('data without losers.txt')
-            learn.load_data_set('data without losers.txt')
-            learn.learning()
+            # learn.save_data_set('nn2 without losers.txt')
+            learn.load_data_set('nn1 only winners.txt')
+            learn.learning('nn1')
             end = datetime.now()
-            print('it took', end - start)
+            print('Learning took', end - start)
 
         elif mode == Mode.Search:
             from data.game_parser import GameParser
