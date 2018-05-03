@@ -71,6 +71,10 @@ class PlayManager:
 
         dump(PlayManager._bank_of_plays, open(f'{PlayManager.PlayPath}/all', 'wb'))
 
+        print(PlayManager.PlayPath)
+        print(listdir(f'{PlayManager.PlayPath}'))
+        print(Settings.game_mode)
+
         PlayManager.fill_zero_gens()
 
         Debug.play_manager('End initialization')
