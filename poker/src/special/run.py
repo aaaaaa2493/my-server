@@ -37,6 +37,7 @@ class Run:
 
         elif args[0] == '--parsing-tests':
             from data.game_parser import GameParser, PokerGame
+            Settings.game_mode = Mode.Parse
             PokerGame.converted_games_folder = 'games_test'
             PokerGame.converted_chat_folder = 'chat_tests'
             games = GameParser.parse_dir('testing', True, True)
@@ -47,6 +48,7 @@ class Run:
         elif args[0] == '--learning-tests':
             from learning.learning import Learning
             from learning.data_sets.decision_model.poker_decision import PokerDecision
+            Settings.game_mode = Mode.Learning
             learn = Learning()
             learn.create_data_set(PokerDecision)
             name = 'Neural network'
@@ -57,6 +59,7 @@ class Run:
 
         elif args[0] == '--network-play-tests':
             from holdem.game.game import Game
+            Settings.game_mode = Mode.Testing
             game = Game()
             name = 'Neural network'
             for _ in range(26):
