@@ -31,6 +31,10 @@ class PlayManager:
         if not exists(f'{PlayManager.PlayPath}'):
             mkdir(f'{PlayManager.PlayPath}')
 
+        print(PlayManager.PlayPath)
+        print(listdir(f'{PlayManager.PlayPath}'))
+        print(Settings.game_mode)
+
         if not Settings.game_mode == Mode.Evolution and 'all' in listdir(f'{PlayManager.PlayPath}'):
             PlayManager._initialized = True
             PlayManager._bank_of_plays = load(open(f'{PlayManager.PlayPath}/all', 'rb'))
