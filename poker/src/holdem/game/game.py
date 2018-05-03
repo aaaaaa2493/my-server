@@ -12,6 +12,7 @@ from holdem.table import Table
 from holdem.player.player import Player
 from holdem.player.bot_player import BotPlayer
 from holdem.player.real_player import RealPlayer
+from holdem.player.neural_network_player import NeuralNetworkPlayer
 from holdem.play.play import Play
 from holdem.network import Network
 from special.debug import Debug
@@ -19,7 +20,7 @@ from special.debug import Debug
 
 class Game(AbstractGame):
 
-    def __init__(self, id_: int, players: int = 9, seats: int = 9, start_stack: int = 1000,
+    def __init__(self, id_: int = 0, players: int = 9, seats: int = 9, start_stack: int = 1000,
                  blinds: Scheme = Schemes.Standard.value):
 
         super().__init__(id_, TimedBlinds(blinds, self))
@@ -49,6 +50,9 @@ class Game(AbstractGame):
         self.average_stack: int = None
         self.players_left: int = None
         self.top_9: List[Player] = None
+
+    def add_nn_player(self, path: str) -> bool:
+        return self.add_player(NeuralNetworkPlayer(self.next_id, self.start_stack, path))
 
     def add_real_player(self, name: str) -> bool:
         return self.add_player(RealPlayer(self.id, self.next_id, name, self.start_stack))
@@ -290,8 +294,9 @@ class Game(AbstractGame):
 
         sorted_players = sorted(self.players, key=lambda p: p.lose_time, reverse=True)
 
-        for place, player in enumerate(sorted_players[:10]):
-            Debug.evolution(f'{place+1:>4}) {player.play}')
+        if not Debug.Standings:
+            for place, player in enumerate(sorted_players[:10]):
+                Debug.evolution(f'{place+1:>4}) {player.play}')
 
         for place, player in enumerate(sorted_players):
             Debug.standings(f'{place+1:>4}) {player.name}')

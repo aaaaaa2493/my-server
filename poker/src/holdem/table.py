@@ -353,9 +353,15 @@ class Table:
 
                     if type(player) is NeuralNetworkPlayer:
                         result = player.decide(step, to_call, can_raise_from, self.board.get(),
-                                               self.pot.money, self.blinds.big_blind)
+                                               self.pot.money + sum(p.gived for p in self.players.all_players()),
+                                               self.blinds.big_blind)
                     else:
                         result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
+
+                    if result == Result.Fold:
+                        Debug.table(f'Table {self.id} hand {self.board.hand}: player {player.name} folded')
+                    elif result == Result.Check:
+                        Debug.table(f'Table {self.id} hand {self.board.hand}: player {player.name} folded')
 
                     if self.online:
                         self.network.made_decision(player, result)

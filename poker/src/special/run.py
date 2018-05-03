@@ -69,6 +69,11 @@ class Run:
         elif mode == Mode.Testing:
             # from learning.neural_network import NeuralNetwork
             # NeuralNetwork.PokerDecision.Bubble(100, 9).show()
+            from holdem.game.game import Game
+            game = Game()
+            for _ in range(8):
+                game.add_bot_player()
+            game.add_nn_player('nn2')
             pass
 
         elif mode == Mode.UnitTest:

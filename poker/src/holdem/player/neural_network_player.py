@@ -14,8 +14,12 @@ from learning.data_sets.decision_model.poker_decision_answer import PokerDecisio
 
 class NeuralNetworkPlayer(Player):
     def __init__(self, _id: int, money: int, path: str):
-        super().__init__(_id, money, False, path.upper(), Play(), BaseNetwork())
+        super().__init__(_id, money, False, path, Play(), BaseNetwork())
         self.nn: MLPClassifier = load(open(f'networks/{path}', 'rb'))
+
+    @staticmethod
+    def create_input(*args):
+        return array([array(args)])
 
     def decide(self, step: Step, to_call: int, min_raise: int, cards: Card.Cards, pot: int, bb: int):
 
@@ -26,7 +30,7 @@ class NeuralNetworkPlayer(Player):
             return Result.InAllin
 
         evaluation = HoldemPoker.probability(self.cards, cards)
-        prediction = self.nn.predict(array([
+        prediction = self.nn.predict(self.create_input(
             evaluation,
             self.money / pot,
             to_call / pot,
@@ -35,7 +39,7 @@ class NeuralNetworkPlayer(Player):
             step is Step.Flop,
             step is Step.Turn,
             step is Step.River
-        ]))
+        ))
 
         answer: PokerDecisionAnswer = PokerDecisionAnswer(prediction[0])
 
@@ -57,7 +61,7 @@ class NeuralNetworkPlayer(Player):
         elif answer is PokerDecisionAnswer.Raise:
             if self.remaining_money() > to_call:
 
-                raised_money = evaluation * pot if random() > 0.4 else uniform(0.2, 1) * pot
+                raised_money = int(evaluation * pot if random() > 0.4 else uniform(0.2, 1) * pot)
 
                 if raised_money < min_raise:
                     raised_money = min_raise
