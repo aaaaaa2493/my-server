@@ -23,7 +23,8 @@ class UnitTesting:
         suite = TestSuite(tests_suite)
 
         runner = TextTestRunner(verbosity=2)
-        runner.run(suite)
+
+        assert runner.run(suite).wasSuccessful()
 
     @staticmethod
     def find_modules(from_directory: str) -> List[str]:
