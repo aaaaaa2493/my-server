@@ -17,6 +17,7 @@ class PlayManager:
 
     _initialized = False
     _bank_of_plays: Plays = None
+    _best_plays = None
 
     GenCount: int = 10000
     PlayPath = 'play'
@@ -152,10 +153,11 @@ class PlayManager:
             PlayManager.fill_zero_gens()
 
         if only_profitable:
-            best_plays = sorted([play for play in PlayManager._bank_of_plays if play.total_plays > 10],
-                                key=lambda p: p.value(), reverse=True)[:100]
+            if PlayManager._best_plays is None:
+                PlayManager._best_plays = sorted([play for play in PlayManager._bank_of_plays if play.total_plays > 10],
+                                                 key=lambda p: p.value(), reverse=True)
 
-            for play in best_plays:
+            for play in PlayManager._best_plays:
                 if not play.busy:
                     play.busy = True
                     return play

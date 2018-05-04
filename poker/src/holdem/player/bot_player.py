@@ -10,11 +10,13 @@ from holdem.play.base_play import BasePlay
 from holdem.poker.holdem_poker import HoldemPoker
 from holdem.base_network import BaseNetwork
 from special.debug import Debug
+from special.settings import Settings
+from special.mode import Mode
 
 
 class BotPlayer(Player):
     def __init__(self, _id: int, money: int):
-        play: Play = PlayManager.get_play(True)
+        play: Play = PlayManager.get_play(Settings.game_mode == Mode.Testing)
         super().__init__(_id, money, False, str(play), play, BaseNetwork())
 
     def decide(self, step: Step, to_call: int, can_raise_from: int,

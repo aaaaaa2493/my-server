@@ -101,12 +101,23 @@ class Run:
         elif mode == Mode.Testing:
             # from learning.neural_network import NeuralNetwork
             # NeuralNetwork.PokerDecision.Bubble(100, 9).show()
+            from time import sleep
+            from pickle import load
             from holdem.game.game import Game
             from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
-            game = Game()
-            for _ in range(8):
-                game.add_bot_player()
-            game.add_nn_player('nn2', Net1Net2Player)
+
+            for _id in range(100):
+                game = Game(players=1000)
+                for _ in range(999):
+                    game.add_bot_player()
+                game.add_nn_player('nn2', Net1Net2Player)
+                print('Start game #', _id + 1)
+                while not game.game_finished:
+                    sleep(1)
+            plays = load(open('networks/plays', 'rb'))
+            plays = sorted([(k, v) for k, v in plays.items()], key=lambda k: k[1])
+            for i, play in enumerate(plays):
+                print(f'{i+1:>4}. {play[1]:>6}  {play[0]}')
 
         elif mode == Mode.UnitTest:
             self.start_unit_tests()

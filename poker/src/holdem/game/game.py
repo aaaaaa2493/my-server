@@ -3,6 +3,8 @@ from random import shuffle, choice
 from time import sleep
 from statistics import mean
 from typing import List
+from os.path import exists
+from pickle import load, dump
 from core.abstract_game import AbstractGame
 from core.blinds.scheme.scheme import Scheme
 from core.blinds.scheme.schemes import Schemes
@@ -12,16 +14,18 @@ from holdem.table import Table
 from holdem.player.player import Player
 from holdem.player.bot_player import BotPlayer
 from holdem.player.real_player import RealPlayer
-from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer, NeuralNetworkClass
+from holdem.player.neural_network.base_neural_network_player import NeuralNetworkClass
 from holdem.play.play import Play
 from holdem.network import Network
 from special.debug import Debug
+from special.settings import Settings
+from special.mode import Mode
 
 
 class Game(AbstractGame):
 
-    def __init__(self, id_: int = 0, players: int = 9, seats: int = 9, start_stack: int = 1000,
-                 blinds: Scheme = Schemes.Rapid.value):
+    def __init__(self, id_: int = 0, players: int = 9, seats: int = 9, start_stack: int = 15000,
+                 blinds: Scheme = Schemes.WSOP.value):
 
         super().__init__(id_, TimedBlinds(blinds, self))
 
@@ -298,10 +302,24 @@ class Game(AbstractGame):
             for place, player in enumerate(sorted_players[:10]):
                 Debug.evolution(f'{place+1:>4}) {player.play}')
 
+        if Settings.game_mode == Mode.Testing:
+            if not exists('networks/plays'):
+                plays = {}
+            else:
+                plays = load(open('networks/plays', 'rb'))
+
         for place, player in enumerate(sorted_players):
             Debug.standings(f'{place+1:>4}) {player.name}')
             if not player.controlled:
                 player.play.set_place(place + 1, self.players_count)
+            if Settings.game_mode == Mode.Testing:
+                if player.play.name in plays:
+                    plays[player.play.name] += place + 1
+                else:
+                    plays[player.play.name] = place + 1
+
+        if Settings.game_mode == Mode.Testing:
+            dump(plays, open('networks/plays', 'wb'))
 
         self.game_finished = True
 
