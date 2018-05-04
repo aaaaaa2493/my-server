@@ -67,12 +67,13 @@ class Run:
         elif args[0] == '--network-play-tests':
             from holdem.game.game import Game
             from holdem.play.play_manager import PlayManager
+            from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
             Settings.game_mode = Mode.Testing
             PlayManager.PlayPath = play_path
             game = Game()
             for _ in range(8):
                 game.add_bot_player()
-            game.add_nn_player(network_name)
+            game.add_nn_player(network_name, Net1Net2Player)
             PlayManager.remove_folder()
 
         else:
@@ -101,11 +102,11 @@ class Run:
             # from learning.neural_network import NeuralNetwork
             # NeuralNetwork.PokerDecision.Bubble(100, 9).show()
             from holdem.game.game import Game
+            from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
             game = Game()
             for _ in range(8):
                 game.add_bot_player()
-            game.add_nn_player('nn2')
-            pass
+            game.add_nn_player('nn2', Net1Net2Player)
 
         elif mode == Mode.UnitTest:
             self.start_unit_tests()

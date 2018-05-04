@@ -14,7 +14,7 @@ from special.debug import Debug
 
 class BotPlayer(Player):
     def __init__(self, _id: int, money: int):
-        play: Play = PlayManager.get_play()
+        play: Play = PlayManager.get_play(True)
         super().__init__(_id, money, False, str(play), play, BaseNetwork())
 
     def decide(self, step: Step, to_call: int, can_raise_from: int,

@@ -12,7 +12,7 @@ from holdem.table import Table
 from holdem.player.player import Player
 from holdem.player.bot_player import BotPlayer
 from holdem.player.real_player import RealPlayer
-from holdem.player.neural_network_player import NeuralNetworkPlayer
+from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer, NeuralNetworkClass
 from holdem.play.play import Play
 from holdem.network import Network
 from special.debug import Debug
@@ -51,8 +51,8 @@ class Game(AbstractGame):
         self.players_left: int = None
         self.top_9: List[Player] = None
 
-    def add_nn_player(self, path: str) -> bool:
-        return self.add_player(NeuralNetworkPlayer(self.next_id, self.start_stack, path))
+    def add_nn_player(self, path: str, net_class: NeuralNetworkClass) -> bool:
+        return self.add_player(net_class(self.next_id, self.start_stack, path))
 
     def add_real_player(self, name: str) -> bool:
         return self.add_player(RealPlayer(self.id, self.next_id, name, self.start_stack))

@@ -1,29 +1,14 @@
-from pickle import load
 from random import uniform, random
-from numpy import array
-from sklearn.neural_network import MLPClassifier
 from core.cards.card import Card
+from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer
 from holdem.poker.holdem_poker import HoldemPoker
-from holdem.player.player import Player
-from holdem.play.play import Play
 from holdem.play.step import Step
 from holdem.play.result import Result
-from holdem.base_network import BaseNetwork
 from learning.data_sets.decision_model.poker_decision_answer import PokerDecisionAnswer
 
 
-class NeuralNetworkPlayer(Player):
-    def __init__(self, _id: int, money: int, path: str):
-        super().__init__(_id, money, False, path, Play(), BaseNetwork())
-        self.play.name = path
-        self.nn: MLPClassifier = load(open(f'networks/{path}', 'rb'))
-
-    @staticmethod
-    def create_input(*args):
-        return array([array(args)])
-
+class Net1Net2Player(BaseNeuralNetworkPlayer):
     def decide(self, step: Step, to_call: int, min_raise: int, cards: Card.Cards, pot: int, bb: int):
-
         if not self.in_game:
             return Result.DoNotPlay
 
