@@ -1,10 +1,13 @@
-from typing import List, Tuple
+from typing import List, Tuple, Optional
 from threading import Thread, Lock
 from time import sleep
 from holdem.play.result import Result
 from holdem.play.step import Step
 from core.cards.cards_pair import CardsPair
 from holdem.players import Players
+from holdem.player.player import Player
+from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer
+from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
 from core.blinds.blinds import Blinds
 from holdem.board import Board
 from holdem.poker.hand_strength import HandStrength
@@ -157,6 +160,45 @@ class Table:
         if self.online:
             del self.network
 
+    def log(self, player: Optional[Player], result: Result, money: int = 0):
+        init = f'Table {self.id} hand {self.board.hand}: '
+
+        if result == Result.Ante:
+            Debug.table(init + f'player {player.name} paid ante {money}')
+
+        elif result == Result.Button:
+            Debug.table(init + f'button on {player.name}')
+
+        elif result == Result.SmallBlind:
+            Debug.table(init + f'player {player.name} paid small blind {money}')
+
+        elif result == Result.BigBlind:
+            Debug.table(init + f'player {player.name} paid big blind {money}')
+
+        elif result == Result.MoveToPot:
+            if player is not None:
+                Debug.table(init + f'player {player.name} paid to pot {money}')
+            else:
+                Debug.table(init + f'total pot = {self.pot}')
+
+        elif result == Result.ReturnMoney:
+            Debug.table(init + f'{money} money back to {player.name}')
+
+        elif result == Result.Fold:
+            Debug.table(init + f'player {player.name} folded')
+
+        elif result == Result.Check:
+            Debug.table(init + f'player {player.name} checked')
+
+        elif result == Result.Call:
+            Debug.table(init + f'player {player.name} call {player.gived}')
+
+        elif result == Result.Raise:
+            Debug.table(init + f'player {player.name} raise {player.gived}')
+
+        elif result == Result.Allin:
+            Debug.table(init + f'player {player.name} all-in {player.gived}')
+
     def run(self):
 
         with self.lock:
@@ -183,12 +225,25 @@ class Table:
         if self.blinds.ante > 0:
 
             all_paid = []
+            paid_full_amount = 0
+
             for player in self.players.all_players():
-                paid = player.pay_ante(ante)
-                self.pot.money += paid
+                paid = player.pay(ante)
+                paid_full_amount += paid == ante
                 all_paid += [(player, paid)]
+
+            if paid_full_amount < 2:
+                max_paid: int = max(paid[1] for paid in all_paid)
+                player_max_paid: Player = max(paid[0] for paid in all_paid if paid[1] == max_paid)
+
+                second_paid: int = max(paid[1] for paid in all_paid if paid[1] != max_paid)
+                player_max_paid.pay(second_paid)
+
+            for player in self.players.all_players():
+                paid = player.move_money_to_pot()
+                self.pot.money += paid
                 self.history.add(player, Result.Ante, paid)
-                Debug.table(f'Table {self.id} hand {self.board.hand}: player {player.name} paid ante {paid}')
+                self.log(player, Result.Ante, paid)
 
             if self.online:
                 self.network.ante(all_paid)
@@ -202,14 +257,16 @@ class Table:
 
         if self.players.count == 2:
             player1 = self.players.to_button()
-            Debug.table(f'Table {self.id} hand {self.board.hand}: button on {player1.name}')
-            paid1 = player1.pay_blind(sb)
+            self.log(player1, Result.Button)
+
+            paid1 = player1.pay(sb)
             self.history.add(player1, Result.SmallBlind, paid1)
-            Debug.table(f'Table {self.id} hand {self.board.hand}: player {player1.name} paid small blind {paid1}')
+            self.log(player1, Result.SmallBlind, paid1)
+
             player2 = self.players.next_player()
-            paid2 = player2.pay_blind(bb)
+            paid2 = player2.pay(bb)
             self.history.add(player2, Result.BigBlind, paid2)
-            Debug.table(f'Table {self.id} hand {self.board.hand}: player {player2.name} paid big blind {paid2}')
+            self.log(player2, Result.BigBlind, paid2)
 
             if self.online:
                 self.network.blinds(player1, [(player1, paid1), (player2, paid2)])
@@ -217,11 +274,12 @@ class Table:
 
         elif self.players.game_without_small_blind and self.players.next_seat() is None:
             player1 = self.players.to_button()
-            Debug.table(f'Table {self.id} hand {self.board.hand}: button on {player1.name}')
+            self.log(player1, Result.Button)
+
             player2 = self.players.next_player()
-            paid2 = player2.pay_blind(bb)
+            paid2 = player2.pay(bb)
             self.history.add(player2, Result.BigBlind, paid2)
-            Debug.table(f'Table {self.id} hand {self.board.hand}: player {player2.name} paid big blind {paid2}')
+            self.log(player2, Result.BigBlind, paid2)
 
             if self.online:
                 self.network.blinds(player1, [(player2, paid2)])
@@ -229,15 +287,17 @@ class Table:
 
         else:
             player1 = self.players.to_button()
-            Debug.table(f'Table {self.id} hand {self.board.hand}: button on {player1.name}')
+            self.log(player1, Result.Button)
+
             player2 = self.players.next_player()
-            paid2 = player2.pay_blind(sb)
+            paid2 = player2.pay(sb)
             self.history.add(player2, Result.SmallBlind, paid2)
-            Debug.table(f'Table {self.id} hand {self.board.hand}: player {player2.name} paid small blind {paid2}')
+            self.log(player2, Result.SmallBlind, paid2)
+
             player3 = self.players.next_player()
-            paid3 = player3.pay_blind(bb)
+            paid3 = player3.pay(bb)
             self.history.add(player3, Result.BigBlind, paid3)
-            Debug.table(f'Table {self.id} hand {self.board.hand}: player {player3.name} paid big blind {paid3}')
+            self.log(player3, Result.BigBlind, paid3)
 
             if self.online:
                 self.network.blinds(player1, [(player2, paid2), (player3, paid3)])
@@ -248,13 +308,14 @@ class Table:
         all_paid: int = 0
 
         for player in self.players.all_players():
-            paid = player.move_money_to_pot()
-            self.pot.money += paid
-            all_paid += paid
-            Debug.table(f'Table {self.id} hand {self.board.hand}: player {player.name} paid to pot {paid}')
-        Debug.table(f'Table {self.id} hand {self.board.hand}: total pot = {self.pot}')
+            if player.gived > 0:
+                paid = player.move_money_to_pot()
+                self.pot.money += paid
+                all_paid += paid
+                self.log(player, Result.MoveToPot, paid)
 
         if all_paid > 0:
+            self.log(None, Result.MoveToPot)
 
             if self.online:
                 self.network.collect_money()
@@ -350,7 +411,19 @@ class Table:
                         self.network.switch_decision(player)
                         sleep(Delay.SwitchDecision)
 
-                    result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
+                    player_class = type(player)
+
+                    if issubclass(player_class, BaseNeuralNetworkPlayer):
+                        if player_class is Net1Net2Player:
+                            result = player.decide(step, to_call, can_raise_from, self.board.get(),
+                                                   self.pot.money + sum(p.gived for p in self.players.all_players()),
+                                                   self.blinds.big_blind)
+                        else:
+                            raise ValueError('Bad type of neural network')
+                    else:
+                        result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
+
+                    self.log(player, result)
 
                     if self.online:
                         self.network.made_decision(player, result)
@@ -398,8 +471,7 @@ class Table:
                     sleep(Delay.ExcessMoney)
 
                 self.history.add(player_max_pot, Result.ReturnMoney, difference)
-                Debug.table(f'Table {self.id} hand {self.board.hand}: '
-                            f'{difference} money back to {player_max_pot.name}')
+                self.log(player_max_pot, Result.ReturnMoney, difference)
 
                 self.collect_pot()
 
@@ -429,7 +501,7 @@ class Table:
                         sleep(Delay.ExcessMoney)
 
                     self.history.add(player, Result.ReturnMoney, difference)
-                    Debug.table(f'Table {self.id} hand {self.board.hand}: {difference} money back to {player.name}')
+                    self.log(player, Result.ReturnMoney, difference)
 
                 self.collect_pot()
 

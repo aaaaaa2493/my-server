@@ -93,7 +93,7 @@ class Order(Enum):
     )
 
     Static = (
-        (5, 10, 1)
+        (50, 100, 10)
     )
 
     def __len__(self):

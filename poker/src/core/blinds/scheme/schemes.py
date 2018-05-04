@@ -11,3 +11,4 @@ class Schemes(Enum):
     Fast: Scheme = Scheme(Order.Standard, Time.Fast, Hands.Fast)
     Rapid: Scheme = Scheme(Order.Standard, Time.Rapid, Hands.Rapid)
     Bullet: Scheme = Scheme(Order.Standard, Time.Bullet, Hands.Bullet)
+    WSOP: Scheme = Scheme(Order.WSOP, Time.Rapid, Hands.Rapid)

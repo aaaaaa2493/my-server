@@ -14,7 +14,7 @@ class UnitTesting:
         tests_suite = []
         loader = TestLoader()
 
-        for module in UnitTesting.find_modules():
+        for module in UnitTesting.find_modules(dirname(__file__)):
             imported = import_module(f'unit_tests.{module}')
             for name, obj in getmembers(imported):
                 if isclass(obj) and issubclass(obj, TestCase):
@@ -23,13 +23,14 @@ class UnitTesting:
         suite = TestSuite(tests_suite)
 
         runner = TextTestRunner(verbosity=2)
-        runner.run(suite)
+
+        assert runner.run(suite).wasSuccessful()
 
     @staticmethod
-    def find_modules() -> List[str]:
+    def find_modules(from_directory: str) -> List[str]:
 
-        curr_dir = dirname(__file__)
-        catalogs = [curr_dir]
+        catalogs = [from_directory]
+        curr_dir = from_directory
 
         modules = []
 

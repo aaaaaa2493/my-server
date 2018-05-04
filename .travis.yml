@@ -3,8 +3,14 @@ python:
   - "3.6"
 install:
   - pip install websocket-client
+  - pip install numpy
+  - pip install scipy
+  - pip install scikit-learn
+  - pip install matplotlib
 script:
   - cd poker
   - python src/main.py --unit-tests
   - python src/main.py --evolution-tests
   - python src/main.py --parsing-tests
+  - python src/main.py --learning-tests
+  - python src/main.py --network-play-tests

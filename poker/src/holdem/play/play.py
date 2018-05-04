@@ -84,20 +84,17 @@ class Play:
         # TODO move to top
         from holdem.play.play_manager import PlayManager
 
+        self.busy = False
+
         if Settings.game_mode == Mode.Evolution:
 
             if place == 1:
                 self.wins += 1
-
-            try:
-                self.plays_history = self.plays_history
-            except AttributeError:
-                self.plays_history = []
 
             self.plays_history += [(place, out_of)]
 
             restore_places = self.total_plays * self.average_places
             self.total_plays += 1
             self.average_places = (restore_places + place / out_of) / self.total_plays
-            self.busy = False
+
             PlayManager.save_play(self)

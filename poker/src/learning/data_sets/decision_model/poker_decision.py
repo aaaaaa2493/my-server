@@ -5,14 +5,10 @@ from holdem.play.step import Step
 from data.game_model.event import Event
 from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame
-from learning.data_sets.base_poker_decision import BasePokerDecision, Answer
+from learning.data_sets.base_poker_decision import BasePokerDecision
+from learning.data_sets.base_poker_decision_answer import BasePokerDecisionAnswer
+from learning.data_sets.decision_model.poker_decision_answer import PokerDecisionAnswer
 from special.debug import Debug
-
-
-class PokerDecisionAnswer(Answer):
-    Fold = 0
-    CheckCall = 1
-    Raise = 2
 
 
 class PokerDecision(BasePokerDecision):
@@ -50,7 +46,8 @@ class PokerDecision(BasePokerDecision):
                f'prob {self.probability_to_win} '
 
     @staticmethod
-    def create(res: Answer, prob: float, money: int, pot: int, call: int, bb: int, step: Step) -> 'PokerDecision':
+    def create(res: BasePokerDecisionAnswer, prob: float,
+               money: int, pot: int, call: int, bb: int, step: Step) -> 'PokerDecision':
         if prob < 0 or prob > 1:
             raise ValueError(f'Probability must be in [0, 1], gived {prob}')
 
@@ -69,7 +66,7 @@ class PokerDecision(BasePokerDecision):
         if pot <= call and step != Step.Preflop:
             raise ValueError(f'Pot must be > call, gived call {call} pot {pot}')
 
-        if not res.__class__ == PokerDecisionAnswer:
+        if not type(res) is PokerDecisionAnswer:
             raise ValueError(f'Result must ne instance of PokerDecisionAnswer, gived {res}')
 
         des = PokerDecision()
@@ -101,13 +98,13 @@ class PokerDecision(BasePokerDecision):
         money: Dict[str, int] = {p.name: p.money for p in hand.players}
         bb: int = hand.big_blind
 
-        Debug.learning(')' * 20)
+        Debug.datasets(')' * 20)
         for n, v in money.items():
-            Debug.learning(f'{n} - {v}')
-        Debug.learning('(' * 20)
+            Debug.datasets(f'{n} - {v}')
+        Debug.datasets('(' * 20)
 
         for step, stage in hand:
-            Debug.learning('NEW STEP', step)
+            Debug.datasets('NEW STEP', step)
             gived: Dict[str, int] = {p.name: 0 for p in hand.players}
 
             if step == Step.Preflop:
@@ -119,7 +116,7 @@ class PokerDecision(BasePokerDecision):
                 if act.event.is_statement():
                     continue
 
-                Debug.learning(act, raise_amount)
+                Debug.datasets(act, raise_amount)
 
                 if act.event == Event.Ante:
                     pot_size += act.money
@@ -188,15 +185,15 @@ class PokerDecision(BasePokerDecision):
                 else:
                     raise ValueError('you forget about', act.event)
 
-                Debug.learning(')' * 20)
+                Debug.datasets(')' * 20)
                 for n, v in gived.items():
-                    Debug.learning(f'{n}: {money[n]} ({v})')
-                Debug.learning('(' * 20)
+                    Debug.datasets(f'{n}: {money[n]} ({v})')
+                Debug.datasets('(' * 20)
 
-        Debug.learning('*' * 20)
+        Debug.datasets('*' * 20)
 
         for des in decisions:
-            Debug.learning(des)
+            Debug.datasets(des)
 
-        Debug.learning('_' * 20)
+        Debug.datasets('_' * 20)
         return decisions

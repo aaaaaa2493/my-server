@@ -17,6 +17,7 @@ class PlayManager:
 
     _initialized = False
     _bank_of_plays: Plays = None
+    _best_plays = None
 
     GenCount: int = 10000
     PlayPath = 'play'
@@ -36,6 +37,7 @@ class PlayManager:
             PlayManager._bank_of_plays = load(open(f'{PlayManager.PlayPath}/all', 'rb'))
             for play in PlayManager._bank_of_plays:
                 play.busy = False
+            PlayManager.GenCount = len(PlayManager._bank_of_plays)
             Debug.play_manager('End initialization (short way)')
             return
 
@@ -64,9 +66,8 @@ class PlayManager:
 
         PlayManager._initialized = True
 
-        dump(PlayManager._bank_of_plays, open(f'{PlayManager.PlayPath}/all', 'wb'))
-
         PlayManager.fill_zero_gens()
+        dump(PlayManager._bank_of_plays, open(f'{PlayManager.PlayPath}/all', 'wb'))
 
         Debug.play_manager('End initialization')
 
@@ -152,10 +153,11 @@ class PlayManager:
             PlayManager.fill_zero_gens()
 
         if only_profitable:
-            best_plays = sorted([play for play in PlayManager._bank_of_plays if play.total_plays > 10],
-                                key=lambda p: p.value(), reverse=True)[:100]
+            if PlayManager._best_plays is None:
+                PlayManager._best_plays = sorted([play for play in PlayManager._bank_of_plays if play.total_plays > 10],
+                                                 key=lambda p: p.value(), reverse=True)
 
-            for play in best_plays:
+            for play in PlayManager._best_plays:
                 if not play.busy:
                     play.busy = True
                     return play

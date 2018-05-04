@@ -10,7 +10,8 @@ class Debug:
     PlayManager = 1
     GameManager = 1
     Parser = 1
-    Learning = 0
+    Learning = 1
+    DataSets = 0
     Error = 1
 
     if Table:
@@ -110,6 +111,15 @@ class Debug:
     else:
         @staticmethod
         def learning(*args, **kwargs):
+            pass
+
+    if DataSets:
+        @staticmethod
+        def datasets(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def datasets(*args, **kwargs):
             pass
 
     if Error:
