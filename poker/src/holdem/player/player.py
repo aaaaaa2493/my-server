@@ -125,19 +125,12 @@ class Player:
 
     def pay(self, money: int) -> int:
 
+        money = min(money, self.remaining_money())
+
         self.money -= money - self.gived
         self.gived = money
 
         return money
-
-    def pay_blind(self, money: int) -> int:
-
-        return self.pay(min(money, self.money))
-
-    def pay_ante(self, money: int) -> int:
-
-        self.pay(min(money, self.money))
-        return self.move_money_to_pot()
 
     def move_money_to_pot(self) -> int:
 

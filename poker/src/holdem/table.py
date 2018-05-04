@@ -225,10 +225,23 @@ class Table:
         if self.blinds.ante > 0:
 
             all_paid = []
+            paid_full_amount = 0
+
             for player in self.players.all_players():
-                paid = player.pay_ante(ante)
-                self.pot.money += paid
+                paid = player.pay(ante)
+                paid_full_amount += paid == ante
                 all_paid += [(player, paid)]
+
+            if paid_full_amount < 2:
+                max_paid: int = max(paid[1] for paid in all_paid)
+                player_max_paid: Player = max(paid[0] for paid in all_paid if paid[1] == max_paid)
+
+                second_paid: int = max(paid[1] for paid in all_paid if paid[1] != max_paid)
+                player_max_paid.pay(second_paid)
+
+            for player in self.players.all_players():
+                paid = player.move_money_to_pot()
+                self.pot.money += paid
                 self.history.add(player, Result.Ante, paid)
                 self.log(player, Result.Ante, paid)
 
@@ -246,12 +259,12 @@ class Table:
             player1 = self.players.to_button()
             self.log(player1, Result.Button)
 
-            paid1 = player1.pay_blind(sb)
+            paid1 = player1.pay(sb)
             self.history.add(player1, Result.SmallBlind, paid1)
             self.log(player1, Result.SmallBlind, paid1)
 
             player2 = self.players.next_player()
-            paid2 = player2.pay_blind(bb)
+            paid2 = player2.pay(bb)
             self.history.add(player2, Result.BigBlind, paid2)
             self.log(player2, Result.BigBlind, paid2)
 
@@ -264,7 +277,7 @@ class Table:
             self.log(player1, Result.Button)
 
             player2 = self.players.next_player()
-            paid2 = player2.pay_blind(bb)
+            paid2 = player2.pay(bb)
             self.history.add(player2, Result.BigBlind, paid2)
             self.log(player2, Result.BigBlind, paid2)
 
@@ -277,12 +290,12 @@ class Table:
             self.log(player1, Result.Button)
 
             player2 = self.players.next_player()
-            paid2 = player2.pay_blind(sb)
+            paid2 = player2.pay(sb)
             self.history.add(player2, Result.SmallBlind, paid2)
             self.log(player2, Result.SmallBlind, paid2)
 
             player3 = self.players.next_player()
-            paid3 = player3.pay_blind(bb)
+            paid3 = player3.pay(bb)
             self.history.add(player3, Result.BigBlind, paid3)
             self.log(player3, Result.BigBlind, paid3)
 
