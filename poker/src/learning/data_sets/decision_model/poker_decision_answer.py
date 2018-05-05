@@ -1,4 +1,4 @@
-from learning.data_sets.base_poker_decision_answer import BasePokerDecisionAnswer
+from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
 
 
 class PokerDecisionAnswer(BasePokerDecisionAnswer):

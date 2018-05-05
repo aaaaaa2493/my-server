@@ -3,7 +3,7 @@ from sklearn.model_selection import train_test_split
 from pickle import dump
 from os.path import exists
 from os import mkdir
-from learning.data_sets.base_poker_decision import DecisionClass
+from learning.data_sets.decision_model.base_poker_decision import DecisionClass
 from learning.data_sets.data_set import DataSet
 from special.debug import Debug
 

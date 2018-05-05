@@ -1,7 +1,7 @@
 from pickle import load, dump
 from os.path import exists
 from os import mkdir
-from learning.data_sets.base_poker_decision import BasePokerDecision, DecisionClass
+from learning.data_sets.decision_model.base_poker_decision import BasePokerDecision, DecisionClass
 from learning.data_sets.decisions_set import DecisionsSet
 from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame

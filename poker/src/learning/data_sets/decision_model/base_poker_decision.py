@@ -1,6 +1,6 @@
 from numpy import array
 from typing import List, Callable
-from learning.data_sets.base_poker_decision_answer import BasePokerDecisionAnswer
+from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
 from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame
 

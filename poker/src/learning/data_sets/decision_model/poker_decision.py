@@ -5,8 +5,8 @@ from holdem.play.step import Step
 from data.game_model.event import Event
 from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame
-from learning.data_sets.base_poker_decision import BasePokerDecision
-from learning.data_sets.base_poker_decision_answer import BasePokerDecisionAnswer
+from learning.data_sets.decision_model.base_poker_decision import BasePokerDecision
+from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
 from learning.data_sets.decision_model.poker_decision_answer import PokerDecisionAnswer
 from special.debug import Debug
 

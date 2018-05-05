@@ -1,6 +1,6 @@
 from numpy import array
 from typing import List
-from learning.data_sets.base_poker_decision import BasePokerDecision
+from learning.data_sets.decision_model.base_poker_decision import BasePokerDecision
 
 
 class DecisionsSet:
