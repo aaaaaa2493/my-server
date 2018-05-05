@@ -1,7 +1,7 @@
 from core.blinds.blinds import Blinds
 
 
-class AbstractGame:
+class BaseGame:
     def __init__(self, id_: int, blinds: Blinds):
         self.id: int = id_
         self.blinds: Blinds = blinds

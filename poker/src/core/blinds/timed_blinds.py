@@ -2,15 +2,15 @@ from threading import Thread
 from time import sleep
 from core.blinds.scheme.scheme import Scheme
 from core.blinds.blinds import Blinds
-from core.abstract_game import AbstractGame
+from core.base_game import BaseGame
 
 
 class TimedBlinds(Blinds):
 
-    def __init__(self, scheme: Scheme, game: AbstractGame):
+    def __init__(self, scheme: Scheme, game: BaseGame):
         super().__init__(scheme)
 
-        self.game: AbstractGame = game
+        self.game: BaseGame = game
         self.thread: Thread = None
 
     def start(self) -> None:
