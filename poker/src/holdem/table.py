@@ -204,13 +204,13 @@ class Table:
         with self.lock:
 
             self.in_game = True
-            self.thread = Thread(target=lambda: self.start_game(), name=f'Table {self.id}')
 
             if not self.wait:
 
-                if Debug.Table and Debug.Decision and not self.online:
+                if (Debug.Table or Debug.Decision) and not self.online:
                     self.start_game()
                 else:
+                    self.thread = Thread(target=lambda: self.start_game(), name=f'Table {self.id}')
                     self.thread.start()
 
     def save_history(self) -> None:
