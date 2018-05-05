@@ -9,11 +9,6 @@ from learning.data_sets.decision_model.poker_decision_answer import PokerDecisio
 
 class Net1Net2Player(BaseNeuralNetworkPlayer):
     def decide(self, step: Step, to_call: int, min_raise: int, cards: Card.Cards, pot: int, bb: int):
-        if not self.in_game:
-            return Result.DoNotPlay
-
-        if self.money == 0 and self.in_game:
-            return Result.InAllin
 
         evaluation = HoldemPoker.probability(self.cards, cards)
         prediction = self.nn.predict(self.create_input(

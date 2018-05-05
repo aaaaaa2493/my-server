@@ -173,6 +173,16 @@ class PlayManager:
         return PlayManager._bank_of_plays[index]
 
     @staticmethod
+    def get_play_by_name(name: str) -> Play:
+        if not PlayManager._initialized:
+            PlayManager.init()
+
+        for play in PlayManager._bank_of_plays:
+            if play.name == name:
+                return play
+        return Play()
+
+    @staticmethod
     def standings(count: int = -1):
 
         if not PlayManager._initialized:

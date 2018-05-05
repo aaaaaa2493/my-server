@@ -9,4 +9,4 @@ class DummyPlayer(Player):
         super().__init__(_id, money, False, name, Play(), BaseNetwork())
 
     def decide(self, *args) -> Result:
-        return Result.DoNotPlay
+        return Result.Fold

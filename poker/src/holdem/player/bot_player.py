@@ -22,12 +22,6 @@ class BotPlayer(Player):
     def decide(self, step: Step, to_call: int, can_raise_from: int,
                cards: Card.Cards, online: bool) -> Result:
 
-        if not self.in_game:
-            return Result.DoNotPlay
-
-        if self.money == 0 and self.in_game:
-            return Result.InAllin
-
         if step == Step.Preflop:
             curr_play: BasePlay = self.play.preflop
 

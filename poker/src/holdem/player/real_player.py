@@ -26,12 +26,6 @@ class RealPlayer(Player):
     def decide(self, step: Step, to_call: int, min_raise: int,
                cards: Card.Cards, online: bool) -> Result:
 
-        if not self.in_game:
-            return Result.DoNotPlay
-
-        if self.money == 0 and self.in_game:
-            return Result.InAllin
-
         Debug.input_decision()
         Debug.input_decision(f'you have {self.get_cards()}')
         if step != Step.Preflop:

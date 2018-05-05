@@ -102,22 +102,38 @@ class Run:
             # from learning.neural_network import NeuralNetwork
             # NeuralNetwork.PokerDecision.Bubble(100, 9).show()
             from time import sleep
+            from datetime import datetime
             from pickle import load
             from holdem.game.game import Game
             from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
+            from holdem.play.play_manager import PlayManager
+            start_time = datetime.now()
 
-            for _id in range(100):
-                game = Game(players=1000)
-                for _ in range(999):
-                    game.add_bot_player()
-                game.add_nn_player('nn2', Net1Net2Player)
-                print('Start game #', _id + 1)
-                while not game.game_finished:
-                    sleep(1)
-            plays = load(open('networks/plays', 'rb'))
+            if 1:
+                for _id in range(5):
+                    game = Game(players=100)
+                    for _ in range(99):
+                        game.add_bot_player()
+                    game.add_nn_player('nn1', Net1Net2Player)
+                    print('Start game #', _id + 1)
+                    while not game.game_finished:
+                        sleep(1)
+
+                plays = load(open('networks/plays', 'rb'))
+
+            else:
+                plays = {}
+                for i in range(11):
+                    curr = load(open('networks/plays nn2 ' + str(i+1), 'rb'))
+                    for k, v in curr.items():
+                        plays[k] = plays.get(k, 0) + v
+
             plays = sorted([(k, v) for k, v in plays.items()], key=lambda k: k[1])
             for i, play in enumerate(plays):
-                print(f'{i+1:>4}. {play[1]:>6}  {play[0]}')
+                pl = PlayManager.get_play_by_name(play[0])
+                print(f'{i+1:>4}. {play[1]:>6} ({round(play[1] / 100, 2):>6}) {play[0]:>10}  '
+                      f'(ex {pl.exemplar:>6}) {"*" * pl.wins}')
+            print('It took', datetime.now() - start_time)
 
         elif mode == Mode.UnitTest:
             self.start_unit_tests()

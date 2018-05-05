@@ -6,7 +6,6 @@ from holdem.play.step import Step
 from core.cards.cards_pair import CardsPair
 from holdem.players import Players
 from holdem.player.player import Player
-from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer
 from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
 from core.blinds.blinds import Blinds
 from holdem.board import Board
@@ -411,17 +410,21 @@ class Table:
                         self.network.switch_decision(player)
                         sleep(Delay.SwitchDecision)
 
-                    player_class = type(player)
-
-                    if issubclass(player_class, BaseNeuralNetworkPlayer):
-                        if player_class is Net1Net2Player:
-                            result = player.decide(step, to_call, can_raise_from, self.board.get(),
-                                                   self.pot.money + sum(p.gived for p in self.players.all_players()),
-                                                   self.blinds.big_blind)
+                    if player.is_neural_network:
+                        if player.cls is Net1Net2Player:
+                            pot_money = self.pot.money + sum(p.gived for p in self.players.all_players())
+                            result = player.make_decision(
+                                step,
+                                to_call,
+                                can_raise_from,
+                                self.board.get(),
+                                pot_money,
+                                self.blinds.big_blind
+                            )
                         else:
                             raise ValueError('Bad type of neural network')
                     else:
-                        result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
+                        result = player.make_decision(step, to_call, can_raise_from, self.board.get(), self.online)
 
                     self.log(player, result)
 
