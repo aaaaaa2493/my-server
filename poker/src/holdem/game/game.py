@@ -313,6 +313,8 @@ class Game(BaseGame):
             if not player.controlled:
                 player.play.set_place(place + 1, self.players_count)
             if Settings.game_mode == Mode.Testing:
+                if player.play.exemplar == 0:
+                    print('Net', player.play.name, ':', place + 1)
                 if player.play.name in plays:
                     plays[player.play.name] += place + 1
                 else:

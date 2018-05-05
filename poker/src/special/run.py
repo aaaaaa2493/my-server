@@ -67,7 +67,7 @@ class Run:
         elif args[0] == '--network-play-tests':
             from holdem.game.game import Game
             from holdem.play.play_manager import PlayManager
-            from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
+            from holdem.player.neural_network.net1_net2_player import Net1Net2Player
             Settings.game_mode = Mode.Testing
             PlayManager.PlayPath = play_path
             game = Game()
@@ -105,16 +105,18 @@ class Run:
             from datetime import datetime
             from pickle import load
             from holdem.game.game import Game
-            from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
+            from holdem.player.neural_network.net1_net2_player import Net1Net2Player
+            from holdem.player.neural_network.net3_player import Net3Player
             from holdem.play.play_manager import PlayManager
             start_time = datetime.now()
 
             if 1:
-                for _id in range(5):
+                for _id in range(100):
                     game = Game(players=100)
-                    for _ in range(99):
+                    for _ in range(98):
                         game.add_bot_player()
-                    game.add_nn_player('nn1', Net1Net2Player)
+                    game.add_nn_player('nn2', Net1Net2Player)
+                    game.add_nn_player('nn3', Net3Player)
                     print('Start game #', _id + 1)
                     while not game.game_finished:
                         sleep(1)
@@ -140,17 +142,17 @@ class Run:
 
         elif mode == Mode.Learning:
             from learning.learning import Learning
-            from learning.data_sets.decision_model.poker_decision import PokerDecision
-            # data.game_parser import GameParser
+            from learning.data_sets.decision_model.poker_decision_2 import PokerDecision2
+            from data.game_parser import GameParser
             from datetime import datetime
             learn = Learning()
-            learn.create_data_set(PokerDecision)
+            learn.create_data_set(PokerDecision2)
             start = datetime.now()
             # GameParser.parse_dir('pack1', False, False)
             # learn.add_data_set('pack1')
-            # learn.save_data_set('nn2 without losers.txt')
-            learn.load_data_set('nn1 only winners.txt')
-            learn.learning('nn1')
+            # learn.save_data_set('nn3 a lot of raises variants.txt')
+            learn.load_data_set('nn3 a lot of raises variants.txt')
+            learn.learning('nn4')
             end = datetime.now()
             print('Learning took', end - start)
 
