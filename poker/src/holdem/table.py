@@ -8,6 +8,7 @@ from holdem.players import Players
 from holdem.player.player import Player
 from holdem.player.neural_network.net1_net2_player import Net1Net2Player
 from holdem.player.neural_network.net3_player import Net3Player
+from holdem.player.neural_network.net4_player import Net4Player
 from core.blinds.blinds import Blinds
 from holdem.board import Board
 from holdem.poker.hand_strength import HandStrength
@@ -210,7 +211,7 @@ class Table:
                 if (Debug.Table or Debug.Decision) and not self.online:
                     self.start_game()
                 else:
-                    self.thread = Thread(target=lambda: self.start_game(), name=f'Table {self.id}')
+                    self.thread = Thread(target=self.start_game, name=f'Table {self.id}')
                     self.thread.start()
 
     def save_history(self) -> None:
@@ -412,7 +413,7 @@ class Table:
                         sleep(Delay.SwitchDecision)
 
                     if player.is_neural_network:
-                        if player.cls is Net1Net2Player or player.cls is Net3Player:
+                        if player.cls is Net1Net2Player or player.cls is Net3Player or player.cls is Net4Player:
                             pot_money = self.pot.money + sum(p.gived for p in self.players.all_players())
                             result = player.make_decision(
                                 step,
