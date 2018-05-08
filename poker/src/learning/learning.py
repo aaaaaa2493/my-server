@@ -30,10 +30,31 @@ class Learning:
         y = self._data.decisions.get_answers()
         Debug.learning(f'Start learning from {y.size} samples')
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25)
-        mlp = MLPClassifier(hidden_layer_sizes=(10, 10))
+        mlp = MLPClassifier(hidden_layer_sizes=(100, 100))
         mlp.fit(x_train, y_train)
         Debug.learning('train', mlp.score(x_train, y_train))
         Debug.learning('test ', mlp.score(x_test, y_test))
         if not exists('networks'):
             mkdir('networks')
         dump(mlp, open(f'networks/{path}', 'wb'))
+
+        # nn1 10x2 - 0.753
+        # nn1 10x3 - 0.752
+
+        # nn2 10x2  - 0.751
+        # nn2 10x3  - 0.755
+        # nn2 100x2 - 0.761
+        # nn2 100x3 - 0.762
+
+        # nn3 10x2  - 0.703
+        # nn3 10x3  - 0.705
+        # nn3 100x2 - 0.715
+
+        # nn4 10x2  - 0.71
+
+        # nn5 10x2  - 0.724
+        # nn5 10x3  - 0.725
+        # nn5 100x2 - 0.738
+        # nn5 100x3 - 0.739
+
+        # nn6 100x2 - 0.762
