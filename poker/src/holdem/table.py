@@ -11,6 +11,7 @@ from holdem.player.neural_network.net3_player import Net3Player
 from holdem.player.neural_network.net4_player import Net4Player
 from holdem.player.neural_network.net5_player import Net5Player
 from holdem.player.neural_network.net6_player import Net6Player
+from holdem.player.neural_network.net7_player import Net7Player
 from core.blinds.blinds import Blinds
 from holdem.board import Board
 from holdem.poker.hand_strength import HandStrength
@@ -403,6 +404,8 @@ class Table:
             min_raise = bb
             can_raise_from = to_call + min_raise
 
+            players_not_decided = self.players.count_in_game_players()
+
             while True:
 
                 if player.money > 0 and player.in_game and self.players.count_in_game_players() > 1 and not (
@@ -435,10 +438,28 @@ class Table:
                                 self.blinds.big_blind,
                                 HandStrength.get_strength(player.cards, self.board.get())
                             )
+                        elif player.cls is Net7Player:
+                            result = player.make_decision(
+                                step,
+                                to_call,
+                                can_raise_from,
+                                self.board.get(),
+                                pot_money,
+                                self.blinds.big_blind,
+                                HandStrength.get_strength(player.cards, self.board.get()),
+                                sum(1 for _ in self.players.all_players()),
+                                self.players.count_in_game_players(),
+                                players_not_decided - 1,  # without self
+                            )
                         else:
                             raise ValueError('Bad type of neural network')
                     else:
                         result = player.make_decision(step, to_call, can_raise_from, self.board.get(), self.online)
+
+                    if result == Result.Raise or result == Result.Allin:
+                        players_not_decided = self.players.count_in_game_players() - 1  # without raiser
+                    else:
+                        players_not_decided -= 1
 
                     self.log(player, result)
 

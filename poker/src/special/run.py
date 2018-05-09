@@ -107,17 +107,17 @@ class Run:
             from holdem.game.game import Game
             from holdem.player.neural_network.net1_net2_player import Net1Net2Player
             from holdem.player.neural_network.net3_player import Net3Player
-            from holdem.player.neural_network.net6_player import Net6Player
+            from holdem.player.neural_network.net7_player import Net7Player
             from holdem.play.play_manager import PlayManager
             start_time = datetime.now()
 
-            if 1:
+            if 0:
                 for _id in range(400):
                     game = Game(players=100)
                     for _ in range(98):
                         game.add_bot_player()
                     game.add_nn_player('nn2', Net1Net2Player)
-                    game.add_nn_player('nn6', Net6Player)
+                    game.add_nn_player('nn7', Net7Player)
                     print('Start game #', _id + 1)
                     while not game.game_finished:
                         sleep(0.01)
@@ -126,15 +126,15 @@ class Run:
 
             else:
                 plays = {}
-                for i in range(11):
-                    curr = load(open('networks/plays nn2 ' + str(i+1), 'rb'))
+                for i in range(1):
+                    curr = load(open('networks/plays', 'rb'))
                     for k, v in curr.items():
                         plays[k] = plays.get(k, 0) + v
 
             plays = sorted([(k, v) for k, v in plays.items()], key=lambda k: k[1])
             for i, play in enumerate(plays):
                 pl = PlayManager.get_play_by_name(play[0])
-                print(f'{i+1:>4}. {play[1]:>6} ({round(play[1] / 600, 2):>6}) {play[0]:>10}  '
+                print(f'{i+1:>4}. {play[1]:>6} ({round(play[1] / 400, 2):>6}) {play[0]:>10}  '
                       f'(ex {pl.exemplar:>6}) {"*" * pl.wins}')
             print('It took', datetime.now() - start_time)
 
@@ -143,17 +143,17 @@ class Run:
 
         elif mode == Mode.Learning:
             from learning.learning import Learning
-            from learning.data_sets.decision_model.poker_decision_5 import PokerDecision5
+            from learning.data_sets.decision_model.poker_decision_6 import PokerDecision6
             from data.game_parser import GameParser
             from datetime import datetime
             learn = Learning()
-            learn.create_data_set(PokerDecision5)
+            learn.create_data_set(PokerDecision6)
             start = datetime.now()
             # GameParser.parse_dir('pack1', False, False)
             learn.add_data_set('pack1')
-            learn.save_data_set('nn6 added self cards.txt')
+            learn.save_data_set('nn7 players count info.txt')
             # learn.load_data_set('nn3 a lot of raises variants.txt')
-            learn.learning('nn6')
+            learn.learning('nn7')
             end = datetime.now()
             print('Learning took', end - start)
 
