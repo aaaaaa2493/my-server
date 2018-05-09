@@ -12,6 +12,7 @@ class Debug:
     Parser = 1
     Learning = 1
     DataSets = 0
+    UnitTest = 1
     Error = 1
 
     if Table:
@@ -120,6 +121,15 @@ class Debug:
     else:
         @staticmethod
         def datasets(*args, **kwargs):
+            pass
+
+    if UnitTest:
+        @staticmethod
+        def unit_test(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def unit_test(*args, **kwargs):
             pass
 
     if Error:
