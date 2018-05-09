@@ -12,13 +12,12 @@ class BaseNeuralNetworkPlayer(Player):
         super().__init__(_id, money, False, path, Play(), BaseNetwork())
         self.play.name = path
         self.nn: MLPClassifier = load(open(f'networks/{path}', 'rb'))
-        self.is_neural_network = True
 
     @staticmethod
     def create_input(*args):
         return array([array(args)])
 
-    def decide(self, *args):
+    def decide(self, **kwargs):
         raise NotImplementedError('NeuralNetworkPlayer::decide')
 
 

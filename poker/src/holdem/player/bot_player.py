@@ -19,8 +19,8 @@ class BotPlayer(Player):
         play: Play = PlayManager.get_play(Settings.game_mode == Mode.Testing and 0)
         super().__init__(_id, money, False, str(play), play, BaseNetwork())
 
-    def decide(self, step: Step, to_call: int, can_raise_from: int,
-               cards: Card.Cards, online: bool) -> Result:
+    def decide(self, step: Step, to_call: int, min_raise: int,
+               board: Card.Cards, online: bool) -> Result:
 
         if step == Step.Preflop:
             curr_play: BasePlay = self.play.preflop
@@ -37,8 +37,8 @@ class BotPlayer(Player):
         else:
             raise ValueError(f'Undefined step id {step}')
 
-        if self.remaining_money() > can_raise_from * 3 and random() < curr_play.bluff:
-            bluff = int(can_raise_from * (1 + random()))
+        if self.remaining_money() > min_raise * 3 and random() < curr_play.bluff:
+            bluff = int(min_raise * (1 + random()))
             self.pay(bluff)
             Debug.decision(f'609 {self.name} raise bluff {bluff}; bluff = {curr_play.bluff}')
 
@@ -47,7 +47,7 @@ class BotPlayer(Player):
 
             return Result.Raise
 
-        probability = HoldemPoker.probability(self.cards, cards)
+        probability = HoldemPoker.probability(self.cards, board)
 
         if probability < curr_play.min_probability_to_play:
 
@@ -143,7 +143,7 @@ class BotPlayer(Player):
 
                 return Result.Fold
 
-        if can_raise_from > bet:
+        if min_raise > bet:
 
             if to_call == 0 or self.gived == to_call:
                 Debug.decision(f'656 {self.name} check on mid bet '
@@ -210,7 +210,7 @@ class BotPlayer(Player):
 
                     return Result.Fold
 
-            if raise_bet < can_raise_from:
+            if raise_bet < min_raise:
 
                 if to_call == 0 or to_call == self.gived:
                     Debug.decision(f'656 {self.name} check while thinks about raise {raise_bet}')

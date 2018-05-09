@@ -114,8 +114,6 @@ class Player:
         self.lose_time: int = None
         self.play: Play = play
         self.network: BaseNetwork = net
-        self.cls = type(self)
-        self.is_neural_network = False
 
     def __str__(self):
 
@@ -232,14 +230,14 @@ class Player:
 
         self.lose_time = int(datetime.now().timestamp() * 10 ** 6) * 10 ** 2 + stack * 10 + place
 
-    def make_decision(self, *args) -> Result:
+    def make_decision(self, **kwargs) -> Result:
         if not self.in_game:
             return Result.DoNotPlay
 
         if self.money == 0 and self.in_game:
             return Result.InAllin
 
-        return self.decide(*args)
+        return self.decide(**kwargs)
 
-    def decide(self, *args) -> Result:
+    def decide(self, **kwargs) -> Result:
         raise NotImplementedError('decide')

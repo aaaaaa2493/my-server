@@ -16,7 +16,7 @@ class Net7Player(BaseNeuralNetworkPlayer):
                step: Step,
                to_call: int,
                min_raise: int,
-               cards: Card.Cards,
+               board: Card.Cards,
                pot: int,
                bb: int,
                strength: Strength,
@@ -36,8 +36,8 @@ class Net7Player(BaseNeuralNetworkPlayer):
         if players_not_moved < 0 or players_not_moved >= players_active:
             raise ValueError('bad players not moved:', players_not_moved, 'with players active:', players_active)
 
-        evaluation = HoldemPoker.probability(self.cards, cards)
-        outs: float = HoldemPoker.calculate_outs(self.cards, cards)[0]
+        evaluation = HoldemPoker.probability(self.cards, board)
+        outs: float = HoldemPoker.calculate_outs(self.cards, board)[0]
         first: Rank = self.cards.first.rank
         second: Rank = self.cards.second.rank
         prediction = self.nn.predict(self.create_input(

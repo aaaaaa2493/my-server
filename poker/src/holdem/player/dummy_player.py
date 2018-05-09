@@ -8,5 +8,5 @@ class DummyPlayer(Player):
     def __init__(self, _id: int, name: str, money: int):
         super().__init__(_id, money, False, name, Play(), BaseNetwork())
 
-    def decide(self, *args) -> Result:
+    def decide(self, **kwargs) -> Result:
         return Result.Fold

@@ -6,12 +6,6 @@ from holdem.play.step import Step
 from core.cards.cards_pair import CardsPair
 from holdem.players import Players
 from holdem.player.player import Player
-from holdem.player.neural_network.net1_net2_player import Net1Net2Player
-from holdem.player.neural_network.net3_player import Net3Player
-from holdem.player.neural_network.net4_player import Net4Player
-from holdem.player.neural_network.net5_player import Net5Player
-from holdem.player.neural_network.net6_player import Net6Player
-from holdem.player.neural_network.net7_player import Net7Player
 from core.blinds.blinds import Blinds
 from holdem.board import Board
 from holdem.poker.hand_strength import HandStrength
@@ -417,44 +411,21 @@ class Table:
                         self.network.switch_decision(player)
                         sleep(Delay.SwitchDecision)
 
-                    if player.is_neural_network:
-                        pot_money = self.pot.money + sum(p.gived for p in self.players.all_players())
-                        if player.cls is Net1Net2Player or player.cls is Net3Player or player.cls is Net4Player:
-                            result = player.make_decision(
-                                step,
-                                to_call,
-                                can_raise_from,
-                                self.board.get(),
-                                pot_money,
-                                self.blinds.big_blind
-                            )
-                        elif player.cls is Net5Player or player.cls is Net6Player:
-                            result = player.make_decision(
-                                step,
-                                to_call,
-                                can_raise_from,
-                                self.board.get(),
-                                pot_money,
-                                self.blinds.big_blind,
-                                HandStrength.get_strength(player.cards, self.board.get())
-                            )
-                        elif player.cls is Net7Player:
-                            result = player.make_decision(
-                                step,
-                                to_call,
-                                can_raise_from,
-                                self.board.get(),
-                                pot_money,
-                                self.blinds.big_blind,
-                                HandStrength.get_strength(player.cards, self.board.get()),
-                                sum(1 for _ in self.players.all_players()),
-                                self.players.count_in_game_players(),
-                                players_not_decided - 1,  # without self
-                            )
-                        else:
-                            raise ValueError('Bad type of neural network')
-                    else:
-                        result = player.make_decision(step, to_call, can_raise_from, self.board.get(), self.online)
+                    pot_money = self.pot.money + sum(p.gived for p in self.players.all_players())
+
+                    result = player.make_decision(
+                        online=self.online,
+                        step=step,
+                        to_call=to_call,
+                        min_raise=can_raise_from,
+                        board=self.board.get(),
+                        pot=pot_money,
+                        bb=self.blinds.big_blind,
+                        strength=HandStrength.get_strength(player.cards, self.board.get()),
+                        players_on_table=sum(1 for _ in self.players.all_players()),
+                        players_active=self.players.count_in_game_players(),
+                        players_not_moved=players_not_decided - 1,  # without self
+                    )
 
                     if result == Result.Raise or result == Result.Allin:
                         players_not_decided = self.players.count_in_game_players() - 1  # without raiser

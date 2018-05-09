@@ -15,13 +15,13 @@ class Net6Player(BaseNeuralNetworkPlayer):
                step: Step,
                to_call: int,
                min_raise: int,
-               cards: Card.Cards,
+               board: Card.Cards,
                pot: int,
                bb: int,
                strength: Strength
                ) -> Result:
 
-        evaluation = HoldemPoker.probability(self.cards, cards)
+        evaluation = HoldemPoker.probability(self.cards, board)
         first: Rank = self.cards.first.rank
         second: Rank = self.cards.second.rank
         prediction = self.nn.predict(self.create_input(

@@ -13,13 +13,13 @@ class Net5Player(BaseNeuralNetworkPlayer):
                step: Step,
                to_call: int,
                min_raise: int,
-               cards: Card.Cards,
+               board: Card.Cards,
                pot: int,
                bb: int,
                strength: Strength
                ) -> Result:
 
-        evaluation = HoldemPoker.probability(self.cards, cards)
+        evaluation = HoldemPoker.probability(self.cards, board)
         prediction = self.nn.predict(self.create_input(
             evaluation,
             self.money / pot,
