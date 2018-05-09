@@ -53,7 +53,8 @@ class PokerDecision8(BasePokerDecision):
         ] + self.strength + [
             self.first,
             self.second,
-            self.have_suited_cards
+            self.have_pocket_pairs,
+            self.have_suited_cards,
         ] + self.players_on_table + self.players_playing + self.players_not_moved + [
             self.outs,
             self.my_money / self.big_blind / Blinds.NORMAL_BBS - 1,
