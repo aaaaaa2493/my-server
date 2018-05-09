@@ -104,6 +104,7 @@ class Run:
             from time import sleep
             from datetime import datetime
             from pickle import load
+            from statistics import mean
             from holdem.game.game import Game
             from holdem.player.neural_network.net1_net2_player import Net1Net2Player
             from holdem.player.neural_network.net3_player import Net3Player
@@ -114,7 +115,7 @@ class Run:
             from holdem.play.play_manager import PlayManager
             start_time = datetime.now()
 
-            if 1:
+            if 0:
                 for _id in range(400):
                     game = Game(players=100)
                     for _ in range(95):
@@ -128,19 +129,11 @@ class Run:
                     while not game.game_finished:
                         sleep(0.01)
 
-                plays = load(open('networks/plays', 'rb'))
-
-            else:
-                plays = {}
-                for i in range(1):
-                    curr = load(open('networks/plays', 'rb'))
-                    for k, v in curr.items():
-                        plays[k] = plays.get(k, 0) + v
-
-            plays = sorted([(k, v) for k, v in plays.items()], key=lambda k: k[1])
+            plays = load(open('networks/plays', 'rb'))
+            plays = sorted([(k, v) for k, v in plays.items()], key=lambda k: mean(k[1]))
             for i, play in enumerate(plays):
                 pl = PlayManager.get_play_by_name(play[0])
-                print(f'{i+1:>4}. {play[1]:>6} ({round(play[1] / 400, 2):>6}) {play[0]:>10}  '
+                print(f'{i+1:>4}. {round(mean(play[1]), 2):>6} {play[0]:>10}  '
                       f'(ex {pl.exemplar:>6}) {"*" * pl.wins}')
             print('It took', datetime.now() - start_time)
 

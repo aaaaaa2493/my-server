@@ -1,13 +1,19 @@
-from enum import Enum
+from typing import Tuple, Iterator
+from data.game_model.poker_position import PokerPosition
 
 
-class TablePosition(Enum):
-    Handed10 = (3, 3, 2, 2)
-    Handed9 = (3, 2, 2, 2)
-    Handed8 = (2, 2, 2, 2)
-    Handed7 = (2, 1, 2, 2)
-    Handed6 = (1, 1, 2, 2)
-    Handed5 = (1, 1, 1, 2)
-    Handed4 = (1, 0, 1, 2)
-    Handed3 = (0, 0, 1, 2)
-    Handed2 = (0, 0, 0, 2)
+class TablePosition:
+    def __init__(self, utg: int, mid: int, late: int, blinds: int):
+        self.early: int = utg
+        self.middle: int = mid
+        self.late: int = late
+        self.blinds: int = blinds
+
+    def __iter__(self) -> Iterator[Tuple[PokerPosition, int]]:
+        yield PokerPosition.Blinds, self.blinds
+        yield PokerPosition.Early, self.early
+        yield PokerPosition.Middle, self.middle
+        yield PokerPosition.Late, self.late
+
+    def __str__(self) -> str:
+        return f'TablePosition{(self.early, self.middle, self.late, self.blinds)}'
