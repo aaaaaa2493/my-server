@@ -6,6 +6,8 @@ from core.blinds.scheme.order import Order
 
 class Blinds:
 
+    NORMAL_BBS = 100
+
     def __init__(self, scheme: Scheme):
         self.order: Order = scheme.order.value
         self.hands: Hands = scheme.hands.value

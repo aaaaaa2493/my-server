@@ -1,6 +1,7 @@
 from typing import List, Tuple, Optional
 from threading import Thread, Lock
 from time import sleep
+from statistics import mean
 from holdem.play.result import Result
 from holdem.play.step import Step
 from core.cards.cards_pair import CardsPair
@@ -373,6 +374,8 @@ class Table:
         sb = self.blinds.small_blind
         bb = self.blinds.big_blind
 
+        average_stack_on_start_of_hand = int(mean(p.money for p in self.players.all_players()))
+
         self.collect_ante(ante)
 
         for step in Step:
@@ -423,6 +426,8 @@ class Table:
                         players_on_table=sum(1 for _ in self.players.all_players()),
                         players_active=self.players.count_in_game_players(),
                         players_not_moved=players_not_decided - 1,  # without self
+                        max_playing_stack=max(p.remaining_money() for p in self.players.in_game_players()),
+                        average_stack_on_table=average_stack_on_start_of_hand
                     )
 
                     if result == Result.Raise or result == Result.Allin:

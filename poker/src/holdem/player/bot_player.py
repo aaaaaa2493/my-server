@@ -16,7 +16,7 @@ from special.mode import Mode
 
 class BotPlayer(Player):
     def __init__(self, _id: int, money: int):
-        play: Play = PlayManager.get_play(Settings.game_mode == Mode.Testing and 0)
+        play: Play = PlayManager.get_play(Settings.game_mode == Mode.Testing)
         super().__init__(_id, money, False, str(play), play, BaseNetwork())
 
     def decide(self, *,
