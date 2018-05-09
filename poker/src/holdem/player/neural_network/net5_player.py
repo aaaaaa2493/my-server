@@ -9,15 +9,15 @@ from holdem.poker.strength import Strength
 
 
 class Net5Player(BaseNeuralNetworkPlayer):
-    def decide(self,
+    def decide(self, *,
                step: Step,
                to_call: int,
                min_raise: int,
                board: Card.Cards,
                pot: int,
                bb: int,
-               strength: Strength
-               ) -> Result:
+               strength: Strength,
+               **_) -> Result:
 
         evaluation = HoldemPoker.probability(self.cards, board)
         prediction = self.nn.predict(self.create_input(

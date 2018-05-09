@@ -8,7 +8,14 @@ from learning.data_sets.decision_model.poker_decision_answer_3 import PokerDecis
 
 
 class Net4Player(BaseNeuralNetworkPlayer):
-    def decide(self, step: Step, to_call: int, min_raise: int, board: Card.Cards, pot: int, bb: int) -> Result:
+    def decide(self, *,
+               step: Step,
+               to_call: int,
+               min_raise: int,
+               board: Card.Cards,
+               pot: int,
+               bb: int,
+               **_) -> Result:
 
         evaluation = HoldemPoker.probability(self.cards, board)
         prediction = self.nn.predict(self.create_input(

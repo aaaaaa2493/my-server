@@ -19,8 +19,13 @@ class BotPlayer(Player):
         play: Play = PlayManager.get_play(Settings.game_mode == Mode.Testing and 0)
         super().__init__(_id, money, False, str(play), play, BaseNetwork())
 
-    def decide(self, step: Step, to_call: int, min_raise: int,
-               board: Card.Cards, online: bool) -> Result:
+    def decide(self, *,
+               step: Step,
+               to_call: int,
+               min_raise: int,
+               board: Card.Cards,
+               online: bool,
+               **_) -> Result:
 
         if step == Step.Preflop:
             curr_play: BasePlay = self.play.preflop

@@ -12,7 +12,7 @@ from special.debug import Debug
 
 
 class Net7Player(BaseNeuralNetworkPlayer):
-    def decide(self,
+    def decide(self, *,
                step: Step,
                to_call: int,
                min_raise: int,
@@ -23,7 +23,7 @@ class Net7Player(BaseNeuralNetworkPlayer):
                players_on_table: int,
                players_active: int,
                players_not_moved: int,
-               ) -> Result:
+               **_) -> Result:
         if players_on_table < 2 or players_on_table > 10:
             raise ValueError('bad players on table:', players_active)
 

@@ -23,8 +23,13 @@ class RealPlayer(Player):
         )
         super().__init__(_id, money, True, name, play, network)
 
-    def decide(self, step: Step, to_call: int, min_raise: int,
-               board: Card.Cards, online: bool) -> Result:
+    def decide(self, *,
+               step: Step,
+               to_call: int,
+               min_raise: int,
+               board: Card.Cards,
+               online: bool,
+               **_) -> Result:
 
         Debug.input_decision()
         Debug.input_decision(f'you have {self.get_cards()}')
