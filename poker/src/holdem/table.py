@@ -411,15 +411,13 @@ class Table:
                         self.network.switch_decision(player)
                         sleep(Delay.SwitchDecision)
 
-                    pot_money = self.pot.money + sum(p.gived for p in self.players.all_players())
-
                     result = player.make_decision(
                         online=self.online,
                         step=step,
                         to_call=to_call,
                         min_raise=can_raise_from,
                         board=self.board.get(),
-                        pot=pot_money,
+                        pot=self.pot.money + sum(p.gived for p in self.players.all_players()),
                         bb=self.blinds.big_blind,
                         strength=HandStrength.get_strength(player.cards, self.board.get()),
                         players_on_table=sum(1 for _ in self.players.all_players()),
