@@ -94,7 +94,7 @@ class PokerDecision6(BasePokerDecision):
 
         pr = HoldemPoker.probability(cards, board)
         strength = HandStrength.get_strength(cards, board)
-        outs: float = HoldemPoker.calculate_outs(cards, board)[0] / 21  # 21 is max outs
+        outs: float = HoldemPoker.calculate_outs(cards, board)[0] / HoldemPoker.MAX_OUTS
 
         des = PokerDecision6()
         des.set_answer(res)

@@ -8,6 +8,7 @@ from holdem.play.step import Step
 from holdem.play.result import Result
 from learning.data_sets.decision_model.poker_decision_answer_3 import PokerDecisionAnswer3
 from holdem.poker.strength import Strength
+from special.debug import Debug
 
 
 class Net7Player(BaseNeuralNetworkPlayer):
@@ -23,7 +24,6 @@ class Net7Player(BaseNeuralNetworkPlayer):
                players_active: int,
                players_not_moved: int,
                ) -> Result:
-
         if players_on_table < 2 or players_on_table > 10:
             raise ValueError('bad players on table:', players_active)
 
@@ -114,10 +114,29 @@ class Net7Player(BaseNeuralNetworkPlayer):
             players_not_moved == 7,
             players_not_moved == 8,
             players_not_moved == 9,
-            outs
+            outs / HoldemPoker.MAX_OUTS
         ))
 
+        Debug.decision("NEURAL NETWORK 7 START THINK")
+        Debug.decision('evaluation =', evaluation)
+        Debug.decision('pot =', pot)
+        Debug.decision('money =', self.money)
+        Debug.decision('to_call =', to_call)
+        Debug.decision('bb =', bb)
+        Debug.decision('step =', step)
+        Debug.decision('strength =', strength)
+        Debug.decision('first =', first)
+        Debug.decision('second =', second)
+        Debug.decision('suited =', self.cards.suitability)
+        Debug.decision('players_on_table =', players_on_table)
+        Debug.decision('players_active =', players_active)
+        Debug.decision('players_not_moved =', players_not_moved)
+        Debug.decision('outs =', outs)
+
         answer: PokerDecisionAnswer3 = PokerDecisionAnswer3(prediction[0])
+
+        Debug.decision('ANSWER =', answer)
+        Debug.decision("NEURAL NETWORK 7 END THINK")
 
         if answer is PokerDecisionAnswer3.Fold:
             self.fold()

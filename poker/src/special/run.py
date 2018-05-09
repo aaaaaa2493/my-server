@@ -111,7 +111,7 @@ class Run:
             from holdem.play.play_manager import PlayManager
             start_time = datetime.now()
 
-            if 0:
+            if 1:
                 for _id in range(400):
                     game = Game(players=100)
                     for _ in range(98):
