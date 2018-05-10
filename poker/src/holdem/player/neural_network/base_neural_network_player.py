@@ -17,7 +17,7 @@ class BaseNeuralNetworkPlayer(Player):
     def create_input(*args):
         return array([array(args)])
 
-    def decide(self, *args):
+    def decide(self, **kwargs):
         raise NotImplementedError('NeuralNetworkPlayer::decide')
 
 

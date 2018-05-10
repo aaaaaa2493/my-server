@@ -3,6 +3,9 @@ from data.game_model.event import Event
 from data.game_model.poker_event import PokerEvent
 from data.game_model.mock_player import MockPlayer
 from data.game_model.observer_player import ObserverPlayer
+from data.game_model.table_positions import TablePositions
+from data.game_model.table_position import TablePosition
+from data.game_model.poker_position import PokerPosition
 from core.cards.card import Card
 from core.cards.deck import Deck
 from core.cards.cards_pair import CardsPair
@@ -33,6 +36,29 @@ class PokerHand:
         self.curr_step: Step = Step.Preflop
         self.curr_events: List[PokerEvent] = self.preflop
 
+    def calculate_players_positions(self):
+        position_scheme: TablePosition = TablePositions.get_position(len(self.players))
+        if (position_scheme.blinds + position_scheme.early +
+                position_scheme.middle + position_scheme.late) != len(self.players):
+            raise ValueError('Bad position scheme', position_scheme, len(self.players))
+
+        candidates_for_button = [p for p in self.players if p.seat == self.button_seat]
+        if len(candidates_for_button) > 1:
+            raise ValueError(f'Candidates for button > 1, button on {self.button_seat}')
+
+        if not len(candidates_for_button):
+            if all(self.button_seat < p.seat for p in self.players):
+                self.button_seat = max(p.seat for p in self.players)
+            else:
+                self.button_seat = max(p.seat for p in self.players if p.seat < self.button_seat)
+
+        button_index = self.players.index(max(p for p in self.players if p.seat == self.button_seat))
+        curr_index = button_index
+        for position, count_positions in position_scheme:
+            for _ in range(count_positions):
+                curr_index = (curr_index + 1) % len(self.players)
+                self.players[curr_index].position = position
+
     def __iter__(self) -> Iterator[Tuple[Step, List[PokerEvent]]]:
         yield Step.Preflop, self.preflop
         yield Step.Flop, self.flop
@@ -46,6 +72,7 @@ class PokerHand:
         self.sit_during_game = out_of_hand
         self.table_id = table_num
         self.button_seat = button
+        self.calculate_players_positions()
 
     def add_winner(self, name: str) -> None:
         self.get_player(name).is_winner = True

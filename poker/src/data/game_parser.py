@@ -3,6 +3,7 @@ from os import listdir, makedirs
 from os.path import exists
 from shutil import copyfile
 from data.game_model.poker_game import PokerGame
+from data.game_model.game_source import GameSource
 from data.reg_ex.poker_stars import PokerStars
 from data.reg_ex.party_poker import PartyPoker
 from data.reg_ex.poker_888 import Poker888
@@ -19,21 +20,25 @@ class GameParser:
         match = PokerStars.identifier.search(text)
         if match is not None:
             Debug.parser('Found PokerStars game')
+            game.game_source = GameSource.PokerStars
             return PokerStarsParsing(game)
 
         match = Poker888.identifier.search(text)
         if match is not None:
             Debug.parser('Found Poker888 game')
+            game.game_source = GameSource.Poker888
             return Poker888Parsing(game)
 
         match = Poker888.identifier_snap.search(text)
         if match is not None:
             Debug.parser('Found Poker888 Snap Poker game')
+            game.game_source = GameSource.Poker888
             return Poker888Parsing(game, True)
 
         match = PartyPoker.identifier.search(text)
         if match is not None:
             Debug.parser('Found PartyPoker game')
+            game.game_source = GameSource.PartyPoker
             return PartyPokerParsing(game)
 
         return None

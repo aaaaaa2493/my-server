@@ -7,6 +7,8 @@ from core.cards.cards_pair import CardsPair
 
 class HoldemPoker:
 
+    MAX_OUTS: int = 21
+
     @staticmethod
     def probability(c: CardsPair, f: Card.Cards) -> float:
         pr = HandEvaluator.evaluate_hand([c.first.convert(), c.second.convert()], [card.convert() for card in f])

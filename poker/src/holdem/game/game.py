@@ -5,7 +5,7 @@ from statistics import mean
 from typing import List
 from os.path import exists
 from pickle import load, dump
-from core.abstract_game import AbstractGame
+from core.base_game import BaseGame
 from core.blinds.scheme.scheme import Scheme
 from core.blinds.scheme.schemes import Schemes
 from core.blinds.timed_blinds import TimedBlinds
@@ -22,7 +22,7 @@ from special.settings import Settings
 from special.mode import Mode
 
 
-class Game(AbstractGame):
+class Game(BaseGame):
 
     def __init__(self, id_: int = 0, players: int = 9, seats: int = 9, start_stack: int = 15000,
                  blinds: Scheme = Schemes.WSOP.value):
@@ -314,9 +314,11 @@ class Game(AbstractGame):
                 player.play.set_place(place + 1, self.players_count)
             if Settings.game_mode == Mode.Testing:
                 if player.play.name in plays:
-                    plays[player.play.name] += place + 1
+                    plays[player.play.name] += [place + 1]
                 else:
-                    plays[player.play.name] = place + 1
+                    plays[player.play.name] = [place + 1]
+                if player.play.exemplar == 0:
+                    print('Net', player.play.name, ':', place + 1, f'  ({round(mean(plays[player.play.name]), 2)})')
 
         if Settings.game_mode == Mode.Testing:
             dump(plays, open('networks/plays', 'wb'))

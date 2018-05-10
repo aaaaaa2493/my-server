@@ -23,23 +23,22 @@ class RealPlayer(Player):
         )
         super().__init__(_id, money, True, name, play, network)
 
-    def decide(self, step: Step, to_call: int, min_raise: int,
-               cards: Card.Cards, online: bool) -> Result:
-
-        if not self.in_game:
-            return Result.DoNotPlay
-
-        if self.money == 0 and self.in_game:
-            return Result.InAllin
+    def decide(self, *,
+               step: Step,
+               to_call: int,
+               min_raise: int,
+               board: Card.Cards,
+               online: bool,
+               **_) -> Result:
 
         Debug.input_decision()
         Debug.input_decision(f'you have {self.get_cards()}')
         if step != Step.Preflop:
-            Debug.input_decision(f'on table {Card.str(cards)}')
-            Debug.input_decision(f'your combination: {HandStrength.max_strength(self.cards.get() + cards)}')
-        Debug.input_decision(f'probability to win: {HoldemPoker.probability(self.cards, cards)}')
+            Debug.input_decision(f'on table {Card.str(board)}')
+            Debug.input_decision(f'your combination: {HandStrength.max_strength(self.cards.get() + board)}')
+        Debug.input_decision(f'probability to win: {HoldemPoker.probability(self.cards, board)}')
 
-        outs, outs_cards = HoldemPoker.calculate_outs(self.cards, cards)
+        outs, outs_cards = HoldemPoker.calculate_outs(self.cards, board)
 
         Debug.input_decision(f'outs: {outs} - {" ".join([card.card for card in outs_cards])}')
         Debug.input_decision()

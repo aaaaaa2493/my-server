@@ -7,11 +7,15 @@ from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame
 from learning.data_sets.decision_model.base_poker_decision import BasePokerDecision
 from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
-from learning.data_sets.decision_model.poker_decision_answer import PokerDecisionAnswer
+from learning.data_sets.decision_model.poker_decision_answer_3 import PokerDecisionAnswer3
 from special.debug import Debug
+from core.cards.card import Card
+from core.cards.cards_pair import CardsPair
+from core.cards.suitability import Suitability
+from holdem.poker.hand_strength import HandStrength
 
 
-class PokerDecision(BasePokerDecision):
+class PokerDecision5(BasePokerDecision):
     def __init__(self):
         super().__init__()
         self.probability_to_win: float = 0
@@ -23,6 +27,10 @@ class PokerDecision(BasePokerDecision):
         self.is_flop: int = 0
         self.is_turn: int = 0
         self.is_river: int = 0
+        self.strength = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.first = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.second = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0, 0]
+        self.have_suited_cards: int = 0
 
     def to_array(self) -> array:
         arr = [
@@ -34,6 +42,8 @@ class PokerDecision(BasePokerDecision):
             self.is_flop,
             self.is_turn,
             self.is_river,
+        ] + self.strength + self.first + self.second + [
+            self.have_suited_cards
         ]
         return array(arr)
 
@@ -46,10 +56,14 @@ class PokerDecision(BasePokerDecision):
                f'prob {self.probability_to_win} '
 
     @staticmethod
-    def create(res: BasePokerDecisionAnswer, prob: float,
-               money: int, pot: int, call: int, bb: int, step: Step) -> 'PokerDecision':
-        if prob < 0 or prob > 1:
-            raise ValueError(f'Probability must be in [0, 1], gived {prob}')
+    def create(res: BasePokerDecisionAnswer,
+               money: int,
+               pot: int,
+               call: int,
+               bb: int,
+               step: Step,
+               cards: CardsPair,
+               board: Card.Cards) -> 'PokerDecision5':
 
         if money < 0:
             raise ValueError(f'Money must be > 0, gived {money}')
@@ -66,12 +80,15 @@ class PokerDecision(BasePokerDecision):
         if pot <= call and step != Step.Preflop:
             raise ValueError(f'Pot must be > call, gived call {call} pot {pot}')
 
-        if type(res) is not PokerDecisionAnswer:
+        if type(res) is not PokerDecisionAnswer3:
             raise ValueError(f'Result must ne instance of PokerDecisionAnswer, gived {res}')
 
-        des = PokerDecision()
+        pr = HoldemPoker.probability(cards, board)
+        strength = HandStrength.get_strength(cards, board)
+
+        des = PokerDecision5()
         des.set_answer(res)
-        des.probability_to_win = prob
+        des.probability_to_win = pr
         des.my_money = money
         des.money_in_pot = pot
         des.money_to_call = call
@@ -85,6 +102,26 @@ class PokerDecision(BasePokerDecision):
             des.is_turn = 1
         elif step == Step.River:
             des.is_river = 1
+        else:
+            raise ValueError('bad step', step)
+
+        int_strength: int = strength.value
+        if int_strength < 0:
+            raise ValueError('strength is < 0', int_strength, strength)
+        des.strength[int_strength] = 1
+
+        rank: int = cards.first.rank.value - 2
+        if rank < 0:
+            raise ValueError('rank is < 0', rank, cards.first.rank)
+        des.first[rank] = 1
+
+        rank: int = cards.second.rank.value - 2
+        if rank < 0:
+            raise ValueError('rank is < 0', rank, cards.second.rank)
+        des.second[rank] = 1
+
+        if cards.suitability == Suitability.Suited:
+            des.have_suited_cards = 1
 
         return des
 
@@ -134,32 +171,53 @@ class PokerDecision(BasePokerDecision):
 
                 elif act.event == Event.Fold:
                     if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
-                        pr = HoldemPoker.probability(act.player.cards, hand.board.get_from_step(step))
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
-                        des = PokerDecision.create(PokerDecisionAnswer.Fold, pr,
-                                                   my_money, pot_size, to_call, bb, step)
+                        des = PokerDecision5.create(
+                            PokerDecisionAnswer3.Fold,
+                            my_money,
+                            pot_size,
+                            to_call,
+                            bb,
+                            step,
+                            act.player.cards,
+                            hand.board.get_from_step(step)
+                        )
                         decisions += [des]
 
                 elif act.event == Event.Check:
                     if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
-                        pr = HoldemPoker.probability(act.player.cards, hand.board.get_from_step(step))
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
-                        des = PokerDecision.create(PokerDecisionAnswer.CheckCall, pr,
-                                                   my_money, pot_size, to_call, bb, step)
+                        des = PokerDecision5.create(
+                            PokerDecisionAnswer3.CheckCall,
+                            my_money,
+                            pot_size,
+                            to_call,
+                            bb,
+                            step,
+                            act.player.cards,
+                            hand.board.get_from_step(step)
+                        )
                         decisions += [des]
 
                 elif act.event == Event.Call:
                     if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
-                        pr = HoldemPoker.probability(act.player.cards, hand.board.get_from_step(step))
                         my_money = money[act.player.name]
                         if raise_amount > my_money + gived[act.player.name]:
                             to_call = my_money
                         else:
                             to_call = raise_amount - gived[act.player.name]
-                        des = PokerDecision.create(PokerDecisionAnswer.CheckCall, pr,
-                                                   my_money, pot_size, to_call, bb, step)
+                        des = PokerDecision5.create(
+                            PokerDecisionAnswer3.CheckCall,
+                            my_money,
+                            pot_size,
+                            to_call,
+                            bb,
+                            step,
+                            act.player.cards,
+                            hand.board.get_from_step(step)
+                        )
                         decisions += [des]
                     pot_size += act.money - gived[act.player.name]
                     money[act.player.name] -= act.money - gived[act.player.name]
@@ -167,11 +225,30 @@ class PokerDecision(BasePokerDecision):
 
                 elif act.event == Event.Raise or act.event == Event.Allin:
                     if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
-                        pr = HoldemPoker.probability(act.player.cards, hand.board.get_from_step(step))
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
-                        des = PokerDecision.create(PokerDecisionAnswer.Raise, pr,
-                                                   my_money, pot_size, to_call, bb, step)
+
+                        actually_raised = act.money - gived[act.player.name]
+                        pot_sized_raise = actually_raised / pot_size
+                        if my_money == actually_raised:
+                            answer = PokerDecisionAnswer3.AllIn
+                        elif pot_sized_raise < 0.25:
+                            answer = PokerDecisionAnswer3.RaiseSmall
+                        elif pot_sized_raise < 0.75:
+                            answer = PokerDecisionAnswer3.RaiseMedium
+                        else:
+                            answer = PokerDecisionAnswer3.RaiseALot
+
+                        des = PokerDecision5.create(
+                            answer,
+                            my_money,
+                            pot_size,
+                            to_call,
+                            bb,
+                            step,
+                            act.player.cards,
+                            hand.board.get_from_step(step)
+                        )
                         decisions += [des]
                     pot_size += act.money - gived[act.player.name]
                     money[act.player.name] -= act.money - gived[act.player.name]

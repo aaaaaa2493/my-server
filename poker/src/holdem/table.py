@@ -1,13 +1,12 @@
 from typing import List, Tuple, Optional
 from threading import Thread, Lock
 from time import sleep
+from statistics import mean
 from holdem.play.result import Result
 from holdem.play.step import Step
 from core.cards.cards_pair import CardsPair
 from holdem.players import Players
 from holdem.player.player import Player
-from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer
-from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
 from core.blinds.blinds import Blinds
 from holdem.board import Board
 from holdem.poker.hand_strength import HandStrength
@@ -204,13 +203,13 @@ class Table:
         with self.lock:
 
             self.in_game = True
-            self.thread = Thread(target=lambda: self.start_game(), name=f'Table {self.id}')
 
             if not self.wait:
 
-                if Debug.Table and Debug.Decision and not self.online:
+                if (Debug.Table or Debug.Decision) and not self.online:
                     self.start_game()
                 else:
+                    self.thread = Thread(target=self.start_game, name=f'Table {self.id}')
                     self.thread.start()
 
     def save_history(self) -> None:
@@ -375,6 +374,8 @@ class Table:
         sb = self.blinds.small_blind
         bb = self.blinds.big_blind
 
+        average_stack_on_start_of_hand = int(mean(p.money for p in self.players.all_players()))
+
         self.collect_ante(ante)
 
         for step in Step:
@@ -400,6 +401,8 @@ class Table:
             min_raise = bb
             can_raise_from = to_call + min_raise
 
+            players_not_decided = self.players.count_in_game_players()
+
             while True:
 
                 if player.money > 0 and player.in_game and self.players.count_in_game_players() > 1 and not (
@@ -411,17 +414,26 @@ class Table:
                         self.network.switch_decision(player)
                         sleep(Delay.SwitchDecision)
 
-                    player_class = type(player)
+                    result = player.make_decision(
+                        online=self.online,
+                        step=step,
+                        to_call=to_call,
+                        min_raise=can_raise_from,
+                        board=self.board.get(),
+                        pot=self.pot.money + sum(p.gived for p in self.players.all_players()),
+                        bb=self.blinds.big_blind,
+                        strength=HandStrength.get_strength(player.cards, self.board.get()),
+                        players_on_table=sum(1 for _ in self.players.all_players()),
+                        players_active=self.players.count_in_game_players(),
+                        players_not_moved=players_not_decided - 1,  # without self
+                        max_playing_stack=max(p.remaining_money() for p in self.players.in_game_players()),
+                        average_stack_on_table=average_stack_on_start_of_hand
+                    )
 
-                    if issubclass(player_class, BaseNeuralNetworkPlayer):
-                        if player_class is Net1Net2Player:
-                            result = player.decide(step, to_call, can_raise_from, self.board.get(),
-                                                   self.pot.money + sum(p.gived for p in self.players.all_players()),
-                                                   self.blinds.big_blind)
-                        else:
-                            raise ValueError('Bad type of neural network')
+                    if result == Result.Raise or result == Result.Allin:
+                        players_not_decided = self.players.count_in_game_players() - 1  # without raiser
                     else:
-                        result = player.decide(step, to_call, can_raise_from, self.board.get(), self.online)
+                        players_not_decided -= 1
 
                     self.log(player, result)
 

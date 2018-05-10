@@ -67,7 +67,7 @@ class Run:
         elif args[0] == '--network-play-tests':
             from holdem.game.game import Game
             from holdem.play.play_manager import PlayManager
-            from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
+            from holdem.player.neural_network.net1_net2_player import Net1Net2Player
             Settings.game_mode = Mode.Testing
             PlayManager.PlayPath = play_path
             game = Game()
@@ -102,39 +102,57 @@ class Run:
             # from learning.neural_network import NeuralNetwork
             # NeuralNetwork.PokerDecision.Bubble(100, 9).show()
             from time import sleep
+            from datetime import datetime
             from pickle import load
+            from statistics import mean
             from holdem.game.game import Game
-            from holdem.player.neural_network.Net1Net2Player import Net1Net2Player
+            from holdem.player.neural_network.net1_net2_player import Net1Net2Player
+            from holdem.player.neural_network.net3_player import Net3Player
+            from holdem.player.neural_network.net6_player import Net6Player
+            from holdem.player.neural_network.net7_player import Net7Player
+            from holdem.player.neural_network.net8_player import Net8Player
+            from holdem.player.neural_network.net9_player import Net9Player
+            from holdem.play.play_manager import PlayManager
+            start_time = datetime.now()
 
-            for _id in range(100):
-                game = Game(players=1000)
-                for _ in range(999):
-                    game.add_bot_player()
-                game.add_nn_player('nn2', Net1Net2Player)
-                print('Start game #', _id + 1)
-                while not game.game_finished:
-                    sleep(1)
+            if 0:
+                for _id in range(400):
+                    game = Game(players=100)
+                    for _ in range(95):
+                        game.add_bot_player()
+                    game.add_nn_player('nn2', Net1Net2Player)
+                    game.add_nn_player('nn6', Net6Player)
+                    game.add_nn_player('nn7', Net7Player)
+                    game.add_nn_player('nn8', Net8Player)
+                    game.add_nn_player('nn9', Net9Player)
+                    print('Start game #', _id + 1)
+                    while not game.game_finished:
+                        sleep(0.01)
+
             plays = load(open('networks/plays', 'rb'))
-            plays = sorted([(k, v) for k, v in plays.items()], key=lambda k: k[1])
+            plays = sorted([(k, v) for k, v in plays.items()], key=lambda k: mean(k[1]))
             for i, play in enumerate(plays):
-                print(f'{i+1:>4}. {play[1]:>6}  {play[0]}')
+                pl = PlayManager.get_play_by_name(play[0])
+                print(f'{i+1:>4}. {round(mean(play[1]), 2):>6} {play[0]:>10}  '
+                      f'(ex {pl.exemplar:>6}) {"*" * pl.wins}')
+            print('It took', datetime.now() - start_time)
 
         elif mode == Mode.UnitTest:
             self.start_unit_tests()
 
         elif mode == Mode.Learning:
             from learning.learning import Learning
-            from learning.data_sets.decision_model.poker_decision import PokerDecision
-            # data.game_parser import GameParser
+            from learning.data_sets.decision_model.poker_decision_8 import PokerDecision8
+            from data.game_parser import GameParser
             from datetime import datetime
             learn = Learning()
-            learn.create_data_set(PokerDecision)
+            learn.create_data_set(PokerDecision8)
             start = datetime.now()
             # GameParser.parse_dir('pack1', False, False)
             # learn.add_data_set('pack1')
-            # learn.save_data_set('nn2 without losers.txt')
-            learn.load_data_set('nn1 only winners.txt')
-            learn.learning('nn1')
+            # learn.save_data_set('nn9 first and second to floats.txt')
+            learn.load_data_set('nn9 first and second to floats.txt')
+            learn.learning('nn9')
             end = datetime.now()
             print('Learning took', end - start)
 

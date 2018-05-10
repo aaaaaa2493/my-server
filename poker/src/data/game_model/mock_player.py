@@ -1,6 +1,7 @@
 from typing import List
 from data.game_model.event import Event
 from data.game_model.player_event import PlayerEvent
+from data.game_model.poker_position import PokerPosition
 from core.cards.cards_pair import CardsPair
 from holdem.play.step import Step
 
@@ -20,6 +21,7 @@ class MockPlayer:
         self.flop: List[PlayerEvent] = []
         self.turn: List[PlayerEvent] = []
         self.river: List[PlayerEvent] = []
+        self.position: PokerPosition = None
 
     def get_list(self, step: Step) -> List[PlayerEvent]:
 

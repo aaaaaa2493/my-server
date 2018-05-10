@@ -16,6 +16,7 @@ from holdem.poker.hand import Hand
 from data.game_model.poker_hand import PokerHand
 from data.game_model.mock_player import MockPlayer
 from data.game_model.event import Event
+from data.game_model.game_source import GameSource
 from special.debug import Debug
 
 
@@ -36,6 +37,7 @@ class PokerGame:
         self.seats: int = 0
         self.hands: List[PokerHand] = []
         self.curr_hand: PokerHand = None
+        self.game_source: GameSource = None
 
     def init(self, id_, name, seats, date, time):
         self.id = id_
