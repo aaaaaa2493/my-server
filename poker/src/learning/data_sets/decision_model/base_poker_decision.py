@@ -20,6 +20,10 @@ class BasePokerDecision:
         raise NotImplementedError('to array')
 
     @staticmethod
+    def initialize(game: PokerGame, hand: PokerHand) -> None:
+        pass
+
+    @staticmethod
     def get_decisions(game: PokerGame, hand: PokerHand) -> List['BasePokerDecision']:
         raise NotImplementedError('get_decisions')
 

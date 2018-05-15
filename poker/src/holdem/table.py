@@ -16,6 +16,8 @@ from special.debug import Debug
 from core.cards.card import Card
 from core.cards.deck import Deck
 from core.pot import Pot
+from data.game_model.table_position import TablePosition
+from data.game_model.table_positions import TablePositions
 
 
 class Table:
@@ -212,6 +214,17 @@ class Table:
                     self.thread = Thread(target=self.start_game, name=f'Table {self.id}')
                     self.thread.start()
 
+    def update_positions(self):
+        players_count = self.players.count
+        position_scheme: TablePosition = TablePositions.get_position(players_count)
+        button = self.players.to_button()
+        for position, count_positions in position_scheme:
+            for _ in range(count_positions):
+                curr_player = self.players.next_player()
+                curr_player.position = position
+        if self.players.get_curr_player() != button:
+            raise ValueError('Something wrong with update positions')
+
     def save_history(self) -> None:
 
         for player in self.players.all_players():
@@ -370,6 +383,8 @@ class Table:
 
         self.players.lock.acquire()
 
+        self.update_positions()
+
         ante = self.blinds.ante
         sb = self.blinds.small_blind
         bb = self.blinds.big_blind
@@ -427,7 +442,11 @@ class Table:
                         players_active=self.players.count_in_game_players(),
                         players_not_moved=players_not_decided - 1,  # without self
                         max_playing_stack=max(p.remaining_money() for p in self.players.in_game_players()),
-                        average_stack_on_table=average_stack_on_start_of_hand
+                        average_stack_on_table=average_stack_on_start_of_hand,
+                        folds_stats=[p.folds[player.position].get_stats() for p in self.players.in_game_players()],
+                        calls_stats=[p.calls[player.position].get_stats() for p in self.players.in_game_players()],
+                        checks_stats=[p.checks[player.position].get_stats() for p in self.players.in_game_players()],
+                        raises_stats=[p.raises[player.position].get_stats() for p in self.players.in_game_players()],
                     )
 
                     if result == Result.Raise or result == Result.Allin:
@@ -436,6 +455,31 @@ class Table:
                         players_not_decided -= 1
 
                     self.log(player, result)
+
+                    if result == Result.Fold:
+                        if step == Step.Preflop:
+                            player.folds[player.position].activate()
+                            player.calls[player.position].skip()
+                        player.raises[player.position].skip()
+                        if can_raise_from == 0 or can_raise_from == player.gived:
+                            player.checks[player.position].skip()
+                    elif result == Result.Check:
+                        if step == Step.Preflop:
+                            player.folds[player.position].skip()
+                        player.checks[player.position].activate()
+                        player.raises[player.position].skip()
+                    elif result == Result.Call:
+                        if step == Step.Preflop:
+                            player.folds[player.position].skip()
+                            player.calls[player.position].activate()
+                        player.raises[player.position].skip()
+                    elif result == Result.Raise or result == Result.Allin:
+                        if step == Step.Preflop:
+                            player.folds[player.position].skip()
+                            player.calls[player.position].skip()
+                        player.raises[player.position].activate()
+                        if can_raise_from == 0 or can_raise_from == player.gived:
+                            player.checks[player.position].skip()
 
                     if self.online:
                         self.network.made_decision(player, result)

@@ -1,4 +1,4 @@
-from typing import List
+from typing import List, Dict
 from datetime import datetime
 from holdem.play.decision import Decision
 from holdem.play.step import Step
@@ -8,6 +8,8 @@ from core.cards.cards_pair import CardsPair
 from holdem.play.play import Play
 from holdem.base_network import BaseNetwork
 from core.cards.card import Card
+from data.game_model.poker_position import PokerPosition
+from data.game_model.player_statistics import PlayerStatistics
 
 
 class Player:
@@ -114,6 +116,31 @@ class Player:
         self.lose_time: int = None
         self.play: Play = play
         self.network: BaseNetwork = net
+        self.position: PokerPosition = None
+        self.folds: Dict[PokerPosition, PlayerStatistics] = {
+            PokerPosition.Blinds: PlayerStatistics(),
+            PokerPosition.Early: PlayerStatistics(),
+            PokerPosition.Middle: PlayerStatistics(),
+            PokerPosition.Late: PlayerStatistics(),
+        }
+        self.calls: Dict[PokerPosition, PlayerStatistics] = {
+            PokerPosition.Blinds: PlayerStatistics(),
+            PokerPosition.Early: PlayerStatistics(),
+            PokerPosition.Middle: PlayerStatistics(),
+            PokerPosition.Late: PlayerStatistics(),
+        }
+        self.raises: Dict[PokerPosition, PlayerStatistics] = {
+            PokerPosition.Blinds: PlayerStatistics(),
+            PokerPosition.Early: PlayerStatistics(),
+            PokerPosition.Middle: PlayerStatistics(),
+            PokerPosition.Late: PlayerStatistics(),
+        }
+        self.checks: Dict[PokerPosition, PlayerStatistics] = {
+            PokerPosition.Blinds: PlayerStatistics(),
+            PokerPosition.Early: PlayerStatistics(),
+            PokerPosition.Middle: PlayerStatistics(),
+            PokerPosition.Late: PlayerStatistics(),
+        }
 
     def __str__(self):
 
