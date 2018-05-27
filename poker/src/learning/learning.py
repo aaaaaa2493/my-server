@@ -30,7 +30,7 @@ class Learning:
         y = self._data.decisions.get_answers()
         Debug.learning(f'Start learning from {y.size} samples')
         x_train, x_test, y_train, y_test = train_test_split(x, y, test_size=0.25)
-        mlp = MLPClassifier(hidden_layer_sizes=(10, 10, 10))
+        mlp = MLPClassifier(hidden_layer_sizes=(200, 100, 100))
         mlp.fit(x_train, y_train)
         Debug.learning('train', mlp.score(x_train, y_train))
         Debug.learning('test ', mlp.score(x_test, y_test))

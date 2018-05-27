@@ -108,25 +108,32 @@ class Run:
             from holdem.game.game import Game
             from holdem.player.neural_network.net1_net2_player import Net1Net2Player
             from holdem.player.neural_network.net3_player import Net3Player
+            from holdem.player.neural_network.net4_player import Net4Player
+            from holdem.player.neural_network.net5_player import Net5Player
             from holdem.player.neural_network.net6_player import Net6Player
             from holdem.player.neural_network.net7_player import Net7Player
             from holdem.player.neural_network.net8_player import Net8Player
             from holdem.player.neural_network.net9_player import Net9Player
             from holdem.player.neural_network.net10_player import Net10Player
+            from holdem.player.neural_network.net11_player import Net11Player
             from holdem.play.play_manager import PlayManager
             start_time = datetime.now()
 
             if 1:
                 for _id in range(400):
                     game = Game(players=100)
-                    for _ in range(94):
+                    for _ in range(90):
                         game.add_bot_player()
                     game.add_nn_player('nn2', Net1Net2Player)
+                    game.add_nn_player('nn3', Net3Player)
+                    game.add_nn_player('nn4', Net4Player)
+                    game.add_nn_player('nn5', Net5Player)
                     game.add_nn_player('nn6', Net6Player)
                     game.add_nn_player('nn7', Net7Player)
                     game.add_nn_player('nn8', Net8Player)
                     game.add_nn_player('nn9', Net9Player)
                     game.add_nn_player('nn10', Net10Player)
+                    game.add_nn_player('nn11', Net11Player)
                     print('Start game #', _id + 1)
                     while not game.game_finished:
                         sleep(0.01)
@@ -144,17 +151,17 @@ class Run:
 
         elif mode == Mode.Learning:
             from learning.learning import Learning
-            from learning.data_sets.decision_model.poker_decision_9 import PokerDecision9
+            from learning.data_sets.decision_model.poker_decision_10 import PokerDecision10
             from data.game_parser import GameParser
             from datetime import datetime
             learn = Learning()
-            learn.create_data_set(PokerDecision9)
+            learn.create_data_set(PokerDecision10)
             start = datetime.now()
             # GameParser.parse_dir('pack1', False, False)
             # learn.add_data_set('pack1')
-            # learn.save_data_set('nn10 call raise check fold stats.txt')
-            learn.load_data_set('nn10 call raise check fold stats.txt')
-            learn.learning('nn10')
+            # learn.save_data_set('nn11 common cards.txt')
+            learn.load_data_set('nn11 common cards.txt')
+            learn.learning('nn11 200x100x100')
             end = datetime.now()
             print('Learning took', end - start)
 
