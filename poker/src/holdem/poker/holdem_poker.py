@@ -1,7 +1,7 @@
 from typing import Tuple
 from lib.pokereval.hand_evaluator import HandEvaluator
 from holdem.poker.hand_strength import HandStrength
-from core.cards.card import Card
+from core.cards.card import Card, Cards
 from core.cards.cards_pair import CardsPair
 
 
@@ -10,18 +10,18 @@ class HoldemPoker:
     MAX_OUTS: int = 21
 
     @staticmethod
-    def probability(c: CardsPair, f: Card.Cards) -> float:
+    def probability(c: CardsPair, f: Cards) -> float:
         pr = HandEvaluator.evaluate_hand([c.first.convert(), c.second.convert()], [card.convert() for card in f])
         # print('EVALUATING', c, 'board', Card.str(f), '=', pr)
         return pr
 
     @staticmethod
-    def calculate_outs(hidden: CardsPair, common: Card.Cards) -> Tuple[int, Card.Cards]:
+    def calculate_outs(hidden: CardsPair, common: Cards) -> Tuple[int, Cards]:
 
         if len(common) == 5 or not common:
             return 0, []
 
-        cards: Card.Cards = [hidden.first, hidden.second] + common
+        cards: Cards = [hidden.first, hidden.second] + common
 
         curr_hand_strength = HandStrength.max_strength(cards).strength
 

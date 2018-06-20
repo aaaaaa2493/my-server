@@ -1,4 +1,4 @@
-from core.cards.card import Card
+from core.cards.card import Card, Cards
 from holdem.player.player import Player
 from holdem.play.play import Play
 from holdem.play.step import Step
@@ -27,7 +27,7 @@ class RealPlayer(Player):
                step: Step,
                to_call: int,
                min_raise: int,
-               board: Card.Cards,
+               board: Cards,
                online: bool,
                **_) -> Result:
 

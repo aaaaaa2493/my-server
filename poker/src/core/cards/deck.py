@@ -9,8 +9,8 @@ class NotEnoughCards(Exception):
 class Deck:
 
     def __init__(self):
-        self.cards: Card.Cards = Card.cards_52()
-        self.used: Card.Cards = []
+        self.cards: Cards = Card.cards_52()
+        self.used: Cards = []
 
     def next(self) -> Card:
 

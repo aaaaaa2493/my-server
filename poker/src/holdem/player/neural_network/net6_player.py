@@ -1,5 +1,5 @@
 from random import random
-from core.cards.card import Card
+from core.cards.card import Cards
 from core.cards.rank import Rank
 from core.cards.suitability import Suitability
 from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer
@@ -15,7 +15,7 @@ class Net6Player(BaseNeuralNetworkPlayer):
                step: Step,
                to_call: int,
                min_raise: int,
-               board: Card.Cards,
+               board: Cards,
                pot: int,
                bb: int,
                strength: Strength,

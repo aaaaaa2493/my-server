@@ -1,6 +1,6 @@
 from time import sleep
 from random import random, uniform
-from core.cards.card import Card
+from core.cards.card import Cards
 from holdem.player.player import Player
 from holdem.play.play import Play
 from holdem.play.play_manager import PlayManager
@@ -23,7 +23,7 @@ class BotPlayer(Player):
                step: Step,
                to_call: int,
                min_raise: int,
-               board: Card.Cards,
+               board: Cards,
                online: bool,
                **_) -> Result:
 

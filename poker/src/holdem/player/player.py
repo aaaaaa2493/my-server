@@ -108,7 +108,7 @@ class Player:
         self.wins: int = 0
         self.in_game: bool = False
         self.in_play: bool = True
-        self.re_seat: 'Players' = None
+        self.re_seat: Players = None
         self.cards: CardsPair = CardsPair()
         self.history: Player.History = Player.History()
         self.hand: Hand = None

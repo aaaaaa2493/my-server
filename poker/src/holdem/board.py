@@ -1,5 +1,5 @@
 from time import sleep
-from core.cards.card import Card
+from core.cards.card import Card, Cards
 from core.cards.deck import Deck
 from holdem.play.step import Step
 from holdem.delay import Delay
@@ -153,10 +153,10 @@ class Board:
         if self.state == Step.Turn:
             self.open_river_with_network(table)
 
-    def get(self) -> Card.Cards:
+    def get(self) -> Cards:
         return self.get_from_step(self.state)
 
-    def get_from_step(self, step: Step) -> Card.Cards:
+    def get_from_step(self, step: Step) -> Cards:
         if step == Step.Preflop:
             return []
 

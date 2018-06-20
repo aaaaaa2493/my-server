@@ -1,3 +1,4 @@
+from __future__ import annotations
 from numpy import array
 from typing import List, Dict, Tuple
 from statistics import mean
@@ -13,7 +14,7 @@ from learning.data_sets.decision_model.base_poker_decision import BasePokerDecis
 from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
 from learning.data_sets.decision_model.poker_decision_answer_3 import PokerDecisionAnswer3
 from special.debug import Debug
-from core.cards.card import Card
+from core.cards.card import Cards
 from core.cards.cards_pair import CardsPair
 from core.cards.suitability import Suitability
 from core.blinds.blinds import Blinds
@@ -156,7 +157,7 @@ class PokerDecision10(BasePokerDecision):
                bb: int,
                step: Step,
                cards: CardsPair,
-               board: Card.Cards,
+               board: Cards,
                players_on_table: int,
                players_active: int,
                players_not_moved: int,
@@ -164,7 +165,7 @@ class PokerDecision10(BasePokerDecision):
                average_stack_on_table: int,
                players: List[MockPlayer],
                folded_players: List[str],
-               my_position: PokerPosition) -> 'PokerDecision10':
+               my_position: PokerPosition) -> PokerDecision10:
 
         if money < 0:
             raise ValueError(f'Money must be > 0, gived {money}')

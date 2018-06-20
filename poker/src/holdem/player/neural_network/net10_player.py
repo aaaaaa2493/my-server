@@ -1,7 +1,7 @@
 from random import random, choice
 from typing import List
 from statistics import mean
-from core.cards.card import Card
+from core.cards.card import Cards
 from core.cards.rank import Rank
 from core.cards.suitability import Suitability
 from core.blinds.blinds import Blinds
@@ -20,7 +20,7 @@ class Net10Player(BaseNeuralNetworkPlayer):
                step: Step,
                to_call: int,
                min_raise: int,
-               board: Card.Cards,
+               board: Cards,
                pot: int,
                bb: int,
                strength: Strength,

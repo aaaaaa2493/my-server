@@ -14,7 +14,7 @@ class TablePositions(Enum):
     Handed2 = TablePosition(0, 0, 0, 2)
 
     @classmethod
-    def get_position(cls, players_count: int) -> 'TablePosition':
+    def get_position(cls, players_count: int) -> TablePosition:
         if players_count == 2:
             return TablePositions.Handed2.value
         elif players_count == 3:

@@ -1,4 +1,5 @@
-from typing import List, Optional, Iterator
+from __future__ import annotations
+from typing import List, Iterator
 from threading import Lock
 from time import sleep
 from holdem.player.player import Player
@@ -8,13 +9,11 @@ from holdem.network import Network
 
 class Players:
 
-    TablePlayers = List[Optional[Player]]
-
     def __init__(self, game, seats: int, _id: int, is_final: bool):
         
         self.game = game
-        self.players: Players.TablePlayers = [None] * seats
-        self.controlled: Players.TablePlayers = []
+        self.players: TablePlayers = [None] * seats
+        self.controlled: TablePlayers = []
         self.network: Network = None
         self.online: bool = False
 
@@ -179,7 +178,7 @@ class Players:
         self.curr_player = save_curr_player
         return length
 
-    def sort_by_nearest_to_button(self, players: TablePlayers) -> 'Players.TablePlayers':
+    def sort_by_nearest_to_button(self, players: TablePlayers) -> TablePlayers:
 
         return sorted(players, key=lambda p: self.length_to_button(p))
 
@@ -260,7 +259,7 @@ class Players:
                 self.next_free_seat()
                 self.sit_player(player, from_other_table)
 
-    def remove_player(self, players: 'Players') -> None:
+    def remove_player(self, players: Players) -> None:
 
         if self.count == 0:
             raise ValueError('No one to remove')
@@ -338,3 +337,6 @@ class Players:
         return '\n'.join('     Empty seat' if p is None else
                          f'{self.player_position(p)} {p.get_cards()} {p.name} money = {p.money}'
                          for p in self.players)
+
+
+TablePlayers = List[Player]

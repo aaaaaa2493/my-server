@@ -1,5 +1,5 @@
 from random import random
-from core.cards.card import Card
+from core.cards.card import Cards
 from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer
 from holdem.poker.holdem_poker import HoldemPoker
 from holdem.play.step import Step
@@ -12,7 +12,7 @@ class Net4Player(BaseNeuralNetworkPlayer):
                step: Step,
                to_call: int,
                min_raise: int,
-               board: Card.Cards,
+               board: Cards,
                pot: int,
                bb: int,
                **_) -> Result:

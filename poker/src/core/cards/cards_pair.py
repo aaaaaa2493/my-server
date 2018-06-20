@@ -1,3 +1,4 @@
+from __future__ import annotations
 from core.cards.card import Card
 from core.cards.rank import Rank
 from core.cards.suitability import Suitability
@@ -99,7 +100,7 @@ class CardsPair:
 
         return Suitability.Offsuited
 
-    def get(self) -> Card.Cards:
+    def get(self) -> Cards:
         return [self.first, self.second]
 
     def drop(self) -> None:
@@ -137,7 +138,7 @@ class CardsPair:
 
         raise NotInitializedCards('Pair of cards is not initialized')
 
-    def __gt__(self, opp: 'CardsPair') -> bool:
+    def __gt__(self, opp: CardsPair) -> bool:
 
         if self.first.rank == self.second.rank:
             if opp.first.rank != opp.second.rank:
@@ -164,10 +165,10 @@ class CardsPair:
 
         return False
 
-    def __eq__(self, other: 'CardsPair') -> bool:
+    def __eq__(self, other: CardsPair) -> bool:
         return self.first == other.first and self.second == other.second
 
-    def __ne__(self, other: 'CardsPair') -> bool:
+    def __ne__(self, other: CardsPair) -> bool:
         return not self.__eq__(other)
 
     def __str__(self):

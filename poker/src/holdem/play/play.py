@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List, Tuple
 from functools import lru_cache
 from copy import deepcopy
@@ -71,7 +72,7 @@ class Play:
         self.turn.mutate(percent)
         self.river.mutate(percent)
 
-    def get_mutated(self, percent: float = 0.1) -> 'Play':
+    def get_mutated(self, percent: float = 0.1) -> Play:
 
         mutated = deepcopy(self)
         mutated.previous = self.exemplar

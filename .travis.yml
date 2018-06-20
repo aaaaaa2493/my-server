@@ -1,12 +1,11 @@
 language: python
 python:
-  - "3.6"
+  - "3.7-dev"
 install:
   - pip install websocket-client
   - pip install numpy
   - pip install scipy
   - pip install scikit-learn
-  - pip install matplotlib
 script:
   - cd poker
   - python src/main.py --unit-tests

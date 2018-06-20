@@ -1,6 +1,6 @@
 from itertools import combinations
 from core.cards.rank import Rank
-from core.cards.card import Card
+from core.cards.card import Card, Cards
 from core.cards.cards_pair import CardsPair
 from holdem.poker.hand import Hand
 from holdem.poker.strength import Strength
@@ -8,7 +8,7 @@ from holdem.poker.strength import Strength
 
 class HandStrength:
     @staticmethod
-    def get_strength(cards: CardsPair, board: Card.Cards) -> Strength:
+    def get_strength(cards: CardsPair, board: Cards) -> Strength:
         if not len(board):
             return HandStrength.strength2(cards.first, cards.second).strength
         return HandStrength.max_strength([cards.first, cards.second] + board).strength
@@ -147,5 +147,5 @@ class HandStrength:
         return Hand([c1, None, None, None, None], Strength.Nothing, c1.rank)
 
     @staticmethod
-    def max_strength(cards: Card.Cards) -> Hand:
+    def max_strength(cards: Cards) -> Hand:
         return max(HandStrength.strength(*c) for c in combinations(cards, 5))

@@ -1,3 +1,4 @@
+from __future__ import annotations
 from numpy import array
 from typing import List, Dict
 from holdem.poker.holdem_poker import HoldemPoker
@@ -9,7 +10,7 @@ from learning.data_sets.decision_model.base_poker_decision import BasePokerDecis
 from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
 from learning.data_sets.decision_model.poker_decision_answer_3 import PokerDecisionAnswer3
 from special.debug import Debug
-from core.cards.card import Card
+from core.cards.card import Cards
 from core.cards.cards_pair import CardsPair
 from core.cards.suitability import Suitability
 from core.blinds.blinds import Blinds
@@ -79,12 +80,12 @@ class PokerDecision8(BasePokerDecision):
                bb: int,
                step: Step,
                cards: CardsPair,
-               board: Card.Cards,
+               board: Cards,
                players_on_table: int,
                players_active: int,
                players_not_moved: int,
                max_playing_stack: int,
-               average_stack_on_table: int) -> 'PokerDecision8':
+               average_stack_on_table: int) -> PokerDecision8:
 
         if money < 0:
             raise ValueError(f'Money must be > 0, gived {money}')

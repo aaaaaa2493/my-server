@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List, Tuple, Iterator, Dict
 from os import mkdir, makedirs, listdir
 from os.path import exists
@@ -73,16 +74,16 @@ class PokerGame:
         dump(self, open(path, 'wb'))
 
     @staticmethod
-    def load_dir(path: str) -> List['PokerGame']:
+    def load_dir(path: str) -> List[PokerGame]:
         return [game for game in PokerGame.load_dir_gen(path)]
 
     @staticmethod
-    def load_dir_gen(path: str) -> Iterator['PokerGame']:
+    def load_dir_gen(path: str) -> Iterator[PokerGame]:
         for curr_path in listdir(PokerGame.path_to_parsed_games + path):
             yield PokerGame.load(path + '/' + curr_path)
 
     @staticmethod
-    def load(path: str) -> 'PokerGame':
+    def load(path: str) -> PokerGame:
         Debug.parser(f'Loading {path}')
         return load(open(PokerGame.path_to_parsed_games + path, 'rb'))
 
