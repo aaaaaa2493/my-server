@@ -3,12 +3,8 @@ python:
   - "3.7-dev"
 install:
   - pip install websocket-client
-  - wget 188.134.82.95/lib/np -O numpy-1.14.3+mkl-cp37-cp37m-win_amd64.whl
-  - wget 188.134.82.95/lib/sp -O scipy-1.1.0-cp37-cp37m-win_amd64.whl
-  - wget 188.134.82.95/lib/sl -O scikit_learn-0.19.1-cp37-cp37m-win_amd64.whl
-  - pip install numpy-1.14.3+mkl-cp37-cp37m-win_amd64.whl
-  - pip install scipy-1.1.0-cp37-cp37m-win_amd64.whl
-  - pip install scikit_learn-0.19.1-cp37-cp37m-win_amd64.whl
+  - pip install numpy
+  - pip install scikit-learn
 script:
   - cd poker
   - python src/main.py --unit-tests
