@@ -1481,7 +1481,7 @@ class Server:
 
     else:
         ip = '188.134.82.95'
-        local_ip = '192.168.0.101'
+        local_ip = '192.168.0.100'
 
     port = 9001
 
@@ -1864,6 +1864,10 @@ if __name__ == '__main__':
             file.write(_error.body.split("'")[1] + '\n')
 
         return template(ERROR_PAGE_TEMPLATE, e=_error)
+
+    @route('/lib/<file:path>')
+    def static_serve(file):
+        return static_file(file, root='lib')
 
 
     run(host=Server.local_ip, port=80)
