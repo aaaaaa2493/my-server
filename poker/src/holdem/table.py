@@ -463,8 +463,6 @@ class Table:
             winner = max(p for p in self.players.in_game_players())
             winner.wins += winner.in_pot
 
-            winner.win_without_showdown(self.board.state)
-
             for player in self.players.all_players():
                 if player != winner:
                     if winner.in_pot >= player.in_pot:

@@ -1,5 +1,5 @@
 from __future__ import annotations
-from typing import List, Iterator
+from typing import List, Iterator, Optional
 from threading import Lock
 from time import sleep
 from holdem.player.player import Player
@@ -322,4 +322,4 @@ class Players:
                          for p in self.players)
 
 
-TablePlayers = List[Player]
+TablePlayers = List[Optional[Player]]

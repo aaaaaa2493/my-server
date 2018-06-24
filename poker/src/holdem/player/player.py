@@ -1,5 +1,4 @@
 from datetime import datetime
-from holdem.play.step import Step
 from holdem.play.result import Result
 from holdem.poker.hand import Hand
 from core.cards.cards_pair import CardsPair
@@ -93,25 +92,6 @@ class Player:
     def wait_to_resit(self) -> bool:
 
         return self.re_seat is not None
-
-    def win_without_showdown(self, step: Step) -> None:
-
-        self.play.wins_before_showdown += 1
-
-        if step == Step.Preflop:
-            self.play.preflop.wins += 1
-
-        elif step == Step.Flop:
-            self.play.flop.wins += 1
-
-        elif step == Step.Turn:
-            self.play.turn.wins += 1
-
-        elif step == Step.River:
-            self.play.river.wins += 1
-
-        else:
-            raise ValueError(f'Undefined step id {step}')
 
     def set_lose_time(self, stack: int = 0, place: int = 0) -> None:
 
