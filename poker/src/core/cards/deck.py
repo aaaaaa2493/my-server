@@ -1,5 +1,5 @@
 from random import shuffle
-from core.cards.card import Card
+from core.cards.card import Card, Cards
 
 
 class NotEnoughCards(Exception):
