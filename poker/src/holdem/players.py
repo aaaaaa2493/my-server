@@ -26,7 +26,6 @@ class Players:
         self.total_seats: int = seats
         self.count: int = 0
         self.is_final: bool = is_final
-        self.game_without_small_blind: bool = False
         self.lock: Lock = Lock()
 
     def move_button(self) -> None:
@@ -104,9 +103,6 @@ class Players:
 
     def to_small_blind(self) -> Player:
 
-        if self.game_without_small_blind:
-            raise ValueError('This table play hand without small blind')
-
         if self.count == 2:
             return self.to_button()
         else:
@@ -114,12 +110,7 @@ class Players:
             return self.next_player()
 
     def to_big_blind(self) -> Player:
-
-        if self.game_without_small_blind:
-            self.to_button()
-        else:
-            self.to_small_blind()
-
+        self.to_small_blind()
         return self.next_player()
 
     def all_players(self) -> Iterator[Player]:
@@ -191,10 +182,9 @@ class Players:
         if player == curr:
             return '  D '
 
-        if not self.game_without_small_blind:
-            curr = self.next_player()
-            if player == curr:
-                return ' SB '
+        curr = self.next_player()
+        if player == curr:
+            return ' SB '
 
         curr = self.next_player()
         if player == curr:
@@ -299,12 +289,8 @@ class Players:
 
         losers: List[Player] = []
 
-        self.game_without_small_blind = False
         for player in self.all_players():
             if player.money == 0:
-
-                if player == self.to_big_blind() and self.count > 3:
-                    self.game_without_small_blind = True
 
                 losers += [player]
                 player.in_play = False
@@ -328,9 +314,6 @@ class Players:
                 loser.play.busy = False
 
             self.delete_player(loser)
-
-        if self.game_without_small_blind and self.count < 3:
-            self.game_without_small_blind = False
 
     def __str__(self):
 

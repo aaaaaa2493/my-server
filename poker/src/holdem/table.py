@@ -145,18 +145,6 @@ class Table:
                 self.network.blinds(player1, [(player1, paid1), (player2, paid2)])
                 sleep(Delay.Blinds)
 
-        elif self.players.game_without_small_blind and self.players.next_seat() is None:
-            player1 = self.players.to_button()
-            self.log(player1, Result.Button)
-
-            player2 = self.players.next_player()
-            paid2 = player2.pay(bb)
-            self.log(player2, Result.BigBlind, paid2)
-
-            if self.online:
-                self.network.blinds(player1, [(player2, paid2)])
-                sleep(Delay.Blinds)
-
         else:
             player1 = self.players.to_button()
             self.log(player1, Result.Button)
