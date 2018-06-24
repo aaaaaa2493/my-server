@@ -1,6 +1,4 @@
-from typing import List, Dict
 from datetime import datetime
-from holdem.play.decision import Decision
 from holdem.play.step import Step
 from holdem.play.result import Result
 from holdem.poker.hand import Hand
@@ -9,93 +7,9 @@ from holdem.play.play import Play
 from holdem.base_network import BaseNetwork
 from core.cards.card import Card
 from data.game_model.poker_position import PokerPosition
-from data.game_model.player_statistics import PlayerStatistics
 
 
 class Player:
-
-    class History:
-
-        Decisions = List[Decision]
-
-        def __init__(self):
-
-            self.preflop: Decision = None
-            self.flop: Decision = None
-            self.turn: Decision = None
-            self.river: Decision = None
-
-        def drop(self) -> None:
-
-            self.preflop: Decision = None
-            self.flop: Decision = None
-            self.turn: Decision = None
-            self.river: Decision = None
-
-        def set(self, step: Step, result: Result,
-                raise_counter: int, all_in: bool) -> None:
-
-            if result == Result.Fold:
-                decision = Decision.Fold
-
-            elif result == Result.Check:
-                decision = Decision.Check
-
-            elif result == Result.Call:
-                if all_in:
-                    decision = Decision.CallA
-
-                elif raise_counter == 1:
-                    decision = Decision.CheckCall
-
-                elif raise_counter == 2:
-                    decision = Decision.CallR
-
-                elif raise_counter == 3:
-                    decision = Decision.Call3
-
-                elif raise_counter >= 4:
-                    decision = Decision.Call4
-
-                else:
-                    raise ValueError('Wrong call decision when raise counter == 0')
-
-            elif result == Result.Raise:
-                if raise_counter == 0:
-                    decision = Decision.Bet
-
-                elif raise_counter == 1:
-                    decision = Decision.Raise
-
-                elif raise_counter == 2:
-                    decision = Decision.Bet3
-
-                elif raise_counter >= 3:
-                    decision = Decision.Bet4
-
-                else:
-                    raise ValueError('Wrong raise counter')
-
-            elif result == Result.Allin:
-                decision = Decision.Allin
-
-            else:
-                raise ValueError(f'Wrong result id {result}')
-
-            if step == Step.Preflop:
-                self.preflop: Decision = Decision.update(self.preflop, decision)
-
-            elif step == Step.Flop:
-                self.flop: Decision = Decision.update(self.flop, decision)
-
-            elif step == Step.Turn:
-                self.turn: Decision = Decision.update(self.turn, decision)
-
-            elif step == Step.River:
-                self.river: Decision = Decision.update(self.river, decision)
-
-            else:
-                raise ValueError(f'Undefined step id {step}')
 
     def __init__(self, _id: int, money: int, controlled: bool, name: str, play: Play, net: BaseNetwork):
 
@@ -110,37 +24,12 @@ class Player:
         self.in_play: bool = True
         self.re_seat: Players = None
         self.cards: CardsPair = CardsPair()
-        self.history: Player.History = Player.History()
         self.hand: Hand = None
         self.controlled: bool = controlled
         self.lose_time: int = None
         self.play: Play = play
         self.network: BaseNetwork = net
         self.position: PokerPosition = None
-        self.folds: Dict[PokerPosition, PlayerStatistics] = {
-            PokerPosition.Blinds: PlayerStatistics(),
-            PokerPosition.Early: PlayerStatistics(),
-            PokerPosition.Middle: PlayerStatistics(),
-            PokerPosition.Late: PlayerStatistics(),
-        }
-        self.calls: Dict[PokerPosition, PlayerStatistics] = {
-            PokerPosition.Blinds: PlayerStatistics(),
-            PokerPosition.Early: PlayerStatistics(),
-            PokerPosition.Middle: PlayerStatistics(),
-            PokerPosition.Late: PlayerStatistics(),
-        }
-        self.raises: Dict[PokerPosition, PlayerStatistics] = {
-            PokerPosition.Blinds: PlayerStatistics(),
-            PokerPosition.Early: PlayerStatistics(),
-            PokerPosition.Middle: PlayerStatistics(),
-            PokerPosition.Late: PlayerStatistics(),
-        }
-        self.checks: Dict[PokerPosition, PlayerStatistics] = {
-            PokerPosition.Blinds: PlayerStatistics(),
-            PokerPosition.Early: PlayerStatistics(),
-            PokerPosition.Middle: PlayerStatistics(),
-            PokerPosition.Late: PlayerStatistics(),
-        }
 
     def __str__(self):
 
@@ -225,33 +114,6 @@ class Player:
 
         else:
             raise ValueError(f'Undefined step id {step}')
-
-    def save_decisions(self) -> None:
-
-        self.play.total_hands += 1
-
-        for step in Step:
-
-            if step == Step.Preflop:
-                curr = self.history.preflop
-                play = self.play.preflop
-
-            elif step == Step.Flop:
-                curr = self.history.flop
-                play = self.play.flop
-
-            elif step == Step.Turn:
-                curr = self.history.turn
-                play = self.play.turn
-
-            else:
-                curr = self.history.river
-                play = self.play.river
-
-            if curr is not None:
-                play.add(curr)
-
-        self.history.drop()
 
     def set_lose_time(self, stack: int = 0, place: int = 0) -> None:
 
