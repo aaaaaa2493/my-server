@@ -14,7 +14,7 @@ class Player:
         self.id: int = _id
         self.name: str = name
         self.money: int = money
-        self.money_last_time: int = money
+        self.money_start_of_hand: int = money
         self.gived: int = 0
         self.in_pot: int = 0
         self.wins: int = 0

@@ -296,13 +296,13 @@ class Players:
                 player.in_play = False
 
             else:
-                player.money_last_time = player.money
+                player.money_start_of_hand = player.money
 
-        loser_stacks = sorted(player.money_last_time for player in losers)
+        loser_stacks = sorted(player.money_start_of_hand for player in losers)
         loser_sits = sorted([self.length_to_button(player) for player in losers], reverse=True)
 
         for loser in losers:
-            loser.set_lose_time(loser_stacks.index(loser.money_last_time),
+            loser.set_lose_time(loser_stacks.index(loser.money_start_of_hand),
                                 loser_sits.index(self.length_to_button(loser)))
 
         for loser in losers:

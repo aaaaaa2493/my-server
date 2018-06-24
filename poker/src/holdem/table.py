@@ -418,14 +418,14 @@ class Table:
         results = []
 
         for player in self.players.all_players():
-            if player.money > player.money_last_time:
+            if player.money > player.money_start_of_hand:
 
                 results += [f'{player.name} wins {player.money - player.money_last_time}']
 
                 Debug.table(f'Table {self.id} hand {self.board.hand}: '
                             f'player {player.name} wins {player.money - player.money_last_time} '
                             f'and has {player.money} money')
-            elif player.money < player.money_last_time:
+            elif player.money < player.money_start_of_hand:
 
                 results += [f'{player.name} loses {player.money_last_time - player.money}']
 
