@@ -1,7 +1,6 @@
 from typing import List, Optional
 from threading import Thread, Lock
 from time import sleep
-from statistics import mean
 from holdem.play.result import Result
 from holdem.play.step import Step
 from holdem.players import Players
@@ -230,8 +229,6 @@ class Table:
         ante = self.blinds.ante
         sb = self.blinds.small_blind
         bb = self.blinds.big_blind
-
-        average_stack_on_start_of_hand = int(mean(p.money for p in self.players.all_players()))
 
         self.collect_ante(ante)
 
