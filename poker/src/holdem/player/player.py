@@ -6,7 +6,6 @@ from core.cards.cards_pair import CardsPair
 from holdem.play.play import Play
 from holdem.base_network import BaseNetwork
 from core.cards.card import Card
-from data.game_model.poker_position import PokerPosition
 
 
 class Player:
@@ -29,7 +28,6 @@ class Player:
         self.lose_time: int = None
         self.play: Play = play
         self.network: BaseNetwork = net
-        self.position: PokerPosition = None
 
     def __str__(self):
 

@@ -14,8 +14,6 @@ from holdem.delay import Delay
 from special.debug import Debug
 from core.cards.deck import Deck
 from core.pot import Pot
-from data.game_model.table_position import TablePosition
-from data.game_model.table_positions import TablePositions
 
 
 class Table:
@@ -97,17 +95,6 @@ class Table:
                 else:
                     self.thread = Thread(target=self.start_game, name=f'Table {self.id}')
                     self.thread.start()
-
-    def update_positions(self):
-        players_count = self.players.count
-        position_scheme: TablePosition = TablePositions.get_position(players_count)
-        button = self.players.to_button()
-        for position, count_positions in position_scheme:
-            for _ in range(count_positions):
-                curr_player = self.players.next_player()
-                curr_player.position = position
-        if self.players.get_curr_player() != button:
-            raise ValueError('Something wrong with update positions')
 
     def collect_ante(self, ante: int) -> None:
 
@@ -251,8 +238,6 @@ class Table:
             self.first_hand = False
 
         self.players.lock.acquire()
-
-        self.update_positions()
 
         ante = self.blinds.ante
         sb = self.blinds.small_blind
