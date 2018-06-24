@@ -1,5 +1,7 @@
 from datetime import datetime
+from typing import Tuple
 from holdem.play.result import Result
+from holdem.play.option import Option
 from holdem.poker.hand import Hand
 from core.cards.cards_pair import CardsPair
 from holdem.play.play import Play
@@ -104,7 +106,51 @@ class Player:
         if self.money == 0 and self.in_game:
             return Result.InAllin
 
-        return self.decide(**kwargs)
+        answer, raised_money = self._decide(**kwargs)
+        raised_money = int(raised_money)
 
-    def decide(self, **kwargs) -> Result:
+        if answer is Option.Fold:
+            self.fold()
+            return Result.Fold
+
+        elif answer is Option.CheckCall:
+            to_call: int = kwargs['to_call']
+            if self.remaining_money() > to_call:
+                #  Если игрок вернул CheckCall но колоть нечего то очевидно чек
+                if to_call == 0 or self.gived == to_call:
+                    return Result.Check
+                else:
+                    self.pay(to_call)
+                    return Result.Call
+            else:
+                self.go_all_in()
+                return Result.Call
+
+        elif answer is Option.Raise:
+            to_call = kwargs['to_call']
+            min_raise = kwargs['min_raise']
+            if self.remaining_money() > to_call:
+
+                if raised_money < min_raise:
+                    raised_money = min_raise
+
+                if raised_money > self.remaining_money():
+                    raised_money = self.remaining_money()
+
+                if raised_money == self.remaining_money():
+                    self.go_all_in()
+                    return Result.Allin
+
+                self.pay(raised_money)
+                return Result.Raise
+
+            else:
+                self.go_all_in()
+                return Result.Call
+
+        else:
+            self.fold()
+            return Result.Fold
+
+    def _decide(self, **kwargs) -> Tuple[Option, int]:
         raise NotImplementedError('decide')

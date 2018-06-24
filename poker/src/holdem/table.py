@@ -279,12 +279,6 @@ class Table:
                         board=self.board.get(),
                         pot=self.pot.money + sum(p.gived for p in self.players.all_players()),
                         bb=self.blinds.big_blind,
-                        strength=HandStrength.get_strength(player.cards, self.board.get()),
-                        players_on_table=sum(1 for _ in self.players.all_players()),
-                        players_active=self.players.count_in_game_players(),
-                        players_not_moved=players_not_decided - 1,  # without self
-                        max_playing_stack=max(p.remaining_money() for p in self.players.in_game_players()),
-                        average_stack_on_table=average_stack_on_start_of_hand,
                     )
 
                     if result == Result.Raise or result == Result.Allin:

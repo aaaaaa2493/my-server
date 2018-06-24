@@ -114,15 +114,13 @@ class Run:
             from holdem.player.neural_network.net7_player import Net7Player
             from holdem.player.neural_network.net8_player import Net8Player
             from holdem.player.neural_network.net9_player import Net9Player
-            from holdem.player.neural_network.net10_player import Net10Player
-            from holdem.player.neural_network.net11_player import Net11Player
             from holdem.play.play_manager import PlayManager
             start_time = datetime.now()
 
             if 1:
                 for _id in range(400):
                     game = Game(players=100)
-                    for _ in range(90):
+                    for _ in range(92):
                         game.add_bot_player()
                     game.add_nn_player('nn2', Net1Net2Player)
                     game.add_nn_player('nn3', Net3Player)
@@ -132,8 +130,6 @@ class Run:
                     game.add_nn_player('nn7', Net7Player)
                     game.add_nn_player('nn8', Net8Player)
                     game.add_nn_player('nn9', Net9Player)
-                    game.add_nn_player('nn10', Net10Player)
-                    game.add_nn_player('nn11', Net11Player)
                     print('Start game #', _id + 1)
                     while not game.game_finished:
                         sleep(0.01)
