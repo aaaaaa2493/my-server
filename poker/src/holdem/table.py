@@ -420,17 +420,17 @@ class Table:
         for player in self.players.all_players():
             if player.money > player.money_start_of_hand:
 
-                results += [f'{player.name} wins {player.money - player.money_last_time}']
+                results += [f'{player.name} wins {player.money - player.money_start_of_hand}']
 
                 Debug.table(f'Table {self.id} hand {self.board.hand}: '
-                            f'player {player.name} wins {player.money - player.money_last_time} '
+                            f'player {player.name} wins {player.money - player.money_start_of_hand} '
                             f'and has {player.money} money')
             elif player.money < player.money_start_of_hand:
 
-                results += [f'{player.name} loses {player.money_last_time - player.money}']
+                results += [f'{player.name} loses {player.money_start_of_hand - player.money}']
 
                 Debug.table(f'Table {self.id} hand {self.board.hand}: '
-                            f'player {player.name} loses {player.money_last_time - player.money} '
+                            f'player {player.name} loses {player.money_start_of_hand - player.money} '
                             f'and has {player.money} money')
             else:
                 Debug.table(f'Table {self.id} hand {self.board.hand}: player {player.name} has {player.money} money')
@@ -487,7 +487,6 @@ class Table:
 
                 Debug.table(f'Table {self.id} hand {self.board.hand}: '
                             f'{player.get_cards()}, {player.name} has {player.hand}')
-                player.play.goes_to_showdown += 1
 
             hand_results.sort(reverse=True, key=lambda x: x[0])
 
@@ -500,9 +499,6 @@ class Table:
                 wins_hand = max(player.hand for player in self.players.in_game_players())
                 players_wins = [p for p in self.players.in_game_players() if p.hand == wins_hand]
                 count_winners = len(players_wins)
-
-                for player in players_wins:
-                    player.play.wins_after_showdown += 1
 
                 Debug.table(f"Table {self.id} hand {self.board.hand}: "
                             f"{', '.join(p.name for p in players_wins)} wins with {wins_hand}")
