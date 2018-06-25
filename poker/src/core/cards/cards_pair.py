@@ -1,5 +1,5 @@
+from typing import List
 from core.cards.card import Card, Cards
-from core.cards.rank import Rank
 from core.cards.suitability import Suitability
 
 
@@ -8,6 +8,10 @@ class CanNotAddAnotherCard(Exception):
 
 
 class NotInitializedCards(Exception):
+    pass
+
+
+class InitializeWithSameCard(Exception):
     pass
 
 
@@ -34,6 +38,9 @@ class CardsPair:
 
         if first is not None and second is not None:
 
+            if first == second:
+                raise InitializeWithSameCard('Can not initialize with same card')
+
             if first >= second:
                 self.first: Card = first
                 self.second: Card = second
@@ -48,6 +55,15 @@ class CardsPair:
         else:
             self.first: Card = None
             self.second: Card = None
+
+    @staticmethod
+    def get_all_pairs() -> List['CardsPair']:
+        pairs: List['CardsPair'] = []
+        for card1 in Card.cards_52():
+            for card2 in Card.cards_52():
+                if card1 > card2:
+                    pairs += [CardsPair(card1, card2)]
+        return pairs
 
     def initialized(self) -> bool:
         return self.second is not None
@@ -76,7 +92,9 @@ class CardsPair:
         if self.first is None:
             self.first = card
         elif self.second is None:
-            if card.rank > self.first.rank:
+            if self.first == card:
+                raise InitializeWithSameCard('Can not initialize with same card')
+            if card > self.first:
                 self.second = self.first
                 self.first = card
             else:
