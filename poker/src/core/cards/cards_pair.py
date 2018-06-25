@@ -1,4 +1,4 @@
-from core.cards.card import Card
+from core.cards.card import Card, Cards
 from core.cards.rank import Rank
 from core.cards.suitability import Suitability
 
@@ -99,7 +99,7 @@ class CardsPair:
 
         return Suitability.Offsuited
 
-    def get(self) -> Card.Cards:
+    def get(self) -> Cards:
         return [self.first, self.second]
 
     def drop(self) -> None:

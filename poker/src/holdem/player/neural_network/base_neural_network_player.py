@@ -1,9 +1,10 @@
 from pickle import load
 from numpy import array
-from typing import Callable
+from typing import Callable, Tuple
 from sklearn.neural_network import MLPClassifier
 from holdem.player.player import Player
 from holdem.play.play import Play
+from holdem.play.option import Option
 from holdem.base_network import BaseNetwork
 
 
@@ -17,7 +18,7 @@ class BaseNeuralNetworkPlayer(Player):
     def create_input(*args):
         return array([array(args)])
 
-    def decide(self, **kwargs):
+    def _decide(self, **kwargs) -> Tuple[Option, int]:
         raise NotImplementedError('NeuralNetworkPlayer::decide')
 
 

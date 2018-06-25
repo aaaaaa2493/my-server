@@ -10,7 +10,7 @@ from core.blinds.scheme.scheme import Scheme
 from core.blinds.scheme.schemes import Schemes
 from core.blinds.timed_blinds import TimedBlinds
 from holdem.delay import Delay
-from holdem.table import Table
+from holdem.table import Table, Tables
 from holdem.player.player import Player
 from holdem.player.bot_player import BotPlayer
 from holdem.player.real_player import RealPlayer
@@ -43,12 +43,12 @@ class Game(BaseGame):
         self.players: List[Player] = []
 
         if self.total_tables == 1:
-            self.tables: Table.Tables = [Table(self, 0, seats, self.blinds, True)]
+            self.tables: Tables = [Table(self, 0, seats, self.blinds, True)]
             self.final_table = self.tables[0]
 
         else:
-            self.tables: Table.Tables = [Table(self, _id, seats, self.blinds, False)
-                                         for _id in range(1, self.total_tables + 1)]
+            self.tables: Tables = [Table(self, _id, seats, self.blinds, False)
+                                   for _id in range(1, self.total_tables + 1)]
             self.final_table = Table(self, 0, self.total_seats, self.blinds, True)
 
         self.average_stack: int = None
@@ -147,7 +147,7 @@ class Game(BaseGame):
                 sleep(Delay.BlindsIncreased)
 
     @staticmethod
-    def get_first_free_table(tables: Table.Tables) -> Table:
+    def get_first_free_table(tables: Tables) -> Table:
 
         while True:
 
@@ -302,10 +302,10 @@ class Game(BaseGame):
             for place, player in enumerate(sorted_players[:10]):
                 Debug.evolution(f'{place+1:>4}) {player.play}')
 
+        plays = {}
+
         if Settings.game_mode == Mode.Testing:
-            if not exists('networks/plays'):
-                plays = {}
-            else:
+            if exists('networks/plays'):
                 plays = load(open('networks/plays', 'rb'))
 
         for place, player in enumerate(sorted_players):

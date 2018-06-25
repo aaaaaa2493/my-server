@@ -6,17 +6,15 @@ from lib.pokereval.card import Card as _Card
 
 class Card:
 
-    Cards = List['Card']
-
     UndefinedCard: str = 'UP'
     EmptyCard: str = 'ZZ'
 
     @staticmethod
-    def cards_52() -> Cards:
+    def cards_52() -> 'Cards':
         return [Card(value + suit) for value in Ranks for suit in Suits]
 
     @staticmethod
-    def str(cards: Cards) -> str:
+    def str(cards: 'Cards') -> str:
         return ' '.join(card.card for card in cards)
 
     def __init__(self, card: str):
@@ -71,3 +69,6 @@ class Card:
 
     def __ne__(self, other: 'Card') -> bool:
         return (self.rank, self.suit) != (other.rank, other.suit)
+
+
+Cards = List[Card]

@@ -1,8 +1,7 @@
-from typing import List
 from datetime import datetime
-from holdem.play.decision import Decision
-from holdem.play.step import Step
+from typing import Tuple
 from holdem.play.result import Result
+from holdem.play.option import Option
 from holdem.poker.hand import Hand
 from core.cards.cards_pair import CardsPair
 from holdem.play.play import Play
@@ -12,103 +11,19 @@ from core.cards.card import Card
 
 class Player:
 
-    class History:
-
-        Decisions = List[Decision]
-
-        def __init__(self):
-
-            self.preflop: Decision = None
-            self.flop: Decision = None
-            self.turn: Decision = None
-            self.river: Decision = None
-
-        def drop(self) -> None:
-
-            self.preflop: Decision = None
-            self.flop: Decision = None
-            self.turn: Decision = None
-            self.river: Decision = None
-
-        def set(self, step: Step, result: Result,
-                raise_counter: int, all_in: bool) -> None:
-
-            if result == Result.Fold:
-                decision = Decision.Fold
-
-            elif result == Result.Check:
-                decision = Decision.Check
-
-            elif result == Result.Call:
-                if all_in:
-                    decision = Decision.CallA
-
-                elif raise_counter == 1:
-                    decision = Decision.CheckCall
-
-                elif raise_counter == 2:
-                    decision = Decision.CallR
-
-                elif raise_counter == 3:
-                    decision = Decision.Call3
-
-                elif raise_counter >= 4:
-                    decision = Decision.Call4
-
-                else:
-                    raise ValueError('Wrong call decision when raise counter == 0')
-
-            elif result == Result.Raise:
-                if raise_counter == 0:
-                    decision = Decision.Bet
-
-                elif raise_counter == 1:
-                    decision = Decision.Raise
-
-                elif raise_counter == 2:
-                    decision = Decision.Bet3
-
-                elif raise_counter >= 3:
-                    decision = Decision.Bet4
-
-                else:
-                    raise ValueError('Wrong raise counter')
-
-            elif result == Result.Allin:
-                decision = Decision.Allin
-
-            else:
-                raise ValueError(f'Wrong result id {result}')
-
-            if step == Step.Preflop:
-                self.preflop: Decision = Decision.update(self.preflop, decision)
-
-            elif step == Step.Flop:
-                self.flop: Decision = Decision.update(self.flop, decision)
-
-            elif step == Step.Turn:
-                self.turn: Decision = Decision.update(self.turn, decision)
-
-            elif step == Step.River:
-                self.river: Decision = Decision.update(self.river, decision)
-
-            else:
-                raise ValueError(f'Undefined step id {step}')
-
     def __init__(self, _id: int, money: int, controlled: bool, name: str, play: Play, net: BaseNetwork):
 
         self.id: int = _id
         self.name: str = name
         self.money: int = money
-        self.money_last_time: int = money
+        self.money_start_of_hand: int = money
         self.gived: int = 0
         self.in_pot: int = 0
         self.wins: int = 0
         self.in_game: bool = False
         self.in_play: bool = True
-        self.re_seat: 'Players' = None
+        self.re_seat: Players = None
         self.cards: CardsPair = CardsPair()
-        self.history: Player.History = Player.History()
         self.hand: Hand = None
         self.controlled: bool = controlled
         self.lose_time: int = None
@@ -180,52 +95,6 @@ class Player:
 
         return self.re_seat is not None
 
-    def win_without_showdown(self, step: Step) -> None:
-
-        self.play.wins_before_showdown += 1
-
-        if step == Step.Preflop:
-            self.play.preflop.wins += 1
-
-        elif step == Step.Flop:
-            self.play.flop.wins += 1
-
-        elif step == Step.Turn:
-            self.play.turn.wins += 1
-
-        elif step == Step.River:
-            self.play.river.wins += 1
-
-        else:
-            raise ValueError(f'Undefined step id {step}')
-
-    def save_decisions(self) -> None:
-
-        self.play.total_hands += 1
-
-        for step in Step:
-
-            if step == Step.Preflop:
-                curr = self.history.preflop
-                play = self.play.preflop
-
-            elif step == Step.Flop:
-                curr = self.history.flop
-                play = self.play.flop
-
-            elif step == Step.Turn:
-                curr = self.history.turn
-                play = self.play.turn
-
-            else:
-                curr = self.history.river
-                play = self.play.river
-
-            if curr is not None:
-                play.add(curr)
-
-        self.history.drop()
-
     def set_lose_time(self, stack: int = 0, place: int = 0) -> None:
 
         self.lose_time = int(datetime.now().timestamp() * 10 ** 6) * 10 ** 2 + stack * 10 + place
@@ -237,7 +106,51 @@ class Player:
         if self.money == 0 and self.in_game:
             return Result.InAllin
 
-        return self.decide(**kwargs)
+        answer, raised_money = self._decide(**kwargs)
+        raised_money = int(raised_money)
 
-    def decide(self, **kwargs) -> Result:
+        if answer is Option.Fold:
+            self.fold()
+            return Result.Fold
+
+        elif answer is Option.CheckCall:
+            to_call: int = kwargs['to_call']
+            if self.remaining_money() > to_call:
+                #  Если игрок вернул CheckCall но колоть нечего то очевидно чек
+                if to_call == 0 or self.gived == to_call:
+                    return Result.Check
+                else:
+                    self.pay(to_call)
+                    return Result.Call
+            else:
+                self.go_all_in()
+                return Result.Call
+
+        elif answer is Option.Raise:
+            to_call = kwargs['to_call']
+            min_raise = kwargs['min_raise']
+            if self.remaining_money() > to_call:
+
+                if raised_money < min_raise:
+                    raised_money = min_raise
+
+                if raised_money > self.remaining_money():
+                    raised_money = self.remaining_money()
+
+                if raised_money == self.remaining_money():
+                    self.go_all_in()
+                    return Result.Allin
+
+                self.pay(raised_money)
+                return Result.Raise
+
+            else:
+                self.go_all_in()
+                return Result.Call
+
+        else:
+            self.fold()
+            return Result.Fold
+
+    def _decide(self, **kwargs) -> Tuple[Option, int]:
         raise NotImplementedError('decide')

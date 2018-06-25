@@ -1,4 +1,4 @@
-from typing import List, Optional, Iterator
+from typing import List, Iterator, Optional
 from threading import Lock
 from time import sleep
 from holdem.player.player import Player
@@ -8,13 +8,11 @@ from holdem.network import Network
 
 class Players:
 
-    TablePlayers = List[Optional[Player]]
-
     def __init__(self, game, seats: int, _id: int, is_final: bool):
         
         self.game = game
-        self.players: Players.TablePlayers = [None] * seats
-        self.controlled: Players.TablePlayers = []
+        self.players: TablePlayers = [None] * seats
+        self.controlled: TablePlayers = []
         self.network: Network = None
         self.online: bool = False
 
@@ -27,7 +25,6 @@ class Players:
         self.total_seats: int = seats
         self.count: int = 0
         self.is_final: bool = is_final
-        self.game_without_small_blind: bool = False
         self.lock: Lock = Lock()
 
     def move_button(self) -> None:
@@ -105,9 +102,6 @@ class Players:
 
     def to_small_blind(self) -> Player:
 
-        if self.game_without_small_blind:
-            raise ValueError('This table play hand without small blind')
-
         if self.count == 2:
             return self.to_button()
         else:
@@ -115,12 +109,7 @@ class Players:
             return self.next_player()
 
     def to_big_blind(self) -> Player:
-
-        if self.game_without_small_blind:
-            self.to_button()
-        else:
-            self.to_small_blind()
-
+        self.to_small_blind()
         return self.next_player()
 
     def all_players(self) -> Iterator[Player]:
@@ -179,7 +168,7 @@ class Players:
         self.curr_player = save_curr_player
         return length
 
-    def sort_by_nearest_to_button(self, players: TablePlayers) -> 'Players.TablePlayers':
+    def sort_by_nearest_to_button(self, players: 'TablePlayers') -> 'TablePlayers':
 
         return sorted(players, key=lambda p: self.length_to_button(p))
 
@@ -192,10 +181,9 @@ class Players:
         if player == curr:
             return '  D '
 
-        if not self.game_without_small_blind:
-            curr = self.next_player()
-            if player == curr:
-                return ' SB '
+        curr = self.next_player()
+        if player == curr:
+            return ' SB '
 
         curr = self.next_player()
         if player == curr:
@@ -300,24 +288,20 @@ class Players:
 
         losers: List[Player] = []
 
-        self.game_without_small_blind = False
         for player in self.all_players():
             if player.money == 0:
-
-                if player == self.to_big_blind() and self.count > 3:
-                    self.game_without_small_blind = True
 
                 losers += [player]
                 player.in_play = False
 
             else:
-                player.money_last_time = player.money
+                player.money_start_of_hand = player.money
 
-        loser_stacks = sorted(player.money_last_time for player in losers)
+        loser_stacks = sorted(player.money_start_of_hand for player in losers)
         loser_sits = sorted([self.length_to_button(player) for player in losers], reverse=True)
 
         for loser in losers:
-            loser.set_lose_time(loser_stacks.index(loser.money_last_time),
+            loser.set_lose_time(loser_stacks.index(loser.money_start_of_hand),
                                 loser_sits.index(self.length_to_button(loser)))
 
         for loser in losers:
@@ -330,11 +314,11 @@ class Players:
 
             self.delete_player(loser)
 
-        if self.game_without_small_blind and self.count < 3:
-            self.game_without_small_blind = False
-
     def __str__(self):
 
         return '\n'.join('     Empty seat' if p is None else
                          f'{self.player_position(p)} {p.get_cards()} {p.name} money = {p.money}'
                          for p in self.players)
+
+
+TablePlayers = List[Optional[Player]]

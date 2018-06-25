@@ -5,7 +5,6 @@ from data.game_model.mock_player import MockPlayer
 from data.game_model.observer_player import ObserverPlayer
 from data.game_model.table_positions import TablePositions
 from data.game_model.table_position import TablePosition
-from data.game_model.poker_position import PokerPosition
 from core.cards.card import Card
 from core.cards.deck import Deck
 from core.cards.cards_pair import CardsPair
@@ -139,7 +138,7 @@ class PokerHand:
             raise ValueError('No such step id ' + str(step))
 
     def next_step(self) -> None:
-        self.switch_to_step(Step.next_step(self.curr_step))
+        self.switch_to_step(self.curr_step.next_step())
 
     def __str__(self) -> str:
 

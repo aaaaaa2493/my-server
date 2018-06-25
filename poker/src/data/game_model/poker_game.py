@@ -16,6 +16,7 @@ from holdem.poker.hand import Hand
 from data.game_model.poker_hand import PokerHand
 from data.game_model.mock_player import MockPlayer
 from data.game_model.event import Event
+from data.game_model.poker_event import PokerEvent
 from data.game_model.game_source import GameSource
 from special.debug import Debug
 
@@ -290,7 +291,7 @@ class PokerGame:
                     events = iter(hand.curr_events)
 
                     try:
-                        event = next(events)
+                        event: PokerEvent = next(events)
                     except StopIteration:
                         if need_to_continue:
                             continue

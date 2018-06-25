@@ -9,7 +9,7 @@ from learning.data_sets.decision_model.base_poker_decision import BasePokerDecis
 from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
 from learning.data_sets.decision_model.poker_decision_answer_3 import PokerDecisionAnswer3
 from special.debug import Debug
-from core.cards.card import Card
+from core.cards.card import Cards
 from core.cards.cards_pair import CardsPair
 from holdem.poker.hand_strength import HandStrength
 from holdem.poker.strength import Strength
@@ -77,7 +77,7 @@ class PokerDecision4(BasePokerDecision):
                bb: int,
                step: Step,
                cards: CardsPair,
-               board: Card.Cards) -> 'PokerDecision4':
+               board: Cards) -> 'PokerDecision4':
 
         if money < 0:
             raise ValueError(f'Money must be > 0, gived {money}')

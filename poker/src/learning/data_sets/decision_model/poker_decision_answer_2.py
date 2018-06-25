@@ -1,3 +1,4 @@
+from holdem.play.option import Option
 from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
 
 
@@ -12,3 +13,12 @@ class PokerDecisionAnswer2(BasePokerDecisionAnswer):
     Raise_85 = 7
     Raise_100 = 8
     AllIn = 9
+
+    def as_option(self) -> Option:
+        if self is PokerDecisionAnswer2.Fold:
+            return Option.Fold
+        elif self is PokerDecisionAnswer2.CheckCall:
+            return Option.CheckCall
+        else:
+            return Option.Raise
+

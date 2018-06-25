@@ -1,29 +1,30 @@
 from random import random
-from core.cards.card import Card
+from typing import Tuple
+from core.cards.card import Cards
 from core.cards.rank import Rank
 from core.cards.suitability import Suitability
 from holdem.player.neural_network.base_neural_network_player import BaseNeuralNetworkPlayer
 from holdem.poker.holdem_poker import HoldemPoker
 from holdem.play.step import Step
-from holdem.play.result import Result
+from holdem.play.option import Option
 from learning.data_sets.decision_model.poker_decision_answer_3 import PokerDecisionAnswer3
 from holdem.poker.strength import Strength
 from special.debug import Debug
 
 
 class Net7Player(BaseNeuralNetworkPlayer):
-    def decide(self, *,
-               step: Step,
-               to_call: int,
-               min_raise: int,
-               board: Card.Cards,
-               pot: int,
-               bb: int,
-               strength: Strength,
-               players_on_table: int,
-               players_active: int,
-               players_not_moved: int,
-               **_) -> Result:
+    def _decide(self, *,
+                step: Step,
+                to_call: int,
+                min_raise: int,
+                board: Cards,
+                pot: int,
+                bb: int,
+                strength: Strength,
+                players_on_table: int,
+                players_active: int,
+                players_not_moved: int,
+                **_) -> Tuple[Option, int]:
         if players_on_table < 2 or players_on_table > 10:
             raise ValueError('bad players on table:', players_active)
 
@@ -138,48 +139,14 @@ class Net7Player(BaseNeuralNetworkPlayer):
         Debug.decision('ANSWER =', answer)
         Debug.decision("NEURAL NETWORK 7 END THINK")
 
-        if answer is PokerDecisionAnswer3.Fold:
-            self.fold()
-            return Result.Fold
+        raise_amount = 0
+        if answer is PokerDecisionAnswer3.AllIn:
+            raise_amount = self.remaining_money()
+        elif answer is PokerDecisionAnswer3.RaiseSmall:
+            raise_amount = (0.1 + 0.25 * random()) * pot
+        elif answer is PokerDecisionAnswer3.RaiseMedium:
+            raise_amount = (0.25 + 0.4 * random()) * pot
+        elif answer is PokerDecisionAnswer3.RaiseALot:
+            raise_amount = (0.6 + 0.6 * random()) * pot
 
-        elif answer is PokerDecisionAnswer3.CheckCall:
-            if self.remaining_money() > to_call:
-                if to_call == 0 or self.gived == to_call:
-                    return Result.Check
-                else:
-                    self.pay(to_call)
-                    return Result.Call
-            else:
-                self.go_all_in()
-                return Result.Call
-
-        else:
-            if self.remaining_money() > to_call:
-
-                if answer == PokerDecisionAnswer3.AllIn:
-                    raised_money = self.remaining_money()
-                elif answer == PokerDecisionAnswer3.RaiseSmall:
-                    raised_money = (0.25 * random()) * pot
-                elif answer == PokerDecisionAnswer3.RaiseMedium:
-                    raised_money = (0.25 + 0.5 * random()) * pot
-                else:
-                    raised_money = (0.75 + 0.5 * random()) * pot
-
-                raised_money = int(raised_money)
-
-                if raised_money < min_raise:
-                    raised_money = min_raise
-
-                if raised_money > self.remaining_money():
-                    raised_money = self.remaining_money()
-
-                if raised_money == self.remaining_money():
-                    self.go_all_in()
-                    return Result.Allin
-
-                self.pay(raised_money)
-                return Result.Raise
-
-            else:
-                self.go_all_in()
-                return Result.Call
+        return answer.as_option(), raise_amount

@@ -1,6 +1,6 @@
 from typing import Iterator
 from core.cards.rank import Rank
-from core.cards.card import Card
+from core.cards.card import Cards
 from holdem.poker.strength import Strength
 
 
@@ -10,7 +10,7 @@ class BadStrength(Exception):
 
 class Hand:
 
-    def __init__(self, cards: Card.Cards, strength: Strength, kicker1: Rank = None,
+    def __init__(self, cards: Cards, strength: Strength, kicker1: Rank = None,
                  kicker2: Rank = None, kicker3: Rank = None,
                  kicker4: Rank = None, kicker5: Rank = None):
 

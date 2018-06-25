@@ -1,7 +1,9 @@
-from core.cards.card import Card
+from typing import Tuple
+from core.cards.card import Card, Cards
 from holdem.player.player import Player
 from holdem.play.play import Play
 from holdem.play.step import Step
+from holdem.play.option import Option
 from holdem.play.result import Result
 from holdem.network import Network
 from holdem.base_network import BaseNetwork
@@ -23,13 +25,13 @@ class RealPlayer(Player):
         )
         super().__init__(_id, money, True, name, play, network)
 
-    def decide(self, *,
-               step: Step,
-               to_call: int,
-               min_raise: int,
-               board: Card.Cards,
-               online: bool,
-               **_) -> Result:
+    def _decide(self, *,
+                step: Step,
+                to_call: int,
+                min_raise: int,
+                board: Cards,
+                online: bool,
+                **_) -> Tuple[Option, int]:
 
         Debug.input_decision()
         Debug.input_decision(f'you have {self.get_cards()}')
@@ -66,53 +68,30 @@ class RealPlayer(Player):
             available_decisions += [(Result.Call, self.remaining_money())]
             Debug.input_decision(f'2 - call all in {self.remaining_money()}')
 
-        while True:
-            answer = self.network.input_decision(available_decisions)
-            try:
-                if answer[0] == '1':
-                    self.fold()
-                    return Result.Fold
+        answer = self.network.input_decision(available_decisions)
 
-                elif answer[0] == '2':
-                    if self.remaining_money() > to_call:
-                        if to_call == 0 or self.gived == to_call:
-                            return Result.Check
-                        else:
-                            self.pay(to_call)
-                            return Result.Call
-                    else:
-                        self.go_all_in()
-                        return Result.Call
+        if answer[0] == '1':
+            return Option.Fold, 0
 
-                elif answer[0] == '3':
-
-                    if self.remaining_money() > to_call:
-
-                        if len(answer) == 2:
-
-                            raised_money = int(answer[1])
-
-                            if raised_money == self.remaining_money():
-                                self.go_all_in()
-                                return Result.Allin
-
-                            if raised_money < min_raise:
-                                raise IndexError
-
-                            if raised_money > self.remaining_money():
-                                raise IndexError
-
-                            self.pay(raised_money)
-                            return Result.Raise
-
-                        else:
-                            self.go_all_in()
-                            return Result.Allin
-
-            except IndexError:
-                continue
+        elif answer[0] == '2':
+            if self.remaining_money() > to_call:
+                if to_call == 0 or self.gived == to_call:
+                    return Option.CheckCall, 0
+                else:
+                    return Option.CheckCall, to_call
             else:
-                break
+                return Option.CheckCall, self.remaining_money()
 
-        self.fold()
-        return Result.Fold
+        elif answer[0] == '3':
+
+            if self.remaining_money() > to_call:
+
+                if len(answer) == 2:
+                    raised_money = int(answer[1])
+                    return Option.Raise, raised_money
+
+                else:
+                    return Option.Raise, self.remaining_money()
+
+        else:
+            return Option.Fold, 0

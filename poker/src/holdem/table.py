@@ -1,10 +1,8 @@
-from typing import List, Tuple, Optional
+from typing import List, Optional
 from threading import Thread, Lock
 from time import sleep
-from statistics import mean
 from holdem.play.result import Result
 from holdem.play.step import Step
-from core.cards.cards_pair import CardsPair
 from holdem.players import Players
 from holdem.player.player import Player
 from core.blinds.blinds import Blinds
@@ -13,125 +11,11 @@ from holdem.poker.hand_strength import HandStrength
 from holdem.network import Network
 from holdem.delay import Delay
 from special.debug import Debug
-from core.cards.card import Card
 from core.cards.deck import Deck
 from core.pot import Pot
 
 
 class Table:
-
-    Tables = List['Table']
-
-    class History:
-
-        Decisions = List['Table.History.Decision']
-
-        class Decision:
-
-            def __init__(self, player: 'Player', decision: Result, money: int):
-
-                self.player: 'Player' = player
-                self.decision: Result = decision
-                self.money: int = money
-
-            def __str__(self):
-                return f'{self.player.cards} {self.player.id:>3} ' \
-                       f'{Result.ToStr[self.decision]:<5} {self.money}'
-
-        Steps = List['Table.History.Step']
-
-        class Step:
-
-            def __init__(self):
-
-                self.decisions: Table.History.Decisions = []
-
-            def add(self, player: 'Player', decision: Result, money: int) -> None:
-
-                self.decisions += [Table.History.Decision(player, decision, money)]
-
-        Hands = List['Table.History.Hands']
-
-        class Hand:
-
-            def __init__(self, number: int):
-
-                self.number = number
-                self.opened_cards: Card.Cards = None
-                self.dealt_cards: List[Tuple['Player', CardsPair]] = None
-                self.last_step: Step = Step.Preflop
-
-                self.preflop: Table.History.Step = Table.History.Step()
-                self.flop: Table.History.Step = None
-                self.turn: Table.History.Step = None
-                self.river: Table.History.Step = None
-
-            def add(self, player: 'Player', result: Result, money: int) -> None:
-
-                if self.last_step == Step.River:
-                    self.river.add(player, result, money)
-
-                elif self.last_step == Step.Turn:
-                    self.turn.add(player, result, money)
-
-                elif self.last_step == Step.Flop:
-                    self.flop.add(player, result, money)
-
-                elif self.last_step == Step.Preflop:
-                    self.preflop.add(player, result, money)
-
-                else:
-                    raise OverflowError('Undefined step')
-
-            def give_cards(self, players: Players) -> None:
-
-                self.dealt_cards = []
-
-                for player in players.all_players():
-                    self.dealt_cards += [(player, player.cards)]
-
-            def next_step(self) -> None:
-
-                if self.last_step == Step.Turn:
-                    self.river = Table.History.Step()
-                    self.last_step = Step.River
-
-                elif self.last_step == Step.Flop:
-                    self.turn = Table.History.Step()
-                    self.last_step = Step.Turn
-
-                elif self.last_step == Step.Preflop:
-                    self.flop = Table.History.Step()
-                    self.last_step = Step.Flop
-
-                else:
-                    raise OverflowError('Can not save more steps')
-
-        def __init__(self, start_hand: int):
-
-            self.number: int = start_hand
-            self.curr: Table.History.Hand = Table.History.Hand(start_hand)
-            self.hands: Table.History.Hands = []
-
-        def save(self, cards: Card.Cards) -> None:
-
-            self.curr.opened_cards = cards
-
-            self.hands += [self.curr]
-            self.number += 1
-            self.curr = Table.History.Hand(self.number)
-
-        def next_step(self) -> None:
-
-            self.curr.next_step()
-
-        def deal(self, players: Players) -> None:
-
-            self.curr.give_cards(players)
-
-        def add(self, player: 'Player', result: Result, money: int) -> None:
-
-            self.curr.add(player, result, money)
 
     def __init__(self, game, _id: int, seats: int, blinds: Blinds, is_final: bool, start_hand: int = 1):
 
@@ -152,7 +36,6 @@ class Table:
         self.blinds: Blinds = blinds
         self.board: Board = Board(self.deck, start_hand)
         self.players: Players = Players(game, seats, _id, is_final)
-        self.history: Table.History = Table.History(start_hand)
 
     def __del__(self):
 
@@ -212,13 +95,6 @@ class Table:
                     self.thread = Thread(target=self.start_game, name=f'Table {self.id}')
                     self.thread.start()
 
-    def save_history(self) -> None:
-
-        for player in self.players.all_players():
-            player.save_decisions()
-
-        self.history.save(self.board.get())
-
     def collect_ante(self, ante: int) -> None:
 
         if self.blinds.ante > 0:
@@ -241,7 +117,6 @@ class Table:
             for player in self.players.all_players():
                 paid = player.move_money_to_pot()
                 self.pot.money += paid
-                self.history.add(player, Result.Ante, paid)
                 self.log(player, Result.Ante, paid)
 
             if self.online:
@@ -259,29 +134,14 @@ class Table:
             self.log(player1, Result.Button)
 
             paid1 = player1.pay(sb)
-            self.history.add(player1, Result.SmallBlind, paid1)
             self.log(player1, Result.SmallBlind, paid1)
 
             player2 = self.players.next_player()
             paid2 = player2.pay(bb)
-            self.history.add(player2, Result.BigBlind, paid2)
             self.log(player2, Result.BigBlind, paid2)
 
             if self.online:
                 self.network.blinds(player1, [(player1, paid1), (player2, paid2)])
-                sleep(Delay.Blinds)
-
-        elif self.players.game_without_small_blind and self.players.next_seat() is None:
-            player1 = self.players.to_button()
-            self.log(player1, Result.Button)
-
-            player2 = self.players.next_player()
-            paid2 = player2.pay(bb)
-            self.history.add(player2, Result.BigBlind, paid2)
-            self.log(player2, Result.BigBlind, paid2)
-
-            if self.online:
-                self.network.blinds(player1, [(player2, paid2)])
                 sleep(Delay.Blinds)
 
         else:
@@ -290,12 +150,10 @@ class Table:
 
             player2 = self.players.next_player()
             paid2 = player2.pay(sb)
-            self.history.add(player2, Result.SmallBlind, paid2)
             self.log(player2, Result.SmallBlind, paid2)
 
             player3 = self.players.next_player()
             paid3 = player3.pay(bb)
-            self.history.add(player3, Result.BigBlind, paid3)
             self.log(player3, Result.BigBlind, paid3)
 
             if self.online:
@@ -332,8 +190,6 @@ class Table:
             while button != self.players.next_busy_seat():
                 self.players.get_curr_seat().add_card(self.deck.next())
             button.add_card(self.deck.next())
-
-        self.history.deal(self.players)
 
         for player in self.players.controlled:
             self.network.give_cards(player)
@@ -373,8 +229,6 @@ class Table:
         ante = self.blinds.ante
         sb = self.blinds.small_blind
         bb = self.blinds.big_blind
-
-        average_stack_on_start_of_hand = int(mean(p.money for p in self.players.all_players()))
 
         self.collect_ante(ante)
 
@@ -422,12 +276,6 @@ class Table:
                         board=self.board.get(),
                         pot=self.pot.money + sum(p.gived for p in self.players.all_players()),
                         bb=self.blinds.big_blind,
-                        strength=HandStrength.get_strength(player.cards, self.board.get()),
-                        players_on_table=sum(1 for _ in self.players.all_players()),
-                        players_active=self.players.count_in_game_players(),
-                        players_not_moved=players_not_decided - 1,  # without self
-                        max_playing_stack=max(p.remaining_money() for p in self.players.in_game_players()),
-                        average_stack_on_table=average_stack_on_start_of_hand
                     )
 
                     if result == Result.Raise or result == Result.Allin:
@@ -440,9 +288,6 @@ class Table:
                     if self.online:
                         self.network.made_decision(player, result)
                         sleep(Delay.MadeDecision)
-
-                    player.history.set(step, result, self.raise_counter, player.in_all_in())
-                    self.history.add(player, result, player.gived)
 
                     if result == Result.Raise or result == Result.Allin:
 
@@ -482,7 +327,6 @@ class Table:
                     self.network.back_excess_money(player_max_pot, difference)
                     sleep(Delay.ExcessMoney)
 
-                self.history.add(player_max_pot, Result.ReturnMoney, difference)
                 self.log(player_max_pot, Result.ReturnMoney, difference)
 
                 self.collect_pot()
@@ -512,7 +356,6 @@ class Table:
                         self.network.back_excess_money(player_max_pot, difference)
                         sleep(Delay.ExcessMoney)
 
-                    self.history.add(player, Result.ReturnMoney, difference)
                     self.log(player, Result.ReturnMoney, difference)
 
                 self.collect_pot()
@@ -546,16 +389,13 @@ class Table:
             self.collect_pot()
 
             self.board.open_with_network(self)
-            self.history.next_step()
             Debug.table(f'Table {self.id} hand {self.board.hand}: board {self.board}')
 
-    def give_money(self, winner: 'Player') -> None:
+    def give_money(self, winner: Player) -> None:
 
         winner.in_pot = 0
         winner.money += winner.wins
         self.pot.money -= winner.wins
-
-        self.history.add(winner, Result.WinMoney, winner.wins)
 
         if self.online:
             self.network.give_money(winner, winner.wins)
@@ -569,19 +409,19 @@ class Table:
         results = []
 
         for player in self.players.all_players():
-            if player.money > player.money_last_time:
+            if player.money > player.money_start_of_hand:
 
-                results += [f'{player.name} wins {player.money - player.money_last_time}']
+                results += [f'{player.name} wins {player.money - player.money_start_of_hand}']
 
                 Debug.table(f'Table {self.id} hand {self.board.hand}: '
-                            f'player {player.name} wins {player.money - player.money_last_time} '
+                            f'player {player.name} wins {player.money - player.money_start_of_hand} '
                             f'and has {player.money} money')
-            elif player.money < player.money_last_time:
+            elif player.money < player.money_start_of_hand:
 
-                results += [f'{player.name} loses {player.money_last_time - player.money}']
+                results += [f'{player.name} loses {player.money_start_of_hand - player.money}']
 
                 Debug.table(f'Table {self.id} hand {self.board.hand}: '
-                            f'player {player.name} loses {player.money_last_time - player.money} '
+                            f'player {player.name} loses {player.money_start_of_hand - player.money} '
                             f'and has {player.money} money')
             else:
                 Debug.table(f'Table {self.id} hand {self.board.hand}: player {player.name} has {player.money} money')
@@ -614,8 +454,6 @@ class Table:
             winner = max(p for p in self.players.in_game_players())
             winner.wins += winner.in_pot
 
-            winner.win_without_showdown(self.board.state)
-
             for player in self.players.all_players():
                 if player != winner:
                     if winner.in_pot >= player.in_pot:
@@ -640,7 +478,6 @@ class Table:
 
                 Debug.table(f'Table {self.id} hand {self.board.hand}: '
                             f'{player.get_cards()}, {player.name} has {player.hand}')
-                player.play.goes_to_showdown += 1
 
             hand_results.sort(reverse=True, key=lambda x: x[0])
 
@@ -653,9 +490,6 @@ class Table:
                 wins_hand = max(player.hand for player in self.players.in_game_players())
                 players_wins = [p for p in self.players.in_game_players() if p.hand == wins_hand]
                 count_winners = len(players_wins)
-
-                for player in players_wins:
-                    player.play.wins_after_showdown += 1
 
                 Debug.table(f"Table {self.id} hand {self.board.hand}: "
                             f"{', '.join(p.name for p in players_wins)} wins with {wins_hand}")
@@ -745,7 +579,6 @@ class Table:
                     if player.in_pot == 0:
                         player.in_game = False
 
-        self.save_history()
         self.print_result()
 
         if self.pot.money != 0:
@@ -773,3 +606,6 @@ class Table:
     def __str__(self):
 
         return f'Table {self.id} hand {self.board.hand}:\n{self.players}'
+
+
+Tables = List[Table]

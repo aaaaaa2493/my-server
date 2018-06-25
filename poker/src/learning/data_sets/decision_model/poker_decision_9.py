@@ -1,10 +1,14 @@
 from numpy import array
-from typing import List, Dict
+from typing import List, Dict, Tuple
+from statistics import mean
 from holdem.poker.holdem_poker import HoldemPoker
 from holdem.play.step import Step
 from data.game_model.event import Event
 from data.game_model.poker_hand import PokerHand
 from data.game_model.poker_game import PokerGame
+from data.game_model.poker_position import PokerPosition
+from data.game_model.player_statistics import PlayerStatistics
+from data.game_model.mock_player import MockPlayer
 from learning.data_sets.decision_model.base_poker_decision import BasePokerDecision
 from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
 from learning.data_sets.decision_model.poker_decision_answer_3 import PokerDecisionAnswer3
@@ -12,10 +16,18 @@ from special.debug import Debug
 from core.cards.card import Cards
 from core.cards.cards_pair import CardsPair
 from core.cards.suitability import Suitability
+from core.blinds.blinds import Blinds
 from holdem.poker.hand_strength import HandStrength
 
 
-class PokerDecision6(BasePokerDecision):
+class PokerDecision9(BasePokerDecision):
+
+    CurrGame: PokerGame = None
+    CurrRaisers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = None
+    CurrCheckers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = None
+    CurrCallers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = None  # only preflop
+    CurrFolders: Dict[Tuple[str, PokerPosition], PlayerStatistics] = None  # only preflop
+
     def __init__(self):
         super().__init__()
         self.probability_to_win: float = 0
@@ -35,6 +47,24 @@ class PokerDecision6(BasePokerDecision):
         self.players_playing = [0, 0, 0, 0, 0, 0, 0, 0, 0]  # 2 - 10
         self.players_not_moved = [0, 0, 0, 0, 0, 0, 0, 0, 0, 0]  # 0 - 9
         self.outs: float = 0  # 1 is 21 out
+        self.max_playing_stack = 0
+        self.average_stack_on_table: int = 0
+        self.max_raiser: float = 0
+        self.min_raiser: float = 0
+        self.avg_raiser: float = 0
+        self.max_caller: float = 0
+        self.min_caller: float = 0
+        self.avg_caller: float = 0
+        self.max_folder: float = 0
+        self.min_folder: float = 0
+        self.avg_folder: float = 0
+        self.max_checker: float = 0
+        self.min_checker: float = 0
+        self.avg_checker: float = 0
+        self.my_position_is_early: int = 0
+        self.my_position_is_middle: int = 0
+        self.my_position_is_late: int = 0
+        self.my_position_is_blinds: int = 0
 
     def to_array(self) -> array:
         arr = [
@@ -49,7 +79,26 @@ class PokerDecision6(BasePokerDecision):
         ] + self.strength + self.first + self.second + [
             self.have_suited_cards
         ] + self.players_on_table + self.players_playing + self.players_not_moved + [
-            self.outs
+            self.outs,
+            self.my_money / self.big_blind / Blinds.NORMAL_BBS - 1,
+            self.max_playing_stack / self.big_blind / Blinds.NORMAL_BBS - 1,
+            self.average_stack_on_table / self.big_blind / Blinds.NORMAL_BBS - 1,
+            self.max_raiser,
+            self.min_raiser,
+            self.avg_raiser,
+            self.max_caller,
+            self.min_caller,
+            self.avg_caller,
+            self.max_folder,
+            self.min_folder,
+            self.avg_folder,
+            self.max_checker,
+            self.min_checker,
+            self.avg_checker,
+            self.my_position_is_early,
+            self.my_position_is_middle,
+            self.my_position_is_late,
+            self.my_position_is_blinds,
         ]
         return array(arr)
 
@@ -62,6 +111,10 @@ class PokerDecision6(BasePokerDecision):
                f'prob {self.probability_to_win} '
 
     @staticmethod
+    def initialize(game: PokerGame, hand: PokerHand) -> None:
+        print('init hand', hand.id)
+
+    @staticmethod
     def create(res: BasePokerDecisionAnswer,
                money: int,
                pot: int,
@@ -72,7 +125,12 @@ class PokerDecision6(BasePokerDecision):
                board: Cards,
                players_on_table: int,
                players_active: int,
-               players_not_moved: int) -> 'PokerDecision6':
+               players_not_moved: int,
+               max_playing_stack: int,
+               average_stack_on_table: int,
+               players: List[MockPlayer],
+               folded_players: List[str],
+               my_position: PokerPosition) -> 'PokerDecision9':
 
         if money < 0:
             raise ValueError(f'Money must be > 0, gived {money}')
@@ -96,7 +154,7 @@ class PokerDecision6(BasePokerDecision):
         strength = HandStrength.get_strength(cards, board)
         outs: float = HoldemPoker.calculate_outs(cards, board)[0] / HoldemPoker.MAX_OUTS
 
-        des = PokerDecision6()
+        des = PokerDecision9()
         des.set_answer(res)
         des.probability_to_win = pr
         des.my_money = money
@@ -151,10 +209,73 @@ class PokerDecision6(BasePokerDecision):
 
         des.outs = outs
 
+        des.max_playing_stack = max_playing_stack
+        des.average_stack_on_table = average_stack_on_table
+
+        curr_raisers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = PokerDecision9.CurrRaisers
+        curr_callers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = PokerDecision9.CurrCallers
+        curr_folders: Dict[Tuple[str, PokerPosition], PlayerStatistics] = PokerDecision9.CurrFolders
+        curr_checkers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = PokerDecision9.CurrCheckers
+
+        raisers = []
+        callers = []
+        folders = []
+        checkers = []
+        for player in players:
+            if player.name not in folded_players:
+                raisers += [curr_raisers[player.name, player.position].get_stats()]
+                callers += [curr_callers[player.name, player.position].get_stats()]
+                folders += [curr_folders[player.name, player.position].get_stats()]
+                checkers += [curr_checkers[player.name, player.position].get_stats()]
+
+        des.max_raiser = max(raisers)
+        des.min_raiser = min(raisers)
+        des.avg_raiser = mean(raisers)
+
+        des.max_caller = max(callers)
+        des.min_caller = min(callers)
+        des.avg_caller = mean(callers)
+
+        des.max_folder = max(folders)
+        des.min_folder = min(folders)
+        des.avg_folder = mean(folders)
+
+        des.max_checker = max(checkers)
+        des.min_checker = min(checkers)
+        des.avg_checker = mean(checkers)
+
+        des.my_position_is_early = my_position is PokerPosition.Early
+        des.my_position_is_middle = my_position is PokerPosition.Middle
+        des.my_position_is_late = my_position is PokerPosition.Late
+        des.my_position_is_blinds = my_position is PokerPosition.Blinds
+
         return des
 
     @staticmethod
     def get_decisions(game: PokerGame, hand: PokerHand) -> List[BasePokerDecision]:
+
+        if game != PokerDecision9.CurrGame:
+            PokerDecision9.CurrGame = game
+            PokerDecision9.CurrRaisers = dict()
+            PokerDecision9.CurrCallers = dict()
+            PokerDecision9.CurrFolders = dict()
+            PokerDecision9.CurrCheckers = dict()
+
+        curr_raisers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = PokerDecision9.CurrRaisers
+        curr_callers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = PokerDecision9.CurrCallers
+        curr_folders: Dict[Tuple[str, PokerPosition], PlayerStatistics] = PokerDecision9.CurrFolders
+        curr_checkers: Dict[Tuple[str, PokerPosition], PlayerStatistics] = PokerDecision9.CurrCheckers
+
+        for player in hand.players:
+            key = (player.name, player.position)
+            if key not in curr_raisers:
+                curr_raisers[key] = PlayerStatistics()
+            if key not in curr_callers:
+                curr_callers[key] = PlayerStatistics()
+            if key not in curr_folders:
+                curr_folders[key] = PlayerStatistics()
+            if key not in curr_checkers:
+                curr_checkers[key] = PlayerStatistics()
 
         decisions: List[BasePokerDecision] = []
 
@@ -163,7 +284,13 @@ class PokerDecision6(BasePokerDecision):
         players_on_table = len(hand.players)
         players_active = players_on_table
 
+        folded_players: List[str] = []
+
         money: Dict[str, int] = {p.name: p.money for p in hand.players}
+
+        average_money_on_table: int = int(sum(p.money for p in hand.players) / len(hand.players))
+        max_money_on_table: int = max(p.money for p in hand.players)
+
         bb: int = hand.big_blind
 
         Debug.datasets(')' * 20)
@@ -188,6 +315,11 @@ class PokerDecision6(BasePokerDecision):
 
                 Debug.datasets(act, raise_amount)
 
+                folder = curr_folders[act.player.name, act.player.position]
+                caller = curr_callers[act.player.name, act.player.position]
+                raiser = curr_raisers[act.player.name, act.player.position]
+                checker = curr_checkers[act.player.name, act.player.position]
+
                 if act.event == Event.Ante:
                     pot_size += act.money
                     money[act.player.name] -= act.money
@@ -206,7 +338,7 @@ class PokerDecision6(BasePokerDecision):
                     if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
-                        des = PokerDecision6.create(
+                        des = PokerDecision9.create(
                             PokerDecisionAnswer3.Fold,
                             my_money,
                             pot_size,
@@ -218,16 +350,30 @@ class PokerDecision6(BasePokerDecision):
                             players_on_table,
                             players_active,
                             players_not_moved,
+                            max_money_on_table,
+                            average_money_on_table,
+                            hand.players,
+                            folded_players,
+                            act.player.position,
                         )
                         decisions += [des]
+
+                    if step == Step.Preflop:
+                        folder.activate()
+                        caller.skip()
+                    raiser.skip()
+                    if raise_amount == 0 or raise_amount == gived[act.player.name]:
+                        checker.skip()
+
                     players_active -= 1
                     players_not_moved -= 1
+                    folded_players += [act.player.name]
 
                 elif act.event == Event.Check:
                     if act.player.cards is not None and act.player.cards.initialized() and not act.player.is_loser:
                         my_money = money[act.player.name]
                         to_call = raise_amount - gived[act.player.name]
-                        des = PokerDecision6.create(
+                        des = PokerDecision9.create(
                             PokerDecisionAnswer3.CheckCall,
                             my_money,
                             pot_size,
@@ -239,8 +385,19 @@ class PokerDecision6(BasePokerDecision):
                             players_on_table,
                             players_active,
                             players_not_moved,
+                            max_money_on_table,
+                            average_money_on_table,
+                            hand.players,
+                            folded_players,
+                            act.player.position,
                         )
                         decisions += [des]
+
+                    if step == Step.Preflop:
+                        folder.skip()
+                    checker.activate()
+                    raiser.skip()
+
                     players_not_moved -= 1
 
                 elif act.event == Event.Call:
@@ -250,7 +407,7 @@ class PokerDecision6(BasePokerDecision):
                             to_call = my_money
                         else:
                             to_call = raise_amount - gived[act.player.name]
-                        des = PokerDecision6.create(
+                        des = PokerDecision9.create(
                             PokerDecisionAnswer3.CheckCall,
                             my_money,
                             pot_size,
@@ -262,8 +419,19 @@ class PokerDecision6(BasePokerDecision):
                             players_on_table,
                             players_active,
                             players_not_moved,
+                            max_money_on_table,
+                            average_money_on_table,
+                            hand.players,
+                            folded_players,
+                            act.player.position,
                         )
                         decisions += [des]
+
+                    if step == Step.Preflop:
+                        folder.skip()
+                        caller.activate()
+                    raiser.skip()
+
                     pot_size += act.money - gived[act.player.name]
                     money[act.player.name] -= act.money - gived[act.player.name]
                     gived[act.player.name] = act.money
@@ -285,7 +453,7 @@ class PokerDecision6(BasePokerDecision):
                         else:
                             answer = PokerDecisionAnswer3.RaiseALot
 
-                        des = PokerDecision6.create(
+                        des = PokerDecision9.create(
                             answer,
                             my_money,
                             pot_size,
@@ -297,8 +465,21 @@ class PokerDecision6(BasePokerDecision):
                             players_on_table,
                             players_active,
                             players_not_moved,
+                            max_money_on_table,
+                            average_money_on_table,
+                            hand.players,
+                            folded_players,
+                            act.player.position,
                         )
                         decisions += [des]
+
+                    if step == Step.Preflop:
+                        folder.skip()
+                        caller.skip()
+                    raiser.activate()
+                    if raise_amount == 0 or raise_amount == gived[act.player.name]:
+                        checker.skip()
+
                     pot_size += act.money - gived[act.player.name]
                     money[act.player.name] -= act.money - gived[act.player.name]
                     gived[act.player.name] = act.money

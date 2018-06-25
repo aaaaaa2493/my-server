@@ -12,17 +12,16 @@ class Step(OrderedEnum):
     Turn = 3
     River = 4
 
-    @classmethod
-    def next_step(cls, step: 'Step') -> 'Step':
+    def next_step(self) -> 'Step':
 
-        if step == Step.Preflop:
+        if self == Step.Preflop:
             return Step.Flop
-        elif step == Step.Flop:
+        elif self == Step.Flop:
             return Step.Turn
-        elif step == Step.Turn:
+        elif self == Step.Turn:
             return Step.River
 
-        raise LastGameStep(f'No next step id for {step}')
+        raise LastGameStep(f'No next step id for {self}')
 
     def __str__(self) -> str:
         return _to_str[self]
