@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Dict
 from special.ordered_enum import OrderedEnum
 
@@ -13,7 +12,7 @@ class Step(OrderedEnum):
     Turn = 3
     River = 4
 
-    def next_step(self) -> Step:
+    def next_step(self) -> 'Step':
 
         if self == Step.Preflop:
             return Step.Flop

@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Dict
 from enum import Enum
 
@@ -8,7 +7,7 @@ class Suitability(Enum):
     Offsuited = False
 
     @classmethod
-    def get_suitability(cls, suitability: str) -> Suitability:
+    def get_suitability(cls, suitability: str) -> 'Suitability':
         return _from_str[suitability]
 
     def __str__(self) -> str:

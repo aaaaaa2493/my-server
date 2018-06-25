@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Dict
 from special.ordered_enum import OrderedEnum
 
@@ -10,7 +9,7 @@ class Suit(OrderedEnum):
     Spades = 4
 
     @classmethod
-    def get_suit(cls, suit: str) -> Suit:
+    def get_suit(cls, suit: str) -> 'Suit':
         return _from_str[suit]
 
     @property

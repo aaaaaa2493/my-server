@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Dict
 from special.ordered_enum import OrderedEnum
 
@@ -20,7 +19,7 @@ class Rank(OrderedEnum):
     Invalid = 1
 
     @classmethod
-    def get_rank(cls, rank: str) -> Rank:
+    def get_rank(cls, rank: str) -> 'Rank':
         return _from_str[rank]
 
     @property

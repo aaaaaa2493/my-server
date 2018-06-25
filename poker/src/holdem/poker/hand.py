@@ -1,4 +1,3 @@
-from __future__ import annotations
 from typing import Iterator
 from core.cards.rank import Rank
 from core.cards.card import Cards
@@ -58,32 +57,32 @@ class Hand:
             return
         yield self.kicker5
 
-    def __lt__(self, other: Hand) -> bool:
+    def __lt__(self, other: 'Hand') -> bool:
 
         return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) < \
                (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
 
-    def __le__(self, other: Hand) -> bool:
+    def __le__(self, other: 'Hand') -> bool:
 
         return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) <= \
                (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
 
-    def __gt__(self, other: Hand) -> bool:
+    def __gt__(self, other: 'Hand') -> bool:
 
         return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) > \
                (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
 
-    def __ge__(self, other: Hand) -> bool:
+    def __ge__(self, other: 'Hand') -> bool:
 
         return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) >= \
                (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
 
-    def __eq__(self, other: Hand) -> bool:
+    def __eq__(self, other: 'Hand') -> bool:
 
         return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) == \
                (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
 
-    def __ne__(self, other: Hand) -> bool:
+    def __ne__(self, other: 'Hand') -> bool:
 
         return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) != \
                (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)

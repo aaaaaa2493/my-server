@@ -1,4 +1,3 @@
-from __future__ import annotations
 from numpy import array
 from typing import List, Dict
 from holdem.poker.holdem_poker import HoldemPoker
@@ -48,7 +47,7 @@ class PokerDecision(BasePokerDecision):
 
     @staticmethod
     def create(res: BasePokerDecisionAnswer, prob: float,
-               money: int, pot: int, call: int, bb: int, step: Step) -> PokerDecision:
+               money: int, pot: int, call: int, bb: int, step: Step) -> 'PokerDecision':
         if prob < 0 or prob > 1:
             raise ValueError(f'Probability must be in [0, 1], gived {prob}')
 
