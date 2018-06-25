@@ -107,6 +107,9 @@ class CardsPair:
     def __ne__(self, other: 'CardsPair') -> bool:
         return not self.__eq__(other)
 
+    def __hash__(self):
+        return hash((self.first, self.second))
+
     def __str__(self):
 
         if self.initialized():

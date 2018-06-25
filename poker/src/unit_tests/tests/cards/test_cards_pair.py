@@ -121,3 +121,9 @@ class CardsPairTest(TestCase):
         self.assertRegex(str(self.full), '.. ..')
         self.assertRegex(str(self.half), '.. \?\?')
         self.assertRegex(str(self.none), '\?\? \?\?')
+
+    def test_hash(self):
+        pair1 = CardsPair(Card('AS'), Card('5D'))
+        pair2 = CardsPair(Card('AS'), Card('5C'))
+        pair3 = CardsPair(Card('AS'), Card('5D'))
+        self.assertEqual(len({pair1, pair2, pair3}), 2)
