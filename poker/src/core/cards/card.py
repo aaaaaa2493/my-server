@@ -1,7 +1,8 @@
 from typing import List
+from functools import lru_cache
 from core.cards.rank import Rank, Ranks
 from core.cards.suit import Suit, Suits
-from lib.pokereval.card import Card as _Card
+from lib.deuces.card import Card as _Card
 
 
 class Card:
@@ -39,12 +40,9 @@ class Card:
     def s(self) -> str:
         return self.card[1]
 
-    def convert(self) -> _Card:
-        return _Card(self.rank.to_int(), self.suit.to_int())
-
-    @staticmethod
-    def get_card(card: _Card) -> 'Card':
-        return Card(Rank(card.rank).short + Suit(card.suit).short)
+    @lru_cache(100)
+    def convert(self) -> int:
+        return _Card.new(self.card)
 
     def __str__(self) -> str:
         return f'{self.str_rank} of {self.str_suit}'

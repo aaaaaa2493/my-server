@@ -1,18 +1,26 @@
 from typing import Tuple
-from lib.pokereval.hand_evaluator import HandEvaluator
 from holdem.poker.hand_strength import HandStrength
 from core.cards.card import Card, Cards
 from core.cards.cards_pair import CardsPair
+from lib.deuces.evaluator import Evaluator
 
 
 class HoldemPoker:
 
     MAX_OUTS: int = 21
+    _evaluator = Evaluator()
 
     @staticmethod
     def probability(c: CardsPair, f: Cards) -> float:
-        pr = HandEvaluator.evaluate_hand([c.first.convert(), c.second.convert()], [card.convert() for card in f])
-        # print('EVALUATING', c, 'board', Card.str(f), '=', pr)
+        ev = HoldemPoker._evaluator
+        board = [card.convert() for card in f]
+        hand = [c.first.convert(), c.second.convert()]
+
+        if len(board) == 0:
+            pr = ev.evaluate(board, hand)
+        else:
+            pr = 1 - ev.get_five_card_rank_percentage(ev.evaluate(board, hand))
+
         return pr
 
     @staticmethod
