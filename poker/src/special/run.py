@@ -45,7 +45,6 @@ class Run:
             PlayManager.GenCount = 30
             self.start_evolution(100, 9, 27, 1000)
             NameManager.remove_folder()
-            PlayManager.remove_folder()
 
         elif args[0] == '--parsing-tests':
             from data.game_parser import GameParser, PokerGame
