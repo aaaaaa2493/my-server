@@ -14,4 +14,5 @@ script:
   - python src/main.py --parsing-tests
   - python src/main.py --learning-tests
   - python src/main.py --network-play-tests
-  - ./profile.cmd
+  - python -m cProfile -o profile_results.prof .\src\main.py --evolution-tests --profile
+  - gprof2dot -f pstats profile_results.prof | dot -Tpng -o profile_results.png
