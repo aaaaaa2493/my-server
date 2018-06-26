@@ -1,8 +1,7 @@
 from typing import List
-from functools import lru_cache
 from core.cards.rank import Rank, Ranks
 from core.cards.suit import Suit, Suits
-from lib.deuces.card import Card as _Card
+from lib.deuces.card import PRECALC_CARDS
 
 
 class Card:
@@ -23,6 +22,7 @@ class Card:
         self.card: str = card
         self.rank: Rank = Rank.get_rank(card[0])
         self.suit: Suit = Suit.get_suit(card[1])
+        self._int_value: int = PRECALC_CARDS[card]
 
     @property
     def str_rank(self) -> str:
@@ -40,9 +40,8 @@ class Card:
     def s(self) -> str:
         return self.card[1]
 
-    @lru_cache(100)
     def convert(self) -> int:
-        return _Card.new(self.card)
+        return self._int_value
 
     def __str__(self) -> str:
         return f'{self.str_rank} of {self.str_suit}'

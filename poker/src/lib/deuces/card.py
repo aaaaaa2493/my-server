@@ -212,3 +212,71 @@ class Card():
                 output += Card.int_to_pretty_str(c) + " "
 
         print(output)
+
+
+PRECALC_CARDS = {
+    'AH': Card.new('AH'),
+    'AD': Card.new('AD'),
+    'AC': Card.new('AC'),
+    'AS': Card.new('AS'),
+
+    'KH': Card.new('KH'),
+    'KD': Card.new('KD'),
+    'KC': Card.new('KC'),
+    'KS': Card.new('KS'),
+
+    'QH': Card.new('QH'),
+    'QD': Card.new('QD'),
+    'QC': Card.new('QC'),
+    'QS': Card.new('QS'),
+
+    'JH': Card.new('JH'),
+    'JD': Card.new('JD'),
+    'JC': Card.new('JC'),
+    'JS': Card.new('JS'),
+
+    'TH': Card.new('TH'),
+    'TD': Card.new('TD'),
+    'TC': Card.new('TC'),
+    'TS': Card.new('TS'),
+
+    '9H': Card.new('9H'),
+    '9D': Card.new('9D'),
+    '9C': Card.new('9C'),
+    '9S': Card.new('9S'),
+
+    '8H': Card.new('8H'),
+    '8D': Card.new('8D'),
+    '8C': Card.new('8C'),
+    '8S': Card.new('8S'),
+
+    '7H': Card.new('7H'),
+    '7D': Card.new('7D'),
+    '7C': Card.new('7C'),
+    '7S': Card.new('7S'),
+
+    '6H': Card.new('6H'),
+    '6D': Card.new('6D'),
+    '6C': Card.new('6C'),
+    '6S': Card.new('6S'),
+
+    '5H': Card.new('5H'),
+    '5D': Card.new('5D'),
+    '5C': Card.new('5C'),
+    '5S': Card.new('5S'),
+
+    '4H': Card.new('4H'),
+    '4D': Card.new('4D'),
+    '4C': Card.new('4C'),
+    '4S': Card.new('4S'),
+
+    '3H': Card.new('3H'),
+    '3D': Card.new('3D'),
+    '3C': Card.new('3C'),
+    '3S': Card.new('3S'),
+
+    '2H': Card.new('2H'),
+    '2D': Card.new('2D'),
+    '2C': Card.new('2C'),
+    '2S': Card.new('2S'),
+}

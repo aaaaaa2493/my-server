@@ -17,6 +17,10 @@ class Strength(OrderedEnum):
     def __str__(self) -> str:
         return _to_str[self]
 
+    @staticmethod
+    def from_deuces(strength: int) -> 'Strength':
+        return _from_deuces[strength]
+
 
 _to_str: Dict[Strength, str] = {
     Strength.Nothing: 'nothing',
@@ -29,4 +33,16 @@ _to_str: Dict[Strength, str] = {
     Strength.Quad: 'quad',
     Strength.StraightFlush: 'straight flush',
     Strength.RoyalFlush: 'royal flush'
+}
+
+_from_deuces: Dict[int, Strength] = {
+    1: Strength.StraightFlush,
+    2: Strength.Quad,
+    3: Strength.FullHouse,
+    4: Strength.Flush,
+    5: Strength.Straight,
+    6: Strength.Set,
+    7: Strength.Pairs,
+    8: Strength.Pair,
+    9: Strength.Nothing
 }
