@@ -1,6 +1,7 @@
 from typing import List, Optional
 from threading import Thread, Lock
 from time import sleep
+from special.settings import Settings
 from holdem.play.result import Result
 from holdem.play.step import Step
 from holdem.players import Players
@@ -89,7 +90,7 @@ class Table:
 
             if not self.wait:
 
-                if (Debug.Table or Debug.Decision) and not self.online:
+                if (Debug.Table or Debug.Decision) and not self.online or Settings.is_profiling:
                     self.start_game()
                 else:
                     self.thread = Thread(target=self.start_game, name=f'Table {self.id}')

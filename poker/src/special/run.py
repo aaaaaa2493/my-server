@@ -21,6 +21,9 @@ class Run:
 
     def parse_arguments(self, args):
 
+        if args[-1] == '--profile':
+            Settings.is_profiling = True
+
         nicks_path = 'nicks_test'
         play_path = 'play_test'
         games_path = 'games_test'
@@ -40,8 +43,9 @@ class Run:
             NameManager.NicksPath = nicks_path
             PlayManager.PlayPath = play_path
             PlayManager.GenCount = 30
-            self.start_evolution(3, 9, 27, 1000)
+            self.start_evolution(100, 9, 27, 1000)
             NameManager.remove_folder()
+            PlayManager.remove_folder()
 
         elif args[0] == '--parsing-tests':
             from data.game_parser import GameParser, PokerGame

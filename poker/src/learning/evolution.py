@@ -29,7 +29,7 @@ class Evolution:
             Debug.evolution(f'Start game #{num + 1}')
 
             while not game.game_finished:
-                sleep(1)
+                sleep(0.01)
 
             PlayManager.standings(10)
             PlayManager.delete_bad_plays()

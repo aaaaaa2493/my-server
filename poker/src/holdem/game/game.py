@@ -75,8 +75,11 @@ class Game(BaseGame):
         self.players_count += 1
 
         if self.players_count == self.total_players:
-            self.thread = Thread(target=self.start_game, name='Game infinite')
-            self.thread.start()
+            if Settings.is_profiling:
+                self.start_game()
+            else:
+                self.thread = Thread(target=self.start_game, name='Game infinite')
+                self.thread.start()
             return True
 
         return False
@@ -422,8 +425,6 @@ class Game(BaseGame):
                     else:
                         Debug.game_progress('GAME OVER')
                         break
-
-                sleep(0.01)
 
         if not self.game_broken:
 
