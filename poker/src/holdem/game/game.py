@@ -75,9 +75,7 @@ class Game(BaseGame):
         self.players_count += 1
 
         if self.players_count == self.total_players:
-            if Settings.is_profiling:
-                self.start_game()
-            else:
+            if Settings.game_mode != Mode.Evolution:
                 self.thread = Thread(target=self.start_game, name='Game infinite')
                 self.thread.start()
             return True

@@ -28,6 +28,8 @@ class Play:
 
         self.busy = False
 
+        self.need_save = True
+
         self.name = '???'
 
         self.plays_history: List[Tuple[int, int]] = []
@@ -97,4 +99,4 @@ class Play:
             self.total_plays += 1
             self.average_places = (restore_places + place / out_of) / self.total_plays
 
-            PlayManager.save_play(self)
+            self.need_save = True

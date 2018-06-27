@@ -21,9 +21,6 @@ class Run:
 
     def parse_arguments(self, args):
 
-        if args[-1] == '--profile':
-            Settings.is_profiling = True
-
         nicks_path = 'nicks_test'
         play_path = 'play_test'
         games_path = 'games_test'
