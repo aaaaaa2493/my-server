@@ -2,6 +2,7 @@ from typing import Iterator
 from core.cards.rank import Rank
 from core.cards.card import Cards
 from holdem.poker.strength import Strength
+from holdem.poker.holdem_poker import HoldemPoker
 
 
 class BadStrength(Exception):
@@ -35,6 +36,11 @@ class Hand:
 
         self.cards = cards
 
+        if len(cards) == 5:
+            self.value = - HoldemPoker.fast_card_strength(cards)  # with minus because less is better
+        else:
+            self.value = self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5
+
     def kickers(self) -> Iterator[Rank]:
 
         if self.kicker1 is None:
@@ -58,34 +64,22 @@ class Hand:
         yield self.kicker5
 
     def __lt__(self, other: 'Hand') -> bool:
-
-        return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) < \
-               (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
+        return self.value < other.value
 
     def __le__(self, other: 'Hand') -> bool:
-
-        return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) <= \
-               (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
+        return self.value <= other.value
 
     def __gt__(self, other: 'Hand') -> bool:
-
-        return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) > \
-               (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
+        return self.value > other.value
 
     def __ge__(self, other: 'Hand') -> bool:
-
-        return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) >= \
-               (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
+        return self.value >= other.value
 
     def __eq__(self, other: 'Hand') -> bool:
-
-        return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) == \
-               (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
+        return self.value == other.value
 
     def __ne__(self, other: 'Hand') -> bool:
-
-        return (self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5) != \
-               (other.strength, other.kicker1, other.kicker2, other.kicker3, other.kicker4, other.kicker5)
+        return self.value != other.value
 
     def __str__(self) -> str:
 
