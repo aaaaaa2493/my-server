@@ -36,7 +36,7 @@ class Hand:
 
         self.cards = cards
 
-        if kicker5 is not None:
+        if sum(card is not None for card in cards) == 5:
             self.value = - HoldemPoker.fast_card_strength(cards)  # with minus because less is better
         else:
             self.value = self.strength, self.kicker1, self.kicker2, self.kicker3, self.kicker4, self.kicker5
