@@ -1,7 +1,7 @@
 from typing import List
 from core.cards.rank import Rank, Ranks
 from core.cards.suit import Suit, Suits
-from lib.pokereval.card import Card as _Card
+from lib.deuces.card import PRECALC_CARDS
 
 
 class Card:
@@ -22,6 +22,7 @@ class Card:
         self.card: str = card
         self.rank: Rank = Rank.get_rank(card[0])
         self.suit: Suit = Suit.get_suit(card[1])
+        self._int_value: int = PRECALC_CARDS[card]
 
     @property
     def str_rank(self) -> str:
@@ -39,12 +40,8 @@ class Card:
     def s(self) -> str:
         return self.card[1]
 
-    def convert(self) -> _Card:
-        return _Card(self.rank.to_int(), self.suit.to_int())
-
-    @staticmethod
-    def get_card(card: _Card) -> 'Card':
-        return Card(Rank(card.rank).short + Suit(card.suit).short)
+    def convert(self) -> int:
+        return self._int_value
 
     def __str__(self) -> str:
         return f'{self.str_rank} of {self.str_suit}'

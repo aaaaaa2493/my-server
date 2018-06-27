@@ -28,8 +28,12 @@ class Evolution:
 
             Debug.evolution(f'Start game #{num + 1}')
 
-            while not game.game_finished:
-                sleep(1)
+            game.start_game()
 
             PlayManager.standings(10)
             PlayManager.delete_bad_plays()
+
+            if (num + 1) % 100 == 0:
+                PlayManager.save_all_plays()
+
+        PlayManager.save_all_plays()

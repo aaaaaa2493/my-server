@@ -491,7 +491,7 @@ class PokerGame:
                     except KeyError:
                         pass
 
-            results.sort(reverse=True, key=lambda x: x[0])
+            results.sort(reverse=True, key=lambda x: x[0].safe_value)
 
             converted += [(time, network.hand_results(hand.board, results))]
             time = time + timedelta(seconds=Delay.HandResults)

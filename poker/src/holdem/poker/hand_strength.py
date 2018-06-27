@@ -4,6 +4,7 @@ from core.cards.card import Card, Cards
 from core.cards.cards_pair import CardsPair
 from holdem.poker.hand import Hand
 from holdem.poker.strength import Strength
+from holdem.poker.holdem_poker import HoldemPoker
 
 
 class HandStrength:
@@ -11,7 +12,7 @@ class HandStrength:
     def get_strength(cards: CardsPair, board: Cards) -> Strength:
         if not len(board):
             return HandStrength.strength2(cards.first, cards.second).strength
-        return HandStrength.max_strength([cards.first, cards.second] + board).strength
+        return HoldemPoker.fast_max_strength([cards.first, cards.second] + board)
 
     @staticmethod
     def strength(c1: Card, c2: Card, c3: Card, c4: Card, c5: Card) -> Hand:
@@ -148,4 +149,5 @@ class HandStrength:
 
     @staticmethod
     def max_strength(cards: Cards) -> Hand:
-        return max(HandStrength.strength(*c) for c in combinations(cards, 5))
+        best_cards = min((c for c in combinations(cards, 5)), key=lambda x: HoldemPoker.fast_card_strength(x))
+        return HandStrength.strength(*best_cards)
