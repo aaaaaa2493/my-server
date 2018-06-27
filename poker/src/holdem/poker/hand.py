@@ -81,6 +81,10 @@ class Hand:
     def __ne__(self, other: 'Hand') -> bool:
         return self.value != other.value
 
+    @property
+    def safe_value(self):
+        return self.kicker5 is not None, self.value
+
     def __str__(self) -> str:
 
         if self.strength == Strength.RoyalFlush:
