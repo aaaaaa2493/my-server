@@ -1,5 +1,6 @@
 from typing import List
 from core.cards.card import Card, Cards
+from core.cards.suit import Suit, Suits
 from core.cards.suitability import Suitability
 
 
@@ -15,24 +16,28 @@ class InitializeWithSameCard(Exception):
     pass
 
 
+class BadCardsPairStringRepresentation(Exception):
+    pass
+
+
 class CardsPair:
 
-    All = ('22o', '32s', '32o', '33o', '42s', '42o', '43s', '43o', '44o', '52s', '52o',
-           '53s', '53o', '54s', '54o', '55o', '62s', '62o', '63s', '63o', '64s', '64o',
-           '65s', '65o', '66o', '72s', '72o', '73s', '73o', '74s', '74o', '75s', '75o',
-           '76s', '76o', '77o', '82s', '82o', '83s', '83o', '84s', '84o', '85s', '85o',
-           '86s', '86o', '87s', '87o', '88o', '92s', '92o', '93s', '93o', '94s', '94o',
-           '95s', '95o', '96s', '96o', '97s', '97o', '98s', '98o', '99o', 'T2s', 'T2o',
+    All = ('22', '32s', '32o', '33', '42s', '42o', '43s', '43o', '44', '52s', '52o',
+           '53s', '53o', '54s', '54o', '55', '62s', '62o', '63s', '63o', '64s', '64o',
+           '65s', '65o', '66', '72s', '72o', '73s', '73o', '74s', '74o', '75s', '75o',
+           '76s', '76o', '77', '82s', '82o', '83s', '83o', '84s', '84o', '85s', '85o',
+           '86s', '86o', '87s', '87o', '88', '92s', '92o', '93s', '93o', '94s', '94o',
+           '95s', '95o', '96s', '96o', '97s', '97o', '98s', '98o', '99', 'T2s', 'T2o',
            'T3s', 'T3o', 'T4s', 'T4o', 'T5s', 'T5o', 'T6s', 'T6o', 'T7s', 'T7o', 'T8s',
-           'T8o', 'T9s', 'T9o', 'TTo', 'J2s', 'J2o', 'J3s', 'J3o', 'J4s', 'J4o', 'J5s',
+           'T8o', 'T9s', 'T9o', 'TT', 'J2s', 'J2o', 'J3s', 'J3o', 'J4s', 'J4o', 'J5s',
            'J5o', 'J6s', 'J6o', 'J7s', 'J7o', 'J8s', 'J8o', 'J9s', 'J9o', 'JTs', 'JTo',
-           'JJo', 'Q2s', 'Q2o', 'Q3s', 'Q3o', 'Q4s', 'Q4o', 'Q5s', 'Q5o', 'Q6s', 'Q6o',
-           'Q7s', 'Q7o', 'Q8s', 'Q8o', 'Q9s', 'Q9o', 'QTs', 'QTo', 'QJs', 'QJo', 'QQo',
+           'JJ', 'Q2s', 'Q2o', 'Q3s', 'Q3o', 'Q4s', 'Q4o', 'Q5s', 'Q5o', 'Q6s', 'Q6o',
+           'Q7s', 'Q7o', 'Q8s', 'Q8o', 'Q9s', 'Q9o', 'QTs', 'QTo', 'QJs', 'QJo', 'QQ',
            'K2s', 'K2o', 'K3s', 'K3o', 'K4s', 'K4o', 'K5s', 'K5o', 'K6s', 'K6o', 'K7s',
            'K7o', 'K8s', 'K8o', 'K9s', 'K9o', 'KTs', 'KTo', 'KJs', 'KJo', 'KQs', 'KQo',
-           'KKo', 'A2s', 'A2o', 'A3s', 'A3o', 'A4s', 'A4o', 'A5s', 'A5o', 'A6s', 'A6o',
+           'KK', 'A2s', 'A2o', 'A3s', 'A3o', 'A4s', 'A4o', 'A5s', 'A5o', 'A6s', 'A6o',
            'A7s', 'A7o', 'A8s', 'A8o', 'A9s', 'A9o', 'ATs', 'ATo', 'AJs', 'AJo', 'AQs',
-           'AQo', 'AKs', 'AKo', 'AAo')
+           'AQo', 'AKs', 'AKo', 'AA')
 
     def __init__(self, first: Card = None, second: Card = None):
 
@@ -65,6 +70,35 @@ class CardsPair:
                     pairs += [CardsPair(card1, card2)]
         return pairs
 
+    @staticmethod
+    def get_possible_pairs(pairs: str) -> List['CardsPair']:
+        if pairs not in CardsPair.All:
+            raise BadCardsPairStringRepresentation()
+
+        result: List['CardsPair'] = []
+        if len(pairs) == 2:
+            rank = pairs[0]
+            for suit1 in Suit.all():
+                for suit2 in Suit.all():
+                    if suit1 > suit2:
+                        result += [CardsPair(Card(rank + suit1.short), Card(rank + suit2.short))]
+
+        elif pairs[-1] == 's':
+            rank1 = pairs[0]
+            rank2 = pairs[1]
+            for suit in Suits:
+                result += [CardsPair(Card(rank1 + suit), Card(rank2 + suit))]
+
+        elif pairs[-1] == 'o':
+            rank1 = pairs[0]
+            rank2 = pairs[1]
+            for suit1 in Suits:
+                for suit2 in Suits:
+                    if suit1 != suit2:
+                        result += [CardsPair(Card(rank1 + suit1), Card(rank2 + suit2))]
+
+        return result
+
     def initialized(self) -> bool:
         return self.second is not None
 
@@ -78,6 +112,11 @@ class CardsPair:
             return Suitability.Suited
 
         return Suitability.Offsuited
+
+    def is_pocket_pairs(self) -> bool:
+        if not self.initialized():
+            raise NotInitializedCards()
+        return self.first.rank == self.second.rank
 
     def get(self) -> Cards:
         return [self.first, self.second]
@@ -107,6 +146,8 @@ class CardsPair:
         if self.initialized():
             first = self.first.r
             second = self.second.r
+            if first == second:
+                return first + second
             suitability = 's' if self.first.suit == self.second.suit else 'o'
             return first + second + suitability
 

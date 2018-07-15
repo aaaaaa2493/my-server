@@ -1,6 +1,6 @@
 from unittest import TestCase
 from core.cards.cards_pair import CardsPair, CanNotAddAnotherCard, NotInitializedCards, Card, Suitability
-from core.cards.cards_pair import InitializeWithSameCard
+from core.cards.cards_pair import InitializeWithSameCard, BadCardsPairStringRepresentation
 
 
 class CardsPairTest(TestCase):
@@ -214,3 +214,32 @@ class CardsPairTest(TestCase):
 
         pairs2 = CardsPair.get_all_pairs()
         self.assertEqual(len(pairs2), len(set(pairs)))
+
+    def test_range(self):
+
+        with self.assertRaises(BadCardsPairStringRepresentation):
+            CardsPair.get_possible_pairs('abc')
+
+        for range_item in CardsPair.All:
+            pairs = CardsPair.get_possible_pairs(range_item)
+            len_pairs = len(pairs)
+            self.assertEqual(len_pairs, len(set(pairs)))
+            for pair in pairs:
+                self.assertTrue(pair.initialized())
+                self.assertEqual(pair.suitability,
+                                 Suitability.Offsuited if pair.is_pocket_pairs() else
+                                 Suitability.get_suitability(range_item[-1]))
+                self.assertEqual(pair.first.rank.short, range_item[0])
+                self.assertEqual(pair.second.rank.short, range_item[1])
+
+            if len(range_item) == 2:
+                self.assertEqual(len_pairs, 6)
+
+            elif range_item[-1] == Suitability.Suited.short:
+                self.assertEqual(len_pairs, 4)
+
+            elif range_item[-1] == Suitability.Offsuited.short:
+                self.assertEqual(len_pairs, 12)
+
+            else:
+                raise AssertionError()
