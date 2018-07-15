@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Iterator
 from special.ordered_enum import OrderedEnum
 
 
@@ -11,6 +11,11 @@ class Suit(OrderedEnum):
     @classmethod
     def get_suit(cls, suit: str) -> 'Suit':
         return _from_str[suit]
+
+    @classmethod
+    def all(cls) -> Iterator['Suit']:
+        for suit in Suits:
+            yield _from_str[suit]
 
     @property
     def short(self) -> str:

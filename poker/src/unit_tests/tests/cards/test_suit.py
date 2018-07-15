@@ -1,5 +1,5 @@
 from unittest import TestCase
-from core.cards.suit import Suit
+from core.cards.suit import Suit, Suits
 
 
 class SuitTest(TestCase):
@@ -28,3 +28,12 @@ class SuitTest(TestCase):
         self.assertEqual(Suit.Diamonds.short, 'D')
         self.assertEqual(Suit.Clubs.short, 'C')
         self.assertEqual(Suit.Spades.short, 'S')
+
+    def test_all(self):
+        all_suits = *Suit.all(),
+        self.assertEqual(len(all_suits), len(Suits))
+        self.assertEqual(len(all_suits), len(set(all_suits)))
+        self.assertTrue(Suit.Hearts in all_suits)
+        self.assertTrue(Suit.Diamonds in all_suits)
+        self.assertTrue(Suit.Clubs in all_suits)
+        self.assertTrue(Suit.Spades in all_suits)
