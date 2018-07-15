@@ -1,5 +1,5 @@
 from unittest import TestCase
-from core.cards.rank import Rank
+from core.cards.rank import Rank, Ranks
 
 
 class RankTest(TestCase):
@@ -62,3 +62,21 @@ class RankTest(TestCase):
         self.assertEqual(Rank.Four.short, '4')
         self.assertEqual(Rank.Three.short, '3')
         self.assertEqual(Rank.Two.short, '2')
+
+    def test_all(self):
+        all_ranks = *Rank.all(),
+        self.assertEqual(len(all_ranks), len(Ranks))
+        self.assertEqual(len(all_ranks), len(set(all_ranks)))
+        self.assertTrue(Rank.Ace in all_ranks)
+        self.assertTrue(Rank.King in all_ranks)
+        self.assertTrue(Rank.Queen in all_ranks)
+        self.assertTrue(Rank.Jack in all_ranks)
+        self.assertTrue(Rank.Ten in all_ranks)
+        self.assertTrue(Rank.Nine in all_ranks)
+        self.assertTrue(Rank.Eight in all_ranks)
+        self.assertTrue(Rank.Seven in all_ranks)
+        self.assertTrue(Rank.Six in all_ranks)
+        self.assertTrue(Rank.Five in all_ranks)
+        self.assertTrue(Rank.Four in all_ranks)
+        self.assertTrue(Rank.Three in all_ranks)
+        self.assertTrue(Rank.Two in all_ranks)

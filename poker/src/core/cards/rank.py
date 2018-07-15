@@ -1,4 +1,4 @@
-from typing import Dict
+from typing import Dict, Iterator
 from special.ordered_enum import OrderedEnum
 
 
@@ -21,6 +21,11 @@ class Rank(OrderedEnum):
     @classmethod
     def get_rank(cls, rank: str) -> 'Rank':
         return _from_str[rank]
+
+    @classmethod
+    def all(cls) -> Iterator['Rank']:
+        for rank in Ranks:
+            yield _from_str[rank]
 
     @property
     def short(self) -> str:
