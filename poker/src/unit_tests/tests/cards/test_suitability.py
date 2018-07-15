@@ -13,3 +13,7 @@ class SuitabilityTest(TestCase):
     def test_to_str(self):
         self.assertEqual(str(Suitability.Suited), 'suited')
         self.assertEqual(str(Suitability.Offsuited), 'offsuited')
+
+    def test_short_str(self):
+        self.assertEqual(Suitability.Suited.short, 's')
+        self.assertEqual(Suitability.Offsuited.short, 'o')
