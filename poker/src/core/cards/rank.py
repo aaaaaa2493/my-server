@@ -24,7 +24,7 @@ class Rank(OrderedEnum):
         return _from_str[rank]
 
     @classmethod
-    def all(cls) -> Iterator['Rank']:
+    def all(cls) -> Iterator[Rank]:
         for rank in Ranks:
             yield _from_str[rank]
 

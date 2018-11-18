@@ -14,7 +14,7 @@ class Suit(OrderedEnum):
         return _from_str[suit]
 
     @classmethod
-    def all(cls) -> Iterator['Suit']:
+    def all(cls) -> Iterator[Suit]:
         for suit in Suits:
             yield _from_str[suit]
 
