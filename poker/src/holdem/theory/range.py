@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List
 from core.cards.cards_pair import CardsPair
 
@@ -20,8 +21,34 @@ class Range:
         '53o', '93o', '63o', '43o', '92o', '73o', '83o', '52o', '82o', '42o', '62o', '72o', '32o'
     )
 
+    AllPossibleItems = 1326
+
     def __init__(self, pairs: List[CardsPair]):
         self.pairs = [pair for pair in set(pairs)]
 
     @staticmethod
-    def get_range(pairs: List[str]) -> 'Range': ...
+    def from_str(poker_range: str) -> Range:
+        poker_range = poker_range.strip()
+        result_range = []
+        if poker_range.endswith('%'):
+            need_items = int(poker_range[:-1].strip()) / 100 * Range.AllPossibleItems
+            curr_items = 0
+            for range_item in Range.SortedRangeItems:
+                if len(range_item) == 2:
+                    curr_items += 6
+                elif range_item[-1] == 's':
+                    curr_items += 4
+                elif range_item[-1] == 'o':
+                    curr_items += 12
+
+                if curr_items <= need_items:
+                    result_range += [range_item]
+                else:
+                    break
+        else:
+            ranges = ...
+
+        return Range.get_range(result_range)
+
+    @staticmethod
+    def get_range(pairs: List[str]) -> Range: ...
