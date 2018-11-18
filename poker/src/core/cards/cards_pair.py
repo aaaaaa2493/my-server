@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List
 from core.cards.card import Card, Cards
 from core.cards.suit import Suit, Suits
@@ -61,8 +62,8 @@ class CardsPair:
             self.second: Card = None
 
     @staticmethod
-    def get_all_pairs() -> List['CardsPair']:
-        pairs: List['CardsPair'] = []
+    def get_all_pairs() -> List[CardsPair]:
+        pairs: List[CardsPair] = []
         for card1 in Card.cards_52():
             for card2 in Card.cards_52():
                 if card1 > card2:
@@ -159,10 +160,10 @@ class CardsPair:
 
         raise NotInitializedCards('Pair of cards is not initialized')
 
-    def __eq__(self, other: 'CardsPair') -> bool:
+    def __eq__(self, other: CardsPair) -> bool:
         return self.first == other.first and self.second == other.second
 
-    def __ne__(self, other: 'CardsPair') -> bool:
+    def __ne__(self, other: CardsPair) -> bool:
         return not self.__eq__(other)
 
     def __hash__(self):

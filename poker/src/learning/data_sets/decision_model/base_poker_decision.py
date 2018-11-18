@@ -1,3 +1,4 @@
+from __future__ import annotations
 from numpy import array
 from typing import List, Callable
 from learning.data_sets.decision_model.base_poker_decision_answer import BasePokerDecisionAnswer
@@ -24,7 +25,7 @@ class BasePokerDecision:
         pass
 
     @staticmethod
-    def get_decisions(game: PokerGame, hand: PokerHand) -> List['BasePokerDecision']:
+    def get_decisions(game: PokerGame, hand: PokerHand) -> List[BasePokerDecision]:
         raise NotImplementedError('get_decisions')
 
 

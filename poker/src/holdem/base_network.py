@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Optional, List, Tuple
 from json import dumps
 from holdem.play.result import Result
@@ -27,7 +28,7 @@ class BaseNetwork:
     def input_decision(self, available) -> Optional[List[str]]:
         raise NotImplementedError('input decision')
 
-    def init_hand(self, player: Optional['Player'], table: 'Table', game: 'Game') -> Optional[str]:
+    def init_hand(self, player: Optional[Player], table: Table, game: Game) -> Optional[str]:
 
         to_send = dict()
 
@@ -93,7 +94,7 @@ class BaseNetwork:
         else:
             return self.send(to_send)
 
-    def ante(self, all_paid: List[Tuple['Player', int]]) -> Optional[str]:
+    def ante(self, all_paid: List[Tuple[Player, int]]) -> Optional[str]:
 
         to_send = dict()
 
@@ -114,7 +115,7 @@ class BaseNetwork:
     def collect_money(self) -> Optional[str]:
         return self.send({'type': 'collect money'})
 
-    def blinds(self, button: 'Player', blind_info: List[Tuple['Player', int]]) -> Optional[str]:
+    def blinds(self, button: Player, blind_info: List[Tuple[Player, int]]) -> Optional[str]:
 
         to_send = dict()
 
@@ -144,7 +145,7 @@ class BaseNetwork:
 
         return self.send(to_send)
 
-    def give_cards(self, player: 'Player') -> Optional[str]:
+    def give_cards(self, player: Player) -> Optional[str]:
 
         to_send = dict()
 
@@ -158,7 +159,7 @@ class BaseNetwork:
 
         return self.send({'type': 'deal cards'})
 
-    def delete_player(self, player: 'Player') -> Optional[str]:
+    def delete_player(self, player: Player) -> Optional[str]:
 
         to_send = dict()
 
@@ -167,7 +168,7 @@ class BaseNetwork:
 
         return self.send(to_send)
 
-    def add_player(self, player: 'Player', seat: int) -> Optional[str]:
+    def add_player(self, player: Player, seat: int) -> Optional[str]:
 
         to_send = dict()
 
@@ -182,7 +183,7 @@ class BaseNetwork:
         else:
             return self.send(to_send)
 
-    def resit(self, player: 'Player', players: 'Players') -> Optional[str]:
+    def resit(self, player: Player, players: Players) -> Optional[str]:
 
         to_send = dict()
 
@@ -214,7 +215,7 @@ class BaseNetwork:
         else:
             return self.send(to_send)
 
-    def switch_decision(self, player: 'Player') -> Optional[str]:
+    def switch_decision(self, player: Player) -> Optional[str]:
 
         to_send = dict()
 
@@ -223,7 +224,7 @@ class BaseNetwork:
 
         return self.send(to_send)
 
-    def made_decision(self, player: 'Player', decision: Result) -> Optional[str]:
+    def made_decision(self, player: Player, decision: Result) -> Optional[str]:
 
         to_send = dict()
 
@@ -252,7 +253,7 @@ class BaseNetwork:
 
         return self.send(to_send)
 
-    def back_excess_money(self, player: 'Player', money: int) -> Optional[str]:
+    def back_excess_money(self, player: Player, money: int) -> Optional[str]:
 
         to_send = dict()
 
@@ -291,7 +292,7 @@ class BaseNetwork:
 
         return self.send(to_send)
 
-    def open_cards(self, table: 'Table', for_replay=False) -> Optional[str]:
+    def open_cards(self, table: Table, for_replay=False) -> Optional[str]:
 
         to_send = dict()
 
@@ -329,7 +330,7 @@ class BaseNetwork:
         else:
             return self.send(to_send)
 
-    def give_money(self, player: 'Player', money: int) -> Optional[str]:
+    def give_money(self, player: Player, money: int) -> Optional[str]:
 
         to_send = dict()
 
@@ -348,7 +349,7 @@ class BaseNetwork:
 
         return self.send(to_send)
 
-    def hand_results(self, board: Board, results: List[Tuple[Hand, 'Player', str]]) -> Optional[str]:
+    def hand_results(self, board: Board, results: List[Tuple[Hand, Player, str]]) -> Optional[str]:
 
         to_send = dict()
 

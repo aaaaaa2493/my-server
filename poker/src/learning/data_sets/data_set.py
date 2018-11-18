@@ -1,3 +1,4 @@
+from __future__ import annotations
 from pickle import load, dump
 from os.path import exists
 from os import mkdir
@@ -36,5 +37,5 @@ class DataSet:
         dump(self, open(DataSet.dataset_folder + '/' + path, 'wb'))
 
     @staticmethod
-    def load(path) -> 'DataSet':
+    def load(path) -> DataSet:
         return load(open(DataSet.dataset_folder + '/' + path, 'rb'))

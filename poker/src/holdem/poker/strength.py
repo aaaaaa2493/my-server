@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Dict
 from special.ordered_enum import OrderedEnum
 
@@ -18,7 +19,7 @@ class Strength(OrderedEnum):
         return _to_str[self]
 
     @staticmethod
-    def from_deuces(strength: int) -> 'Strength':
+    def from_deuces(strength: int) -> Strength:
         return _from_deuces[strength]
 
 

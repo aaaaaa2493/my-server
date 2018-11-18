@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import Dict
 from enum import Enum
 
@@ -30,7 +31,7 @@ class Decision(Enum):
         return _to_str[self]
 
     @staticmethod
-    def update(curr: 'Decision', decision: 'Decision') -> 'Decision':
+    def update(curr: Decision, decision: Decision) -> Decision:
 
         if curr is None:
             if decision == Decision.Fold:
