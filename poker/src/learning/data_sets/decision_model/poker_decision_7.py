@@ -1,3 +1,4 @@
+from __future__ import annotations
 from numpy import array
 from typing import List, Dict
 from holdem.poker.holdem_poker import HoldemPoker
@@ -80,7 +81,7 @@ class PokerDecision7(BasePokerDecision):
                players_active: int,
                players_not_moved: int,
                max_playing_stack: int,
-               average_stack_on_table: int) -> 'PokerDecision7':
+               average_stack_on_table: int) -> PokerDecision7:
 
         if money < 0:
             raise ValueError(f'Money must be > 0, gived {money}')

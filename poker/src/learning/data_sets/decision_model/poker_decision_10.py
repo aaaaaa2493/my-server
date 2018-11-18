@@ -1,3 +1,4 @@
+from __future__ import annotations
 from numpy import array
 from typing import List, Dict, Tuple
 from statistics import mean
@@ -164,7 +165,7 @@ class PokerDecision10(BasePokerDecision):
                average_stack_on_table: int,
                players: List[MockPlayer],
                folded_players: List[str],
-               my_position: PokerPosition) -> 'PokerDecision10':
+               my_position: PokerPosition) -> PokerDecision10:
 
         if money < 0:
             raise ValueError(f'Money must be > 0, gived {money}')

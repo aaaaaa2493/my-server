@@ -1,4 +1,3 @@
-from time import sleep
 from core.blinds.scheme.scheme import Scheme
 from holdem.play.play import Play
 from holdem.game.game import Game

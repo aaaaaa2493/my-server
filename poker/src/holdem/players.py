@@ -1,3 +1,4 @@
+from __future__ import annotations
 from typing import List, Iterator, Optional
 from threading import Lock
 from time import sleep
@@ -168,7 +169,7 @@ class Players:
         self.curr_player = save_curr_player
         return length
 
-    def sort_by_nearest_to_button(self, players: 'TablePlayers') -> 'TablePlayers':
+    def sort_by_nearest_to_button(self, players: TablePlayers) -> TablePlayers:
 
         return sorted(players, key=lambda p: self.length_to_button(p))
 
@@ -248,7 +249,7 @@ class Players:
                 self.next_free_seat()
                 self.sit_player(player, from_other_table)
 
-    def remove_player(self, players: 'Players') -> None:
+    def remove_player(self, players: Players) -> None:
 
         if self.count == 0:
             raise ValueError('No one to remove')
