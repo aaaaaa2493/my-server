@@ -6,6 +6,8 @@ install:
   - pip install numpy
   - pip install scipy
   - pip install scikit-learn
+  - pip install gprof2dot
+  - sudo apt-get install graphviz
 script:
   - cd poker
   - python src/main.py --unit-tests
@@ -13,3 +15,5 @@ script:
   - python src/main.py --parsing-tests
   - python src/main.py --learning-tests
   - python src/main.py --network-play-tests
+  - python -m cProfile -o profile_results.prof ./src/main.py --evolution-tests
+  - gprof2dot -f pstats profile_results.prof | dot -Tpng -o profile_results.png

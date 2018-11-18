@@ -1,5 +1,6 @@
 from unittest import TestCase
 from core.cards.cards_pair import CardsPair, CanNotAddAnotherCard, NotInitializedCards, Card, Suitability
+from core.cards.cards_pair import InitializeWithSameCard
 
 
 class CardsPairTest(TestCase):
@@ -117,89 +118,99 @@ class CardsPairTest(TestCase):
         self.assertNotEqual(pair1, pair2)
         self.assertEqual(pair1, pair3)
 
-    def test_comparisons(self):
-        pair1 = CardsPair(Card('AS'), Card('5D'))
-        pair2 = CardsPair(Card('AD'), Card('5C'))
-        self.assertFalse(pair1 > pair2)
-        self.assertFalse(pair2 > pair1)
-
-        pair1 = CardsPair(Card('AS'), Card('6D'))
-        pair2 = CardsPair(Card('AD'), Card('5C'))
-        self.assertTrue(pair1 > pair2)
-        self.assertFalse(pair2 > pair1)
-
-        pair1 = CardsPair(Card('KS'), Card('5D'))
-        pair2 = CardsPair(Card('AD'), Card('5C'))
-        self.assertFalse(pair1 > pair2)
-        self.assertTrue(pair2 > pair1)
-
-        pair1 = CardsPair(Card('KS'), Card('6D'))
-        pair2 = CardsPair(Card('AD'), Card('5C'))
-        self.assertFalse(pair1 > pair2)
-        self.assertTrue(pair2 > pair1)
-
-        pair1 = CardsPair(Card('7S'), Card('7D'))
-        pair2 = CardsPair(Card('AD'), Card('5C'))
-        self.assertTrue(pair1 > pair2)
-        self.assertFalse(pair2 > pair1)
-
-        pair1 = CardsPair(Card('7S'), Card('7D'))
-        pair2 = CardsPair(Card('2S'), Card('2C'))
-        self.assertTrue(pair1 > pair2)
-        self.assertFalse(pair2 > pair1)
-
-        pair1 = CardsPair(Card('AS'), Card('5S'))
-        pair2 = CardsPair(Card('AD'), Card('5C'))
-        self.assertTrue(pair1 > pair2)
-        self.assertFalse(pair2 > pair1)
-
-        pair1 = CardsPair(Card('AS'), Card('5S'))
-        pair2 = CardsPair(Card('AD'), Card('6C'))
-        self.assertFalse(pair1 > pair2)
-        self.assertTrue(pair2 > pair1)
-
-    def test_str_comparisons(self):
-        pair1 = 'A5o'
-        pair2 = 'A5o'
-        self.assertFalse(CardsPair.gt_str(pair1, pair2))
-        self.assertFalse(CardsPair.gt_str(pair2, pair1))
-
-        pair1 = 'A6o'
-        pair2 = 'A5o'
-        self.assertTrue(CardsPair.gt_str(pair1, pair2))
-        self.assertFalse(CardsPair.gt_str(pair2, pair1))
-
-        pair1 = 'K5o'
-        pair2 = 'A5o'
-        self.assertFalse(CardsPair.gt_str(pair1, pair2))
-        self.assertTrue(CardsPair.gt_str(pair2, pair1))
-
-        pair1 = 'K6o'
-        pair2 = 'A5o'
-        self.assertFalse(CardsPair.gt_str(pair1, pair2))
-        self.assertTrue(CardsPair.gt_str(pair2, pair1))
-
-        pair1 = '77o'
-        pair2 = 'A5o'
-        self.assertTrue(CardsPair.gt_str(pair1, pair2))
-        self.assertFalse(CardsPair.gt_str(pair2, pair1))
-
-        pair1 = '77o'
-        pair2 = '22o'
-        self.assertTrue(CardsPair.gt_str(pair1, pair2))
-        self.assertFalse(CardsPair.gt_str(pair2, pair1))
-
-        pair1 = 'A5s'
-        pair2 = 'A5o'
-        self.assertTrue(CardsPair.gt_str(pair1, pair2))
-        self.assertFalse(CardsPair.gt_str(pair2, pair1))
-
-        pair1 = 'A5s'
-        pair2 = 'A6o'
-        self.assertFalse(CardsPair.gt_str(pair1, pair2))
-        self.assertTrue(CardsPair.gt_str(pair2, pair1))
-
     def test_str(self):
         self.assertRegex(str(self.full), '.. ..')
         self.assertRegex(str(self.half), '.. \?\?')
         self.assertRegex(str(self.none), '\?\? \?\?')
+
+    def test_hash(self):
+        pair1 = CardsPair(Card('AS'), Card('5D'))
+        pair2 = CardsPair(Card('AS'), Card('5C'))
+        pair3 = CardsPair(Card('AS'), Card('5D'))
+        self.assertEqual(len({pair1, pair2, pair3}), 2)
+
+    def test_can_not_add_same_card(self):
+        for card1 in Card.cards_52():
+
+            with self.assertRaises(InitializeWithSameCard):
+                CardsPair(card1, card1)
+
+            with self.assertRaises(InitializeWithSameCard):
+                pair = CardsPair(card1)
+                pair.set(card1)
+
+            with self.assertRaises(InitializeWithSameCard):
+                pair = CardsPair()
+                pair.set(card1)
+                pair.set(card1)
+
+            for card2 in Card.cards_52():
+                if card1 != card2:
+                    CardsPair(card1, card2)
+
+                    pair = CardsPair(card1)
+                    pair.set(card2)
+
+                    pair = CardsPair(card2)
+                    pair.set(card1)
+
+                    pair = CardsPair()
+                    pair.set(card1)
+                    pair.set(card2)
+
+                    pair = CardsPair()
+                    pair.set(card2)
+                    pair.set(card1)
+                else:
+                    with self.assertRaises(InitializeWithSameCard):
+                        CardsPair(card1, card2)
+
+                    with self.assertRaises(InitializeWithSameCard):
+                        CardsPair(card2, card1)
+
+                    with self.assertRaises(InitializeWithSameCard):
+                        pair = CardsPair(card1)
+                        pair.set(card2)
+
+                    with self.assertRaises(InitializeWithSameCard):
+                        pair = CardsPair(card2)
+                        pair.set(card1)
+
+                    with self.assertRaises(InitializeWithSameCard):
+                        pair = CardsPair()
+                        pair.set(card1)
+                        pair.set(card2)
+
+                    with self.assertRaises(InitializeWithSameCard):
+                        pair = CardsPair()
+                        pair.set(card2)
+                        pair.set(card1)
+
+    def test_all_combinations(self):
+
+        pairs = []
+        for card1 in Card.cards_52():
+            for card2 in Card.cards_52():
+                if card1 != card2:
+                    pairs += [CardsPair(card1, card2)]
+
+                    pair = CardsPair(card1)
+                    pair.set(card2)
+                    pairs += [pair]
+
+                    pair = CardsPair(card2)
+                    pair.set(card1)
+                    pairs += [pair]
+
+                    pair = CardsPair()
+                    pair.set(card1)
+                    pair.set(card2)
+                    pairs += [pair]
+
+                    pair = CardsPair()
+                    pair.set(card2)
+                    pair.set(card1)
+                    pairs += [pair]
+
+        pairs2 = CardsPair.get_all_pairs()
+        self.assertEqual(len(pairs2), len(set(pairs)))

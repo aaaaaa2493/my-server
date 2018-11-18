@@ -40,7 +40,7 @@ class Run:
             NameManager.NicksPath = nicks_path
             PlayManager.PlayPath = play_path
             PlayManager.GenCount = 30
-            self.start_evolution(3, 9, 27, 1000)
+            self.start_evolution(100, 9, 27, 1000)
             NameManager.remove_folder()
 
         elif args[0] == '--parsing-tests':

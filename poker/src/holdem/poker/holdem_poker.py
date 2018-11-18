@@ -1,19 +1,47 @@
-from typing import Tuple
-from lib.pokereval.hand_evaluator import HandEvaluator
-from holdem.poker.hand_strength import HandStrength
+from typing import Tuple, List
+from itertools import combinations
 from core.cards.card import Card, Cards
 from core.cards.cards_pair import CardsPair
+from lib.deuces.evaluator import Evaluator
+from holdem.poker.strength import Strength
 
 
 class HoldemPoker:
 
     MAX_OUTS: int = 21
+    _evaluator = Evaluator()
 
     @staticmethod
     def probability(c: CardsPair, f: Cards) -> float:
-        pr = HandEvaluator.evaluate_hand([c.first.convert(), c.second.convert()], [card.convert() for card in f])
-        # print('EVALUATING', c, 'board', Card.str(f), '=', pr)
+        ev = HoldemPoker._evaluator
+        board = [card.convert() for card in f]
+        hand = [c.first.convert(), c.second.convert()]
+
+        if len(board) == 0:
+            pr = ev.evaluate(board, hand)
+        else:
+            pr = 1 - ev.get_five_card_rank_percentage(ev.evaluate(board, hand))
+
         return pr
+
+    @staticmethod
+    def fast_card_strength(cards: Cards) -> int:
+        return HoldemPoker._evaluator.evaluate([card.convert() for card in cards], [])
+
+    @staticmethod
+    def fast_hand_strength(cards: Cards) -> Strength:
+        fast_strength = HoldemPoker.fast_card_strength(cards)
+        if fast_strength == 1:
+            return Strength.RoyalFlush
+        return Strength.from_deuces(HoldemPoker._evaluator.get_rank_class(fast_strength))
+
+    @staticmethod
+    def fast_max_strength(cards: Cards) -> Strength:
+        int_cards: List[int] = [card.convert() for card in cards]
+        max_strength = min(HoldemPoker._evaluator.evaluate(list(c), []) for c in combinations(int_cards, 5))
+        if max_strength == 1:
+            return Strength.RoyalFlush
+        return Strength.from_deuces(HoldemPoker._evaluator.get_rank_class(max_strength))
 
     @staticmethod
     def calculate_outs(hidden: CardsPair, common: Cards) -> Tuple[int, Cards]:
@@ -23,7 +51,7 @@ class HoldemPoker:
 
         cards: Cards = [hidden.first, hidden.second] + common
 
-        curr_hand_strength = HandStrength.max_strength(cards).strength
+        curr_hand_strength = HoldemPoker.fast_max_strength(cards)
 
         outs: int = 0
         outs_cards = []
@@ -32,15 +60,9 @@ class HoldemPoker:
 
             if card not in cards:
 
-                new_hand_strength = HandStrength.max_strength(cards + [card]).strength
+                new_hand_strength = HoldemPoker.fast_max_strength(cards + [card])
 
-                if len(common) == 4:
-                    new_board_strength = HandStrength.strength(*common, card).strength
-
-                else:
-                    new_board_strength = HandStrength.strength4(*common, card).strength
-
-                if new_board_strength < new_hand_strength > curr_hand_strength:
+                if new_hand_strength > curr_hand_strength:
                     outs += 1
                     outs_cards += [card]
 

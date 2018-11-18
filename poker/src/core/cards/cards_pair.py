@@ -1,5 +1,5 @@
+from typing import List
 from core.cards.card import Card, Cards
-from core.cards.rank import Rank
 from core.cards.suitability import Suitability
 
 
@@ -8,6 +8,10 @@ class CanNotAddAnotherCard(Exception):
 
 
 class NotInitializedCards(Exception):
+    pass
+
+
+class InitializeWithSameCard(Exception):
     pass
 
 
@@ -30,45 +34,12 @@ class CardsPair:
            'A7s', 'A7o', 'A8s', 'A8o', 'A9s', 'A9o', 'ATs', 'ATo', 'AJs', 'AJo', 'AQs',
            'AQo', 'AKs', 'AKo', 'AAo')
 
-    @staticmethod
-    def gt_str(this: str, opp: str) -> bool:
-
-        sfv: Rank = Rank.get_rank(this[0])
-        ssv: Rank = Rank.get_rank(this[1])
-        ssb: Suitability = Suitability.get_suitability(this[2])
-
-        ofv: Rank = Rank.get_rank(opp[0])
-        osv: Rank = Rank.get_rank(opp[1])
-        osb: Suitability = Suitability.get_suitability(opp[2])
-
-        if sfv == ssv:
-            if ofv != osv:
-                return True
-            elif sfv > ofv:
-                return True
-            return False
-
-        elif ofv == osv:
-            return False
-
-        if sfv > ofv:
-            return True
-        elif sfv < ofv:
-            return False
-
-        if ssv > osv:
-            return True
-        elif ssv < osv:
-            return False
-
-        if ssb == Suitability.Suited and osb == Suitability.Offsuited:
-            return True
-
-        return False
-
     def __init__(self, first: Card = None, second: Card = None):
 
         if first is not None and second is not None:
+
+            if first == second:
+                raise InitializeWithSameCard('Can not initialize with same card')
 
             if first >= second:
                 self.first: Card = first
@@ -84,6 +55,15 @@ class CardsPair:
         else:
             self.first: Card = None
             self.second: Card = None
+
+    @staticmethod
+    def get_all_pairs() -> List['CardsPair']:
+        pairs: List['CardsPair'] = []
+        for card1 in Card.cards_52():
+            for card2 in Card.cards_52():
+                if card1 > card2:
+                    pairs += [CardsPair(card1, card2)]
+        return pairs
 
     def initialized(self) -> bool:
         return self.second is not None
@@ -112,7 +92,9 @@ class CardsPair:
         if self.first is None:
             self.first = card
         elif self.second is None:
-            if card.rank > self.first.rank:
+            if self.first == card:
+                raise InitializeWithSameCard('Can not initialize with same card')
+            if card > self.first:
                 self.second = self.first
                 self.first = card
             else:
@@ -137,38 +119,14 @@ class CardsPair:
 
         raise NotInitializedCards('Pair of cards is not initialized')
 
-    def __gt__(self, opp: 'CardsPair') -> bool:
-
-        if self.first.rank == self.second.rank:
-            if opp.first.rank != opp.second.rank:
-                return True
-            elif self.first.rank > opp.first.rank:
-                return True
-            return False
-
-        elif opp.first.rank == opp.second.rank:
-            return False
-
-        if self.first.rank > opp.first.rank:
-            return True
-        elif self.first.rank < opp.first.rank:
-            return False
-
-        if self.second.rank > opp.second.rank:
-            return True
-        elif self.second.rank < opp.second.rank:
-            return False
-
-        if self.first.suit == self.second.suit and opp.first.suit != opp.second.suit:
-            return True
-
-        return False
-
     def __eq__(self, other: 'CardsPair') -> bool:
         return self.first == other.first and self.second == other.second
 
     def __ne__(self, other: 'CardsPair') -> bool:
         return not self.__eq__(other)
+
+    def __hash__(self):
+        return hash((self.first, self.second))
 
     def __str__(self):
 

@@ -111,15 +111,28 @@ class PlayManager:
     @staticmethod
     def save_play(play: Play):
 
+        if play.need_save:
+
+            play.need_save = False
+
+            if not PlayManager._initialized:
+                PlayManager.init()
+
+            if Settings.game_mode == Mode.Evolution:
+
+                if not exists(f'{PlayManager.PlayPath}/{play.generation}'):
+                    mkdir(f'{PlayManager.PlayPath}/{play.generation}')
+
+                dump(play, open(f'{PlayManager.PlayPath}/{play.generation}/{play.exemplar}', 'wb'))
+
+    @staticmethod
+    def save_all_plays():
         if not PlayManager._initialized:
             PlayManager.init()
 
-        if Settings.game_mode == Mode.Evolution:
-
-            if not exists(f'{PlayManager.PlayPath}/{play.generation}'):
-                mkdir(f'{PlayManager.PlayPath}/{play.generation}')
-
-            dump(play, open(f'{PlayManager.PlayPath}/{play.generation}/{play.exemplar}', 'wb'))
+        for play in PlayManager._bank_of_plays:
+            if play.need_save:
+                PlayManager.save_play(play)
 
     @staticmethod
     def fill_zero_gens():
