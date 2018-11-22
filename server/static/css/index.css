@@ -36,6 +36,11 @@ body{
     color: #FF6A00;
 }
 
+.github:hover{
+    background-color: #333333;
+    color: #ffffff;
+}
+
 .standard:hover{
     background-color: #c0c0c0;
     color: #303030;

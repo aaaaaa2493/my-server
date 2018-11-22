@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Visual GitHub</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" type="text/css" href="static/github/css/main.css"/>
+    <link rel="stylesheet" type="text/css" href="static/github/css/w3.css"/>
+    <script>
+        const ip = '{{ip}}';
+        const port = '{{port}}';
+    </script>
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.15/howler.min.js"></script>
+    <script src="static/github/js/displayFig.js"></script>
+    <script src="static/github/js/main.js"></script>
+    <link rel='stylesheet' href='static/github/css/displayFig.css'>
+</head>
+<body onload="WebSocketInit()">
+
+    <div id="id01" class="w3-modal">
+        <div class="w3-modal-content">
+            <div class="w3-container">
+          <span onclick="document.getElementById('id01').style.display='none'"
+                class="w3-button w3-display-topright">&times;</span>
+                <p align="center">This is Visual GitHub Activity project, creatred by students of St.Petersburg's Electrotechnical University:</p>
+                <p align="center">Turov Vladimir</p>
+                <p align="center">Ivanov Vladimir</p>
+                <p align="center">Piskunov Yaroslav</p>
+                <p align="center">Zyl Sergey</p>
+                <p align="center">Matushina Marina</p>
+                <p align="center">For more information see the <a href="https://github.com/moevm/mse_voice_acting_of_activity_on_the_github" target="_blank">repository</a></p>
+            </div>
+        </div>
+    </div>
+
+    <div align="center">
+        <div class="w3-container">
+            <div class="w3-display-container" style="height: 55px">
+                <div id="VA" class="w3-display-left" style="font-size: x-large; margin-left:1%">Visual activity on GitHub</div>
+                <button class="w3-display-right w3-btn w3-black" id ="changecolors">Go to Dark</button>
+                <div id="bar" class="w3-display-middle" style="margin-left: 38%">Volume: <label><input id="volinp" type="range" min="0" max="100" step="1" value="20"></label></div>
+                <div class="w3-display-right" style="margin-right: 1%">
+                    <button class="w3-display-right w3-btn w3-green" onclick="document.getElementById('id01').style.display='block'">About</button>
+                </div>
+            </div>
+        </div>
+        <div id="displaydiv"></div>
+        <p id="IE" align="center" style="font-size: x-large">Info about events</p>
+        <input type="checkbox" id="1" class="w3-check w3-margin-bottom filterMain" value="all" onclick="use_all_filters_flags();"><label class="checkboxes" for="1">All</label>
+        <input type="checkbox" checked id="2" class="w3-check w3-margin-bottom filtercheck" value="pull_request" onclick="filterChange();"><label class="checkboxes" for="2">PullReq</label>
+        <input type="checkbox" id="3" class="w3-check w3-margin-bottom filtercheck" value="push" onclick="filterChange();"><label class="checkboxes" for="3">Push</label>
+        <input type="checkbox" id="4" class="w3-check w3-margin-bottom filtercheck" value="create_repo" onclick="filterChange();"><label class="checkboxes" for="4">CreateRepo</label>
+        <input type="checkbox" id="5" class="w3-check w3-margin-bottom filtercheck" value="fork_repo"  onclick="filterChange();"><label class="checkboxes" for="5">ForkRepo</label>
+        <input type="checkbox" id="6" class="w3-check w3-margin-bottom filtercheck" value="issue" onclick="filterChange();"><label class="checkboxes" for="6">Issue</label>
+        <input type="checkbox" id="7" class="w3-check w3-margin-bottom filtercheck" value="issue_comment" onclick="filterChange();"><label class="checkboxes" for="7">IssueComment</label>
+        <input type="checkbox" id="8" class="w3-check w3-margin-bottom filtercheck" value="pull_request_review" onclick="filterChange();"><label class="checkboxes" for="8">PullReqReview</label>
+        <input type="checkbox" id="9" class="w3-check w3-margin-bottom filtercheck" value="wiki_page" onclick="filterChange();"><label class="checkboxes" for="9">WikiPage</label>
+        <input type="checkbox" id="10" class="w3-check w3-margin-bottom filtercheck" value="release" onclick="filterChange();"><label class="checkboxes" for="10">Release</label>
+        <input type="checkbox" id="11" class="w3-check w3-margin-bottom filtercheck" value="commit_comment" onclick="filterChange();"><label class="checkboxes" for="11">CommitComment</label>
+       <!-- <button class="w3-btn w3-green w3-margin-bottom" id="pushOnly" onclick="filter_push()">Switch Pushes only</button>
+        <button class="w3-btn w3-green w3-margin-bottom" id="pullOnly" onclick="filter_pull()">Swith Pull requests only</button>  -->
+        <div id="eventfield"></div>
+
+    </div>
+</body>
+</html>

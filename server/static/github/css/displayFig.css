@@ -1,0 +1,25 @@
+.a_figure{
+    border:1px solid;
+    background-color: aqua;
+    position:absolute;
+    display: flex;
+    justify-content: center; /*Центрирование по горизонтали*/
+    align-items: center;
+    text-align: center;
+
+}
+#displaydiv{
+    width: 0px;
+    height:0px;
+    border:solid 2px;
+    background-color: #e8e8e7;
+}
+
+#back_figure{
+    background-color: #87918F;
+    position:absolute;
+    display: flex;
+    justify-content: center; /*Центрирование по горизонтали*/
+    align-items: center;
+    text-align: center;
+}

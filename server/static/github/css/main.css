@@ -1,0 +1,53 @@
+#eventfield{
+    border: dashed 3px black;
+    width: 96%;
+    height: 620px;
+    margin-bottom: 10px;
+}
+
+#changecolors{
+    margin-right: 18%;
+}
+
+#displaydiv{
+    transition: background-color 0.5s ease;
+}
+
+#VA{
+     transition: color 0.5s ease;
+}
+
+#IE{
+    transition: color 0.5s ease;
+}
+
+#bar{
+    transition: color 0.5s ease;
+}
+
+#eventfield{
+    overflow-y:scroll;
+    text-align: left;
+}
+
+.filtercheck{
+    margin-left: 8px;
+}
+
+.checkboxes {
+    font-size: large;
+    color: #ffffff;
+    background: #a0a0a0;
+    border-radius: 5px;
+    margin-left: 3px;
+    padding: 4px;
+}
+
+input[type=checkbox]:checked + label {
+    background: green;
+}
+
+body{
+    background-color: white;
+    transition: background-color 0.5s ease;
+}
