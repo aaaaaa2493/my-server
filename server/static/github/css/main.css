@@ -24,14 +24,27 @@
 #bar{
     transition: color 0.5s ease;
 }
-
+#id01{
+    z-index: 3000;
+}
 #eventfield{
     overflow-y:scroll;
     text-align: left;
 }
 
+.black{
+    background-color: #292929;
+}
+
 .filtercheck{
     margin-left: 8px;
+    width: 64px;
+    height: 64px;
+}
+
+.filterMain{
+    width: 64px;
+    height: 64px;
 }
 
 .checkboxes {
@@ -43,11 +56,16 @@
     padding: 4px;
 }
 
-input[type=checkbox]:checked + label {
-    background: green;
+body, input, button {
+    transition: background-color 0.5s, color 0.5s;
 }
 
 body{
     background-color: white;
-    transition: background-color 0.5s ease;
+}
+
+:focus {
+    outline-style: none;
+    outline-width: 0px !important;
+    outline-color: none !important;
 }

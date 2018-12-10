@@ -343,18 +343,16 @@
 
     return ReconnectingWebSocket;
 });
-
+var ws = new ReconnectingWebSocket(`ws://${ip}:${port}`);
 //Creation ReconnectingWebSocket
 function WebSocketInit() {
-
-    var ws = new ReconnectingWebSocket(`ws://${ip}:${port}`);
     ws.onopen = function() {
         ws.send("Message to send");
     };
 
     ws.onmessage = function (evt) {
         var received_msg = evt.data;
-        // console.log(received_msg);
+        console.log(received_msg);
         infoonFig(received_msg);
     };
 
@@ -364,4 +362,16 @@ function WebSocketInit() {
 
 }
 
+function filterChoose(filter_json) {
+    ws.send(JSON.stringify(filter_json));
+}
 //End of the websocket part
+function orgChoose() {
+    let org = {
+        'type':'filter',
+        'org':`${$("#organization").val()}`,
+        'repo':`${$("#repos").val()}`
+    };
+    //alert(JSON.stringify(org))
+    ws.send(JSON.stringify(org));
+}

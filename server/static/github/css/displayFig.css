@@ -23,3 +23,10 @@
     align-items: center;
     text-align: center;
 }
+.error_filter_org{
+    -webkit-box-shadow: 0px 0px 15px #f20800;
+    -moz-box-shadow: 0px 0px 15px #f20800;
+    box-shadow: 0px 0px 15px #f20800;
+    background-color: rgba(255, 188, 190, 0.97);
+    border:3px solid red;
+}

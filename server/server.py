@@ -1646,7 +1646,8 @@ class KeyServer:
 # ABOUT VISUAL GITHUB
 
 
-from bottle import route, run, static_file
+from os import listdir
+from bottle import route, run, static_file, template
 from github3 import GitHub
 from github3.events import Event
 from github3.exceptions import NotFoundError
@@ -1656,7 +1657,7 @@ from threading import Thread, Lock
 from typing import List, Dict
 from time import sleep
 from datetime import datetime, timedelta
-from json import dumps
+from json import dumps,loads
 from json.decoder import JSONDecodeError
 from websocket_server import WebsocketServer, WebSocketHandler
 from pprint import pprint
@@ -1696,7 +1697,8 @@ def download_events():
                     new_events += [event]
                 else:
                     break
-            last_event = new_events[0]
+            if len(new_events):
+                last_event = new_events[0]
             event_queue[0:0] = new_events
         except ServerError:
             print("Server error occurred")
@@ -1705,11 +1707,12 @@ def download_events():
         except ConnectionAbortedError:
             print("Connection aborted error occurred")
 
-        pushes = sum(event.type == "PushEvent" for event in event_queue)
-        print(f'{event_queue[-1].created_at.time()}-'
-              f'{event_queue[0].created_at.time()}, '
-              f'events: {len(event_queue)}, '
-              f'pushes: {pushes}')
+        if len(event_queue):
+            pushes = sum(event.type == "PushEvent" for event in event_queue)
+            print(f'{event_queue[-1].created_at.time()}-'
+                  f'{event_queue[0].created_at.time()}, '
+                  f'events: {len(event_queue)}, '
+                  f'pushes: {pushes}')
 
         sleep(10)
 
@@ -1783,6 +1786,7 @@ def handle_events():
                     ]
 
             elif event.type == 'CreateEvent':
+                continue
 
                 time_created = event.created_at.time()
                 event = event.as_dict()
@@ -1985,9 +1989,53 @@ def send_events():
         for send_item in list_to_send_now:
             # print('send', send_item['time'])
             del send_item['time']
-            server2.broadcast(send_item)
+            websocket_server.broadcast(send_item)
 
         sleep(0.01)
+
+
+class DebugLog:
+    Debug = Debug.Debug
+    Send = 0
+    Connected = 1
+    ClientLeft = 1
+    Errors = 1
+
+    if Send:
+        @staticmethod
+        def send(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def send(*args, **kwargs):
+            pass
+
+    if Connected:
+        @staticmethod
+        def connected(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def connected(*args, **kwargs):
+            pass
+
+    if ClientLeft:
+        @staticmethod
+        def client_left(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def client_left(*args, **kwargs):
+            pass
+
+    if Errors:
+        @staticmethod
+        def error(*args, **kwargs):
+            print(*args, **kwargs)
+    else:
+        @staticmethod
+        def error(*args, **kwargs):
+            pass
 
 
 class VisualGithubClient:
@@ -2001,35 +2049,30 @@ class VisualGithubClient:
         try:
             self.handler.finish()
         except KeyError:
-            Debug.error(f'Key error possibly double '
+            DebugLog.error(f'Key error possibly double '
                         f'deleting id = {self.id}')
-
-    def send_raw(self, message: str) -> None:
-        try:
-            Debug.send(f'Send to {self.id}: {"{ JSON event }"}')
-            self.handler.send_message(message)
-        except BrokenPipeError:
-            Debug.error(f'Broken pipe error send raw id = {self.id}')
 
     def send(self, obj: dict) -> None:
         try:
             msg = dumps(obj)
-            Debug.send(f'Send to {self.id}: {"{ JSON event }"}')
+            DebugLog.send(f'Send to {self.id}: {"{ JSON event }"}')
             self.handler.send_message(msg)
         except BrokenPipeError:
-            Debug.error(f'Broken pipe error send id = {self.id}')
+            DebugLog.error(f'Broken pipe error send id = {self.id}')
 
-    def receive(self, srv: 'Server2', message: str, client: dict):
-        pass
+    def receive(self, srv: 'WebSocketServer', message: str, client: dict):
+        print(message)
+        print("Ok")
+        # Действия
 
-    def left(self, srv: 'Server2') -> None:
+    def left(self, srv: 'WebSocketServer') -> None:
         del srv.clients[self.id]
         # Debug.client_left('DEL VISUAL GITHUB', self.id)
 
 
-class Server2:
+class WebSocketServer:
 
-    if Debug.Debug:
+    if DebugLog.Debug:
         ip = '127.0.0.1'
         local_ip = '127.0.0.1'
 
@@ -2041,7 +2084,7 @@ class Server2:
 
     def __init__(self):
 
-        self.server = WebsocketServer(Server2.port, Server2.local_ip)
+        self.server = WebsocketServer(WebSocketServer.port, WebSocketServer.local_ip)
         self.server.set_fn_new_client(self.new_client)
         self.server.set_fn_client_left(self.client_left)
         self.server.set_fn_message_received(self.message_received)
@@ -2053,6 +2096,8 @@ class Server2:
 
     # Called for every client connecting (after handshake)
     def new_client(self, client, _):
+        DebugLog.connected(f'New client connected '
+                        f'and was given id {client["id"]}')
         new_client = VisualGithubClient(client['id'], client['handler'])
         client['client'] = new_client
         self.clients[new_client.id] = new_client
@@ -2063,14 +2108,14 @@ class Server2:
         if client is None:
             return
 
-        Debug.client_left(f'Client {client["id"]} disconnected')
+        DebugLog.client_left(f'Client {client["id"]} disconnected')
         try:
             client['client'].left(self)
         except KeyError:
-            Debug.error(f'Key error possibly double deleting '
+            DebugLog.error(f'Key error possibly double deleting '
                         f'in client left id = {client["id"]}')
         except ValueError:
-            Debug.error(f'Value error possibly double deleting '
+            DebugLog.error(f'Value error possibly double deleting '
                         f'in client left id = {client["id"]}')
 
     # Called when a client sends a message
@@ -2085,9 +2130,15 @@ class Server2:
             client.send(message)
 
 
+def get_audio_files():
+    files = []
+    for file in listdir('static/github/audio'):
+        if file.endswith('.mp3'):
+            files += ['github/audio/' + file]
+    return files
 
 
-
+audio_files = get_audio_files()
 
 
 if __name__ == '__main__':
@@ -2113,6 +2164,11 @@ if __name__ == '__main__':
 
     @route('/static/<file:path>')
     def static_serve(file):
+        if 'github' in file and file.endswith('.mp3'):
+            filename = file.split('/')[-1]  # without path
+            file_num = filename.split('.')[0]  # without ".mp3"
+            file = audio_files[int(file_num)-1]
+
         return static_file(file, root='static')
 
     @route('/html/<file:path>')
@@ -2144,8 +2200,6 @@ if __name__ == '__main__':
 
     @route('/poker')
     def poker():
-
-        return redirect('/poker/replay')
 
         state = 'unknown state'
 
@@ -2316,15 +2370,16 @@ if __name__ == '__main__':
     def static_serve(file):
         return static_file(file, root='lib')
 
-    @route('/github')
-    def github():
-        return template('static/github/frontend.html', ip=Server2.ip, port=Server2.port)
 
-
-    server2 = Server2()
-    Thread(target=lambda: server2.run(), name='WebSocket server').start()
+    websocket_server = WebSocketServer()
+    Thread(target=lambda: websocket_server.run(), name='WebSocket server').start()
     Thread(target=download_events, name="Download events").start()
     Thread(target=handle_events, name="Handle events").start()
     Thread(target=send_events, name="Send events").start()
+
+    @route('/github')
+    def github():
+        return template('static/github/frontend.html',
+                        ip=WebSocketServer.ip, port=WebSocketServer.port, audio_size=len(audio_files))
 
     run(host=Server.local_ip, port=80)

@@ -1,5 +1,5 @@
-const time_of_life = 150;
-const audio_size = 67;
+const max_count_of_figures = 20;
+const animation_time = 2000;
 
 let colors=["#FFFFCC","#FFFF99","#FFFF66","#FFFF33","#FFFF00","#CCCC00","#FFCC66","#FFCC00","#FFCC33",
     "#CC9933","#996600","#FF9900","#FF9933","#CC9966","#CC6600","#FFCC99","#FF9966","#FF6600",
@@ -23,15 +23,21 @@ let colors=["#FFFFCC","#FFFF99","#FFFF66","#FFFF33","#FFFF00","#CCCC00","#FFCC66
     "#999900"];
 
 let isLight = true;
-
-let pushOnly = false;
-let pullOnly = false;
-
 let infoCount = 0;
 
+let scrolledDown = false;
+
+window.onunload = function(){
+    saveStateInCookies();
+}
 
 $(document).ready(function () {
-    filterChange();
+    getStateFromCookies();
+    let for_comfort_scroll = 60;
+    $('#eventfield').scroll(function(){
+        scrolledDown = $(this).scrollTop() >= $('#eventfield')[0].scrollHeight - $('#eventfield').height() - for_comfort_scroll;
+    });
+
     $('#changecolors').click(function () {
         if(isLight) {
             $('body').css('background-color','#292929');
@@ -55,7 +61,15 @@ $(document).ready(function () {
             $('#changecolors').html("Go to Dark");
             $('#changecolors').removeClass('w3-white').addClass('w3-black');
             $('#eventfield').css('color', '#000000');
+
             isLight = true;
+        }
+        for (let i=0; i<11; i++){
+            let button = $('#filt_' + i);
+            if (button.hasClass('w3-white'))
+                button.removeClass('w3-white').addClass('black');
+            else
+                button.removeClass('black').addClass('w3-white');
         }
     });
 });
@@ -67,19 +81,15 @@ setInterval(function(){
 },0);
 let id=0;
 
+
 function createFig(type,info) {
     let rand_array = rands();
 
     playSound(rand_array[4], $('#volinp').val()/100);
 
     let idl=id++;
-    if(id === 1000)
-        id=0;
     let br = 0;
     let rot = 0;
-    let back_fig_anim_time = 2000;
-    if(time_of_life < 50)
-        back_fig_anim_time=40*time_of_life;
     if(type === 0){
         br = rand_array[2]/2;
     }
@@ -100,19 +110,13 @@ function createFig(type,info) {
         "border-radius":"+50px",
         "height":"+=50px",
         "opacity":"0"
-    },back_fig_anim_time);
-    setTimeout(()=>{$("#displaydiv  div:last").remove();},2000);
-    setTimeout(function(){
-        if(time_of_life >= 200) {
-            $(`#${idl}`).animate({"opacity": "0"}, 1000);
-            setTimeout(() => {
-                $(`#${idl}`).remove()
-            }, 1000);
-        }
-        else
-            $(`#${idl}`).remove();
-    },40*time_of_life);
-
+    },animation_time);
+    let id_to_remove = idl - max_count_of_figures;
+    setTimeout(()=>{$("#displaydiv  div:last").remove();},animation_time);
+    $(`#${id_to_remove}`).animate({"opacity": "0"}, animation_time);
+    setTimeout(() => {
+        $(`#${id_to_remove}`).remove()
+    }, animation_time);
 }
 
 
@@ -126,61 +130,115 @@ function rands(){
     return rands_array;
 }
 
-function filter_push() {
-    $("#eventfield").empty();
-    infoCount=0;
-    if(pushOnly)
-        pushOnly = false;
-    else
-    {
-        pullOnly = false;
-        pushOnly = true;
-    }
-}
-
-function filter_pull() {
-    $("#eventfield").empty();
-    infoCount=0;
-    if(pullOnly)
-        pullOnly = false;
-    else
-    {
-        pushOnly = false;
-        pullOnly = true;
-    }
-}
-
 let filter_flags = [];
-function filterChange(){
+function filterChange(id){
     filter_flags=[];
-    let tmp_mass =  $("input:checkbox:checked");
-    for ( let key in tmp_mass){
-        filter_flags.push(tmp_mass[key].value)
+    let button = $('#filt_' + id);
+    if (button.hasClass('w3-white')) {
+        button.removeClass('w3-white').addClass('black');
     }
-    if(tmp_mass.length===10 && $('.filterMain')[0].checked === false )
-        $('.filterMain').prop('checked', true);
-    else if (tmp_mass.length!==11)
-        $('.filterMain').prop('checked', false);
+    else {
+        button.removeClass('black').addClass('w3-white');
+    }
+
+    let filter_json = {type: 'filter'};
+    for (let i = 1; i <= 9; i++) {
+        let button = $('#filt_' + i);
+        if (button.hasClass('w3-white'))
+            filter_json[button.val()] = !isLight;
+        else
+            filter_json[button.val()] = isLight;
+        if(filter_json[button.val()]===true) {
+            filter_flags.push(button.val());
+        }
+    }
+    button = $('#filt_0');
+    if(filter_flags.length===9) {
+        button = $('#filt_0');
+        if (button.hasClass('w3-white') && isLight) {
+            button.removeClass('w3-white').addClass('black');
+        }
+        else if (button.hasClass('black') )
+            button.removeClass('black').addClass('w3-white');
+    }
+    else if (filter_flags.length!==9){
+        if(button.hasClass('w3-white') && !isLight){
+            button.removeClass('w3-white').addClass('black');
+        }
+        else if(button.hasClass('black') && isLight)
+            button.removeClass('black').addClass('w3-white');
+    }
+    filterChoose(filter_json);
 }
 
 function use_all_filters_flags() {
-    if($('.filterMain')[0].checked === true)
-        $('.filtercheck').prop('checked', true);
-    else
-        $('.filtercheck').prop('checked', false);
-    filterChange();
+    let filter_json = {type:'filter'};
+    filter_flags=[];
+    if($('#filt_0').hasClass('w3-white')){
+        $('#filt_0').removeClass('w3-white').addClass('black');
+    }
+    else if($('#filt_0').hasClass('black'))
+        $('#filt_0').removeClass('black').addClass('w3-white');
+    for (let i = 1; i <= 9; i++){
+        let button = $('#filt_' + i);
+        if($('#filt_0').hasClass('w3-white')!==isLight) {
+            filter_flags.push(button.val());
+            if (button.hasClass('w3-white') && !isLight) {
+                button.removeClass('w3-white').addClass('black');
+            }
+            else if (button.hasClass('black') && isLight) {
+                button.removeClass('black').addClass('w3-white');
+            }
+        }
+        if (button.hasClass('w3-white')) {
+            button.removeClass('w3-white').addClass('black');
+        }
+        else {
+            button.removeClass('black').addClass('w3-white');
+        }
+        filter_json[button.val()] = true;
+    }
+    filterChoose(filter_json);
 }
+
 function add_event(type, jsinfo) {
-    $("#eventfield").append(`<div id="one_event"><a href="${jsinfo["url"]}" target="_blank">${jsinfo["repo"]} ${jsinfo["url"]}</div>`);
-    $("#eventfield").scrollTop($("#eventfield")[0].scrollHeight);
+    let date = new Date();
+    let year = date.getFullYear();
+    let month = date.getMonth() + 1;
+    let day = date.getDate();
+    let hours = date.getHours();
+    let minutes = date.getMinutes();
+    if (minutes < 10)
+        minutes = '0' + minutes;
+    let seconds = date.getSeconds();
+    if (seconds < 10)
+        seconds = '0' + seconds;
+    let date_string = year + '-' + month + '-' + day + '  ' + hours + ':' + minutes + ':' + seconds + ' - ';
+    $("#eventfield").append(`<div id="one_event">${date_string}${jsinfo["type"]} - <a href="${jsinfo["url"]}" 
+    target="_blank">${jsinfo["owner"]} / ${jsinfo["repo"]}</div>`);
+    if (scrolledDown)
+        $("#eventfield").scrollTop($("#eventfield")[0].scrollHeight);
     createFig(type, jsinfo);
 }
 
 function infoonFig(info) {
     let type = Math.floor(Math.random() * (3));
    // $("#back_figure").remove();
+   // alert(info +' '+ filter_flags);
     let jsinfo = JSON.parse(info);
-    if(filter_flags.indexOf(`${jsinfo['type']}`) > -1) {
+
+    if(jsinfo['type']==='error'){
+        if(jsinfo['where'][0].length === 3){
+            document.getElementById('organization').classList.add('error_filter_org');
+            document.getElementById('repos').classList.add('error_filter_org');
+        }
+        else if(jsinfo['where'] === 'org'){
+            document.getElementById('organization').classList.add('error_filter_org');
+        }
+        else
+            document.getElementById('repos').classList.add('error_filter_org');
+    }
+    else if(filter_flags.indexOf(`${jsinfo['type']}`) > -1) {
         if (infoCount <= 50) {
             add_event(type, jsinfo);
             infoCount++;
@@ -207,4 +265,166 @@ function playSound(index, volume) {
         a.play();
         cached_sounds[file] = a;
     }
+}
+
+function setCookie(name,value,days = 1) {
+    let expires = '';
+    if (days) {
+        let date = new Date();
+        date.setTime(date.getTime() + (days*24*60*60*1000));
+        expires = '; expires='+ date.toUTCString();
+    }
+    document.cookie = name + '=' + value + expires + '; path=/';
+}
+
+function getCookie(name) {
+    let nameEQ = name + '=';
+    let ca = document.cookie.split(';');
+    for(let i = 0; i < ca.length; i++) {
+        let c = ca[i];
+        while (c.charAt(0)=== ' '){
+            c = c.substring(1, c.length);
+        }
+        if (c.indexOf(nameEQ) === 0) {
+            return c.substring(nameEQ.length, c.length);
+        }
+    }
+    return null;
+}
+
+function  deleteCookie(name) {
+    setCookie(name, '', -1);
+}
+
+
+
+function saveStateInCookies() {
+    setCookie("isLight", isLight);
+    setCookie("volume", $("#volinp").val());
+    setCookie("organization", $("#organization").val());
+    setCookie("repos", $("#repos").val());
+    let tmp_mass =  $("input:image");
+
+    for ( let key in tmp_mass){
+        let black = $( "#"+tmp_mass[key].id ).hasClass( "black" );
+        let white = $( "#"+tmp_mass[key].id ).hasClass( "w3-white" );
+        let checked = isLight ? black : white;
+
+        setCookie(tmp_mass[key].id, checked);
+    }
+}
+
+function getStateFromCookies() {
+
+
+    let isL = getCookie("isLight");
+    let vol = getCookie('volume');
+    let organization = getCookie('organization');
+    let repos = getCookie('repos');
+    let tmp_mass = $("input:image");
+
+    if(isL == "false") {
+        $('body').css('background-color','#292929');
+        $('#displaydiv').css('background-color','#363535');
+        $('#VA').css('color', '#ffffff');
+        $('#IE').css('color', '#ffffff');
+        $('#bar').css('color', '#ffffff');
+        $('#changecolors').html("Go to Light");
+        $('#back_figure').css('background-color','#87918F');
+        $('#changecolors').removeClass('w3-black').addClass('w3-white');
+        $('#eventfield').css('color', '#ffffff');
+        isLight = false;
+        for (let i=0; i<11; i++){
+            let button = $('#filt_' + i);
+            if (button.hasClass('w3-white'))
+                button.removeClass('w3-white').addClass('black');
+            else
+                button.removeClass('black').addClass('w3-white');
+        }
+    }
+    else{
+        $('body').css('background-color','white');
+        $('#displaydiv').css('background-color', '#e8e8e7');
+        $('#back_figure').css('background-color','#F5F5DC');
+        $('#VA').css('color', '#000000');
+        $('#IE').css('color', '#000000');
+        $('#bar').css('color', '#000000');
+        $('#changecolors').html("Go to Dark");
+        $('#changecolors').removeClass('w3-white').addClass('w3-black');
+        $('#eventfield').css('color', '#000000');
+
+        isLight = true;
+    }
+
+
+    let numVol = Number(vol) >= 0;
+
+    if(vol !== undefined && numVol >= 0 && numVol<=100 ) {
+        $("#volinp").val(vol);
+    }
+
+    else{
+        removeCookiesWithSettings();
+        return;
+    }
+
+    if(organization !== undefined && repos !== undefined) {
+        $("#organization").val(organization);
+        $("#repos").val(repos);
+    }
+    let checkCounter = 0;
+  
+    filterChange('1');
+
+    if(getCookie("filt_0") == "true") {
+
+        use_all_filters_flags();
+
+        if (isL == "true") {
+            $('#filt_0').removeClass('w3-white').addClass('black');
+        }
+        else {
+            $('#filt_0').removeClass('black').addClass('w3-white');
+        }
+        return;
+    }
+
+
+    for ( let key in tmp_mass){
+        let state = getCookie(tmp_mass[key].id+"");
+
+        if(state !== undefined ){
+            if (state == "true") {
+               // let black = $( "#"+tmp_mass[key].id ).hasClass( "black" );
+                filterChange(tmp_mass[key].id[5])
+                //$("#" + tmp_mass[key].id).prop('checked', true);
+                checkCounter++;
+            }
+            else{
+                $("#" + tmp_mass[key].id).prop('checked', false);
+            }
+        }
+    }
+
+    if(checkCounter == 0) {
+        filterChange('1');
+        removeCookiesWithSettings()
+    }
+
+
+}
+
+function removeCookiesWithSettings() {
+    deleteCookie("isLight");
+    deleteCookie('volume');
+    deleteCookie('organization');
+    deleteCookie('repos');
+    let tmp_mass = $("input:image");
+
+    for (let key in tmp_mass) {
+        deleteCookie(tmp_mass[key].id + "");
+    }
+
+    $("#volinp").val(20);
+    $("#1").prop('checked', true);
 }

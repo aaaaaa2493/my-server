@@ -1,6 +1,7 @@
 <!DOCTYPE html>
 <html>
 <head>
+
     <title>Visual GitHub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
     <link rel="stylesheet" type="text/css" href="static/github/css/main.css"/>
@@ -8,6 +9,7 @@
     <script>
         const ip = '{{ip}}';
         const port = '{{port}}';
+        const audio_size = parseInt('{{audio_size}}');
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.15/howler.min.js"></script>
@@ -46,21 +48,29 @@
         </div>
         <div id="displaydiv"></div>
         <p id="IE" align="center" style="font-size: x-large">Info about events</p>
-        <input type="checkbox" id="1" class="w3-check w3-margin-bottom filterMain" value="all" onclick="use_all_filters_flags();"><label class="checkboxes" for="1">All</label>
-        <input type="checkbox" checked id="2" class="w3-check w3-margin-bottom filtercheck" value="pull_request" onclick="filterChange();"><label class="checkboxes" for="2">PullReq</label>
-        <input type="checkbox" id="3" class="w3-check w3-margin-bottom filtercheck" value="push" onclick="filterChange();"><label class="checkboxes" for="3">Push</label>
-        <input type="checkbox" id="4" class="w3-check w3-margin-bottom filtercheck" value="create_repo" onclick="filterChange();"><label class="checkboxes" for="4">CreateRepo</label>
-        <input type="checkbox" id="5" class="w3-check w3-margin-bottom filtercheck" value="fork_repo"  onclick="filterChange();"><label class="checkboxes" for="5">ForkRepo</label>
-        <input type="checkbox" id="6" class="w3-check w3-margin-bottom filtercheck" value="issue" onclick="filterChange();"><label class="checkboxes" for="6">Issue</label>
-        <input type="checkbox" id="7" class="w3-check w3-margin-bottom filtercheck" value="issue_comment" onclick="filterChange();"><label class="checkboxes" for="7">IssueComment</label>
-        <input type="checkbox" id="8" class="w3-check w3-margin-bottom filtercheck" value="pull_request_review" onclick="filterChange();"><label class="checkboxes" for="8">PullReqReview</label>
-        <input type="checkbox" id="9" class="w3-check w3-margin-bottom filtercheck" value="wiki_page" onclick="filterChange();"><label class="checkboxes" for="9">WikiPage</label>
-        <input type="checkbox" id="10" class="w3-check w3-margin-bottom filtercheck" value="release" onclick="filterChange();"><label class="checkboxes" for="10">Release</label>
-        <input type="checkbox" id="11" class="w3-check w3-margin-bottom filtercheck" value="commit_comment" onclick="filterChange();"><label class="checkboxes" for="11">CommitComment</label>
+        <input type="image" id="filt_0" src="static/github/icons/all.png" class="w3-white w3-round-xlarge filterMain" value="all" onclick="use_all_filters_flags();">
+        <input type="image" id="filt_1" src="static/github/icons/pull_request.png" class="black w3-round-xlarge filtercheck" value="pull_request" onclick="filterChange('1');">
+        <input type="image" id="filt_2" src="static/github/icons/push.png" class="w3-white w3-round-xlarge filtercheck" value="push" onclick="filterChange('2');">
+        <input type="image" id="filt_3" src="static/github/icons/issue.png" class="w3-white w3-round-xlarge filtercheck" value="issue" onclick="filterChange('3');">
+        <input type="image" id="filt_4" src="static/github/icons/fork_repo.png" class="w3-white w3-round-xlarge filtercheck" value="fork_repo"  onclick="filterChange('4');">
+        <input type="image" id="filt_5" src="static/github/icons/wiki_page.png" class="w3-white w3-round-xlarge filtercheck" value="wiki_page" onclick="filterChange('5');">
+        <input type="image" id="filt_6" src="static/github/icons/release.png" class="w3-white w3-round-xlarge filtercheck" value="release" onclick="filterChange('6');">
+        <input type="image" id="filt_7" src="static/github/icons/pull_request_review.png" class="w3-white w3-round-xlarge filtercheck" value="pull_request_review" onclick="filterChange('7');">
+        <input type="image" id="filt_8" src="static/github/icons/commit_comment.png" class="w3-white w3-round-xlarge filtercheck" value="commit_comment" onclick="filterChange('8');">
+        <input type="image" id="filt_9" src="static/github/icons/issue_comment.png" class="w3-white w3-round-xlarge filtercheck" value="issue_comment" onclick="filterChange('9');">
        <!-- <button class="w3-btn w3-green w3-margin-bottom" id="pushOnly" onclick="filter_push()">Switch Pushes only</button>
         <button class="w3-btn w3-green w3-margin-bottom" id="pullOnly" onclick="filter_pull()">Swith Pull requests only</button>  -->
-        <div id="eventfield"></div>
-
+        <div>
+            <p>Organization and repo</p>
+            <input id="organization" type="text"
+                   onfocus="document.getElementById('organization').classList.remove('error_filter_org');"
+                   onblur="orgChoose();">
+            / <input id="repos"
+                     onfocus="document.getElementById('repos').classList.remove('error_filter_org');"
+                     onblur="orgChoose()">
+        </div>
+        <br>
+        <div class="w3-padding" id="eventfield"></div>
     </div>
 </body>
 </html>
