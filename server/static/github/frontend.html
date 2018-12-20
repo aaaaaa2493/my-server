@@ -4,20 +4,26 @@
 
     <title>Visual GitHub</title>
     <meta name="viewport" content="width=device-width, initial-scale=1">
+    <link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+          integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO" crossorigin="anonymous">
     <link rel="stylesheet" type="text/css" href="static/github/css/main.css"/>
     <link rel="stylesheet" type="text/css" href="static/github/css/w3.css"/>
     <script>
         const ip = '{{ip}}';
         const port = '{{port}}';
-        const audio_size = parseInt('{{audio_size}}');
+        audio_files = null;
     </script>
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/popper.js/1.14.3/umd/popper.min.js"
+            integrity="sha384-ZMP7rVo3mIykV+2+9J3UJ46jBk0WLaUAdn689aCwoqbBJiSnjAK/l8WvCWPIPm49" crossorigin="anonymous"></script>
+    <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+            integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy" crossorigin="anonymous"></script>
     <script src="https://cdnjs.cloudflare.com/ajax/libs/howler/2.0.15/howler.min.js"></script>
     <script src="static/github/js/displayFig.js"></script>
     <script src="static/github/js/main.js"></script>
     <link rel='stylesheet' href='static/github/css/displayFig.css'>
 </head>
-<body onload="WebSocketInit()">
+<body>
 
     <div id="id01" class="w3-modal">
         <div class="w3-modal-content">
@@ -34,19 +40,41 @@
             </div>
         </div>
     </div>
-
-    <div align="center">
-        <div class="w3-container">
-            <div class="w3-display-container" style="height: 55px">
-                <div id="VA" class="w3-display-left" style="font-size: x-large; margin-left:1%">Visual activity on GitHub</div>
-                <button class="w3-display-right w3-btn w3-black" id ="changecolors">Go to Dark</button>
-                <div id="bar" class="w3-display-middle" style="margin-left: 38%">Volume: <label><input id="volinp" type="range" min="0" max="100" step="1" value="20"></label></div>
-                <div class="w3-display-right" style="margin-right: 1%">
-                    <button class="w3-display-right w3-btn w3-green" onclick="document.getElementById('id01').style.display='block'">About</button>
-                </div>
-            </div>
+    <nav id="navbar" class="navbar navbar-expand-lg navbar-light fixed-top" >
+        <div id="VA" class="navbar-brand" >Visual activity on GitHub</div>
+        <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNavDropdown" aria-controls="navbarNavDropdown"  aria-expanded="false" aria-label="Toggle navigation">
+            <span class="navbar-toggler-icon"></span>
+        </button>
+        <div class="collapse navbar-collapse" id="navbarNavDropdown">
+            <ul class="navbar-nav ml-auto">
+                <li class="nav-item">
+                    <div class="my-3 w3-large" id="soundslabel">Sounds: </div>
+                </li>
+                <li class="nav-item">
+                    <div>
+                        <select id ="selectsound" class="w3-btn"></select>
+                    </div>
+                </li>
+                <li class="nav-item my-mx-3" >
+                    <div>
+                        <button class=" w3-btn  w3-black" onclick="changecolrs()" id ="changecolors">Go to Dark</button>
+                    </div>
+                </li>
+                <li class="nav-item">
+                    <div>
+                        <div id="bar" class="" style="" >Volume<br> <label><input class="slider" id="volinp" type="range" min="0" max="100" step="1" value="20"></label></div>
+                    </div>
+                </li>
+                <li class="nav-item ">
+                    <div class="" >
+                     <button class="w3-btn w3-green " style="width:114px" id="aboutbutton" onclick="document.getElementById('id01').style.display='block'">About</button>
+                    </div>
+                </li>
+            </ul>
         </div>
-        <div id="displaydiv"></div>
+    </nav>
+    <div align="center">
+        <div id="displaydiv" style="margin-top: 5vh;"></div>
         <p id="IE" align="center" style="font-size: x-large">Info about events</p>
         <input type="image" id="filt_0" src="static/github/icons/all.png" class="w3-white w3-round-xlarge filterMain" value="all" onclick="use_all_filters_flags();">
         <input type="image" id="filt_1" src="static/github/icons/pull_request.png" class="black w3-round-xlarge filtercheck" value="pull_request" onclick="filterChange('1');">
@@ -61,13 +89,9 @@
        <!-- <button class="w3-btn w3-green w3-margin-bottom" id="pushOnly" onclick="filter_push()">Switch Pushes only</button>
         <button class="w3-btn w3-green w3-margin-bottom" id="pullOnly" onclick="filter_pull()">Swith Pull requests only</button>  -->
         <div>
-            <p>Organization and repo</p>
-            <input id="organization" type="text"
-                   onfocus="document.getElementById('organization').classList.remove('error_filter_org');"
-                   onblur="orgChoose();">
-            / <input id="repos"
-                     onfocus="document.getElementById('repos').classList.remove('error_filter_org');"
-                     onblur="orgChoose()">
+            <p id="OR" style="font-size: x-large">Special Organization and/or Repository</p>
+            <input class="w3-padding-small w3-round-large" placeholder="owner" id="organization" type="text">
+            <b id="slash">/</b> <input class="w3-padding-small w3-round-large" placeholder="repository" id="repos">
         </div>
         <br>
         <div class="w3-padding" id="eventfield"></div>

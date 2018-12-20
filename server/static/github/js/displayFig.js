@@ -1,5 +1,8 @@
-const max_count_of_figures = 20;
+const max_count_of_figures = 50;
 const animation_time = 2000;
+let animation_flag = true;
+let last_events_count = 0;
+const lag_figures_per_second = 8;
 
 let colors=["#FFFFCC","#FFFF99","#FFFF66","#FFFF33","#FFFF00","#CCCC00","#FFCC66","#FFCC00","#FFCC33",
     "#CC9933","#996600","#FF9900","#FF9933","#CC9966","#CC6600","#FFCC99","#FF9966","#FF6600",
@@ -23,67 +26,118 @@ let colors=["#FFFFCC","#FFFF99","#FFFF66","#FFFF33","#FFFF00","#CCCC00","#FFCC66
     "#999900"];
 
 let isLight = true;
+let show_icons_on_figures = false;
 let infoCount = 0;
 
 let scrolledDown = false;
 
 window.onunload = function(){
     saveStateInCookies();
-}
+};
 
 $(document).ready(function () {
     getStateFromCookies();
+    $('#displaydiv').css('min-height',$('#displaydiv').height());
+
     let for_comfort_scroll = 60;
     $('#eventfield').scroll(function(){
         scrolledDown = $(this).scrollTop() >= $('#eventfield')[0].scrollHeight - $('#eventfield').height() - for_comfort_scroll;
     });
 
-    $('#changecolors').click(function () {
-        if(isLight) {
-            $('body').css('background-color','#292929');
-            $('#displaydiv').css('background-color','#363535');
-            $('#VA').css('color', '#ffffff');
-            $('#IE').css('color', '#ffffff');
-            $('#bar').css('color', '#ffffff');
-            $('#changecolors').html("Go to Light");
-            $('#back_figure').css('background-color','#87918F');
-            $('#changecolors').removeClass('w3-black').addClass('w3-white');
-            $('#eventfield').css('color', '#ffffff');
-            isLight = false;
-        }
-        else{
-            $('body').css('background-color','white');
-            $('#displaydiv').css('background-color', '#e8e8e7');
-            $('#back_figure').css('background-color','#F5F5DC');
-            $('#VA').css('color', '#000000');
-            $('#IE').css('color', '#000000');
-            $('#bar').css('color', '#000000');
-            $('#changecolors').html("Go to Dark");
-            $('#changecolors').removeClass('w3-white').addClass('w3-black');
-            $('#eventfield').css('color', '#000000');
-
-            isLight = true;
-        }
-        for (let i=0; i<11; i++){
-            let button = $('#filt_' + i);
-            if (button.hasClass('w3-white'))
-                button.removeClass('w3-white').addClass('black');
-            else
-                button.removeClass('black').addClass('w3-white');
-        }
+    $(document).on('input', '#organization', function(){
+        orgChoose();
+        $('#organization').removeClass('error_filter_org')
     });
+
+    $(document).on('input', '#repos', function(){
+        orgChoose();
+        $('#repos').removeClass('error_filter_org')
+    });
+
+    orgChoose();
 });
+
+
 setInterval(function(){
-    if($(window).width()>$('#displaydiv').width())
+    if($(window).width()*0.96>$('#displaydiv').width())
         $('#displaydiv').css('min-width',$(window).width()*0.96);
-    if($(window).height()>$('#displaydiv').height())
-        $('#displaydiv').css('min-height',$(window).height()-55+'px');
+    if($(window).height()*0.95>$('#displaydiv').height())
+        $('#displaydiv').css('min-height',$(window).height()*0.95);
 },0);
+
+// for calculating lag
+setInterval(() => {
+    if(last_events_count > lag_figures_per_second) {
+        animation_flag = false;
+    }
+    else if(last_events_count < lag_figures_per_second) {
+        animation_flag = true;
+    }
+    last_events_count = 0;
+}, 1000);
+
+
 let id=0;
 
+function changecolrs() {
+    if(isLight) {
+        $('body').css('background-color','#292929');
+        $('#displaydiv').css('background-color','#363535');
+        $('#VA').css('color', '#ffffff');
+        $('#IE').css('color', '#ffffff');
+        $('#bar').css('color', '#ffffff');
+        $('#OR').css('color', '#ffffff');
+        $('#slash').css('color', '#ffffff');
+        $('#changecolors').html("Go to Light");
+        $('#soundslabel').css('color', '#ffffff');
+        $('#selectsound').css('border', '3px solid white');
+        $('#selectsound').css('color', '#ffffff');
+        $('#selectsound').css('background-color', '#000000');
+        $('.optS').css('background-color', '#292929');
+        $('#back_figure').css('background-color','#87918F');
+        $('#changecolors').removeClass('w3-black').addClass('w3-white');
+        $('#navbar').removeClass('navbar-light').addClass('navbar-dark');
+        $('#navbar').css('background-color', '#000000');
+        $('#eventfield').css('color', '#ffffff');
+        isLight = false;
+    }
+    else{
+        $('body').css('background-color','white');
+        $('#displaydiv').css('background-color', '#e8e8e7');
+        $('#back_figure').css('background-color','#F5F5DC');
+        $('#selectsound').css('border', '3px solid black');
+        $('#selectsound').css('color', '#000000');
+        $('#selectsound').css('background-color', '#ffffff');
+        $('.optS').css('background-color', '#ffffff' );
+        $('#OR').css('color', '#000000');
+        $('#slash').css('color', '#000000');
+        $('#VA').css('color', '#000000');
+        $('#IE').css('color', '#000000');
+        $('#bar').css('color', '#000000');
+        $('#soundslabel').css('color', '#000000');
+        $('#changecolors').html("Go to Dark");
+        $('#changecolors').removeClass('w3-white').addClass('w3-black');
+        $('#navbar').removeClass('navbar-dark').addClass('navbar-light');
+        $('#navbar').css('background-color', '#ffffff');
+        $('#eventfield').css('color', '#000000');
+        isLight = true;
+    }
+    for (let i=0; i<11; i++){
+        let button = $('#filt_' + i);
+        if (button.hasClass('w3-white'))
+            button.removeClass('w3-white').addClass('black');
+        else
+            button.removeClass('black').addClass('w3-white');
+    }
+}
 
 function createFig(type,info) {
-    let rand_array = rands();
+    if(audio_files == null) {
+        return;
+    }
+    last_events_count++;
+
+    let rand_array = rands(info);
 
     playSound(rand_array[4], $('#volinp').val()/100);
 
@@ -96,35 +150,65 @@ function createFig(type,info) {
     else if(type === 1){
         rot = 45;
     }
-    $("#displaydiv").prepend(`<div id="back_figure" class="box" style="z-index: ${idl-1};width:${rand_array[2]}px;
-        height:${rand_array[2]}px;border-radius:${br}px;left:${rand_array[0]}px;top:${rand_array[1]}px;
-        transform: rotate(${rot}deg);"></div>
-        <a href="${info["url"]}" target="_blank" id="${idl}" class="a_figure"  style="z-index: ${idl};width:${rand_array[2]}px;
-        height:${rand_array[2]}px;border-radius:${br}px;left:${rand_array[0]}px;top:${rand_array[1]}px;
-        transform: rotate(${rot}deg);background-color: ${colors[rand_array[3]]};opacity: 0.9;">
-        <p id ="text_figure" style="transform: rotate(${-rot}deg)">${info["repo"]}</p></a>`);
+    $("#id01").css('z-index',`${idl+2}`);
+    $("#navbar").css('z-index',`${idl+1}`);
+    if (show_icons_on_figures)
+        $("#displaydiv").prepend(`<div id="back_figure" class="box" style="z-index: ${idl};width:${rand_array[2]}px;
+            height:${rand_array[2]}px;border-radius:${br}px;left:${rand_array[0]}px;top:${rand_array[1]}px;
+            transform: rotate(${rot}deg);"></div>
+            <a href="${info["url"]}" target="_blank" id="${idl}" class="a_figure"  style="z-index: ${idl};width:${rand_array[2]}px;
+            height:${rand_array[2]}px;border-radius:${br}px;left:${rand_array[0]}px;top:${rand_array[1]}px;
+            transform: rotate(${rot}deg);background-color: ${colors[rand_array[3]]};opacity: 0.9;">
+            <p id ="text_figure" style="transform: rotate(${-rot}deg); word-wrap: break-word;
+             overflow: hidden;width:${rand_array[2]-10}px;
+             max-height:${rand_array[2]-10}px " ><b><img src="../icons/${info['type']}.png" width="25px" height="25px"><br> ${info["repo"]}</b></p></a>`);
+    else
+        $("#displaydiv").prepend(`<div id="back_figure" class="box" style="z-index: ${idl};width:${rand_array[2]}px;
+            height:${rand_array[2]}px;border-radius:${br}px;left:${rand_array[0]}px;top:${rand_array[1]}px;
+            transform: rotate(${rot}deg);"></div>
+            <a href="${info["url"]}" target="_blank" id="${idl}" class="a_figure"  style="z-index: ${idl};width:${rand_array[2]}px;
+            height:${rand_array[2]}px;border-radius:${br}px;left:${rand_array[0]}px;top:${rand_array[1]}px;
+            transform: rotate(${rot}deg);background-color: ${colors[rand_array[3]]};opacity: 0.9;">
+            <p id ="text_figure" style="transform: rotate(${-rot}deg); word-wrap: break-word;
+             overflow: hidden;width:${rand_array[2]-10}px;
+             max-height:${rand_array[2]-10}px " ><b>${info["repo"]}</b></p></a>`);
+    let animate_time_with_flag = animation_time;
+    if(!animation_flag){
+        animate_time_with_flag=0;
+    }
+    let color_obv=increase_brightness(colors[rand_array[3]],50);
+    document.getElementById('text_figure').style.color = `${hexToComplimentary(color_obv)}`
     $(`#back_figure`).animate({
         "width": "+=50px",
-        "margin-left":"-25px",
-        "margin-top":"-25px",
-        "border-radius":"+50px",
-        "height":"+=50px",
-        "opacity":"0"
-    },animation_time);
+        "margin-left": "-25px",
+        "margin-top": "-25px",
+        "border-radius": "+50px",
+        "height": "+=50px",
+        "opacity": "0"
+    }, animate_time_with_flag);
     let id_to_remove = idl - max_count_of_figures;
-    setTimeout(()=>{$("#displaydiv  div:last").remove();},animation_time);
-    $(`#${id_to_remove}`).animate({"opacity": "0"}, animation_time);
+    setTimeout(()=>{$("#displaydiv  div:last").remove();},animate_time_with_flag);
+    $(`#${id_to_remove}`).animate({"opacity": "0"}, animate_time_with_flag);
     setTimeout(() => {
         $(`#${id_to_remove}`).remove()
-    }, animation_time);
+    }, animate_time_with_flag);
 }
 
+function get_curr_category() {
+    let select = document.getElementById("selectsound");
+    return select.options[select.selectedIndex].value;
+}
 
-function rands(){
+function rands(info){
+    let length = info["repo"].length;
+    if (length >= 17)
+        length = 17;
+    length /= Math.sqrt(2)*0.75;
+    let audio_size = audio_files[get_curr_category()];
     let rands_array=[];
-    rands_array.push(Math.floor(Math.random() * ($('#displaydiv').width() - 250)+100));
-    rands_array.push(Math.floor(Math.random() * ($('#displaydiv').height() - 250)+100));
-    rands_array.push(Math.floor(Math.random() * (150 - 40 + 1)+40));
+    rands_array.push(Math.floor(Math.random() * ($('#displaydiv').width() - 280)+100));
+    rands_array.push(Math.floor(Math.random() * ($('#displaydiv').height() - 280)+100));
+    rands_array.push(Math.floor(length*6/100 * (180 - 70 + 1)+70));
     rands_array.push(Math.floor(Math.random() * (colors.length)));
     rands_array.push(Math.floor(Math.random() * audio_size));
     return rands_array;
@@ -141,7 +225,7 @@ function filterChange(id){
         button.removeClass('black').addClass('w3-white');
     }
 
-    let filter_json = {type: 'filter'};
+    let filter_json = {type: 'filter_types'};
     for (let i = 1; i <= 9; i++) {
         let button = $('#filt_' + i);
         if (button.hasClass('w3-white'))
@@ -172,7 +256,7 @@ function filterChange(id){
 }
 
 function use_all_filters_flags() {
-    let filter_json = {type:'filter'};
+    let filter_json = {type:'filter_types'};
     filter_flags=[];
     if($('#filt_0').hasClass('w3-white')){
         $('#filt_0').removeClass('w3-white').addClass('black');
@@ -201,6 +285,16 @@ function use_all_filters_flags() {
     filterChoose(filter_json);
 }
 
+function changehovercolor(clas){
+    if(!isLight)
+        $(`.${clas}`).css('background-color','#333333')
+    else
+        $(`.${clas}`).css('background-color','#f2f2f2')
+}
+function changeunhovercolor(clas){
+    $(`.${clas}`).css('background-color','inherit')
+}
+
 function add_event(type, jsinfo) {
     let date = new Date();
     let year = date.getFullYear();
@@ -214,7 +308,8 @@ function add_event(type, jsinfo) {
     if (seconds < 10)
         seconds = '0' + seconds;
     let date_string = year + '-' + month + '-' + day + '  ' + hours + ':' + minutes + ':' + seconds + ' - ';
-    $("#eventfield").append(`<div id="one_event">${date_string}${jsinfo["type"]} - <a href="${jsinfo["url"]}" 
+    $("#eventfield").append(`<div id="one_event" class="${id}" onmouseout="changeunhovercolor(${id});" onmousemove="changehovercolor(${id});"><img src="static/github/icons/${jsinfo['type']}.png" width="25px" height="25px"> 
+        ${date_string} <a href="${jsinfo["url"]}" 
     target="_blank">${jsinfo["owner"]} / ${jsinfo["repo"]}</div>`);
     if (scrolledDown)
         $("#eventfield").scrollTop($("#eventfield")[0].scrollHeight);
@@ -227,32 +322,36 @@ function infoonFig(info) {
    // alert(info +' '+ filter_flags);
     let jsinfo = JSON.parse(info);
 
-    if(jsinfo['type']==='error'){
-        if(jsinfo['where'][0].length === 3){
-            document.getElementById('organization').classList.add('error_filter_org');
-            document.getElementById('repos').classList.add('error_filter_org');
+    if(jsinfo['type'] === 'init') {
+        audio_files = JSON.parse(jsinfo['categories']);
+        for (let i in audio_files) {
+            $('#selectsound').append(`<option class=\"optS\" value=\"${i}\">${i}</option>`);
         }
-        else if(jsinfo['where'] === 'org'){
-            document.getElementById('organization').classList.add('error_filter_org');
-        }
-        else
-            document.getElementById('repos').classList.add('error_filter_org');
     }
-    else if(filter_flags.indexOf(`${jsinfo['type']}`) > -1) {
+    else if(jsinfo['type'] === 'error') {
+        if(jsinfo['where'] === 'owner') {
+            document.getElementById('organization').classList.add('error_filter_org');
+        }
+        else if (jsinfo['where'] === 'repo') {
+            document.getElementById('repos').classList.add('error_filter_org');
+        }
+    }
+    else if(filter_flags.indexOf(`${jsinfo['type']}`) > -1)  {
         if (infoCount <= 50) {
-            add_event(type, jsinfo);
             infoCount++;
         } else {
             $("#one_event").remove();
-            add_event(type, jsinfo);
         }
+
+        add_event(type, jsinfo);
     }
 }
 
 let cached_sounds = {};
 
 function playSound(index, volume) {
-    let file = "static/github/audio/" + (index+1) + ".mp3";
+    let category = get_curr_category();
+    let file = "static/github/audio/" + category + '/' + index + ".mp3";
     if(file in cached_sounds){
         cached_sounds[file].volume(volume);
         cached_sounds[file].play();
@@ -327,11 +426,21 @@ function getStateFromCookies() {
         $('body').css('background-color','#292929');
         $('#displaydiv').css('background-color','#363535');
         $('#VA').css('color', '#ffffff');
+        $('#OR').css('color', '#ffffff');
         $('#IE').css('color', '#ffffff');
         $('#bar').css('color', '#ffffff');
+        $('#OR').css('color', '#ffffff');
+        $('#slash').css('color', '#ffffff');
         $('#changecolors').html("Go to Light");
+        $('#soundslabel').css('color', '#ffffff');
+        $('#selectsound').css('border', '3px solid white');
+        $('#selectsound').css('color', '#ffffff');
+        $('#selectsound').css('background-color', '#000000');
+        $('.optS').css('background-color', '#292929');
         $('#back_figure').css('background-color','#87918F');
         $('#changecolors').removeClass('w3-black').addClass('w3-white');
+        $('#navbar').removeClass('navbar-light').addClass('navbar-dark');
+        $('#navbar').css('background-color', '#000000');
         $('#eventfield').css('color', '#ffffff');
         isLight = false;
         for (let i=0; i<11; i++){
@@ -346,11 +455,21 @@ function getStateFromCookies() {
         $('body').css('background-color','white');
         $('#displaydiv').css('background-color', '#e8e8e7');
         $('#back_figure').css('background-color','#F5F5DC');
+        $('#selectsound').css('border', '3px solid black');
+        $('#selectsound').css('color', '#000000');
+        $('#selectsound').css('background-color', '#ffffff');
+        $('.optS').css('background-color', '#ffffff' );
         $('#VA').css('color', '#000000');
+        $('#OR').css('color', '#000000');
         $('#IE').css('color', '#000000');
         $('#bar').css('color', '#000000');
+        $('#OR').css('color', '#000000');
+        $('#slash').css('color', '#000000');
+        $('#soundslabel').css('color', '#000000');
         $('#changecolors').html("Go to Dark");
         $('#changecolors').removeClass('w3-white').addClass('w3-black');
+        $('#navbar').removeClass('navbar-dark').addClass('navbar-light');
+        $('#navbar').css('background-color', '#ffffff');
         $('#eventfield').css('color', '#000000');
 
         isLight = true;
@@ -374,10 +493,9 @@ function getStateFromCookies() {
     }
     let checkCounter = 0;
   
-    filterChange('1');
+
 
     if(getCookie("filt_0") == "true") {
-
         use_all_filters_flags();
 
         if (isL == "true") {
@@ -389,15 +507,15 @@ function getStateFromCookies() {
         return;
     }
 
-
     for ( let key in tmp_mass){
         let state = getCookie(tmp_mass[key].id+"");
 
         if(state !== undefined ){
-            if (state == "true") {
-               // let black = $( "#"+tmp_mass[key].id ).hasClass( "black" );
-                filterChange(tmp_mass[key].id[5])
-                //$("#" + tmp_mass[key].id).prop('checked', true);
+            if (state == "true" ) {
+                filterChange(tmp_mass[key].id[5]);
+                if(tmp_mass[key].id[5] == "1") {
+                    filterChange(tmp_mass[key].id[5]);
+                }
                 checkCounter++;
             }
             else{
@@ -407,11 +525,9 @@ function getStateFromCookies() {
     }
 
     if(checkCounter == 0) {
-        filterChange('1');
+        filterChange();
         removeCookiesWithSettings()
     }
-
-
 }
 
 function removeCookiesWithSettings() {
@@ -427,4 +543,90 @@ function removeCookiesWithSettings() {
 
     $("#volinp").val(20);
     $("#1").prop('checked', true);
+}
+
+function hexToComplimentary(hex){
+
+    // Convert hex to rgb
+    var rgb = 'rgb(' + (hex = hex.replace('#', '')).match(new RegExp('(.{' + hex.length/3 + '})', 'g')).map(function(l) { return parseInt(hex.length%2 ? l+l : l, 16); }).join(',') + ')';
+    // Get array of RGB values
+    rgb = rgb.replace(/[^\d,]/g, '').split(',');
+    var r = rgb[0], g = rgb[1], b = rgb[2];
+    // Convert RGB to HSL
+    r /= 255.0;
+    g /= 255.0;
+    b /= 255.0;
+    var max = Math.max(r, g, b);
+    var min = Math.min(r, g, b);
+    var h, s, l = (max + min) / 2.0;
+
+    if(max == min) {
+        h = s = 0;  //achromatic
+    } else {
+        var d = max - min;
+        s = (l > 0.5 ? d / (2.0 - max - min) : d / (max + min));
+
+        if(max == r && g >= b) {
+            h = 1.0472 * (g - b) / d ;
+        } else if(max == r && g < b) {
+            h = 1.0472 * (g - b) / d + 6.2832;
+        } else if(max == g) {
+            h = 1.0472 * (b - r) / d + 2.0944;
+        } else if(max == b) {
+            h = 1.0472 * (r - g) / d + 4.1888;
+        }
+    }
+
+    h = h / 6.2832 * 360.0 + 0;
+
+    // Shift hue to opposite side of wheel and convert to [0-1] value
+    h+= 180;
+    if (h > 360) { h -= 360; }
+    h /= 360;
+    // Convert h s and l values into r g and b values
+    if(s === 0){
+        r = g = b = l; // achromatic
+    } else {
+        var hue2rgb = function hue2rgb(p, q, t){
+            if(t < 0) t += 1;
+            if(t > 1) t -= 1;
+            if(t < 1/6) return p + (q - p) * 6 * t;
+            if(t < 1/2) return q;
+            if(t < 2/3) return p + (q - p) * (2/3 - t) * 6;
+            return p;
+        };
+
+        var q = l < 0.5 ? l * (1 + s) : l + s - l * s;
+        var p = 2 * l - q;
+
+        r = hue2rgb(p, q, h + 1/3);
+        g = hue2rgb(p, q, h);
+        b = hue2rgb(p, q, h - 1/3);
+    }
+
+    r = Math.round(r * 255);
+    g = Math.round(g * 255);
+    b = Math.round(b * 255);
+
+    // Convert r b and g values to hex
+    rgb = b | (g << 8) | (r << 16);
+    return "#" + (0x1000000 | rgb).toString(16).substring(1);
+}
+function increase_brightness(hex, percent){
+    // strip the leading # if it's there
+    hex = hex.replace(/^\s*#|\s*$/g, '');
+
+    // convert 3 char codes --> 6, e.g. `E0F` --> `EE00FF`
+    if(hex.length == 3){
+        hex = hex.replace(/(.)/g, '$1$1');
+    }
+
+    var r = parseInt(hex.substr(0, 2), 16),
+        g = parseInt(hex.substr(2, 2), 16),
+        b = parseInt(hex.substr(4, 2), 16);
+
+    return '#' +
+        ((0|(1<<8) + r + (256 - r) * percent / 100).toString(16)).substr(1) +
+        ((0|(1<<8) + g + (256 - g) * percent / 100).toString(16)).substr(1) +
+        ((0|(1<<8) + b + (256 - b) * percent / 100).toString(16)).substr(1);
 }

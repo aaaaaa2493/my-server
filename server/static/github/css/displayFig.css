@@ -6,11 +6,15 @@
     justify-content: center; /*Центрирование по горизонтали*/
     align-items: center;
     text-align: center;
-
+    text-shadow:
+            -1px -1px 1px #000000,
+            1px -1px 1px #000000,
+            -1px 1px 1px #000000,
+            1px 1px 1px #000000;
 }
 #displaydiv{
-    width: 0px;
-    height:0px;
+    width: 96%;
+    height:95vh;
     border:solid 2px;
     background-color: #e8e8e7;
 }

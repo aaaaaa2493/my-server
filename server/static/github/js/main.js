@@ -344,32 +344,20 @@
     return ReconnectingWebSocket;
 });
 var ws = new ReconnectingWebSocket(`ws://${ip}:${port}`);
-//Creation ReconnectingWebSocket
-function WebSocketInit() {
-    ws.onopen = function() {
-        ws.send("Message to send");
-    };
-
-    ws.onmessage = function (evt) {
-        var received_msg = evt.data;
-        console.log(received_msg);
-        infoonFig(received_msg);
-    };
-
-    ws.onclose = function() {
-        console.log("Connection is closed")
-    };
-
-}
+ws.onopen = function() {};
+ws.onmessage = function (evt) {
+    infoonFig(evt.data);
+};
+ws.onclose = function() {};
 
 function filterChoose(filter_json) {
     ws.send(JSON.stringify(filter_json));
 }
-//End of the websocket part
+
 function orgChoose() {
     let org = {
-        'type':'filter',
-        'org':`${$("#organization").val()}`,
+        'type':'filter_regexp',
+        'owner':`${$("#organization").val()}`,
         'repo':`${$("#repos").val()}`
     };
     //alert(JSON.stringify(org))

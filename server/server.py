@@ -13,7 +13,7 @@ from typing import List, Dict, Tuple
 
 
 class Debug:
-    Debug = 1
+    Debug = 0
     PythonAndJSConnections = 0
     ClientTriesToLogin = 0
     SpectatorInit = 0
@@ -1645,19 +1645,21 @@ class KeyServer:
 
 # ABOUT VISUAL GITHUB
 
-
+import re
 from os import listdir
+from os.path import isdir, isfile, join
 from bottle import route, run, static_file, template
 from github3 import GitHub
 from github3.events import Event
 from github3.exceptions import NotFoundError
 from github3.exceptions import ServerError
 from github3.exceptions import ConnectionError
+from github3.exceptions import ForbiddenError
 from threading import Thread, Lock
 from typing import List, Dict
 from time import sleep
 from datetime import datetime, timedelta
-from json import dumps,loads
+from json import dumps, loads
 from json.decoder import JSONDecodeError
 from websocket_server import WebsocketServer, WebSocketHandler
 from pprint import pprint
@@ -1665,7 +1667,8 @@ from pprint import pprint
 
 event_queue: List[Event] = []
 list_to_send: List[dict] = []
-lock: Lock = Lock()
+events_to_send_lock: Lock = Lock()
+event_queue_lock: Lock = Lock()
 
 
 def get_current_time(git_time) -> datetime:
@@ -1680,6 +1683,25 @@ def split_repo_name(full_repo_name):
     return repo_owner, repo_subname
 
 
+def remove_duplicates():
+    if len(list_to_send) < 2:
+        return
+
+    duplicate = list_to_send[-1]
+    for num, event in enumerate(list_to_send[-2::-1], 1):
+        if event['type'] != duplicate['type']:
+            continue
+        if event['owner'] != duplicate['owner']:
+            continue
+        if event['repo'] != duplicate['repo']:
+            continue
+        if event['time'] != duplicate['time']:
+            continue
+
+        list_to_send.pop()
+        return
+
+
 def download_events():
     global event_queue
 
@@ -1689,36 +1711,65 @@ def download_events():
     print("Requests remaining this hour:", git.ratelimit_remaining, '\n')
 
     last_event = None
+    seconds_to_sleep = 4
     while True:
         try:
             new_events: List[Event] = []
+            need_skip = False
+            need_reduce_sleep = False
+            need_increase_sleep = False
+            skipped_events = 0
+
             for event in git.all_events():
-                if last_event is None or event.id != last_event.id:
-                    new_events += [event]
+                if not need_skip:
+                    if last_event is None or event.id != last_event.id:
+                        new_events += [event]
+                    else:
+                        need_skip = True
                 else:
-                    break
-            if len(new_events):
+                    skipped_events += 1
+
+            new_events_count = len(new_events)
+            if new_events_count > 0:
+                if skipped_events / new_events_count < 0.4:
+                    need_reduce_sleep = True
+                elif skipped_events / new_events_count > 1:
+                    need_increase_sleep = True
+
+            if need_reduce_sleep and seconds_to_sleep > 1:
+                seconds_to_sleep -= 1
+            if need_increase_sleep:
+                seconds_to_sleep += 1
+
+            if new_events_count:
                 last_event = new_events[0]
-            event_queue[0:0] = new_events
+            with event_queue_lock:
+                event_queue[0:0] = new_events
+
         except ServerError:
             print("Server error occurred")
         except ConnectionError:
             print("Connection error occurred")
         except ConnectionAbortedError:
             print("Connection aborted error occurred")
+        except ForbiddenError:
+            print("Forbidden Error")
 
-        if len(event_queue):
-            pushes = sum(event.type == "PushEvent" for event in event_queue)
-            print(f'{event_queue[-1].created_at.time()}-'
-                  f'{event_queue[0].created_at.time()}, '
-                  f'events: {len(event_queue)}, '
-                  f'pushes: {pushes}')
+        with event_queue_lock:
+            if len(event_queue):
+                pushes = sum(event.type == "PushEvent" for event in event_queue)
+                print(f'{event_queue[-1].created_at.time()}-'
+                      f'{event_queue[0].created_at.time()}, '
+                      f'events: {len(event_queue):>3} '
+                      f'pushes: {pushes:>3} '
+                      f'sleep: {seconds_to_sleep:>2}s '
+                      f'limit: {git.ratelimit_remaining:>4}')
 
-        sleep(10)
+        sleep(seconds_to_sleep)
 
 
 def handle_events():
-    global event_queue, list_to_send, lock
+    global event_queue, list_to_send, events_to_send_lock
 
     print('Handle events started')
 
@@ -1727,7 +1778,11 @@ def handle_events():
             sleep(1)
             continue
 
-        event: Event = event_queue.pop()
+        with events_to_send_lock:
+            remove_duplicates()
+
+        with event_queue_lock:
+            event: Event = event_queue.pop()
 
         try:
 
@@ -1743,7 +1798,7 @@ def handle_events():
                 commit_hash = event.payload['commits'][-1]['sha']
                 url = f'https://github.com/{repo_name}/commit/{commit_hash}'
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'push',
@@ -1770,7 +1825,7 @@ def handle_events():
                 full_name_repo = event['repo']['name']
                 owner, repo = split_repo_name(full_name_repo)
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'pull_request',
@@ -1796,7 +1851,7 @@ def handle_events():
                 full_name_repo = event['repo']['name']
                 owner, repo = split_repo_name(full_name_repo)
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'create_repo',
@@ -1816,7 +1871,7 @@ def handle_events():
                 full_name_repo = event['payload']['forkee']['full_name']
                 owner, repo = split_repo_name(full_name_repo)
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'fork_repo',
@@ -1837,7 +1892,7 @@ def handle_events():
                 url = event['payload']['issue']['html_url']
                 owner, repo = split_repo_name(event['repo']['name'])
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'issue',
@@ -1858,7 +1913,7 @@ def handle_events():
                 owner, repo = split_repo_name(event['repo']['name'])
                 url = event['payload']['comment']['html_url']
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'issue_comment',
@@ -1876,7 +1931,7 @@ def handle_events():
                 owner, repo = split_repo_name(event['repo']['name'])
                 url = event['payload']['comment']['html_url']
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'pull_request_review',
@@ -1898,7 +1953,7 @@ def handle_events():
 
                 url = event['payload']['pages'][-1]['html_url']
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'wiki_page',
@@ -1916,7 +1971,7 @@ def handle_events():
                 owner, repo = split_repo_name(event['repo']['name'])
                 url = event['payload']['release']['html_url']
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'release',
@@ -1937,7 +1992,7 @@ def handle_events():
                 owner, repo = split_repo_name(event['repo']['name'])
                 url = event['payload']['comment']['html_url']
 
-                with lock:
+                with events_to_send_lock:
                     list_to_send += [
                         {
                             'type': 'commit_comment',
@@ -1982,7 +2037,7 @@ def send_events():
 
         now = datetime.now()
 
-        with lock:
+        with events_to_send_lock:
             list_to_send_now = [i for i in list_to_send if i['time'] < now]
             list_to_send = [i for i in list_to_send if i['time'] >= now]
 
@@ -2044,26 +2099,88 @@ class VisualGithubClient:
         # Это внутренний ID клиента, присваиваемый сервером
         self.id: int = _id
         self.handler: WebSocketHandler = handler
+        self.owner_filter = re.compile('')
+        self.repo_filter = re.compile('')
+        self.type_filters = {
+            'pull_request': False,
+            'push': False,
+            'issue': False,
+            'fork_repo': False,
+            'wiki_page': False,
+            'release': False,
+            'pull_request_review': False,
+            'commit_comment': False,
+            'issue_comment': False
+        }
+
+        self.send({
+            'type': 'init',
+            'categories': audio_lengths
+        })
 
     def finish(self):
         try:
             self.handler.finish()
         except KeyError:
             DebugLog.error(f'Key error possibly double '
-                        f'deleting id = {self.id}')
+                           f'deleting id = {self.id}')
 
     def send(self, obj: dict) -> None:
         try:
             msg = dumps(obj)
-            DebugLog.send(f'Send to {self.id}: {"{ JSON event }"}')
+            DebugLog.send(f'Send to {self.id}: {msg}')
             self.handler.send_message(msg)
         except BrokenPipeError:
             DebugLog.error(f'Broken pipe error send id = {self.id}')
 
+    def pass_filters(self, event: dict):
+        return self.pass_type_filters(event) and self.pass_regexp_filters(event)
+
+    def pass_type_filters(self, event: dict):
+        return self.type_filters[event['type']]
+
+    def set_type_filters(self, event: dict):
+        del event['type']
+        for curr_type in event:
+            self.type_filters[curr_type] = event[curr_type]
+
+    def pass_regexp_filters(self, event: dict):
+        owner_match = self.owner_filter.fullmatch(event['owner']) is not None
+        repo_match = self.repo_filter.fullmatch(event['repo']) is not None
+        return owner_match and repo_match
+
+    def set_regexp_filters(self, owner: str, repo: str):
+        try:
+            owner = owner.lower()
+            if owner == '':
+                owner = '.*'
+            self.owner_filter = re.compile(owner, re.IGNORECASE)
+        except re.error:
+            self.send({
+                'type': 'error',
+                'where': 'owner'
+            })
+
+        try:
+            repo = repo.lower()
+            if repo == '':
+                repo = '.*'
+            self.repo_filter = re.compile(repo, re.IGNORECASE)
+        except re.error:
+            self.send({
+                'type': 'error',
+                'where': 'repo'
+            })
+
     def receive(self, srv: 'WebSocketServer', message: str, client: dict):
-        print(message)
-        print("Ok")
-        # Действия
+        try:
+            json_msg = loads(message)
+            if json_msg['type'] == 'filter_regexp':
+                self.set_regexp_filters(json_msg['owner'], json_msg['repo'])
+            elif json_msg['type'] == 'filter_types':
+                self.set_type_filters(json_msg)
+        except JSONDecodeError:
+            print('JSONDecodeError', message)
 
     def left(self, srv: 'WebSocketServer') -> None:
         del srv.clients[self.id]
@@ -2113,10 +2230,10 @@ class WebSocketServer:
             client['client'].left(self)
         except KeyError:
             DebugLog.error(f'Key error possibly double deleting '
-                        f'in client left id = {client["id"]}')
+                           f'in client left id = {client["id"]}')
         except ValueError:
             DebugLog.error(f'Value error possibly double deleting '
-                        f'in client left id = {client["id"]}')
+                           f'in client left id = {client["id"]}')
 
     # Called when a client sends a message
     def message_received(self, client, _, message):
@@ -2127,18 +2244,30 @@ class WebSocketServer:
 
     def broadcast(self, message: dict):
         for client in list(self.clients.values()):
-            client.send(message)
+            if client.pass_filters(message):
+                client.send(message)
 
 
 def get_audio_files():
-    files = []
-    for file in listdir('static/github/audio'):
-        if file.endswith('.mp3'):
-            files += ['github/audio/' + file]
+    files = {}
+    for folder in listdir('static/github/audio'):
+        full_folder = join('static/github/audio', folder)
+        if not isdir(full_folder):
+            continue
+        for file in listdir(full_folder):
+            full_file = join(full_folder, file)
+            if not isfile(full_file) or not file.endswith('.mp3'):
+                continue
+            if folder not in files:
+                files[folder] = []
+            static, *other_path = full_folder.split('/')
+            files[folder] += [join('/'.join(other_path), file)]
     return files
 
 
 audio_files = get_audio_files()
+audio_lengths = {folder: len(files) for folder, files in audio_files.items()}
+audio_lengths = dumps(audio_lengths)
 
 
 if __name__ == '__main__':
@@ -2165,9 +2294,14 @@ if __name__ == '__main__':
     @route('/static/<file:path>')
     def static_serve(file):
         if 'github' in file and file.endswith('.mp3'):
-            filename = file.split('/')[-1]  # without path
+            path = file.split('/')
+            filename = path[-1]
+            folder = path[-2]
             file_num = filename.split('.')[0]  # without ".mp3"
-            file = audio_files[int(file_num)-1]
+            print(filename, file_num, folder)
+            file = audio_files[folder][int(file_num)]
+
+            print(file)
 
         return static_file(file, root='static')
 
