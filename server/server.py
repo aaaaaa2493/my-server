@@ -13,7 +13,7 @@ from typing import List, Dict, Tuple
 
 
 class Debug:
-    Debug = 0
+    Debug = 1
     PythonAndJSConnections = 0
     ClientTriesToLogin = 0
     SpectatorInit = 0
@@ -2266,7 +2266,7 @@ def get_audio_files():
 
 
 audio_files = get_audio_files()
-audio_lengths = {folder: len(files) for folder, files in audio_files.items()}
+audio_lengths = {folder: len(audio_files[folder]) for folder in sorted(audio_files.keys(), key=lambda x: x.lower())}
 audio_lengths = dumps(audio_lengths)
 
 
