@@ -6,10 +6,14 @@ from time import sleep
 from json import loads, dumps
 from json.decoder import JSONDecodeError
 from datetime import datetime, timedelta
-from os import urandom, listdir, mkdir
+from os import urandom, listdir, mkdir, getcwd, chdir
 from os.path import exists
 from base64 import b64encode
 from typing import List, Dict, Tuple
+
+
+if 'server' in listdir('.'):
+    chdir('server')
 
 
 class Debug:
@@ -1494,8 +1498,8 @@ class Server:
 
     NAMES = dict()
     for name in open('files/names').readlines():
-        json_ = loads(name)
-        NAMES[json_['name']] = json_['token']
+       json_ = loads(name)
+       NAMES[json_['name']] = json_['token']
 
     def __init__(self):
 

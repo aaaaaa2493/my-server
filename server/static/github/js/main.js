@@ -350,8 +350,10 @@ ws.onmessage = function (evt) {
 };
 ws.onclose = function() {};
 
+queue = [];
+
 function filterChoose(filter_json) {
-    ws.send(JSON.stringify(filter_json));
+    queue.push(JSON.stringify(filter_json));
 }
 
 function orgChoose() {
@@ -360,6 +362,17 @@ function orgChoose() {
         'owner':`${$("#organization").val()}`,
         'repo':`${$("#repos").val()}`
     };
-    //alert(JSON.stringify(org))
-    ws.send(JSON.stringify(org));
+    queue.push(JSON.stringify(org));
 }
+
+setInterval(() => {
+    if (queue.length == 0) {
+        return;
+    }
+    
+    try {
+        let curr = queue[0];
+        ws.send(curr);
+        queue.shift();
+    } catch { }
+}, 100);
