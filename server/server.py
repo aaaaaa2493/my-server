@@ -17,7 +17,7 @@ if 'server' in listdir('.'):
 
 
 class Debug:
-    Debug = 1
+    Debug = 0
     PythonAndJSConnections = 0
     ClientTriesToLogin = 0
     SpectatorInit = 0
@@ -1485,7 +1485,7 @@ class Server:
 
     else:
         ip = '188.134.82.95'
-        local_ip = '192.168.0.100'
+        local_ip = '192.168.0.200'
 
     port = 9001
 
@@ -2199,7 +2199,7 @@ class WebSocketServer:
 
     else:
         ip = '188.134.82.95'
-        local_ip = '192.168.0.100'
+        local_ip = '192.168.0.200'
 
     port = 11001
 
