@@ -9,6 +9,7 @@ verify_ssl = true
 bottle = "*"
 websocket-server = "*"
 github3-py = "*"
+django = "==2.2.*"
 
 [requires]
 python_version = "3.8"
