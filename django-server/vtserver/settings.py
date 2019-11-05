@@ -25,7 +25,22 @@ SECRET_KEY = None
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = [
+    'vturov.com',
+    'vladimir-turov.ru'
+]
+
+HOST_REAL_INNER_IP = None
+HOST_REAL_OUTER_IP = None
+HOST_REAL_PORT = None
+
+HOST_DEV_INNER_IP = '127.0.0.1'
+HOST_DEV_OUTER_IP = '127.0.0.1'
+HOST_DEV_PORT = 80
+
+HOST_PROD_INNER_IP = None
+HOST_PROD_OUTER_IP = '188.134.82.95'
+HOST_PROD_PORT = 80
 
 
 # Application definition

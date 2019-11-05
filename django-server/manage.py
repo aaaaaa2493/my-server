@@ -19,6 +19,11 @@ def setup_config():
 
     settings.SECRET_KEY = config['SECRET_KEY']
 
+    if 'HOST_PROD_INNER_IP' not in config:
+        raise ValueError('Cannot find HOST_PROD_INNER_IP value in the "config.json" file.')
+
+    settings.HOST_PROD_INNER_IP = config['HOST_PROD_INNER_IP']
+
 
 def main():
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'vtserver.settings')
@@ -30,6 +35,25 @@ def main():
             "available on your PYTHONPATH environment variable? Did you "
             "forget to activate a virtual environment?"
         ) from exc
+
+    from vtserver import settings
+
+    if settings.SECRET_KEY is None:
+        setup_config()
+
+    if sys.argv[-1] == '--debug':
+        settings.HOST_REAL_INNER_IP = settings.HOST_DEV_INNER_IP
+        settings.HOST_REAL_OUTER_IP = settings.HOST_DEV_OUTER_IP
+        settings.HOST_REAL_PORT = settings.HOST_DEV_PORT
+        sys.argv = sys.argv[:-1]
+        sys.argv += [f'{settings.HOST_REAL_INNER_IP}:{settings.HOST_REAL_PORT}']
+
+    elif sys.argv[-1] == 'runserver':
+        settings.HOST_REAL_INNER_IP = settings.HOST_PROD_INNER_IP
+        settings.HOST_REAL_OUTER_IP = settings.HOST_PROD_OUTER_IP
+        settings.HOST_REAL_PORT = settings.HOST_PROD_PORT
+        sys.argv += [f'{settings.HOST_REAL_INNER_IP}:{settings.HOST_REAL_PORT}']
+
     execute_from_command_line(sys.argv)
 
 
