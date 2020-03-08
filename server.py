@@ -17,7 +17,7 @@ if 'server' in listdir('.'):
 
 
 class Debug:
-    Debug = 0
+    Debug = 1
     PythonAndJSConnections = 0
     ClientTriesToLogin = 0
     SpectatorInit = 0
