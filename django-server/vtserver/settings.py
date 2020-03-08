@@ -27,7 +27,8 @@ DEBUG = True
 
 ALLOWED_HOSTS = [
     'vturov.com',
-    'vladimir-turov.ru'
+    'vladimir-turov.ru',
+    '127.0.0.1'
 ]
 
 HOST_REAL_INNER_IP = None
